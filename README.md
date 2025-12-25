@@ -25,22 +25,51 @@ Mein_Business/
 
 ## 🚀 Quick Start
 
-### Backend Setup
+### Option 1: Clone from GitHub (Empfohlen)
 
 ```powershell
-# 1. In Backend-Verzeichnis wechseln
-cd backend
+# Repository clonen
+git clone https://github.com/baranturhan-commits/Mein_Business.git
+cd Mein_Business
 
-# 2. Abhängigkeiten installieren
+# Backend Setup
+cd backend
 pip install -r requirements.txt
 
-# 3. Cockpit starten
+# Cockpit starten
 python start.py
 ```
 
-### Frontend Setup (Coming Soon)
+### Option 2: Lokale Installation
 
-Das Frontend wird in Zukunft eine moderne Web-Oberfläche für alle Backend-Funktionen bieten.
+Wenn du das Projekt direkt heruntergeladen hast:
+
+```powershell
+# In Backend-Verzeichnis wechseln
+cd backend
+
+# Abhängigkeiten installieren
+pip install -r requirements.txt
+
+# Cockpit starten
+python start.py
+```
+
+---
+
+## 🔄 Entwicklung & Synchronisation
+
+### Änderungen committen & pushen
+```powershell
+git add .
+git commit -m "Deine Änderungsnachricht"
+git push
+```
+
+### Neueste Änderungen holen
+```powershell
+git pull
+```
 
 ---
 
@@ -70,6 +99,10 @@ Moderne Web-Oberfläche für:
 - Python 3.8+
 - Google Gemini AI
 - FPDF (PDF-Generierung)
+
+**Versionskontrolle:**
+- Git & GitHub
+- Repository: [github.com/baranturhan-commits/Mein_Business](https://github.com/baranturhan-commits/Mein_Business)
 
 **Frontend (Geplant):**
 - TBD (React/Vue/Next.js)
