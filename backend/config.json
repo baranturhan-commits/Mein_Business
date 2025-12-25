@@ -1,0 +1,29 @@
+{
+    "firmenname": "Testfirma GmbH",
+    "strasse": "Testweg 1",
+    "ort": "12345 Testhausen",
+    "geschaeftsfuehrer": "Testo Testini",
+    "ust_id": "DE999999999",
+    "bank": "Testbank",
+    "iban": "DE00 1234 5678 9000 0000 00",
+    "bic": "TESTDEZZ",
+    "logo_path": null,
+    "profiles": [
+        {
+            "firma": "Baran Tech Solutions",
+            "strasse": "Am Sonnenhut 34",
+            "plz_ort": "51109, Köln",
+            "geschaeftsfuehrer": "Baran Turhan",
+            "logo_path": null,
+            "iban": "",
+            "bic": "",
+            "bank": "",
+            "smtp": {
+                "server": "smtp.gmail.com",
+                "port": "587",
+                "email": "Celo.turi@gmail.com",
+                "password": "gesz ovyc zrah axzc"
+            }
+        }
+    ]
+}

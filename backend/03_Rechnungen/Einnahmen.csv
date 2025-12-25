@@ -1,0 +1,11 @@
+﻿Rechnungs-Nr;Datum;Kunde;Beschreibung;Netto;MwSt;Brutto;Fällig_am
+RE-202512191926;19.12.2025;{'name': 'Musterfirma GmbH', 'adresse': 'Musterstraße 1, 12345 Musterstadt'};Beratungsleistungen;300,00;57,00;357,00;02.01.2026
+RE-202512191928;19.12.2025;{'name': 'Meier', 'adresse': None};Webdesign;250,00;47,50;297,50;02.01.2026
+RE-2025-001;19.12.2025;Max Mustermann, Musterstraße 1, 12345 Musterstadt;Beratung;100,00;19,00;119,00;02.01.2026
+RE-2025-002;19.12.2025;Beispiel GmbH, Musterstraße 123, 12345 Musterstadt;Beratungsleistung;100,00;19,00;119,00;02.01.2026
+RE-2025-003;19.12.2025;Loop-Test GmbH, Beispielstraße 1, 12345 Berlin;Testleistung;100,00;19,00;119,00;02.01.2026
+RE-2025-004;19.12.2025;f?r;f?r;100,00;19,00;119,00;02.01.2026
+RE-2025-005;19.12.2025;Max Mustermann, Musterweg 123, 12345 Musterstadt;Beratung;100,00;19,00;119,00;02.01.2026
+RE-2025-006;19.12.2025;Unbekannter Kunde, Unbekannte Adresse;Unbekannte Leistung;100,00;19,00;119,00;02.01.2026
+RE-2025-007;19.12.2025;Unknown Customer, Unknown Address;Unbekannte Leistung;100,00;19,00;119,00;02.01.2026
+RE-2025-008;19.12.2025;Max Mustermann, Musterstraße 1, 12345 Musterstadt;Beispiel Leistung;100,00;19,00;119,00;02.01.2026
