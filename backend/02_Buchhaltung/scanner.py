@@ -1,6 +1,6 @@
 # scanner.py
 # Professioneller Multi-Item Beleg-Scanner mit Mandanten-Support
-import google.generativeai as genai
+from google import genai
 import os
 import csv
 import json
@@ -11,17 +11,27 @@ import hashlib
 import glob
 from datetime import datetime
 from PIL import Image
+from dotenv import load_dotenv
 
 # Windows Console Fix für Sonderzeichen (Euro, Umlaute)
 sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8')
 
 # --- KONFIGURATION ---
-# FÜGE HIER DEINEN API-KEY EIN!
-GOOGLE_API_KEY = "AIzaSyBLtja16fqBY1EmkA3WQ2gT9hpJZD9xJIQ"
+# Lade Umgebungsvariablen aus .env Datei
+load_dotenv(os.path.join(os.path.dirname(os.path.dirname(__file__)), '.env'))
 
-genai.configure(api_key=GOOGLE_API_KEY)
+GOOGLE_API_KEY = os.getenv("GOOGLE_API_KEY")
+if not GOOGLE_API_KEY:
+    print("❌ GOOGLE_API_KEY nicht gefunden!")
+    print("👉 Bitte erstelle eine .env Datei im backend/ Ordner mit:")
+    print("   GOOGLE_API_KEY=dein_api_key_hier")
+    sys.exit(1)
+
+# Erstelle Client mit API Key
+client = genai.Client(api_key=GOOGLE_API_KEY)
 # Gemini 2.0 Flash-Lite: schnell, günstig, perfekt für Belege
-model = genai.GenerativeModel('models/gemini-2.0-flash-lite')
+MODEL_NAME = 'gemini-2.0-flash-lite'
+
 
 # --- PFADE ---
 CURRENT_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -217,11 +227,19 @@ def analyze_beleg(filepath):
         ext = ext.lower()
         
         if ext == '.pdf':
-            uploaded_file = genai.upload_file(filepath)
-            response = model.generate_content([prompt, uploaded_file])
+            # PDF hochladen und analysieren
+            uploaded_file = client.files.upload(file=filepath)
+            response = client.models.generate_content(
+                model=MODEL_NAME,
+                contents=[prompt, uploaded_file]
+            )
         else:
+            # Bild öffnen und analysieren
             img = Image.open(filepath)
-            response = model.generate_content([prompt, img])
+            response = client.models.generate_content(
+                model=MODEL_NAME,
+                contents=[prompt, img]
+            )
             
         clean_json = response.text.replace("```json", "").replace("```", "").strip()
         start = clean_json.find("[")
