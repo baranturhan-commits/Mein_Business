@@ -10,15 +10,61 @@ Dieses Projekt ist als Monorepo organisiert:
 
 ```
 Mein_Business/
-├── backend/          # Python Business Automation Backend
-│   ├── 01_Mahnwesen/        # Automatisches Mahnwesen
-│   ├── 02_Buchhaltung/      # Buchhaltung & Belegverarbeitung
-│   ├── 03_Rechnungen/       # Rechnungserstellung
-│   ├── 04_Controlling/      # Finanz-Dashboard
-│   └── README.md            # Backend Dokumentation
+├── .gitignore                  # Git ignore rules (root)
+├── README.md                   # Projekt-Übersicht (diese Datei)
 │
-└── frontend/         # Web Interface (Coming Soon)
-    └── ...
+├── backend/                    # Python Business Automation Backend
+│   ├── 01_Mahnwesen/          # Automatisches Mahnwesen
+│   │   ├── agent.py           # Hauptprogramm für Mahnungen
+│   │   ├── mahnliste.csv      # Mahnliste
+│   │   └── versand_log.csv    # E-Mail-Versandprotokoll
+│   │
+│   ├── 02_Buchhaltung/        # Buchhaltung & Belegverarbeitung
+│   │   ├── scanner.py         # Beleg-Scanner mit KI-Analyse
+│   │   ├── list_models.py     # Gemini Modell-Übersicht
+│   │   └── Ausgaben/          # Gescannte Belege
+│   │
+│   ├── 03_Rechnungen/         # Rechnungserstellung
+│   │   ├── invoice.py         # Invoice Generator V2
+│   │   ├── logo.png           # Firmenlogo
+│   │   ├── Einnahmen.csv      # Einnahmen-Tracking
+│   │   └── README.md          # Rechnungs-Dokumentation
+│   │
+│   ├── 04_Controlling/        # Finanz-Dashboard
+│   │   ├── finance_check.py   # Finanz-Dashboard
+│   │   └── Reports/           # Generierte Reports
+│   │
+│   ├── Mandanten/             # Multi-Tenant Verwaltung
+│   │   ├── Baran_Tech_Solutions/
+│   │   │   ├── counter.json        # Rechnungsnummern
+│   │   │   ├── kunden.csv          # Kundenliste
+│   │   │   └── Rechnungen/         # Generierte Rechnungen
+│   │   │       └── [Kunde]/        # Nach Kunde sortiert
+│   │   │
+│   │   └── Elektroniker_Testbetrieb/
+│   │       ├── counter.json
+│   │       ├── kunden.csv
+│   │       ├── einnahmen.csv
+│   │       ├── mandant_config.json # Mandanten-Konfiguration
+│   │       ├── Rechnungen/         # Generierte Rechnungen
+│   │       ├── Kunden/             # Kundenordner
+│   │       └── Ausgaben/           # Ausgaben-Belege
+│   │
+│   ├── PDFs/                  # Allgemeine PDF-Ablage
+│   ├── Archiv/                # Archivierte Dateien
+│   ├── _ARCHIV/               # Alte Scripts (nicht in Git)
+│   │
+│   ├── start.py               # 🚀 Hauptmenü / Cockpit
+│   ├── add_client.py          # Mandanten/Kunden anlegen
+│   ├── organize_and_start.py  # Setup-Script
+│   ├── config.json            # Globale Konfiguration
+│   ├── kunden.csv             # Kundenliste
+│   ├── requirements.txt       # Python Dependencies
+│   ├── .gitignore            # Backend Git-Regeln
+│   └── README.md             # Backend-Dokumentation
+│
+└── frontend/                  # Web Interface (Coming Soon)
+    └── ...                    # Zukünftig: React/Next.js App
 ```
 
 ---
