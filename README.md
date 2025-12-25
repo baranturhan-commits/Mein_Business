@@ -71,20 +71,39 @@ Mein_Business/
 
 ## 🚀 Quick Start
 
+### Voraussetzungen
+
+- Python 3.8 oder höher
+- Git (für Versionskontrolle)
+- Google Gemini API-Key
+
+---
+
 ### Option 1: Clone from GitHub (Empfohlen)
 
 ```powershell
-# Repository clonen
+# 1. Repository clonen
 git clone https://github.com/baranturhan-commits/Mein_Business.git
 cd Mein_Business
 
-# Backend Setup
+# 2. Backend Setup mit virtueller Umgebung
 cd backend
+
+# Virtuelle Umgebung erstellen
+python -m venv venv
+
+# Virtuelle Umgebung aktivieren
+venv\Scripts\activate  # Windows
+# source venv/bin/activate  # Linux/Mac
+
+# Dependencies installieren
 pip install -r requirements.txt
 
-# Cockpit starten
+# 3. Cockpit starten
 python start.py
 ```
+
+---
 
 ### Option 2: Lokale Installation
 
@@ -94,6 +113,12 @@ Wenn du das Projekt direkt heruntergeladen hast:
 # In Backend-Verzeichnis wechseln
 cd backend
 
+# Virtuelle Umgebung erstellen
+python -m venv venv
+
+# Virtuelle Umgebung aktivieren
+venv\Scripts\activate
+
 # Abhängigkeiten installieren
 pip install -r requirements.txt
 
@@ -101,20 +126,48 @@ pip install -r requirements.txt
 python start.py
 ```
 
+> **💡 Tipp:** Die virtuelle Umgebung sollte bei jeder Entwicklungssession aktiviert werden:
+> ```powershell
+> cd backend
+> venv\Scripts\activate
+> ```
+
 ---
 
 ## 🔄 Entwicklung & Synchronisation
 
-### Änderungen committen & pushen
+### Täglicher Workflow
+
 ```powershell
+# 1. Virtuelle Umgebung aktivieren (falls nicht aktiv)
+cd backend
+venv\Scripts\activate
+
+# 2. Neueste Änderungen holen
+git pull
+
+# 3. Entwickeln...
+python start.py
+
+# 4. Änderungen committen & pushen
 git add .
 git commit -m "Deine Änderungsnachricht"
 git push
 ```
 
-### Neueste Änderungen holen
+### Neue Dependencies hinzufügen
+
 ```powershell
-git pull
+# In aktivierter venv
+pip install package-name
+
+# requirements.txt aktualisieren
+pip freeze > requirements.txt
+
+# Committen
+git add requirements.txt
+git commit -m "Add package-name dependency"
+git push
 ```
 
 ---
