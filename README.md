@@ -131,47 +131,81 @@ git config --global user.email "deine@email.de"
 
 ---
 
-#### 3. IDE installieren (VS Code oder Cursor)
+#### 3. IDE installieren - Google Antigravity
 
-**VS Code (Empfohlen für Anfänger):**
+**Google Antigravity (Empfohlen - das nutzen wir!):**
+
+Antigravity ist eine KI-gestützte Entwicklungsumgebung von Google mit integriertem Gemini AI.
+
+**Wichtig zu Tokens/API-Keys:**
+
+✅ **Bestehende Tokens KÖNNEN weitergenutzt werden!**
+
+- Dein Google Gemini API-Key bleibt gleich auf allen Geräten
+- Einmal erstellt, kannst du ihn überall verwenden
+- **NICHT** neu erstellen, sondern den bestehenden Key kopieren
+
+**Wo findest du deinen bestehenden Key?**
+1. Gehe zu: https://aistudio.google.com/app/apikey
+2. Melde dich an (gleiches Google-Konto wie hier)
+3. Dein Key wird angezeigt - kopieren & auf neuem Laptop verwenden
+
+**Antigravity Setup:**
+1. Antigravity ist webbasiert - kein Download nötig
+2. Öffne Antigravity in deinem Browser
+3. Melde dich mit deinem Google-Account an
+4. Dein Workspace wird automatisch synchronisiert
+
+**Alternative IDEs (falls nötig):**
+
+<details>
+<summary>VS Code (Empfohlen für Offline-Entwicklung)</summary>
+
 1. Download: https://code.visualstudio.com/
 2. Installiere + folgende Extensions:
    - Python (Microsoft)
    - GitLens
    - Pylance
+</details>
 
-**Cursor (Empfohlen für AI-Entwicklung):**
+<details>
+<summary>Cursor (Alternative mit AI-Funktionen)</summary>
+
 1. Download: https://cursor.sh/
 2. Basiert auf VS Code, aber mit KI-Integration
+</details>
 
 ---
 
-#### 4. Google Gemini API-Key besorgen
+#### 4. Google Gemini API-Key
 
+**Falls du noch KEINEN Key hast:**
 1. Gehe zu: https://aistudio.google.com/app/apikey
 2. Melde dich mit Google-Account an
 3. Klicke "Create API Key"
 4. Kopiere den Key (sicher aufbewahren!)
 
+**Falls du bereits einen Key hast (wie hier):**
+- ✅ Nutze denselben Key auf dem neuen Laptop
+- ✅ KEINE neue Erstellung nötig
+- ✅ Ein Key funktioniert auf allen Geräten
+
 ---
 
 #### 5. Projekt clonen & einrichten
 
-**In VS Code/Cursor:**
-1. Öffne Terminal (`` Strg+` ``)
-2. Führe folgende Befehle aus:
+**Mit Antigravity:**
+1. Öffne Antigravity
+2. Gehe zu deinem Workspace
+3. Terminal öffnen
+4. Führe folgende Befehle aus:
 
 ```powershell
 # Repository clonen
 git clone https://github.com/baranturhan-commits/Mein_Business.git
-cd Mein_Business
-
-# Backend-Ordner öffnen in IDE
-code backend  # für VS Code
-# oder: cursor backend  # für Cursor
+cd Mein_Business/backend
 
 # Virtuelle Umgebung erstellen
-cd backend
 python -m venv venv
 
 # Virtuelle Umgebung aktivieren
@@ -180,6 +214,15 @@ venv\Scripts\activate  # Windows
 
 # Dependencies installieren
 pip install -r requirements.txt
+```
+
+**Mit VS Code/Cursor (Alternative):**
+```powershell
+# Projekt öffnen
+code backend  # für VS Code
+# oder: cursor backend  # für Cursor
+
+# Dann gleiche Schritte wie oben
 ```
 
 ---
@@ -213,13 +256,13 @@ Trage deinen Gemini API-Key ein (falls gefragt).
 
 - [ ] Python 3.8+ installiert (`python --version`)
 - [ ] Git installiert (`git --version`)
-- [ ] IDE installiert (VS Code oder Cursor)
 - [ ] Git konfiguriert (Name & E-Mail)
+- [ ] Antigravity-Workspace eingerichtet (oder VS Code/Cursor)
 - [ ] Projekt geclont
 - [ ] Virtuelle Umgebung erstellt (`backend/venv/`)
 - [ ] Dependencies installiert
 - [ ] GitHub-Authentifizierung funktioniert
-- [ ] Google Gemini API-Key vorhanden
+- [ ] Google Gemini API-Key vorhanden (bestehender Key kann genutzt werden!)
 
 ---
 
