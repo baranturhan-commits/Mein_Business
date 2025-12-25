@@ -69,6 +69,160 @@ Mein_Business/
 
 ---
 
+## 💻 Entwicklungsumgebung einrichten
+
+### Auf einem neuen Laptop/PC starten
+
+Folge diesen Schritten, um das Projekt auf einem neuen Rechner zu entwickeln:
+
+#### 1. Python installieren
+
+**Windows:**
+1. Gehe zu: https://www.python.org/downloads/
+2. Lade Python 3.8+ herunter
+3. **WICHTIG:** Hake "Add Python to PATH" an!
+4. Installiere mit Standardoptionen
+5. Prüfe Installation:
+   ```powershell
+   python --version
+   ```
+
+**macOS:**
+```bash
+# Mit Homebrew
+brew install python@3.11
+```
+
+**Linux:**
+```bash
+# Ubuntu/Debian
+sudo apt update
+sudo apt install python3 python3-pip python3-venv
+```
+
+---
+
+#### 2. Git installieren
+
+**Windows (Option A - Winget):**
+```powershell
+winget install --id Git.Git -e --source winget
+```
+
+**Windows (Option B - Manuell):**
+1. Download: https://git-scm.com/download/win
+2. Installiere mit Standardeinstellungen
+
+**macOS:**
+```bash
+brew install git
+```
+
+**Linux:**
+```bash
+sudo apt install git
+```
+
+**Git konfigurieren:**
+```powershell
+git config --global user.name "Dein Name"
+git config --global user.email "deine@email.de"
+```
+
+---
+
+#### 3. IDE installieren (VS Code oder Cursor)
+
+**VS Code (Empfohlen für Anfänger):**
+1. Download: https://code.visualstudio.com/
+2. Installiere + folgende Extensions:
+   - Python (Microsoft)
+   - GitLens
+   - Pylance
+
+**Cursor (Empfohlen für AI-Entwicklung):**
+1. Download: https://cursor.sh/
+2. Basiert auf VS Code, aber mit KI-Integration
+
+---
+
+#### 4. Google Gemini API-Key besorgen
+
+1. Gehe zu: https://aistudio.google.com/app/apikey
+2. Melde dich mit Google-Account an
+3. Klicke "Create API Key"
+4. Kopiere den Key (sicher aufbewahren!)
+
+---
+
+#### 5. Projekt clonen & einrichten
+
+**In VS Code/Cursor:**
+1. Öffne Terminal (`` Strg+` ``)
+2. Führe folgende Befehle aus:
+
+```powershell
+# Repository clonen
+git clone https://github.com/baranturhan-commits/Mein_Business.git
+cd Mein_Business
+
+# Backend-Ordner öffnen in IDE
+code backend  # für VS Code
+# oder: cursor backend  # für Cursor
+
+# Virtuelle Umgebung erstellen
+cd backend
+python -m venv venv
+
+# Virtuelle Umgebung aktivieren
+venv\Scripts\activate  # Windows
+# source venv/bin/activate  # Linux/Mac
+
+# Dependencies installieren
+pip install -r requirements.txt
+```
+
+---
+
+#### 6. GitHub-Authentifizierung einrichten
+
+**In der IDE:**
+1. Öffne Source Control (Strg+Shift+G)
+2. Klicke "Sign in with GitHub"
+3. Browser öffnet sich → Anmelden
+4. Erlaube Zugriff
+
+Jetzt kannst du direkt aus der IDE pushen/pullen!
+
+---
+
+#### 7. API-Key in config.json eintragen (falls nötig)
+
+```powershell
+# Öffne config.json
+code backend/config.json
+```
+
+Trage deinen Gemini API-Key ein (falls gefragt).
+
+**⚠️ ACHTUNG:** Nie den API-Key zu Git committen!
+
+---
+
+### ✅ Setup-Checkliste
+
+- [ ] Python 3.8+ installiert (`python --version`)
+- [ ] Git installiert (`git --version`)
+- [ ] IDE installiert (VS Code oder Cursor)
+- [ ] Git konfiguriert (Name & E-Mail)
+- [ ] Projekt geclont
+- [ ] Virtuelle Umgebung erstellt (`backend/venv/`)
+- [ ] Dependencies installiert
+- [ ] GitHub-Authentifizierung funktioniert
+- [ ] Google Gemini API-Key vorhanden
+
+---
+
 ## 🚀 Quick Start
 
 ### Voraussetzungen
