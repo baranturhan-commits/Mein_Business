@@ -227,7 +227,7 @@ def create_pdf(invoice_data, mandant_path, mandant_config, kunde_data):
                 
                 # Header schreiben, falls Datei neu
                 if not file_exists:
-                    writer.writerow(["Rechnungsnummer", "Datum", "Kunde", "Beschreibung", "Betrag_Netto", "Betrag_Brutto"])
+                    writer.writerow(["Rechnungsnummer", "Datum", "Kunde", "Beschreibung", "Betrag_Netto", "Betrag_Brutto", "Status"])
                 
                 # Daten schreiben
                 writer.writerow([
@@ -236,7 +236,8 @@ def create_pdf(invoice_data, mandant_path, mandant_config, kunde_data):
                     kunde_data['firma'],
                     full_desc,
                     f"{total:.2f}", 
-                    f"{brutto:.2f}"
+                    f"{brutto:.2f}",
+                    "Offen"  # Default Status
                 ])
                 
             print(f"✅ Umsatz in einnahmen.csv verbucht.")

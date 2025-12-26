@@ -26,6 +26,7 @@ Mein_Business/
 │   │
 │   ├── 03_Rechnungen/         # Rechnungserstellung
 │   │   ├── invoice.py         # Invoice Generator V2
+│   │   ├── check_payments.py  # Zahlungseingangs-Checker (OP-Pflege)
 │   │   ├── logo.png           # Firmenlogo
 │   │   ├── Einnahmen.csv      # Einnahmen-Tracking
 │   │   └── README.md          # Rechnungs-Dokumentation
@@ -373,9 +374,10 @@ git push
 
 ### 🔔 Backend
 Vollständige Python-basierte Business-Automatisierung:
-- **Mahnwesen**: KI-gestützte Mahnung mit PDF-Generierung
+- **Mahnwesen**: KI-gestützte Mahnung mit PDF-Generierung (nur offene Rechnungen)
 - **Buchhaltung**: Intelligente Belegverarbeitung
-- **Rechnungen**: Automatische Rechnungserstellung
+- **Rechnungen**: Automatische Rechnungserstellung mit Status-Tracking
+- **OP-Pflege**: Zahlungseingangs-Management (Offen/Bezahlt)
 - **Controlling**: Finanz-Dashboard
 
 Siehe [backend/README.md](backend/README.md) für Details.
@@ -416,5 +418,5 @@ Dieses Projekt ist für den privaten/geschäftlichen Gebrauch.
 
 ---
 
-**Version:** 2.0  
-**Letztes Update:** 2025-12-25
+**Version:** 2.1  
+**Letztes Update:** 2025-12-26

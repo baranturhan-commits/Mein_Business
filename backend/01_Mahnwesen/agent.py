@@ -63,10 +63,36 @@ def load_kunden(mandant_path):
             print(f"⚠️  CSV Fehler: {e}")
     return customers
 
-def find_pdfs(mandant_path):
+def load_einnahmen(mandant_path):
+    """
+    Lädt alle Rechnungen aus einnahmen.csv und gibt nur offene zurück.
+    """
+    csv_path = os.path.join(mandant_path, "einnahmen.csv")
+    all_invoices = []
+    open_invoices = []
+    
+    if not os.path.exists(csv_path):
+        return all_invoices, open_invoices
+    
+    try:
+        with open(csv_path, 'r', encoding='utf-8', newline='') as f:
+            reader = csv.DictReader(f, delimiter=';')
+            for row in reader:
+                all_invoices.append(row)
+                # Status-Spalte prüfen (Standard: Offen bei Fehlen)
+                status = row.get('Status', 'Offen').strip()
+                if status == 'Offen':
+                    open_invoices.append(row)
+    except Exception as e:
+        print(f"⚠️  Fehler beim Lesen von einnahmen.csv: {e}")
+    
+    return all_invoices, open_invoices
+
+def find_pdfs(mandant_path, open_invoice_numbers=None):
     """
     Sucht rekursiv nach PDFs im 'Rechnungen' Ordner des Mandanten.
     Ignoriert den 'Gesendet' Ordner.
+    Filtert nach Rechnungsnummern, wenn open_invoice_numbers angegeben ist.
     """
     rechnungen_dir = os.path.join(mandant_path, "Rechnungen")
     pdf_files = []
@@ -82,7 +108,14 @@ def find_pdfs(mandant_path):
         for file in files:
             if file.lower().endswith(".pdf"):
                 full_path = os.path.join(root, file)
-                pdf_files.append(full_path)
+                
+                # Filter by invoice numbers if provided
+                if open_invoice_numbers:
+                    # Check if any of the open invoice numbers is in the filename
+                    if any(inv_nr in file for inv_nr in open_invoice_numbers):
+                        pdf_files.append(full_path)
+                else:
+                    pdf_files.append(full_path)
                 
     return pdf_files
 
@@ -221,13 +254,41 @@ def main():
     
     # 2. Load Data
     customers = load_kunden(mandant_path)
-    pdfs = find_pdfs(mandant_path)
+    
+    # Lade Einnahmen und filtere nach Status
+    all_invoices, open_invoices = load_einnahmen(mandant_path)
+    
+    print(f"\n📊 RECHNUNGS-STATUS:")
+    print(f"   Gesamt: {len(all_invoices)} Rechnungen")
+    print(f"   ✅ Bezahlt: {len(all_invoices) - len(open_invoices)}")
+    print(f"   ⏳ Offen: {len(open_invoices)}")
+    
+    if not open_invoices:
+        print("\n🎉 Super! Alle Rechnungen sind bezahlt!")
+        print("   Es gibt nichts zu mahnen.")
+        input("\n[Enter] zum Beenden...")
+        return
+    
+    # Extrahiere Rechnungsnummern der offenen Rechnungen
+    open_invoice_numbers = [inv['Rechnungsnummer'] for inv in open_invoices if 'Rechnungsnummer' in inv]
+    
+    print(f"\n⚠️  Folgende Rechnungen sind noch offen:")
+    for inv in open_invoices:
+        inv_nr = inv.get('Rechnungsnummer', 'N/A')
+        kunde = inv.get('Kunde', 'N/A')
+        betrag = inv.get('Betrag_Brutto', 'N/A')
+        datum = inv.get('Datum', 'N/A')
+        print(f"   - {inv_nr} | {kunde} | {betrag}€ | vom {datum}")
+    
+    # Lade nur PDFs für offene Rechnungen
+    pdfs = find_pdfs(mandant_path, open_invoice_numbers)
     
     if not pdfs:
-        print("⚠️  Keine offenen Rechnungen (PDFs) gefunden.")
+        print("\n⚠️  Keine PDFs für offene Rechnungen gefunden.")
+        print("   Hinweis: PDFs sollten die Rechnungsnummer im Dateinamen haben.")
         return
         
-    print(f"🔎 {len(pdfs)} PDF(s) gefunden.")
+    print(f"\n🔎 {len(pdfs)} PDF(s) für offene Rechnungen gefunden.")
     
     # 3. SMTP Config
     smtp_conf = get_smtp_config()

@@ -119,7 +119,128 @@ Der Beleg-Scanner wurde erweitert, damit er mit mehreren Firmen umgehen kann.
 
 ---
 
-### Phase 4: Professionelles Setup (Dez 25, 2025 - HEUTE)
+### Phase 5: Zahlungseingangs-Management & Intelligentes Mahnwesen (Dez 26, 2025)
+
+**Problem:** 
+- Wir schreiben Rechnungen, aber wissen nicht, ob das Geld jemals angekommen ist
+- Risiko: Kunden mahnen, die schon bezahlt haben (sehr peinlich!)
+- Keine Übersicht über offene Forderungen
+
+**Lösung: OP-Pflege System (Offene Posten)**
+
+#### Was wurde implementiert:
+
+**1. Status-Spalte in `einnahmen.csv`**
+- Neue Spalte: `Status` mit Werten `Offen` oder `Bezahlt`
+- Standard bei neuen Rechnungen: `Offen`
+- Beispiel:
+  ```csv
+  Rechnungsnummer;Datum;Kunde;Beschreibung;Betrag_Netto;Betrag_Brutto;Status
+  2025-003;22.12.2025;Oma_Erna;Heizung ANBAU;600.00;714.00;Offen
+  ```
+
+**2. [check_payments.py](backend/03_Rechnungen/check_payments.py) - Neues Tool erstellt**
+
+Ein interaktives Tool zum Verwalten von Zahlungseingängen:
+
+Features:
+- 📊 Übersicht: Zeigt Anzahl und Summen (Gesamt / Offen / Bezahlt)
+- 🔍 Interaktive Prüfung aller offenen Rechnungen
+- ✅ Status-Update: Markiert Rechnungen als "Bezahlt"
+- 💰 Summenberechnung der offenen Forderungen
+- 🔄 Rückwärtskompatibel: Funktioniert auch mit alten CSV-Dateien
+
+Workflow:
+1. Mandant auswählen
+2. Übersicht aller Rechnungen ansehen
+3. Für jede offene Rechnung entscheiden: Bezahlt? (j/n/s)
+4. Finale Übersicht mit Summen
+
+**3. [invoice.py](backend/03_Rechnungen/invoice.py) - Angepasst**
+- Neue Rechnungen bekommen automatisch Status `Offen`
+- CSV-Header um `Status`-Spalte erweitert
+
+**4. [agent.py](backend/01_Mahnwesen/agent.py) - Intelligentes Mahnwesen**
+
+Das Mahnwesen wurde SMART gemacht:
+
+Neue Funktionen:
+- `load_einnahmen()`: Lädt CSV und filtert nach Status
+- `find_pdfs()`: Erweitert um Filterung nach Rechnungsnummern
+- Zeigt Status-Übersicht VOR dem Versenden
+- Stoppt automatisch, wenn alles bezahlt ist
+
+**WICHTIG:** Nur noch Rechnungen mit Status "Offen" werden gemahnt!
+
+Beispiel-Output:
+```
+📊 RECHNUNGS-STATUS:
+   Gesamt: 5 Rechnungen
+   ✅ Bezahlt: 3
+   ⏳ Offen: 2
+
+⚠️  Folgende Rechnungen sind noch offen:
+   - 2025-003 | Oma_Erna | 714.00€ | vom 22.12.2025
+   - 2025-007 | Meier_GmbH | 1250.00€ | vom 24.12.2025
+
+🔎 2 PDF(s) für offene Rechnungen gefunden.
+```
+
+Wenn alles bezahlt ist:
+```
+🎉 Super! Alle Rechnungen sind bezahlt!
+   Es gibt nichts zu mahnen.
+```
+
+**5. [start.py](backend/start.py) - Menü erweitert**
+- Neue Option: `[6] 💶 Zahlungseingänge prüfen (OP pflegen)`
+- Direkt aus dem Hauptmenü aufrufbar
+
+#### Vorteile des neuen Systems:
+
+| Vorher | Nachher |
+|--------|---------|
+| ❌ Keine Ahnung, ob bezahlt | ✅ Klarer Status: Offen/Bezahlt |
+| ❌ Risiko: Bezahlte Kunden mahnen | ✅ Nur offene Rechnungen mahnen |
+| ❌ Manuell im Kontoauszug suchen | ✅ Zentrale Übersicht |
+| ❌ Peinliche Situationen | ✅ Professionell |
+
+#### Workflow in der Praxis:
+
+```
+1. Rechnung schreiben (invoice.py)
+   └─> Status: "Offen" ✅
+   
+2. Wöchentliche OP-Pflege (check_payments.py)
+   └─> Kontoauszug prüfen
+   └─> Geld da? → "Bezahlt" setzen ✅
+   
+3. Mahnungen versenden (agent.py)
+   └─> Nur offene Rechnungen werden gemahnt ✅
+   └─> Bezahlte Kunden werden IGNORIERT 🎉
+```
+
+#### Getestet:
+✅ Neue Rechnung mit Status "Offen" erstellt  
+✅ Status auf "Bezahlt" geändert  
+✅ Mahnwesen zeigt nur offene Rechnungen  
+✅ Mahnwesen stoppt bei bezahlten Rechnungen  
+✅ Summenberechnung funktioniert  
+✅ Migration alter Einträge ohne Status  
+
+#### Geänderte Dateien:
+1. `backend/03_Rechnungen/invoice.py` - Status-Spalte hinzugefügt
+2. `backend/03_Rechnungen/check_payments.py` - **NEU erstellt**
+3. `backend/01_Mahnwesen/agent.py` - Intelligentes Filtern implementiert
+4. `backend/start.py` - Menü-Option hinzugefügt
+5. `backend/Mandanten/*/einnahmen.csv` - Status-Spalte hinzugefügt
+
+**Zeitraum:** 26.12.2025, 15:36 - 15:52  
+**Entwickler:** Baran Turhan (mit Antigravity AI)
+
+---
+
+### Phase 4: Professionelles Setup (Dez 25, 2025)
 
 **Was heute passiert ist:**  
 Das Projekt wurde professionell aufgesetzt, damit man gut damit arbeiten kann.
@@ -294,6 +415,7 @@ Mein_Business/
 
 ---
 
-**Letzte Aktualisierung:** 2025-12-25 15:52  
+**Letzte Aktualisierung:** 2025-12-26 15:52  
 **Bearbeitet von:** Baran Turhan (mit Antigravity AI)  
-**Version:** 2.0 - Anfängerfreundlich umgeschrieben
+**Version:** 2.1 - OP-Pflege & Intelligentes Mahnwesen hinzugefügt
+

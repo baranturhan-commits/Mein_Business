@@ -22,7 +22,8 @@ def main():
         print("[3] 📄 Rechnung schreiben (startet 03_Rechnungen/invoice.py)")
         print("[4] 📧 Rechnungen versenden (startet 01_Mahnwesen/agent.py)")
         print("[5] 📸 Ausgaben scannen (startet 02_Buchhaltung/scanner.py)")
-        print("[6] 💰 Finanzen checken (startet 04_Controlling/finance_check.py)")
+        print("[6] 💶 Zahlungseingänge prüfen (OP pflegen)")
+        print("[7] 💰 Finanzen checken (startet 04_Controlling/finance_check.py)")
         print("[x] Beenden")
         
         choice = input("\nAuswahl: ").strip().lower()
@@ -46,6 +47,8 @@ def main():
         elif choice == '5':
             cmd_info = (os.path.join("02_Buchhaltung", "scanner.py"), [])
         elif choice == '6':
+            cmd_info = (os.path.join("03_Rechnungen", "check_payments.py"), [])
+        elif choice == '7':
             cmd_info = (os.path.join("04_Controlling", "finance_check.py"), [])
         
         if cmd_info:
