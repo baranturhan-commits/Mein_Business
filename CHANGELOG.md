@@ -417,5 +417,53 @@ Mein_Business/
 
 **Letzte Aktualisierung:** 2025-12-26 15:52  
 **Bearbeitet von:** Baran Turhan (mit Antigravity AI)  
-**Version:** 2.1 - OP-Pflege & Intelligentes Mahnwesen hinzugefügt
+### Phase 6: Workflow Erweiterung - Angebote & Lieferscheine (Dez 28, 2025)
+
+**Problem:** 
+- Bisher gab es nur Rechnungen. Der Prozess davor (Angebot und Lieferschein/Abnahme) fehlte.
+- Handwerker brauchen auf der Baustelle oft ein **Blanko-Protokoll** zum handschriftlichen Ausfüllen.
+- Installation von Abhängigkeiten (`reportlab`, `pandas`) war manchmal schwierig.
+
+**Lösung: Kompletter Business-Workflow**
+
+#### Was wurde implementiert:
+
+**1. Neue Module:**
+- **[05_Angebote/offer.py](backend/05_Angebote/offer.py)**
+  - Erstellt professionelle Angebote (PDF)
+  - Speichert Daten in `angebote.xlsx`
+  - Direkte Übernahme von Angeboten in Lieferscheine möglich
+
+- **[06_Lieferscheine/delivery.py](backend/06_Lieferscheine/delivery.py)**
+  - Erstellt Lieferscheine / Abnahmeprotokolle
+  - **Feature Highlight:** "Blanko-Modus"
+    - Erstellt ein PDF mit Kopfdaten (Kunde, Projekt), aber **leerer Tabelle**.
+    - Perfekt für die Baustelle zum Ausdrucken und Ausfüllen per Hand.
+  - Speichert Status (`Offen`), damit daraus später Rechnungen werden können.
+
+**2. Verknüpfung der Module:**
+- **Angebot → Lieferschein:** Man kann ein bestehendes Angebot laden
+- **Lieferschein → Rechnung:** `invoice.py` kann jetzt Lieferscheine importieren
+  - Da im Blanko-Protokoll oft kein Preis steht (0€), fragt die Rechnungserstellung **automatisch** nach den Preisen, wenn man den Lieferschein importiert.
+
+**3. Automatische Installation (Smart Start):**
+- `start.py` prüft jetzt beim Start, ob Module fehlen (`pandas`, `reportlab`, `openpyxl`).
+- Installiert sie **automatisch** nach, falls nötig.
+- Nutzt garantiert die korrekte Python-Umgebung (`sys.executable`).
+
+**4. Design & Usability:**
+- Abnahmeprotokoll-Design an Kundenwunsch angepasst (Blauer Header, Graue Felder).
+- Eingabe-Logik massiv vereinfacht (keine unnötigen Fragen mehr).
+
+**Geänderte Dateien:**
+1. `backend/05_Angebote/offer.py` (NEU)
+2. `backend/06_Lieferscheine/delivery.py` (NEU)
+3. `backend/start.py` (Auto-Install hinzugefügt, Menü erweitert)
+4. `backend/03_Rechnungen/invoice.py` (Import-Logik für Lieferscheine)
+
+---
+
+**Letzte Aktualisierung:** 2025-12-28 19:25
+**Bearbeitet von:** Baran Turhan (mit Antigravity AI)
+**Version:** 2.2 - Angebote, Lieferscheine & Blanko-Protokolle
 

@@ -374,6 +374,8 @@ git push
 
 ### 🔔 Backend
 Vollständige Python-basierte Business-Automatisierung:
+- **Angebote**: Professionelle Angebotserstellung (PDF & Excel)
+- **Lieferscheine**: Abnahmeprotokolle (auch als Blanko-Formular für die Baustelle)
 - **Mahnwesen**: KI-gestützte Mahnung mit PDF-Generierung (nur offene Rechnungen)
 - **Buchhaltung**: Intelligente Belegverarbeitung
 - **Rechnungen**: Automatische Rechnungserstellung mit Status-Tracking
@@ -418,5 +420,5 @@ Dieses Projekt ist für den privaten/geschäftlichen Gebrauch.
 
 ---
 
-**Version:** 2.1  
-**Letztes Update:** 2025-12-26
+**Version:** 2.2
+**Letztes Update:** 2025-12-28
