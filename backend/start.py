@@ -12,6 +12,28 @@ def main():
     # 1. Ermittle das Basis-Verzeichnis (wo LIEGT dieses start.py?)
     BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
+    # --- AUTO-INSTALL DEPENDENCIES ---
+    required_modules = ['pandas', 'openpyxl', 'reportlab']
+    missing = []
+    for mod in required_modules:
+        try:
+            __import__(mod)
+        except ImportError:
+            missing.append(mod)
+            
+    if missing:
+        print(f"⚠️  Es fehlen benötigte Module: {', '.join(missing)}")
+        print("Versuche automatische Installation...")
+        try:
+            subprocess.check_call([sys.executable, '-m', 'pip', 'install'] + missing)
+            print("✅ Installation erfolgreich! Bitte warten...")
+            import time; time.sleep(2)
+        except Exception as e:
+            print(f"❌ Installation fehlgeschlagen: {e}")
+            input("Drücken Sie Enter zum Beenden.")
+            return
+    # ---------------------------------
+
     while True:
         clear_screen()
         print(f"📂 Working Directory: {BASE_DIR}")
@@ -24,6 +46,8 @@ def main():
         print("[5] 📸 Ausgaben scannen (startet 02_Buchhaltung/scanner.py)")
         print("[6] 💶 Zahlungseingänge prüfen (OP pflegen)")
         print("[7] 💰 Finanzen checken (startet 04_Controlling/finance_check.py)")
+        print("[8] 📝 Angebot erstellen (startet 05_Angebote/offer.py)")
+        print("[9] 🚚 Lieferschein / Protokoll (startet 06_Lieferscheine/delivery.py)")
         print("[x] Beenden")
         
         choice = input("\nAuswahl: ").strip().lower()
@@ -50,6 +74,10 @@ def main():
             cmd_info = (os.path.join("03_Rechnungen", "check_payments.py"), [])
         elif choice == '7':
             cmd_info = (os.path.join("04_Controlling", "finance_check.py"), [])
+        elif choice == '8':
+            cmd_info = (os.path.join("05_Angebote", "offer.py"), [])
+        elif choice == '9':
+            cmd_info = (os.path.join("06_Lieferscheine", "delivery.py"), [])
         
         if cmd_info:
             rel_path, args = cmd_info
@@ -60,12 +88,8 @@ def main():
                 try:
                     # Baue den kompletten Befehl: [python, script_path, arg1, arg2...]
                     # Versuche, das venv Python zu nutzen, falls vorhanden
-                    venv_python = os.path.join(BASE_DIR, "venv", "Scripts", "python.exe")
-                    
-                    if os.path.exists(venv_python):
-                        python_exe = venv_python
-                    else:
-                        python_exe = sys.executable
+                    # Immer den aktuellen Interpreter nutzen (venv oder global, so wie start.py läuft)
+                    python_exe = sys.executable
                     
                     cmd_list = [python_exe, full_path] + args
                     subprocess.call(cmd_list)

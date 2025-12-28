@@ -245,11 +245,11 @@ import excel_utils
         except Exception as e:
             print(f"⚠️  Fehler beim Verbuchen des Umsatzes: {e}")
 
-        return True
+        return filename
         
     except Exception as e:
         print(f"❌ Fehler bei der PDF-Erstellung: {e}")
-        return False
+        return None
 
 def main():
     clear_screen()
@@ -298,19 +298,104 @@ def main():
     print(f"👉 Gewählt: {selected_kunde['firma']}")
     print("-" * 30)
     
-    # 3. Positionen
+    # 3. Modus: Manuell oder Lieferschein
+    print("\nModus wählen:")
+    print("[1] Manuelle Eingabe")
+    print("[2] Aus Lieferschein übernehmen")
+    mode = input("Auswahl: ").strip()
+    
     items = []
-    print("\n📦 Positionen eingeben:")
-    while True:
-        desc = input("   Beschreibung: ").strip()
-        if not desc: break
+    lieferschein_ref = ""
+    
+    if mode == '2':
+        # Load Open Delivery Notes
+        ls_xlsx = os.path.join(mandant_path, "Lieferscheine", "lieferscheine.xlsx")
+        available = []
+        if os.path.exists(ls_xlsx):
+            all_ls = excel_utils.read_data(ls_xlsx, "Lieferscheine")
+            # Only exact customer match? Or show all open?
+            # Better show only for selected customer to avoid errors
+            available = [l for l in all_ls if l.get('Status') == 'Offen' and l.get('Kunde') == selected_kunde['firma']]
+            
+        if not available:
+            print("❌ Keine offenen Lieferscheine für diesen Kunden gefunden.")
+            return
+            
+        print("\nOffene Lieferscheine:")
+        for i, l in enumerate(available, 1):
+             print(f"[{i}] {l.get('Lieferscheinnummer')} | {l.get('Datum')}")
+             
         try:
-            amt_s = input("   Betrag (Netto): ").replace(',', '.')
-            if not amt_s: break
-            amt = float(amt_s)
-            items.append({'beschreibung': desc, 'betrag': amt})
-        except ValueError:
-            print("❌ Ungültig.")
+            ls_idx = int(input("Wahl: ")) - 1
+            sel_ls = available[ls_idx]
+            lieferschein_ref = sel_ls.get('Lieferscheinnummer')
+            
+            import json
+            raw = sel_ls.get('Items', '[]')
+            ls_items = json.loads(raw)
+            
+            print(f"\nPreise für {len(ls_items)} Positionen festlegen:")
+            print("-" * 30)
+            
+            for i, it in enumerate(ls_items, 1):
+                desc_text = it['beschreibung']
+                qty = float(it['menge'])
+                
+                print(f"\nPos {i}: {desc_text}")
+                print(f"Menge: {qty}")
+                
+                # Preis abfragen (Standard = 0 oder Wert aus LS falls vorhanden)
+                default_price = float(it.get('preis', 0.0))
+                
+                while True:
+                    p_in = input(f"Einzelpreis (Netto) [Enter={default_price}]: ").strip().replace(',', '.')
+                    if not p_in:
+                        price = default_price
+                        break
+                    try:
+                        price = float(p_in)
+                        break
+                    except: print("❌ Zahl erwartet.")
+                
+                # Summe
+                line_total = price * qty
+                
+                # Format Description for Invoice: "5.0x Anfahrt (@ 50.0€)"
+                # Or just Description? Usually invoice needs "Quantity | Description | Unit Price | Total"
+                # But current create_pdf takes simple items list with 'betrag' as total?
+                # Check create_pdf logic.
+                # line 169: for item in items:
+                #    desc = item['beschreibung']
+                #    price = item['betrag'] (TOTAL)
+                #    table_data.append([desc, f"{price:.2f} €"])
+                
+                # So we must format the description string to include details
+                # because simple invoice generator doesn't split columns yet.
+                final_desc = f"{qty}x {desc_text} (EP: {price:.2f}€)"
+                
+                items.append({
+                    'beschreibung': final_desc,
+                    'betrag': line_total
+                })
+                
+            print(f"✅ Positionen übernommen.")
+            
+        except Exception as e:
+            print(f"❌ Fehler: {e}")
+            return
+    else:
+        # Manuell
+        print("\n📦 Positionen eingeben:")
+        while True:
+            desc = input("   Beschreibung: ").strip()
+            if not desc: break
+            try:
+                amt_s = input("   Betrag (Netto): ").replace(',', '.')
+                if not amt_s: break
+                amt = float(amt_s)
+                items.append({'beschreibung': desc, 'betrag': amt})
+            except ValueError:
+                print("❌ Ungültig.")
             
     if not items: return
         
@@ -327,7 +412,15 @@ def main():
         'items': items
     }
     
-    create_pdf(data, mandant_path, mandant_config, selected_kunde)
+    result = create_pdf(data, mandant_path, mandant_config, selected_kunde)
+    
+    if result:
+        # Update Lieferschein if needed
+        if mode == '2' and lieferschein_ref:
+            ls_xlsx = os.path.join(mandant_path, "Lieferscheine", "lieferscheine.xlsx")
+            excel_utils.update_status(ls_xlsx, "Lieferscheinnummer", lieferschein_ref, "Status", "Abgerechnet")
+            print(f"✅ Lieferschein {lieferschein_ref} als 'Abgerechnet' markiert.")
+            
     input("\n[Enter] zum Beenden...")
 
 if __name__ == "__main__":

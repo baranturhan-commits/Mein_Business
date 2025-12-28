@@ -73,6 +73,8 @@ def create_mandant():
         # 1. Folder Structure
         os.makedirs(mandant_path, exist_ok=True)
         os.makedirs(os.path.join(mandant_path, "Rechnungen"), exist_ok=True)
+        os.makedirs(os.path.join(mandant_path, "Angebote"), exist_ok=True) # [NEW]
+        os.makedirs(os.path.join(mandant_path, "Lieferscheine"), exist_ok=True) # [NEW]
         os.makedirs(os.path.join(mandant_path, "Kunden"), exist_ok=True)
         os.makedirs(os.path.join(mandant_path, "Einnahmen"), exist_ok=True)
         os.makedirs(os.path.join(mandant_path, "Ausgaben"), exist_ok=True)
