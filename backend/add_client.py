@@ -4,6 +4,7 @@ import csv
 import re
 import json
 import shutil
+import excel_utils # [NEW]
 
 # Force UTF-8 for Console
 sys.stdout.reconfigure(encoding='utf-8')
@@ -70,9 +71,12 @@ def create_mandant():
     
     try:
         # 1. Folder Structure
-        os.makedirs(mandant_path)
-        os.makedirs(os.path.join(mandant_path, "Rechnungen"))
-        os.makedirs(os.path.join(mandant_path, "Kunden")) # Explizit verlangt
+        os.makedirs(mandant_path, exist_ok=True)
+        os.makedirs(os.path.join(mandant_path, "Rechnungen"), exist_ok=True)
+        os.makedirs(os.path.join(mandant_path, "Kunden"), exist_ok=True)
+        os.makedirs(os.path.join(mandant_path, "Einnahmen"), exist_ok=True)
+        os.makedirs(os.path.join(mandant_path, "Ausgaben"), exist_ok=True)
+        os.makedirs(os.path.join(mandant_path, "Reports"), exist_ok=True)
         
         # 2. Logo Handling
         logo_filename = None
@@ -111,12 +115,9 @@ def create_mandant():
             
         print("✅ Mandantendaten gespeichert (mandant_config.json).")
         
-        # 4. CSV (Backup/Compatibility)
-        # Wir speichern die kunden.csv weiterhin direkt im Mandanten-Root für Kompatibilität
-        csv_path = os.path.join(mandant_path, "kunden.csv")
-        with open(csv_path, 'w', newline='', encoding='utf-8') as f:
-            writer = csv.writer(f, delimiter=';')
-            writer.writerow(['Firma', 'Email', 'Anrede'])
+        # 4. Excel Init (statt CSV)
+        xlsx_path = os.path.join(mandant_path, "Kunden", "kunden.xlsx")
+        excel_utils.init_file(xlsx_path, ['Firma', 'Email', 'Anrede'], "Kunden")
             
         print(f"\n✨ Mandant '{name}' erfolgreich angelegt!")
         print(f"   Ordner: {mandant_path}")
@@ -173,17 +174,24 @@ def create_kunde():
         
     # Paths
     mandant_path = os.path.join(MANDANTEN_DIR, selected_mandant)
-    csv_path = os.path.join(mandant_path, "kunden.csv")
+    kunden_dir = os.path.join(mandant_path, "Kunden")
+    if not os.path.exists(kunden_dir): os.makedirs(kunden_dir, exist_ok=True)
+    
+    xlsx_path = os.path.join(kunden_dir, "kunden.xlsx")
+    
     invoice_folder = os.path.join(mandant_path, "Rechnungen", safe_firma)
     
     try:
         if not os.path.exists(invoice_folder):
             os.makedirs(invoice_folder)
             
-        # Append to CSV
-        with open(csv_path, 'a', newline='', encoding='utf-8') as f:
-            writer = csv.writer(f, delimiter=';')
-            writer.writerow([safe_firma, email, anrede])
+        # Append to Excel
+        data = {
+            'Firma': safe_firma,
+            'Email': email,
+            'Anrede': anrede
+        }
+        excel_utils.append_data(xlsx_path, data, "Kunden", ['Firma', 'Email', 'Anrede'])
             
         print(f"✅ Kunde '{safe_firma}' erfolgreich für '{selected_mandant}' angelegt.")
         print(f"   Rechnungsordner: {invoice_folder}")

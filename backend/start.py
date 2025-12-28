@@ -59,7 +59,15 @@ def main():
                 print(f"\n⚙️  Starte: {rel_path} {' '.join(args)} ...\n")
                 try:
                     # Baue den kompletten Befehl: [python, script_path, arg1, arg2...]
-                    cmd_list = [sys.executable, full_path] + args
+                    # Versuche, das venv Python zu nutzen, falls vorhanden
+                    venv_python = os.path.join(BASE_DIR, "venv", "Scripts", "python.exe")
+                    
+                    if os.path.exists(venv_python):
+                        python_exe = venv_python
+                    else:
+                        python_exe = sys.executable
+                    
+                    cmd_list = [python_exe, full_path] + args
                     subprocess.call(cmd_list)
                 except Exception as e:
                     print(f"❌ Fehler beim Ausführen: {e}")

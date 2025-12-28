@@ -55,26 +55,24 @@ def load_mandant_config(mandant_path, mandant_name):
             
     return config
 
+
+import shutil # Important for migration
+
 def load_kunden(mandant_path):
-    csv_path = os.path.join(mandant_path, "kunden.csv")
+    kunden_dir = os.path.join(mandant_path, "Kunden")
+    xlsx_path = os.path.join(kunden_dir, "kunden.xlsx")
+    
     kunden = []
-    if os.path.exists(csv_path):
-        try:
-            with open(csv_path, 'r', encoding='utf-8', newline='') as f:
-                reader = csv.reader(f, delimiter=';')
-                rows = list(reader)
-                if rows and rows[0][0] == "Firma": 
-                    rows = rows[1:]
-                
-                for row in rows:
-                    if len(row) >= 1:
-                        kunden.append({
-                            'firma': row[0],
-                            'email': row[1] if len(row) > 1 else "",
-                            'anrede': row[2] if len(row) > 2 else ""
-                        })
-        except Exception as e:
-            print(f"⚠️ Fehler beim Lesen der CSV: {e}")
+    if os.path.exists(xlsx_path):
+        data = excel_utils.read_data(xlsx_path, "Kunden")
+        for row in data:
+            kunden.append({
+                'firma': row.get('Firma', ''),
+                'email': row.get('Email', ''),
+                'anrede': row.get('Anrede', '')
+            })
+            
+    # Fallback to CSV if XL missing? No, we migrate.
     return kunden
 
 def get_and_increment_counter(mandant_path):
@@ -212,35 +210,37 @@ def create_pdf(invoice_data, mandant_path, mandant_config, kunde_data):
         print(f"\n✅ PDF erfolgreich erstellt!")
         print(f"📂 Pfad: {filename}")
 
-        # --- UMSATZ VERBUCHEN ---
+import sys
+sys.path.append(os.path.dirname(SCRIPT_DIR)) # Add backend root
+import excel_utils
+
+# ... inside create_pdf ...
+
+        # --- UMSATZ VERBUCHEN (EXCEL) ---
         try:
-            einnahmen_path = os.path.join(mandant_path, "einnahmen.csv")
-            file_exists = os.path.exists(einnahmen_path)
+            einnahmen_dir = os.path.join(mandant_path, "Einnahmen")
+            if not os.path.exists(einnahmen_dir): os.makedirs(einnahmen_dir, exist_ok=True)
             
-            # Beschreibungen zusammenfügen und bereinigen
+            xlsx_path = os.path.join(einnahmen_dir, "einnahmen.xlsx")
+
+            # Beschreibungen zusammenfügen
             desc_list = [i['beschreibung'] for i in invoice_data['items']]
             full_desc = ", ".join(desc_list)
-            full_desc = full_desc.replace(";", " ") # Semikolon entfernen für CSV Sicherheit
             
-            with open(einnahmen_path, 'a', newline='', encoding='utf-8') as f:
-                writer = csv.writer(f, delimiter=';')
+            data_row = {
+                "Rechnungsnummer": invoice_data['nummer'],
+                "Datum": invoice_data['datum'],
+                "Kunde": kunde_data['firma'],
+                "Beschreibung": full_desc,
+                "Betrag_Netto": f"{total:.2f}",
+                "Betrag_Brutto": f"{brutto:.2f}",
+                "Status": "Offen"
+            }
+            
+            headers = ["Rechnungsnummer", "Datum", "Kunde", "Beschreibung", "Betrag_Netto", "Betrag_Brutto", "Status"]
+            excel_utils.append_data(xlsx_path, data_row, "Einnahmen", headers)
                 
-                # Header schreiben, falls Datei neu
-                if not file_exists:
-                    writer.writerow(["Rechnungsnummer", "Datum", "Kunde", "Beschreibung", "Betrag_Netto", "Betrag_Brutto", "Status"])
-                
-                # Daten schreiben
-                writer.writerow([
-                    invoice_data['nummer'], 
-                    invoice_data['datum'], 
-                    kunde_data['firma'],
-                    full_desc,
-                    f"{total:.2f}", 
-                    f"{brutto:.2f}",
-                    "Offen"  # Default Status
-                ])
-                
-            print(f"✅ Umsatz in einnahmen.csv verbucht.")
+            print(f"✅ Umsatz in Einnahmen/einnahmen.xlsx verbucht.")
             
         except Exception as e:
             print(f"⚠️  Fehler beim Verbuchen des Umsatzes: {e}")

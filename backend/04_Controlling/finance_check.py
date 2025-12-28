@@ -14,23 +14,51 @@ sys.stdout.reconfigure(encoding='utf-8')
 # --- CONFIG & PATHS ---
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 BASE_DIR = os.path.dirname(SCRIPT_DIR)
-CONFIG_FILE = os.path.join(BASE_DIR, "config.json")
-AUSGABEN_BASE_DIR = os.path.join(BASE_DIR, "02_Buchhaltung", "Ausgaben")
-EINNAHMEN_FILE = os.path.join(BASE_DIR, "03_Rechnungen", "Einnahmen.csv")
+MANDANTEN_DIR = os.path.join(BASE_DIR, "Mandanten")
 
 def clear_screen():
     os.system('cls' if os.name == 'nt' else 'clear')
 
 # --- HELPERS ---
-def load_profiles():
-    if not os.path.exists(CONFIG_FILE):
+def load_mandanten():
+    """Liest alle Mandanten aus dem Mandanten-Verzeichnis."""
+    if not os.path.exists(MANDANTEN_DIR):
         return []
+    
+    mandanten = []
     try:
-        with open(CONFIG_FILE, 'r', encoding='utf-8') as f:
-            data = json.load(f)
-            return data.get('profiles', [])
-    except:
-        return []
+        for item in os.listdir(MANDANTEN_DIR):
+            mandant_path = os.path.join(MANDANTEN_DIR, item)
+            if os.path.isdir(mandant_path):
+                # Versuche mandant_config.json zu lesen
+                config_path = os.path.join(mandant_path, "mandant_config.json")
+                if os.path.exists(config_path):
+                    try:
+                        with open(config_path, 'r', encoding='utf-8') as f:
+                            config = json.load(f)
+                            mandanten.append({
+                                'name': item,
+                                'firma': config.get('firma', item),
+                                'path': mandant_path
+                            })
+                    except:
+                        # Fallback wenn config nicht lesbar
+                        mandanten.append({
+                            'name': item,
+                            'firma': item,
+                            'path': mandant_path
+                        })
+                else:
+                    # Kein config.json, nutze Verzeichnisnamen
+                    mandanten.append({
+                        'name': item,
+                        'firma': item,
+                        'path': mandant_path
+                    })
+    except Exception as e:
+        print(f"⚠️  Fehler beim Laden der Mandanten: {e}")
+    
+    return mandanten
 
 def clean_currency(val):
     if pd.isna(val) or val == '': return 0.0
@@ -96,25 +124,25 @@ def main():
     print("="*60)
 
     # 1. SETUP & SELECTION
-    profiles = load_profiles()
-    if not profiles:
-        print("❌ Keine Firmenprofile in config.json gefunden.")
+    mandanten = load_mandanten()
+    if not mandanten:
+        print("❌ Keine Mandanten im Mandanten-Verzeichnis gefunden.")
         return
 
-    print("Für welche Firma wollen wir die Finanzen prüfen?")
-    for idx, p in enumerate(profiles, 1):
-        print(f"[{idx}] {p.get('firma', 'Unbekannt')}")
+    print("Für welchen Mandanten wollen wir die Finanzen prüfen?")
+    for idx, m in enumerate(mandanten, 1):
+        print(f"[{idx}] {m.get('firma', 'Unbekannt')}")
     
     try:
         c_idx = int(input("\nAuswahl: ")) - 1
-        if c_idx < 0 or c_idx >= len(profiles): raise ValueError
-        current_profile = profiles[c_idx]
+        if c_idx < 0 or c_idx >= len(mandanten): raise ValueError
+        current_mandant = mandanten[c_idx]
     except:
         print("❌ Ungültige Auswahl.")
         return
 
-    firma_name = current_profile['firma']
-    firma_safe = "".join(c for c in firma_name if c.isalnum() or c in ('_', '-')).strip()
+    firma_name = current_mandant['firma']
+    mandant_path = current_mandant['path']
     print(f"\n✅ Gewählt: {firma_name}")
 
     print("\nWelcher Zeitraum?")
@@ -128,31 +156,41 @@ def main():
     # 2. LOAD DATA
     print("\n🔄 Lade Daten...")
     
-    # A) Ausgaben
-    ausgaben_path = os.path.join(AUSGABEN_BASE_DIR, firma_safe, "Ausgaben.csv")
+    # A) Ausgaben - aus Mandanten/[name]/Ausgaben/ausgaben.xlsx
+    ausgaben_path = os.path.join(mandant_path, "Ausgaben", "ausgaben.xlsx")
     df_aus = pd.DataFrame()
     if os.path.exists(ausgaben_path):
         try:
-            df_aus = pd.read_csv(ausgaben_path, sep=';', encoding='utf-8-sig')
+            df_aus = pd.read_excel(ausgaben_path)
             for c in ['Netto', 'MwSt', 'Brutto']:
                 if c in df_aus.columns: df_aus[c] = df_aus[c].apply(clean_currency)
-            df_aus['Datum_DT'] = df_aus['Datum'].apply(parse_german_date)
+            # Excel liest Datum oft direkt korrekt, fallback parse
+            if 'Datum' in df_aus.columns and not pd.api.types.is_datetime64_any_dtype(df_aus['Datum']):
+                 df_aus['Datum_DT'] = df_aus['Datum'].apply(parse_german_date)
+            elif 'Datum' in df_aus.columns:
+                 df_aus['Datum_DT'] = df_aus['Datum']
+                 
         except Exception as e:
             print(f"⚠️  Fehler bei Ausgaben lesen: {e}")
 
-    # B) Einnahmen
+    # B) Einnahmen - aus Mandanten/[name]/Einnahmen/einnahmen.xlsx
+    einnahmen_path = os.path.join(mandant_path, "Einnahmen", "einnahmen.xlsx")
     df_ein = pd.DataFrame()
-    if os.path.exists(EINNAHMEN_FILE):
+    if os.path.exists(einnahmen_path):
         try:
-            df_ein = pd.read_csv(EINNAHMEN_FILE, sep=';', encoding='utf-8-sig', on_bad_lines='skip')
-            for c in ['Netto', 'MwSt', 'Brutto']:
-                if c in df_ein.columns: df_ein[c] = df_ein[c].apply(clean_currency)
-            df_ein['Datum_DT'] = df_ein['Datum'].apply(parse_german_date)
-            # Filter Company
-            for col in ['Firma', 'Absender', 'Company']:
-                if col in df_ein.columns:
-                    df_ein = df_ein[df_ein[col] == firma_name]
-                    break
+            df_ein = pd.read_excel(einnahmen_path)
+            for c in ['Betrag_Netto', 'Betrag_Brutto']: # Note different headers in Invoice vs Scanner? 
+                # Scanner: Netto, Brutto. Invoice: Betrag_Netto, Betrag_Brutto.
+                # Standardize for calc:
+                target = c.replace("Betrag_", "")
+                if c in df_ein.columns: 
+                    df_ein[target] = df_ein[c].apply(clean_currency)
+            
+            if 'Datum' in df_ein.columns and not pd.api.types.is_datetime64_any_dtype(df_ein['Datum']):
+                 df_ein['Datum_DT'] = df_ein['Datum'].apply(parse_german_date)
+            elif 'Datum' in df_ein.columns:
+                 df_ein['Datum_DT'] = df_ein['Datum']
+
         except Exception as e:
             print(f"⚠️  Fehler bei Einnahmen lesen: {e}")
 
@@ -241,7 +279,8 @@ def main():
     print(f"💵 VERFÜGBAR        : {reingewinn:10.2f} € (Privat)")
 
     # 6. EXCEL EXPORT (STYLED)
-    report_folder = os.path.join(SCRIPT_DIR, "Reports")
+    # Speichere Report im Mandanten-Ordner
+    report_folder = os.path.join(mandant_path, "Reports")
     if not os.path.exists(report_folder): os.makedirs(report_folder)
     
     t_label = "Gesamt"
@@ -249,7 +288,9 @@ def main():
     elif time_choice == '2': t_label = "LetzterMonat"
     elif time_choice == '3': t_label = "2025"
     
-    filename = f"{firma_safe}_{t_label}_Report.xlsx"
+    # Nutze Mandanten-Namen für Dateinamen
+    mandant_name = current_mandant['name']
+    filename = f"{mandant_name}_{t_label}_Report.xlsx"
     filepath = os.path.join(report_folder, filename)
     
     wb = Workbook()

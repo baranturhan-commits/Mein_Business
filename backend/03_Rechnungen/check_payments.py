@@ -1,16 +1,17 @@
 import os
 import sys
-import csv
-import tempfile
-import shutil
 
 # Force UTF-8 for Console
 sys.stdout.reconfigure(encoding='utf-8')
 
 # --- CONFIG & PATHS ---
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
-BASE_DIR = os.path.dirname(SCRIPT_DIR)
+BASE_DIR = os.path.dirname(SCRIPT_DIR) # backend/
 MANDANTEN_DIR = os.path.join(BASE_DIR, "Mandanten")
+
+# Import excel_utils
+sys.path.append(BASE_DIR)
+import excel_utils
 
 def clear_screen():
     os.system('cls' if os.name == 'nt' else 'clear')
@@ -22,60 +23,20 @@ def list_mandanten():
     items = [d for d in os.listdir(MANDANTEN_DIR) if os.path.isdir(os.path.join(MANDANTEN_DIR, d))]
     return sorted(items)
 
-def load_invoices(einnahmen_path):
-    """Lädt alle Rechnungen aus einnahmen.csv"""
-    invoices = []
-    
-    if not os.path.exists(einnahmen_path):
-        print(f"⚠️  Datei nicht gefunden: {einnahmen_path}")
-        return invoices
+def load_invoices(xlsx_path):
+    """Lädt alle Rechnungen aus Excel"""
+    if not os.path.exists(xlsx_path):
+        return []
     
     try:
-        with open(einnahmen_path, 'r', encoding='utf-8', newline='') as f:
-            reader = csv.DictReader(f, delimiter=';')
-            for row in reader:
-                invoices.append(row)
+        data = excel_utils.read_data(xlsx_path, "Einnahmen")
+        return data
     except Exception as e:
-        print(f"❌ Fehler beim Lesen der CSV: {e}")
-        
-    return invoices
+        print(f"❌ Fehler beim Lesen der Excel: {e}")
+        return []
 
-def update_invoice_status(einnahmen_path, invoice_nr, new_status):
-    """Aktualisiert den Status einer Rechnung"""
-    
-    if not os.path.exists(einnahmen_path):
-        print(f"❌ Datei nicht gefunden: {einnahmen_path}")
-        return False
-    
-    try:
-        # Lese alle Zeilen
-        rows = []
-        with open(einnahmen_path, 'r', encoding='utf-8', newline='') as f:
-            reader = csv.DictReader(f, delimiter=';')
-            fieldnames = reader.fieldnames
-            
-            # Sicherstellen, dass Status-Spalte existiert
-            if 'Status' not in fieldnames:
-                fieldnames = list(fieldnames) + ['Status']
-            
-            for row in reader:
-                if row['Rechnungsnummer'] == invoice_nr:
-                    row['Status'] = new_status
-                elif 'Status' not in row or not row['Status']:
-                    row['Status'] = 'Offen'  # Fallback für alte Einträge
-                rows.append(row)
-        
-        # Schreibe alle Zeilen zurück
-        with open(einnahmen_path, 'w', encoding='utf-8', newline='') as f:
-            writer = csv.DictWriter(f, fieldnames=fieldnames, delimiter=';')
-            writer.writeheader()
-            writer.writerows(rows)
-            
-        return True
-        
-    except Exception as e:
-        print(f"❌ Fehler beim Aktualisieren: {e}")
-        return False
+def update_invoice_status(xlsx_path, rechnungsnummer, new_status="Bezahlt"):
+    return excel_utils.update_status(xlsx_path, "Rechnungsnummer", rechnungsnummer, "Status", new_status)
 
 def display_invoice_details(invoice):
     """Zeigt Details einer Rechnung"""
@@ -83,7 +44,7 @@ def display_invoice_details(invoice):
     print(f"📅 Datum: {invoice.get('Datum', 'N/A')}")
     print(f"👤 Kunde: {invoice.get('Kunde', 'N/A')}")
     print(f"📝 Beschreibung: {invoice.get('Beschreibung', 'N/A')}")
-    print(f"💶 Betrag Brutto: {invoice.get('Betrag_Brutto', 'N/A')} €")
+    print(f"💶 Betrag Brutto: {invoice.get('Betrag_Brutto', '0,00')} €")
     status = invoice.get('Status', 'Offen')
     status_icon = "✅" if status == "Bezahlt" else "⏳"
     print(f"{status_icon} Status: {status}")
@@ -91,13 +52,12 @@ def display_invoice_details(invoice):
 
 def main():
     clear_screen()
-    print("💰 ZAHLUNGSEINGANGS-CHECKER")
-    print("=" * 60)
+    print("💰 ZAHLUNGSEINGANG PRÜFEN (OP-Liste)")
+    print("====================================")
     
-    # 1. Mandant auswählen
     mandanten = list_mandanten()
-    if not mandanten:
-        print("⚠️  Keine Mandanten gefunden.")
+    if not mandanten: 
+        print("Keine Mandanten gefunden.")
         return
     
     print("\nBitte Mandant wählen:")
@@ -105,111 +65,73 @@ def main():
         print(f"[{i}] {m}")
     
     choice = input("\nAuswahl: ").strip()
-    if not choice.isdigit():
-        print("❌ Ungültige Eingabe.")
-        return
+    if not choice.isdigit(): return
     
     idx = int(choice) - 1
-    if not (0 <= idx < len(mandanten)):
-        print("❌ Ungültige Auswahl.")
-        return
+    if not (0 <= idx < len(mandanten)): return
     
     selected_mandant = mandanten[idx]
     mandant_path = os.path.join(MANDANTEN_DIR, selected_mandant)
-    einnahmen_path = os.path.join(mandant_path, "einnahmen.csv")
-    
     print(f"\n👉 Gewählt: {selected_mandant}")
     print("=" * 60)
     
-    # 2. Rechnungen laden
-    invoices = load_invoices(einnahmen_path)
+    # Paths
+    einnahmen_dir = os.path.join(mandant_path, "Einnahmen")
+    xlsx_path = os.path.join(einnahmen_dir, "einnahmen.xlsx")
+    
+    # Rechnungen laden
+    invoices = load_invoices(xlsx_path)
     
     if not invoices:
-        print("\n⚠️  Keine Rechnungen gefunden.")
+        print("✅ Keine Rechnungen gefunden.")
+        input("\n[Enter] zurück...")
         return
-    
-    # 3. Offene Rechnungen anzeigen
+
+    # Filter
     open_invoices = [inv for inv in invoices if inv.get('Status', 'Offen') == 'Offen']
-    paid_invoices = [inv for inv in invoices if inv.get('Status', '') == 'Bezahlt']
-    
-    print(f"\n📊 ÜBERSICHT:")
-    print(f"   Gesamt: {len(invoices)} Rechnungen")
-    print(f"   ⏳ Offen: {len(open_invoices)}")
-    print(f"   ✅ Bezahlt: {len(paid_invoices)}")
+    paid_invoices = [inv for inv in invoices if inv.get('Status') == 'Bezahlt']
+
+    print(f"Gesamt: {len(invoices)} | Offen: {len(open_invoices)} | Bezahlt: {len(paid_invoices)}")
     
     if not open_invoices:
-        print("\n🎉 Super! Alle Rechnungen sind bezahlt!")
-        
-        # Zeige trotzdem alle Rechnungen zur Information
-        print("\n📋 Alle Rechnungen:")
-        for invoice in invoices:
-            display_invoice_details(invoice)
-        
-        input("\n[Enter] zum Beenden...")
-        return
-    
-    print("\n" + "=" * 60)
-    print("⏳ OFFENE RECHNUNGEN:")
-    print("=" * 60)
-    
-    # 4. Durchlaufe offene Rechnungen
-    for i, invoice in enumerate(open_invoices, 1):
-        display_invoice_details(invoice)
-        
-        # Frage ob bezahlt
-        while True:
-            answer = input(f"\n[{i}/{len(open_invoices)}] Wurde diese Rechnung bezahlt? (j/n/s für Überspringen): ").strip().lower()
-            
-            if answer == 'j':
-                # Markiere als bezahlt
-                if update_invoice_status(einnahmen_path, invoice['Rechnungsnummer'], 'Bezahlt'):
-                    print("✅ Status auf 'Bezahlt' gesetzt!")
-                break
-            elif answer == 'n':
-                print("⏳ Bleibt auf 'Offen'.")
-                break
-            elif answer == 's':
-                print("⏭️  Übersprungen.")
-                break
-            else:
-                print("❌ Bitte 'j' (ja), 'n' (nein) oder 's' (überspringen) eingeben.")
-        
-        # Zeige Fortschritt
-        if i < len(open_invoices):
-            print("\n" + "-" * 60)
-            continue_check = input("Weiter zur nächsten Rechnung? (Enter = Ja, 'q' = Beenden): ").strip().lower()
-            if continue_check == 'q':
-                print("\n👋 Abgebrochen.")
-                break
-    
-    # 5. Finale Übersicht
-    print("\n" + "=" * 60)
-    print("📊 FINALE ÜBERSICHT:")
-    
-    # Lade nochmal um aktuelle Zahlen zu zeigen
-    invoices = load_invoices(einnahmen_path)
-    open_invoices = [inv for inv in invoices if inv.get('Status', 'Offen') == 'Offen']
-    paid_invoices = [inv for inv in invoices if inv.get('Status', '') == 'Bezahlt']
-    
-    total_open = sum(float(inv.get('Betrag_Brutto', '0').replace(',', '.')) for inv in open_invoices if inv.get('Betrag_Brutto'))
-    total_paid = sum(float(inv.get('Betrag_Brutto', '0').replace(',', '.')) for inv in paid_invoices if inv.get('Betrag_Brutto'))
-    
-    print(f"   ⏳ Offen: {len(open_invoices)} Rechnungen → {total_open:.2f} €")
-    print(f"   ✅ Bezahlt: {len(paid_invoices)} Rechnungen → {total_paid:.2f} €")
-    print("=" * 60)
-    
-    if open_invoices:
-        print("\n⚠️  ACHTUNG: Noch offene Forderungen!")
-        print("💡 Tipp: Starte 'agent.py' für das Mahnwesen.")
+        print("\n🎉 Keine offenen Posten!")
     else:
-        print("\n🎉 Perfekt! Keine offenen Forderungen mehr!")
+        print("\n⏳ OFFENE POSTEN:")
+        print("=" * 60)
+        for i, invoice in enumerate(open_invoices, 1):
+            display_invoice_details(invoice)
+            
+            while True:
+                ans = input(f"Rechnung bezahlt? (j=Ja, n=Nein, s=Skip, q=Quit): ").strip().lower()
+                if ans == 'j':
+                    if update_invoice_status(xlsx_path, invoice.get('Rechnungsnummer'), "Bezahlt"):
+                        print("✅ Markiert als BEZAHLT.")
+                    else:
+                        print("❌ Fehler beim Speichern.")
+                    break
+                elif ans == 'n':
+                    print("Ok, bleibt offen.")
+                    break
+                elif ans == 's':
+                    break
+                elif ans == 'q':
+                    return
+
+    # Übersicht
+    print("\n" + "=" * 60)
+    print("FINALE STATUS:")
+    invoices = load_invoices(xlsx_path) # Reload
+    open_inv = [i for i in invoices if i.get('Status')=='Offen']
     
-    input("\n[Enter] zum Beenden...")
+    if not open_inv:
+        print("🎉 Alles bezahlt!")
+    else:
+        print(f"⚠️  Noch {len(open_inv)} offen.")
+        
+    input("\n[Enter] beenden...")
 
 if __name__ == "__main__":
     try:
         main()
     except KeyboardInterrupt:
-        print("\n\n👋 Abbruch durch Benutzer.")
-    except Exception as e:
-        print(f"\n❌ Unerwarteter Fehler: {e}")
+        print("\nAbbruch.")

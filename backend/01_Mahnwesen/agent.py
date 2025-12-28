@@ -49,42 +49,84 @@ def list_mandanten():
     items = [d for d in os.listdir(MANDANTEN_DIR) if os.path.isdir(os.path.join(MANDANTEN_DIR, d))]
     return sorted(items)
 
+sys.path.append(os.path.dirname(SCRIPT_DIR)) # Backend root
+import excel_utils
+
 def load_kunden(mandant_path):
-    csv_path = os.path.join(mandant_path, "kunden.csv")
+    # Check Migration
+    kunden_dir = os.path.join(mandant_path, "Kunden")
+    if not os.path.exists(kunden_dir): os.makedirs(kunden_dir, exist_ok=True)
+    
+    old_csv = os.path.join(mandant_path, "kunden.csv")
+    new_csv = os.path.join(kunden_dir, "kunden.csv")
+    if os.path.exists(old_csv) and not os.path.exists(new_csv):
+        try: shutil.move(old_csv, new_csv)
+        except: pass
+
+    # Load from XLSX
+    xlsx_path = os.path.join(kunden_dir, "kunden.xlsx")
+    
     customers = []
-    if os.path.exists(csv_path):
+    if os.path.exists(xlsx_path):
         try:
-            with open(csv_path, 'r', encoding='utf-8-sig') as f:
+            data = excel_utils.read_data(xlsx_path, "Kunden")
+            for row in data:
+                if row.get('Firma') and row.get('Email'): 
+                    customers.append(row)
+        except Exception as e:
+            print(f"⚠️  Excel Fehler beim Laden von Kunden: {e}")
+    
+    # Fallback to CSV if XLSX not found or empty and CSV exists
+    if not customers and os.path.exists(new_csv):
+        try:
+            with open(new_csv, 'r', encoding='utf-8-sig') as f:
                 reader = csv.DictReader(f, delimiter=';')
                 for row in reader:
                     if row.get('Firma') and row.get('Email'): 
                         customers.append(row)
         except Exception as e:
-            print(f"⚠️  CSV Fehler: {e}")
+            print(f"⚠️  CSV Fehler beim Laden von Kunden: {e}")
     return customers
 
 def load_einnahmen(mandant_path):
     """
-    Lädt alle Rechnungen aus einnahmen.csv und gibt nur offene zurück.
+    Lädt alle Rechnungen aus einnahmen.xlsx (oder einnahmen.csv als Fallback) und gibt nur offene zurück.
     """
-    csv_path = os.path.join(mandant_path, "einnahmen.csv")
+    # Check Migration
+    einnahmen_dir = os.path.join(mandant_path, "Einnahmen")
+    if not os.path.exists(einnahmen_dir): os.makedirs(einnahmen_dir, exist_ok=True)
+    
+    old_ein = os.path.join(mandant_path, "einnahmen.csv")
+    new_ein = os.path.join(einnahmen_dir, "einnahmen.csv")
+    if os.path.exists(old_ein) and not os.path.exists(new_ein):
+        try: shutil.move(old_ein, new_ein)
+        except: pass
+        
+    xlsx_path = os.path.join(einnahmen_dir, "einnahmen.xlsx")
     all_invoices = []
     open_invoices = []
     
-    if not os.path.exists(csv_path):
-        return all_invoices, open_invoices
+    # Try loading from XLSX first
+    if os.path.exists(xlsx_path):
+        try:
+            data = excel_utils.read_data(xlsx_path, "Einnahmen")
+            all_invoices = data
+            open_invoices = [inv for inv in data if inv.get('Status', 'Offen').strip() == 'Offen']
+        except Exception as e:
+            print(f"⚠️  Fehler beim Lesen von einnahmen.xlsx: {e}")
     
-    try:
-        with open(csv_path, 'r', encoding='utf-8', newline='') as f:
-            reader = csv.DictReader(f, delimiter=';')
-            for row in reader:
-                all_invoices.append(row)
-                # Status-Spalte prüfen (Standard: Offen bei Fehlen)
-                status = row.get('Status', 'Offen').strip()
-                if status == 'Offen':
-                    open_invoices.append(row)
-    except Exception as e:
-        print(f"⚠️  Fehler beim Lesen von einnahmen.csv: {e}")
+    # Fallback to CSV if XLSX not found or empty and CSV exists
+    if not all_invoices and os.path.exists(new_ein):
+        try:
+            with open(new_ein, 'r', encoding='utf-8', newline='') as f:
+                reader = csv.DictReader(f, delimiter=';')
+                for row in reader:
+                    all_invoices.append(row)
+                    status = row.get('Status', 'Offen').strip()
+                    if status == 'Offen':
+                        open_invoices.append(row)
+        except Exception as e:
+            print(f"⚠️  Fehler beim Lesen von einnahmen.csv: {e}")
     
     return all_invoices, open_invoices
 
