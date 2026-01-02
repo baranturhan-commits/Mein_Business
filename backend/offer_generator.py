@@ -8,7 +8,7 @@ import datetime
 import json
 from reportlab.lib import colors
 from reportlab.lib.pagesizes import A4
-from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer, Table, TableStyle
+from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer, Table, TableStyle, Image as ReportLabImage
 from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
 from reportlab.lib.units import cm
 from pathlib import Path
@@ -66,16 +66,32 @@ def create_offer_pdf(mandant_path, mandant_config, kunde_name, positionen, outpu
     )
     
     # Header
+    # --- HEADER BEREICH (Logo rechts, Absender links) ---
+    # Logo Check
+    logo_path = None
+    if mandant_config.get("logo"):
+        p_logo = os.path.join(mandant_path, mandant_config["logo"])
+        if os.path.exists(p_logo):
+            logo_path = p_logo
+
+    if logo_path:
+        # Logo Placement using Table to align right
+        im = ReportLabImage(logo_path, width=5*cm, height=2.5*cm, kind='proportional')
+        im.hAlign = 'RIGHT'
+        logo_table = Table([[im]], colWidths=[17*cm])
+        logo_table.setStyle(TableStyle([('ALIGN', (0,0), (-1,-1), 'RIGHT')]))
+        story.append(logo_table)
+        story.append(Spacer(1, 0.5*cm))
+    else:
+        story.append(Spacer(1, 1*cm))
+
+    # Absender Block
     firma = mandant_config.get('firma', 'Firma')
-    story.append(Paragraph(f"<b>{firma}</b>", styles['Normal']))
-    
     adresse = mandant_config.get('adresse', {})
-    if adresse.get('strasse'):
-        story.append(Paragraph(adresse['strasse'], styles['Normal']))
-    if adresse.get('ort'):
-        story.append(Paragraph(adresse['ort'], styles['Normal']))
+    firmen_block = f"{firma}<br/>{adresse.get('strasse', '')}<br/>{adresse.get('ort', '')}"
     
-    story.append(Spacer(1, 0.5*cm))
+    story.append(Paragraph(firmen_block, styles['Normal']))
+    story.append(Spacer(1, 1.5*cm))
     
     # Title
     story.append(Paragraph(f"<b>ANGEBOT {nummer}</b>", title_style))

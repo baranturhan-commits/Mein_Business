@@ -1,5 +1,6 @@
 import os
 import sys
+import excel_utils
 import csv
 import datetime
 import re
@@ -212,11 +213,7 @@ def create_pdf(invoice_data, mandant_path, mandant_config, kunde_data):
         print(f"\n✅ PDF erfolgreich erstellt!")
         print(f"📂 Pfad: {filename}")
 
-import sys
-# sys.path.append(os.path.dirname(SCRIPT_DIR)) # Not needed in root
-import excel_utils
 
-# ... inside create_pdf ...
 
         # --- UMSATZ VERBUCHEN (EXCEL) ---
         try:

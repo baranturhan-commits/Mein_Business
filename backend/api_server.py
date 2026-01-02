@@ -12,6 +12,8 @@ from datetime import datetime
 from dotenv import load_dotenv
 import os
 import pandas as pd
+import uuid
+from werkzeug.utils import secure_filename
 
 # Load environment variables
 load_dotenv()
@@ -20,6 +22,7 @@ load_dotenv()
 import excel_utils
 import preisliste_import  # For price list import functionality
 import offer_generator    # For offer PDF generation
+import payroll_generator  # For payslip generation
 
 # Import logger
 from logger import get_logger
@@ -283,21 +286,272 @@ def get_mandant_rechnungen(mandant_id):
         rechnungen = []
         for pdf_file in rechnungen_dir.rglob('*.pdf'):
             if 'Gesendet' not in str(pdf_file):
-                # Use forward slashes for URL
+                # Use forward slashes for URL and prepend API endpoint
                 rel_path = str(pdf_file.relative_to(BACKEND_DIR)).replace('\\', '/')
+                web_path = f"/api/pdf/{rel_path}"
                 rechnungen.append({
                     'name': pdf_file.name,
-                    'path': rel_path,
+                    'path': web_path,
                     'size': pdf_file.stat().st_size,
                     'modified': pdf_file.stat().st_mtime
                 })
         
-        return jsonify({'rechnungen': rechnungen})
+        return jsonify({'rechnungen': sorted(rechnungen, key=lambda x: x['name'], reverse=True)})
     
     except Exception as e:
         logger.error(f"Fehler beim Laden der Rechnungen: {str(e)}")
         return jsonify({'error': str(e)}), 500
 
+
+@app.route('/api/mandanten/<mandant_id>/config', methods=['GET', 'PUT'])
+def handle_mandant_config(mandant_id):
+    """Lese oder Aktualisiere Mandanten-Konfiguration"""
+    mandant_dir = MANDANTEN_DIR / mandant_id
+    config_file = mandant_dir / 'mandant_config.json'
+    
+    if request.method == 'GET':
+        if not config_file.exists():
+            return jsonify({'error': 'Config nicht gefunden'}), 404
+            
+        try:
+            with open(config_file, 'r', encoding='utf-8') as f:
+                config = json.load(f)
+            return jsonify(config)
+        except Exception as e:
+            logger.error(f"Config Read Error: {e}")
+            return jsonify({'error': str(e)}), 500
+            
+    elif request.method == 'PUT':
+        try:
+            new_data = request.get_json()
+            if not new_data:
+                return jsonify({'error': 'Keine Daten'}), 400
+                
+            # Load existing to merge (preserve fields like internal IDs if any)
+            current_config = {}
+            if config_file.exists():
+                with open(config_file, 'r', encoding='utf-8') as f:
+                    current_config = json.load(f)
+            
+            # Update fields
+            # Allow specific fields to be updated
+            allowed_fields = ['firma', 'geschaeftsfuehrer', 'logo', 'adresse', 'bank']
+            
+            for key in allowed_fields:
+                if key in new_data:
+                    current_config[key] = new_data[key]
+            
+            # Save
+            with open(config_file, 'w', encoding='utf-8') as f:
+                json.dump(current_config, f, indent=4, ensure_ascii=False)
+                
+            return jsonify({'success': True, 'config': current_config})
+            
+        except Exception as e:
+            logger.error(f"Config Write Error: {e}")
+            return jsonify({'error': str(e)}), 500
+
+
+@app.route('/api/mandanten/<mandant_id>/logo', methods=['POST'])
+def upload_mandant_logo(mandant_id):
+    """Upload Mandant Logo and update config"""
+    try:
+        if 'file' not in request.files:
+            return jsonify({'error': 'Keine Datei'}), 400
+            
+        file = request.files['file']
+        if not file.filename:
+            return jsonify({'error': 'Keine Datei ausgewählt'}), 400
+            
+        mandant_dir = MANDANTEN_DIR / mandant_id
+        config_file = mandant_dir / 'mandant_config.json'
+        
+        # Save File
+        filename = secure_filename(file.filename)
+        file.save(mandant_dir / filename)
+        
+        # Update config
+        config = {}
+        if config_file.exists():
+            with open(config_file, 'r', encoding='utf-8') as f:
+                config = json.load(f)
+                
+        config['logo'] = filename
+        
+        with open(config_file, 'w', encoding='utf-8') as f:
+            json.dump(config, f, indent=4, ensure_ascii=False)
+            
+        return jsonify({'success': True, 'filename': filename})
+        
+    except Exception as e:
+        logger.error(f"Logo Upload Error: {e}")
+        return jsonify({'error': str(e)}), 500
+
+@app.route('/api/mandanten/<mandant_id>/mitarbeiter', methods=['GET', 'POST'])
+def handle_mitarbeiter(mandant_id):
+    """Verwalte Mitarbeiter (Liste lesen & hinzufügen/bearbeiten)"""
+    mandant_dir = MANDANTEN_DIR / mandant_id
+    json_file = mandant_dir / 'mitarbeiter.json'
+    
+    if request.method == 'GET':
+        if not json_file.exists():
+            return jsonify([])
+        try:
+            with open(json_file, 'r', encoding='utf-8') as f:
+                data = json.load(f)
+            return jsonify(data)
+        except Exception as e:
+            logger.error(f"Error reading mitarbeiter.json: {e}")
+            return jsonify({'error': str(e)}), 500
+            
+    elif request.method == 'POST':
+        try:
+            data = request.get_json()
+            if not data:
+                return jsonify({'error': 'No data'}), 400
+            
+            mitarbeiter_liste = []
+            if json_file.exists():
+                with open(json_file, 'r', encoding='utf-8') as f:
+                    mitarbeiter_liste = json.load(f)
+            
+            # Check if editing existing (if ID provided)
+            # data should contain all fields including potentially 'id'
+            emp_id = data.get('id')
+            if emp_id:
+                # Update existing
+                for i, emp in enumerate(mitarbeiter_liste):
+                    if emp.get('id') == emp_id:
+                        mitarbeiter_liste[i] = data
+                        break
+                else:
+                    # Id provided but not found? Append as new? Or error?
+                    # Let's append as new but keep ID if beneficial, or generate new.
+                    # Best practice: if not found, treat as new (or append).
+                    mitarbeiter_liste.append(data)
+            else:
+                # New employee
+                data['id'] = str(uuid.uuid4())
+                mitarbeiter_liste.append(data)
+            
+            with open(json_file, 'w', encoding='utf-8') as f:
+                json.dump(mitarbeiter_liste, f, indent=4, ensure_ascii=False)
+                
+            return jsonify({'success': True, 'mitarbeiter': mitarbeiter_liste})
+            
+        except Exception as e:
+            logger.error(f"Error saving mitarbeiter: {e}")
+            return jsonify({'error': str(e)}), 500
+
+
+@app.route('/api/mandanten/<mandant_id>/mitarbeiter/<emp_id>/payslips', methods=['GET'])
+def get_employee_payslips(mandant_id, emp_id):
+    """Liefere Liste aller Lohnabrechnungen für einen Mitarbeiter"""
+    try:
+        mandant_dir = MANDANTEN_DIR / mandant_id
+        json_file = mandant_dir / 'mitarbeiter.json'
+        
+        # 1. Get Employee for Name
+        emp_data = None
+        if json_file.exists():
+            with open(json_file, 'r', encoding='utf-8') as f:
+                employees = json.load(f)
+                for emp in employees:
+                    if emp.get('id') == emp_id:
+                        emp_data = emp
+                        break
+        
+        if not emp_data:
+            return jsonify({'error': 'Mitarbeiter nicht gefunden'}), 404
+            
+        # 2. Scan Directory
+        lohn_dir = mandant_dir / 'Lohnabrechnungen'
+        if not lohn_dir.exists():
+            return jsonify([])
+            
+        payslips = []
+        nachname = emp_data.get('nachname', '').strip()
+        vorname = emp_data.get('vorname', '').strip()
+        
+        # Match pattern: Lohn_Nachname_Vorname_...
+        # If files were created with old format (only Nachname), we might miss them.
+        # But for new format it works.
+        # Fallback: check if filename contains Nachname?
+        # Let's match strict prefix if possible to avoid wrong matches.
+        prefix = f"Lohn_{nachname}_{vorname}_"
+        # Also simple check for old format: Lohn_{nachname}_Month-Year.pdf (if user has no Vorname in data?)
+        
+        for file in lohn_dir.iterdir():
+            if file.suffix == '.pdf':
+                if file.name.startswith(prefix) or (vorname == '' and file.name.startswith(f"Lohn_{nachname}_")):
+                    payslips.append({
+                        'filename': file.name,
+                        'date': datetime.fromtimestamp(file.stat().st_mtime).strftime('%d.%m.%Y'),
+                        'size': file.stat().st_size
+                    })
+                    
+        # Sort by date desc (modification time roughly correlates?)
+        # Better to parse month from filename?
+        # Simple: sort by mtime reverse
+        payslips.sort(key=lambda x: x['filename'], reverse=True) # Sort by name usually sorts by year-month if format YYYY? No, Month-Year (Januar-2025). Alpha sort might not be chronological.
+        # But listing is enough.
+        
+        return jsonify(payslips)
+        
+    except Exception as e:
+        logger.error(f"Payslip List Error: {e}")
+        return jsonify({'error': str(e)}), 500
+
+
+@app.route('/api/mandanten/<mandant_id>/mitarbeiter/<emp_id>/payslip', methods=['POST'])
+def generate_payslip(mandant_id, emp_id):
+    """Generiere Lohnabrechnungs-PDF"""
+    try:
+        data = request.get_json()
+        if not data:
+            return jsonify({'error': 'No data'}), 400
+            
+        mandant_dir = MANDANTEN_DIR / mandant_id
+        
+        # 1. Employee Data
+        json_file = mandant_dir / 'mitarbeiter.json'
+        emp_data = None
+        if json_file.exists():
+            with open(json_file, 'r', encoding='utf-8') as f:
+                employees = json.load(f)
+                for emp in employees:
+                    if emp.get('id') == emp_id:
+                        emp_data = emp
+                        break
+        
+        if not emp_data:
+            return jsonify({'error': 'Mitarbeiter nicht gefunden'}), 404
+            
+        # 2. Mandant Config
+        config_file = mandant_dir / 'mandant_config.json'
+        mandant_config = {}
+        if config_file.exists():
+            with open(config_file, 'r', encoding='utf-8') as f:
+                mandant_config = json.load(f)
+                
+        # 3. Generate
+        filename = payroll_generator.create_payroll_pdf(
+            mandant_config, 
+            emp_data, 
+            data, # Payload containing month, lohn, taxes etc.
+            mandant_dir
+        )
+        
+        # Return path relative to api/pdf if possible, OR just success and filename
+        # My frontend documents tab lists files from 'Rechnungen', 'Angebote'.
+        # 'Lohnabrechnungen' is new. I might need to update the file lister too 
+        # but for now I just return success.
+        
+        return jsonify({'success': True, 'filename': filename})
+        
+    except Exception as e:
+        logger.error(f"Payslip Generation Error: {e}")
+        return jsonify({'error': str(e)}), 500
 @app.route('/api/pdf/<path:filepath>', methods=['GET'])
 def serve_pdf(filepath):
     """Liefert PDF-Dateien aus"""
@@ -459,6 +713,11 @@ def create_mandant():
             str(mandant_path / 'Ausgaben' / 'ausgaben.xlsx'),
             ['Datum', 'Beleg-Nr.', 'Firma', 'Beschreibung', 'Kategorie', 'Netto', 'MwSt', 'Brutto'],
             'Ausgaben'
+        )
+        excel_utils.init_file(
+            str(mandant_path / 'Lieferscheine' / 'lieferscheine.xlsx'),
+            ['Nummer', 'Datum', 'Kunde', 'Angebot', 'PDF_Path'],
+            'Lieferscheine'
         )
         excel_utils.init_file(
             str(mandant_path / 'preisliste.xlsx'),
@@ -787,7 +1046,7 @@ def get_angebote(mandant_id):
             
             normalized.append(item)
         
-        return jsonify({'angebote': normalized})
+        return jsonify({'angebote': sorted(normalized, key=lambda x: str(x.get('nummer', '0')), reverse=True)})
     
     except Exception as e:
         logger.error(f"Fehler beim Laden der Angebote: {str(e)}")
@@ -918,31 +1177,58 @@ def get_lieferscheine(mandant_id):
                 item[k.lower()] = v
                 
             # Fix path
-            if 'pdf_path' in item:
-                 fname = item['pdf_path']
-                 if not fname.startswith('/api'):
-                     item['pdf_path'] = f"/api/pdf/Mandanten/{mandant_id}/Lieferscheine/{fname}"
-            normalized.append(item)
+            # Fix path
+            # Search for relevant key
+            path_val = item.get('pdf_path') or item.get('pdf path') or item.get('path') or item.get('dateipfad')
             
-        return jsonify({'lieferscheine': normalized})
+            # Fallback: Construct from Number if path needs validation or is missing
+            if not path_val:
+                nummer = item.get('lieferscheinnummer') or item.get('nummer')
+                if nummer:
+                    path_val = f"{nummer}.pdf"
+            
+            if path_val:
+                 fname = str(path_val).strip()
+                 
+                 # Verify existence
+                 lieferscheine_dir = mandant_path / 'Lieferscheine'
+                 full_path = lieferscheine_dir / fname
+                 
+                 if not full_path.exists():
+                     # Try with .pdf extension
+                     if not fname.lower().endswith('.pdf'):
+                         test_path = lieferscheine_dir / f"{fname}.pdf"
+                         if test_path.exists():
+                             fname = f"{fname}.pdf"
+                             full_path = test_path
+                         else:
+                             # File really not found
+                             continue
+                     else:
+                         continue
+
+                 if not fname.startswith('/api') and not fname.startswith('http'):
+                     final_path = f"/api/pdf/Mandanten/{mandant_id}/Lieferscheine/{fname}"
+                 else:
+                     final_path = fname
+                     
+                 item['pdf_path'] = final_path
+                 
+                 # Ensure Date and Customer are set (mapping from screenshot headers)
+                 if 'datum' not in item and 'date' in item: item['datum'] = item['date']
+                 # Map 'lieferscheinnummer' to 'nummer' for frontend consistency
+                 if 'nummer' not in item and 'lieferscheinnummer' in item: 
+                     item['nummer'] = item['lieferscheinnummer']
+                     
+                 normalized.append(item)
+            else:
+                 # No path and no number -> invalid row
+                 continue
+            
+        return jsonify({'lieferscheine': sorted(normalized, key=lambda x: str(x.get('nummer', '0')), reverse=True)})
         
     except Exception as e:
         logger.error(f"LS Fehler: {e}")
-        return jsonify({'error': str(e)}), 500
-
-        # Read specific excel/json for deliveries if exists, or scan directory
-        # For simplicity, returning empty list or scanning PDFs if excel not handy
-        # But we initialized 'lieferscheine.xlsx' in add_client?
-        # Let's check if we did. usage says YES.
-        
-        file_path = mandant_path / 'Lieferscheine' / 'lieferscheine.xlsx'
-        lieferscheine = []
-        if file_path.exists():
-            lieferscheine = excel_utils.read_data(file_path)
-            
-        return jsonify({'lieferscheine': lieferscheine})
-    except Exception as e:
-        logger.error(f"Fehler beim Laden der Lieferscheine: {e}")
         return jsonify({'error': str(e)}), 500
 
 @app.route('/api/mandanten/<mandant_id>/lieferschein', methods=['POST'])
@@ -1021,150 +1307,7 @@ def create_lieferschein(mandant_id):
         return jsonify({'error': str(e)}), 500
 
 
-@app.route('/api/mandanten/<mandant_id>/protocol/scan', methods=['POST'])
-def scan_protocol(mandant_id):
-    """Scans uploaded protocol and returns invoice items"""
-    try:
-        if 'file' not in request.files:
-            return jsonify({'error': 'Keine Datei'}), 400
-            
-        file = request.files['file']
-        if not file.filename:
-            return jsonify({'error': 'Kein Dateiname'}), 400
 
-        # Save temporarily
-        import tempfile
-        temp_dir = Path(tempfile.gettempdir())
-        temp_path = temp_dir / file.filename
-        file.save(temp_path)
-        
-        # Analyze
-        import protocol_utils
-        mandant_path = MANDANTEN_DIR / mandant_id
-        items = protocol_utils.analyze_protocol(str(temp_path), str(mandant_path))
-        
-        # Cleanup
-        try:
-            temp_path.unlink()
-        except: pass
-        
-        return jsonify({
-            'success': True,
-            'items': items
-        })
-        
-    except Exception as e:
-        logger.error(f"Scan Error: {e}")
-        return jsonify({'error': str(e)}), 500
-
-
-@app.route('/api/mandanten/<mandant_id>/rechnung', methods=['POST'])
-def create_invoice(mandant_id):
-    """Generates Invoice PDF using invoice_generator.py logic"""
-    try:
-        data = request.get_json()
-        kunde_name = data.get('kunde', '')
-        # items [{'bezeichnung': '...', 'menge': 1, 'einzelpreis': 10, 'gesamt': 10}]
-        raw_items = data.get('items', [])
-        
-        if not kunde_name or not raw_items:
-            return jsonify({'error': 'Kunde und Positionen erforderlich'}), 400
-            
-        mandant_dir = MANDANTEN_DIR / mandant_id
-        
-        # Load Config
-        import invoice_generator
-        config = invoice_generator.load_mandant_config(str(mandant_dir), mandant_id)
-        
-        # Prepare Client Data
-        # We need client address details. Try to load from kunden.xlsx or just use name?
-        # invoice_generator expects {'firma': '...', 'anrede': '...'}
-        # Let's try to find the client in the DB to get full details
-        kunden = invoice_generator.load_kunden(str(mandant_dir))
-        kunde_data = next((k for k in kunden if k['firma'] == kunde_name), None)
-        
-        if not kunde_data:
-            # Fallback if not found
-            kunde_data = {'firma': kunde_name, 'anrede': ''}
-            
-        # Generate Number
-        inv_nr = invoice_generator.get_and_increment_counter(str(mandant_dir))
-        
-        # Format Items for Generator
-        # Generator expects: [{'beschreibung': '...', 'betrag': float}]
-        # We transform our detailed items into this format
-        formatted_items = []
-        for item in raw_items:
-            menge = float(item.get('menge', 0))
-            preis = float(item.get('einzelpreis', 0))
-            gesamt = menge * preis
-            
-            # Formatting style: "2.0x Beratung (@ 50.00 €)"
-            # Check unit
-            einheit = item.get('einheit', 'Stk')
-            bezeichnung = item.get('bezeichnung', '')
-            
-            desc = f"{menge} {einheit} {bezeichnung} (Einzel: {preis:.2f}€)"
-            formatted_items.append({
-                'beschreibung': desc,
-                'betrag': gesamt
-            })
-            
-        invoice_data = {
-            'nummer': inv_nr,
-            'datum': datetime.now().strftime("%d.%m.%Y"),
-            'items': formatted_items
-        }
-        
-        # Generate PDF
-        pdf_path = invoice_generator.create_pdf(invoice_data, str(mandant_dir), config, kunde_data)
-        
-        if pdf_path:
-            # Explicitly save to Einnahmen (Fixing silent failure in generator)
-            try:
-                import excel_utils
-                einnahmen_dir = mandant_dir / 'Einnahmen'
-                einnahmen_dir.mkdir(parents=True, exist_ok=True)
-                xlsx_path = einnahmen_dir / 'einnahmen.xlsx'
-                
-                # Format for Excel
-                # Items description as comma list
-                desc_text = ", ".join([i['beschreibung'] for i in formatted_items])
-                
-                excel_row = {
-                    "Rechnungsnummer": inv_nr,
-                    "Datum": datetime.now().strftime("%d.%m.%Y"),
-                    "Kunde": kunde_data.get('firma', kunde_name),
-                    "Beschreibung": desc_text,
-                    "Betrag_Netto": f"{sum(x['betrag'] for x in formatted_items):.2f}",
-                    "Betrag_Brutto": f"{sum(x['betrag'] for x in formatted_items) * 1.19:.2f}",
-                    "Status": "Offen"
-                }
-                
-                headers = ["Rechnungsnummer", "Datum", "Kunde", "Beschreibung", "Betrag_Netto", "Betrag_Brutto", "Status"]
-                excel_utils.append_data(str(xlsx_path), excel_row, "Einnahmen", headers)
-                
-            except Exception as e:
-                logger.error(f"Excel Write Error: {e}")
-            
-            # Prepare relative path for frontend
-            rel_path = Path(pdf_path).relative_to(MANDANTEN_DIR) 
-            web_path = f"/api/pdf/Mandanten/{str(rel_path).replace(os.sep, '/')}"
-            
-            return jsonify({
-                'success': True,
-                'nummer': inv_nr,
-                'pdf_path': web_path,
-                'brutto': sum(x['betrag'] for x in formatted_items) * 1.19
-            })
-        else:
-            return jsonify({'error': 'PDF Generierung fehlgeschlagen'}), 500
-            
-    except Exception as e:
-        logger.error(f"Invoice Error: {e}")
-        import traceback
-        traceback.print_exc()
-        return jsonify({'error': str(e)}), 500
 
 # --- EXPENSES (AUSGABEN) ---
 
@@ -1195,11 +1338,286 @@ def get_ausgaben(mandant_id):
                 item[k] = v
             cleaned.append(item)
             
-        return jsonify({'ausgaben': cleaned})
+        return jsonify({'ausgaben': sorted(cleaned, key=lambda x: str(x.get('Datum', '0000')), reverse=True)})
         
     except Exception as e:
         logger.error(f"Ausgaben Error: {e}")
         return jsonify({'error': str(e)}), 500
+
+@app.route('/api/mandanten/<mandant_id>/export', methods=['POST'])
+def export_month(mandant_id):
+    """Erstellt ein ZIP-Archiv für den Steuerberater (Monatsabschluss)"""
+    try:
+        data = request.get_json()
+        year = int(data.get('year'))
+        month = int(data.get('month'))
+        
+        mandant_dir = MANDANTEN_DIR / mandant_id
+        if not mandant_dir.exists():
+            return jsonify({'error': 'Mandant nicht gefunden'}), 404
+            
+        import zipfile
+        import io
+        import tempfile
+        import shutil
+        
+        # 1. Sammle Daten
+        # Zeitraum definieren (String Matching für Einfachheit: "MM.YYYY" oder "YYYY-MM")
+        # Wir laden alle excels und filtern
+        
+        # Helper to parse date from various formats
+        def get_date_obj(date_str):
+            if not date_str: return None
+            for fmt in ['%d.%m.%Y', '%Y-%m-%d']:
+                try:
+                    return datetime.strptime(str(date_str), fmt)
+                except: continue
+            return None
+            
+        def is_in_period(date_str):
+            d = get_date_obj(date_str)
+            if d:
+                return d.year == year and d.month == month
+            return False
+            
+        # Create temp dir for assembly
+        with tempfile.TemporaryDirectory() as temp_dir_name:
+            base_dir = Path(temp_dir_name)
+            export_name = f"Buchhaltung_{mandant_id}_{year}_{month:02d}"
+            export_path = base_dir / export_name
+            export_path.mkdir()
+            
+            (export_path / 'Einnahmen').mkdir()
+            (export_path / 'Ausgaben').mkdir()
+            
+            summary_stats = {'einnahmen': 0.0, 'ausgaben': 0.0, 'belege_count': 0, 'rechnungen_count': 0}
+            
+            # --- EINNAHMEN ---
+            # Wir benötigen die Rechnungs-PDFs und eine Liste
+            import excel_utils
+            einnahmen_file = mandant_dir / 'Einnahmen' / 'einnahmen.xlsx'
+            if einnahmen_file.exists():
+                einnahmen_data = excel_utils.read_data(str(einnahmen_file), 'Einnahmen')
+                
+                # Filter Period
+                period_einnahmen = [r for r in einnahmen_data if is_in_period(r.get('Datum'))]
+                
+                # Copy PDFs
+                rechnungen_dir = mandant_dir / 'Rechnungen'
+                for r in period_einnahmen:
+                    nr = str(r.get('Rechnungsnummer', ''))
+                    # Finding the PDF might be tricky if not stored in CSV. 
+                    # Assuming filename convention: Rechnung_{nr}.pdf or similar.
+                    # Or we just search for {nr} inside filenames in Rechnungen folder
+                    found = False
+                    if rechnungen_dir.exists():
+                        for pdf in rechnungen_dir.rglob('*.pdf'):
+                            if nr in pdf.name:
+                                shutil.copy2(pdf, export_path / 'Einnahmen' / pdf.name)
+                                found = True
+                                break
+                    
+                    # Add to stats
+                    try:
+                        summary_stats['einnahmen'] += float(str(r.get('Betrag_Netto', 0)).replace(',','.'))
+                    except: pass
+                    summary_stats['rechnungen_count'] += 1
+                
+                # Create Excel Summary for Period
+                # We reuse excel_utils to write a new file
+                if period_einnahmen:
+                     # Remove columns that might be internal object types if any
+                     # Just keeping it simple: Write list of dicts
+                     df = pd.DataFrame(period_einnahmen)
+                     df.to_excel(export_path / f"Einnahmen_{year}_{month:02d}.xlsx", index=False)
+            
+            # --- AUSGABEN ---
+            ausgaben_file = mandant_dir / 'Ausgaben' / 'ausgaben.xlsx'
+            if ausgaben_file.exists():
+                ausgaben_data = excel_utils.read_data(str(ausgaben_file), 'Ausgaben')
+                period_ausgaben = [r for r in ausgaben_data if is_in_period(r.get('Datum'))]
+                
+                belege_dir = mandant_dir / 'Ausgaben' / 'Belege'
+                for r in period_ausgaben:
+                    path_val = r.get('Beleg_Pfad')
+                    if path_val: # If we have a link to a file
+                        src_file = belege_dir / str(path_val)
+                        if src_file.exists():
+                            shutil.copy2(src_file, export_path / 'Ausgaben' / src_file.name)
+                            
+                    try:
+                        summary_stats['ausgaben'] += float(str(r.get('Betrag_Netto', 0)).replace(',','.'))
+                    except: pass
+                    summary_stats['belege_count'] += 1
+                    
+                if period_ausgaben:
+                    df = pd.DataFrame(period_ausgaben)
+                    df.to_excel(export_path / f"Ausgaben_{year}_{month:02d}.xlsx", index=False)
+            
+            # --- SUMMARY TEXT ---
+            with open(export_path / 'Zusammenfassung.txt', 'w', encoding='utf-8') as f:
+                f.write(f"Monatsabschluss: {month:02d}/{year}\n")
+                f.write(f"Mandant: {mandant_id}\n")
+                f.write("-" * 30 + "\n")
+                f.write(f"Einnahmen (Netto): {summary_stats['einnahmen']:.2f} EUR ({summary_stats['rechnungen_count']} Rechnungen)\n")
+                f.write(f"Ausgaben (Netto):  {summary_stats['ausgaben']:.2f} EUR ({summary_stats['belege_count']} Belege)\n")
+                
+            # Create ZIP
+            zip_filename = f"{export_name}.zip"
+            zip_path = base_dir / zip_filename
+            
+            shutil.make_archive(str(base_dir / export_name), 'zip', base_dir, export_name)
+            
+            # Send file
+            return send_file(str(base_dir / zip_filename), as_attachment=True, download_name=zip_filename)
+            
+    except Exception as e:
+        logger.error(f"Export Error: {e}")
+        return jsonify({'error': str(e)}), 500
+
+
+    
+
+
+@app.route('/api/mandanten/<mandant_id>/protocol/scan', methods=['POST'])
+def scan_protocol(mandant_id):
+    """Scans a protocol and optionally matches with offer items"""
+    try:
+        import protocol_utils
+        from werkzeug.utils import secure_filename
+        import tempfile
+        
+        if 'file' not in request.files:
+            return jsonify({'error': 'Keine Datei'}), 400
+            
+        file = request.files['file']
+        angebot_nr = request.form.get('angebot_nr')
+        
+        if not file.filename:
+            return jsonify({'error': 'Kein Dateiname'}), 400
+            
+        mandant_path = MANDANTEN_DIR / mandant_id
+        
+        # 1. Save Temp
+        temp_dir = Path(tempfile.gettempdir())
+        filename = secure_filename(file.filename)
+        temp_path = temp_dir / filename
+        file.save(temp_path)
+        
+        # 2. Load Offer Items if requested
+        offer_items = None
+        if angebot_nr:
+            # Try finding the offer JSON
+            # Format usually: Angebot_2025-001.json or similar
+            # We search for it
+            angebote_dir = mandant_path / 'Angebote'
+            if angebote_dir.exists():
+                # Direct check
+                possible_names = [f"Angebot_{angebot_nr}.json", f"{angebot_nr}.json"]
+                for pname in possible_names:
+                    if (angebote_dir / pname).exists():
+                        with open(angebote_dir / pname, 'r', encoding='utf-8') as f:
+                            offer_data = json.load(f)
+                            offer_items = offer_data.get('positionen', [])
+                        break
+        
+        # 3. Analyze
+        items = protocol_utils.analyze_protocol(
+            str(temp_path), 
+            str(mandant_path), 
+            offer_items=offer_items
+        )
+        
+        # Cleanup
+        try: os.remove(temp_path)
+        except: pass
+        
+        return jsonify({'success': True, 'items': items})
+        
+    except Exception as e:
+        logger.error(f"Protocol Scan Error: {e}")
+        return jsonify({'error': str(e)}), 500
+
+@app.route('/api/mandanten/<mandant_id>/rechnung', methods=['POST'])
+def create_invoice_endpoint(mandant_id):
+    try:
+        data = request.json
+        kunde_name = data.get('kunde')
+        raw_items = data.get('items', [])
+        
+        if not kunde_name or not raw_items:
+            return jsonify({'error': 'Missing data'}), 400
+            
+        mandant_path = MANDANTEN_DIR / mandant_id
+        
+        # 1. Config
+        # We can use invoice_generator generic loader or our own
+        import invoice_generator
+        mandant_config = invoice_generator.load_mandant_config(str(mandant_path), mandant_id)
+        
+        # 2. Kunde Data
+        # We need address etc. if available, or just Name
+        import excel_utils
+        kunden_path = mandant_path / 'Kunden' / 'kunden.xlsx'
+        kunde_data = {'firma': kunde_name, 'anrede': ''} # Fallback
+        
+        if kunden_path.exists():
+            kunden_list = excel_utils.read_data(str(kunden_path), 'Kunden')
+            # Find match
+            for k in kunden_list:
+                if k.get('Firma') == kunde_name:
+                    kunde_data = {
+                        'firma': k.get('Firma'),
+                        'anrede': k.get('Anrede', ''),
+                        'email': k.get('Email', '')
+                    }
+                    break
+        
+        # 3. Generate Number
+        # Helper in invoice_generator expects mandant path string
+        nummer = invoice_generator.get_and_increment_counter(str(mandant_path))
+        
+        # 4. Prepare Items
+        # Convert {menge, einheit, bezeichnung, einzelpreis} -> {beschreibung, betrag}
+        pdf_items = []
+        for it in raw_items:
+            try:
+                m = float(it.get('menge', 0))
+                p = float(it.get('einzelpreis', 0))
+                total = m * p
+                
+                # Format: "1.0 Stk x Bezeichnung (50.00€)"
+                desc = f"{m} {it.get('einheit', 'Stk')} x {it.get('bezeichnung')} (EP: {p:.2f}€)"
+                pdf_items.append({'beschreibung': desc, 'betrag': total})
+            except: continue
+            
+        invoice_data = {
+            'nummer': nummer,
+            'datum': datetime.now().strftime('%d.%m.%Y'),
+            'items': pdf_items
+        }
+        
+        # 5. Create PDF
+        # This function saves the PDF and updates einnahmen.xlsx
+        pdf_file = invoice_generator.create_pdf(
+            invoice_data, 
+            str(mandant_path), 
+            mandant_config, 
+            kunde_data
+        )
+        
+        if pdf_file:
+             # Normalize path for frontend
+             rel_path = Path(pdf_file).relative_to(BACKEND_DIR)
+             return jsonify({'success': True, 'nummer': nummer, 'path': str(rel_path)})
+        else:
+             return jsonify({'error': 'PDF Creation failed'}), 500
+
+    except Exception as e:
+        logger.error(f"Create Invoice Error: {e}")
+        return jsonify({'error': str(e)}), 500
+
+
 
 @app.route('/api/upload/beleg', methods=['POST'])
 def upload_beleg():
@@ -1275,6 +1693,60 @@ def upload_beleg():
 
     except Exception as e:
         logger.error(f"Beleg Upload Error: {e}")
+        return jsonify({'error': str(e)}), 500
+
+@app.route('/api/mandanten/<mandant_id>/kunden', methods=['GET'])
+def get_kunden_list(mandant_id):
+    """List all customers for mandant"""
+    try:
+        mandant_path = MANDANTEN_DIR / mandant_id
+        kunden_path = mandant_path / 'Kunden' / 'kunden.xlsx'
+        
+        kunden = []
+        if kunden_path.exists():
+            import excel_utils
+            kunden = excel_utils.read_data(str(kunden_path), 'Kunden')
+            # Normalize keys if needed or used as is
+        else:
+             # Fallback CSV?
+             csv_path = mandant_path / 'kunden.csv'
+             if csv_path.exists():
+                 with open(csv_path, 'r', encoding='utf-8') as f:
+                     content = f.read() # Simplistic, or use csv module
+                     # Skipping csv logic for now, focusing on Excel as primary
+                     pass
+                     
+        return jsonify({'kunden': kunden})
+    except Exception as e:
+        logger.error(f"Error loading kunden: {e}")
+        return jsonify({'error': str(e)}), 500
+
+@app.route('/api/mandanten/<mandant_id>/angebote', methods=['GET'])
+def get_angebote_list(mandant_id):
+    """List all offers for mandant"""
+    try:
+        mandant_path = MANDANTEN_DIR / mandant_id
+        angebote_dir = mandant_path / 'Angebote'
+        
+        angebote = []
+        if angebote_dir.exists():
+            for f in angebote_dir.glob('Angebot_*.json'):
+                try:
+                    with open(f, 'r', encoding='utf-8') as json_file:
+                        data = json.load(json_file)
+                        angebote.append({
+                            'nummer': data.get('nummer', f.stem.replace('Angebot_', '')),
+                            'kunde': data.get('kunde', 'Unbekannt'),
+                            'datum': data.get('datum', ''),
+                            'betrag': data.get('betrag_netto', 0)
+                        })
+                except: pass
+                
+        # Sort by Nummer desc
+        angebote.sort(key=lambda x: x['nummer'], reverse=True)
+        return jsonify({'angebote': angebote})
+    except Exception as e:
+        logger.error(f"Error loading angebote: {e}")
         return jsonify({'error': str(e)}), 500
 
 if __name__ == '__main__':

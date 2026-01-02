@@ -382,6 +382,7 @@ Vollständige Python-basierte Business-Automatisierung:
 - **Ausgaben**: KI-Belegscanner & Kosten-Tracking
 - **Preisliste**: Zentrale Verwaltung von Produkten & Dienstleistungen
 - **OP-Pflege**: Zahlungseingangs-Management (Offen/Bezahlt)
+- **Mitarbeiter**: Personalverwaltung & Lohnabrechnungen (PDF)
 - **Controlling**: Finanz-Dashboard
 
 Siehe [backend/README.md](backend/README.md) für Details.
@@ -424,5 +425,5 @@ Dieses Projekt ist für den privaten/geschäftlichen Gebrauch.
 
 ---
 
-**Version:** 3.0
-**Letztes Update:** 2026-01-02
+**Version:** 3.1
+**Letztes Update:** 2026-01-02 17:35

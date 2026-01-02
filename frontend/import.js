@@ -62,7 +62,8 @@ async function handleImportFile(event) {
     formData.append('file', file);
 
     try {
-        const response = await fetch(`${API_BASE_URL}/mandanten/${mandantId}/preisliste/import`, {
+        const id = getMandantId();
+        const response = await fetch(`${API_BASE_URL}/mandanten/${id}/preisliste/import`, {
             method: 'POST',
             body: formData
         });
@@ -116,7 +117,8 @@ async function confirmImport() {
     statusDiv.innerHTML = '<p>💾 Speichere Positionen...</p>';
 
     try {
-        const response = await fetch(`${API_BASE_URL}/mandanten/${mandantId}/preisliste/import/confirm`, {
+        const id = getMandantId();
+        const response = await fetch(`${API_BASE_URL}/mandanten/${id}/preisliste/import/confirm`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ positionen: importedPositionen })

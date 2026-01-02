@@ -26,7 +26,7 @@ def analyze_receipt(image_path):
         return None
 
     try:
-        model = genai.GenerativeModel('gemini-1.5-flash')
+        model = genai.GenerativeModel('gemini-2.0-flash-exp')
         
         myfile = genai.upload_file(image_path)
         

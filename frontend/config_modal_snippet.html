@@ -1,0 +1,51 @@
+<!-- Edit Mandant Modal -->
+<div id="editConfigModal" class="modal">
+    <div class="modal-content" style="max-width: 600px;">
+        <div class="modal-header">
+            <h3>Mandant bearbeiten</h3>
+            <button class="close-modal" onclick="closeConfigModal()">×</button>
+        </div>
+        <div class="modal-body">
+            <div class="form-group">
+                <label>Firmenname</label>
+                <input type="text" id="cfgFirma" class="form-control">
+            </div>
+            <div class="form-group">
+                <label>Geschäftsführer</label>
+                <input type="text" id="cfgGF" class="form-control">
+            </div>
+            <h4>Adresse</h4>
+            <div class="form-group">
+                <label>Straße & Nr.</label>
+                <input type="text" id="cfgStrasse" class="form-control">
+            </div>
+            <div class="form-group">
+                <label>PLZ & Ort</label>
+                <input type="text" id="cfgOrt" class="form-control">
+            </div>
+            <h4>Bankverbindung</h4>
+            <div class="form-group">
+                <label>Bank Name</label>
+                <input type="text" id="cfgBankName" class="form-control">
+            </div>
+            <div class="form-group">
+                <label>IBAN</label>
+                <input type="text" id="cfgIBAN" class="form-control">
+            </div>
+            <div class="form-group">
+                <label>BIC</label>
+                <input type="text" id="cfgBIC" class="form-control">
+            </div>
+            <h4>Design</h4>
+            <div class="form-group">
+                <label>Logo Pfad (relativ zum Mandantenordner)</label>
+                <input type="text" id="cfgLogo" class="form-control" placeholder="z.B. logo.png">
+                <small>Datei muss manuell im Ordner liegen.</small>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-secondary" onclick="closeConfigModal()">Abbrechen</button>
+            <button class="btn btn-primary" onclick="saveMandantConfig()">Speichern</button>
+        </div>
+    </div>
+</div>

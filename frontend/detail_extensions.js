@@ -20,6 +20,10 @@ function switchTab(tabName) {
         loadOPCheck();
     } else if (tabName === 'kunden') {
         loadKunden();
+    } else if (tabName === 'mitarbeiter') {
+        if (typeof MitarbeiterManager !== 'undefined') MitarbeiterManager.loadList();
+    } else if (tabName === 'ausgaben') {
+        if (typeof AusgabenManager !== 'undefined') AusgabenManager.init();
     }
 }
 
@@ -209,4 +213,63 @@ window.loadKunden = loadKunden;
 window.showKundeModal = showKundeModal;
 window.closeKundeModal = closeKundeModal;
 window.submitKunde = submitKunde;
-window.togglePaymentStatus = togglePaymentStatus;
+// Export Modal Logic
+function showExportModal() {
+    const m = document.getElementById('exportModal');
+    if (m) m.classList.remove('hidden');
+    // Set current date
+    const now = new Date();
+    const mSelect = document.getElementById('exportMonth');
+    const ySelect = document.getElementById('exportYear');
+    if (mSelect) mSelect.value = now.getMonth() + 1; // 1-12
+    if (ySelect) ySelect.value = now.getFullYear();
+}
+
+function closeExportModal() {
+    const m = document.getElementById('exportModal');
+    if (m) m.classList.add('hidden');
+    const status = document.getElementById('exportStatus');
+    if (status) status.innerHTML = '';
+}
+
+async function startExport() {
+    const month = document.getElementById('exportMonth').value;
+    const year = document.getElementById('exportYear').value;
+    const status = document.getElementById('exportStatus');
+    const mandantId = getMandantIdFromUrl();
+
+    if (!status) return;
+    status.innerHTML = '<div class="spinner"></div> Export wird erstellt...';
+
+    try {
+        const response = await fetch(`${API_BASE_URL}/mandanten/${mandantId}/export`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ month, year })
+        });
+
+        if (response.ok) {
+            const blob = await response.blob();
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `Buchhaltung_${mandantId}_${year}_${month}.zip`;
+            document.body.appendChild(a);
+            a.click();
+            window.URL.revokeObjectURL(url);
+            status.innerHTML = '<div class="success">Export erfolgreich heruntergeladen!</div>';
+            setTimeout(closeExportModal, 2000);
+        } else {
+            const err = await response.json();
+            throw new Error(err.error || 'Server Fehler');
+        }
+    } catch (e) {
+        console.error(e);
+        status.innerHTML = `<div class="error">Fehler: ${e.message}</div>`;
+    }
+}
+
+// Helper needed if not available globally
+function getMandantIdFromUrl() {
+    return new URLSearchParams(window.location.search).get('mandant') || new URLSearchParams(window.location.search).get('id');
+}

@@ -2,95 +2,202 @@
 // Ensure API_BASE_URL is available
 const DOCS_API_URL = (typeof API_BASE_URL !== 'undefined') ? API_BASE_URL : 'http://localhost:5000/api';
 
-function loadDocuments() {
-    console.log("Loading all documents...");
-    loadAngeboteList();
-    loadLieferscheineList();
-    loadRechnungenListDoc();
+// Global Data Store for Filtering
+let allDocumentsData = {
+    angebote: [],
+    lieferscheine: [],
+    rechnungen: []
+};
+
+// Global Filter Function (called from HTML)
+function applyDocFilter() {
+    renderAngeboteList();
+    renderLieferscheineList();
+    renderRechnungenListDoc();
+    // Also trigger expenses if available
+    if (typeof applyAusgabenFilter === 'function') {
+        applyAusgabenFilter();
+    }
 }
 
-async function loadAngeboteList() {
-    const container = document.getElementById('doc-angebote-list'); // Updated ID
-    if (!container) return;
+function loadDocuments() {
+    console.log("Loading all documents...");
+    // Fetch all data
+    fetchAngebote();
+    fetchLieferscheine();
+    fetchRechnungen();
+}
 
+// --- Helper: Date Filtering ---
+function isItemInFilter(item, dateField) {
+    const monthSelect = document.getElementById('docFilterMonth');
+    const yearSelect = document.getElementById('docFilterYear');
+
+    // Default to show if no filter elements
+    if (!monthSelect || !yearSelect) return true;
+
+    const filterMonth = monthSelect.value;
+    const filterYear = yearSelect.value;
+
+    if (filterMonth === 'all' && filterYear === 'all') return true;
+
+    let dateStr = item[dateField] || '';
+    if (!dateStr && item.modified) {
+        // Fallback for files: use modified timestamp
+        dateStr = new Date(item.modified * 1000).toISOString();
+    }
+
+    // Parse Date
+    // Supported formats: 'DD.MM.YYYY', 'YYYY-MM-DD', timestamp/ISO
+    let d = null;
+    if (typeof dateStr === 'string') {
+        if (dateStr.includes('.')) {
+            const parts = dateStr.split('.');
+            if (parts.length === 3) d = new Date(parts[2], parts[1] - 1, parts[0]);
+        } else {
+            d = new Date(dateStr);
+        }
+    } else if (typeof dateStr === 'number') {
+        d = new Date(dateStr * 1000);
+    }
+
+    if (!d || isNaN(d.getTime())) return false; // Hide invalid dates if filter active? Or show? Let's hide.
+
+    const m = d.getMonth() + 1;
+    const y = d.getFullYear();
+
+    if (filterYear !== 'all' && String(y) !== String(filterYear)) return false;
+    if (filterMonth !== 'all' && String(m) !== String(filterMonth)) return false;
+
+    return true;
+}
+
+// --- ANGEBOTE ---
+async function fetchAngebote() {
     try {
         const id = getMandantId();
         const res = await fetch(`${API_BASE_URL}/mandanten/${id}/angebote`);
         const data = await res.json();
-
-        if (data.angebote && data.angebote.length > 0) {
-            container.innerHTML = data.angebote.map(a => `
-                <div class="doc-item" onclick="openPdf('${a.pdf_path}')">
-                    <span class="icon">📝</span>
-                    <div class="doc-info">
-                        <strong>${a.nummer || 'Angebot'}</strong>
-                        <small>${a.date || a.datum} | ${a.kunde}</small>
-                    </div>
-                </div>
-            `).join('');
-        } else {
-            container.innerHTML = '<div class="empty-state">Keine Angebote</div>';
-        }
+        allDocumentsData.angebote = data.angebote || [];
+        renderAngeboteList();
     } catch (e) {
         console.error(e);
-        container.innerHTML = `<div class="error">Fehler: ${e.message}</div>`;
     }
 }
 
-async function loadLieferscheineList() {
-    const container = document.getElementById('doc-lieferscheine-list'); // Updated ID
+function renderAngeboteList() {
+    const container = document.getElementById('doc-angebote-list');
     if (!container) return;
 
+    const filtered = allDocumentsData.angebote.filter(a => isItemInFilter(a, a.date ? 'date' : 'datum'));
+
+    if (filtered.length > 0) {
+        container.innerHTML = filtered.map(a => `
+            <div class="doc-item" onclick="openPdf('${a.pdf_path}')">
+                <span class="icon">📝</span>
+                <div class="doc-info">
+                    <strong>${a.nummer || 'Angebot'}</strong>
+                    <small>${a.date || a.datum} | ${a.kunde}</small>
+                </div>
+            </div>
+        `).join('');
+    } else {
+        container.innerHTML = '<div class="empty-state">Keine Angebote im gewählten Zeitraum</div>';
+    }
+}
+
+// --- LIEFERSCHEINE ---
+async function fetchLieferscheine() {
     try {
         const id = getMandantId();
         const res = await fetch(`${API_BASE_URL}/mandanten/${id}/lieferscheine`);
         const data = await res.json();
-
-        if (data.lieferscheine && data.lieferscheine.length > 0) {
-            container.innerHTML = data.lieferscheine.map(l => `
-                <div class="doc-item" onclick="openPdf('${l.pdf_path}')">
-                    <span class="icon">📋</span>
-                    <div class="doc-info">
-                        <strong>${l.nummer || 'Lieferschein'}</strong>
-                        <small>${l.datum} | ${l.kunde}</small>
-                    </div>
-                </div>
-            `).join('');
-        } else {
-            container.innerHTML = '<div class="empty-state">Keine Protokolle</div>';
-        }
+        allDocumentsData.lieferscheine = data.lieferscheine || [];
+        renderLieferscheineList();
     } catch (e) {
         console.error(e);
-        container.innerHTML = `<div class="error">Fehler: ${e.message}</div>`;
     }
 }
 
-async function loadRechnungenListDoc() {
-    const container = document.getElementById('doc-rechnungen-list'); // Updated ID
-    if (!container) return;
+function renderLieferscheineList() {
+    const containerFilled = document.getElementById('doc-lieferscheine-filled-list');
+    const containerBlank = document.getElementById('doc-lieferscheine-blank-list');
+    if (!containerFilled || !containerBlank) return;
 
+    const filtered = allDocumentsData.lieferscheine.filter(l => isItemInFilter(l, 'datum'));
+
+    const filled = [];
+    const blank = [];
+
+    filtered.forEach(l => {
+        let isBlank = false;
+        if (!l.items || l.items === '[]' || l.items.length === 0) {
+            isBlank = true;
+        }
+        if (isBlank) blank.push(l);
+        else filled.push(l);
+    });
+
+    // Render Filled
+    if (filled.length > 0) {
+        containerFilled.innerHTML = filled.map(l => createDocItem(l, '📋')).join('');
+    } else {
+        containerFilled.innerHTML = '<div class="empty-state">Keine ausgefüllten Protokolle</div>';
+    }
+
+    // Render Blank
+    if (blank.length > 0) {
+        containerBlank.innerHTML = blank.map(l => createDocItem(l, '📄')).join('');
+    } else {
+        containerBlank.innerHTML = '<div class="empty-state">Keine Blanko Protokolle</div>';
+    }
+}
+
+// --- RECHNUNGEN ---
+async function fetchRechnungen() {
     try {
         const id = getMandantId();
         const res = await fetch(`${API_BASE_URL}/mandanten/${id}/rechnungen`);
         const data = await res.json();
-
-        if (data.rechnungen && data.rechnungen.length > 0) {
-            container.innerHTML = data.rechnungen.map(r => `
-                <div class="doc-item" onclick="openPdf('${r.path}')">
-                    <span class="icon">🧾</span>
-                    <div class="doc-info">
-                        <strong>${r.name}</strong>
-                        <small>${new Date(r.modified * 1000).toLocaleDateString()}</small>
-                    </div>
-                </div>
-            `).join('');
-        } else {
-            container.innerHTML = '<div class="empty-state">Keine Rechnungen</div>';
-        }
+        allDocumentsData.rechnungen = data.rechnungen || [];
+        renderRechnungenListDoc();
     } catch (e) {
         console.error(e);
-        container.innerHTML = `<div class="error">Fehler: ${e.message}</div>`;
     }
+}
+
+function renderRechnungenListDoc() {
+    const container = document.getElementById('doc-rechnungen-list');
+    if (!container) return;
+
+    // Filter using modified timestamp
+    const filtered = allDocumentsData.rechnungen.filter(r => isItemInFilter(r, 'modified'));
+
+    if (filtered.length > 0) {
+        container.innerHTML = filtered.map(r => `
+            <div class="doc-item" onclick="openPdf('${r.path}')">
+                <span class="icon">🧾</span>
+                <div class="doc-info">
+                    <strong>${r.name}</strong>
+                    <small>${new Date(r.modified * 1000).toLocaleDateString()}</small>
+                </div>
+            </div>
+        `).join('');
+    } else {
+        container.innerHTML = '<div class="empty-state">Keine Rechnungen im gewählten Zeitraum</div>';
+    }
+}
+
+function createDocItem(doc, icon) {
+    return `
+        <div class="doc-item" onclick="openPdf('${doc.pdf_path}')">
+            <span class="icon">${icon}</span>
+            <div class="doc-info">
+                <strong>${doc.nummer || 'Dokument'}</strong>
+                <small>${doc.datum || ''} | ${doc.kunde || ''}</small>
+            </div>
+        </div>
+    `;
 }
 
 function openPdf(path) {
@@ -112,7 +219,7 @@ if (typeof window.switchTab === 'function') {
         }
     }
 } else {
-    // Fallback if not defined yet (less likely with correct script order)
+    // Fallback if not defined yet
     console.warn("switchTab not found, mocking it");
     window.switchTab = function (tabName) {
         if (tabName === 'documents') loadDocuments();

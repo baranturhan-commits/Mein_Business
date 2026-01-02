@@ -518,4 +518,49 @@ Wir haben den Schritt vom reinen Terminal-Programm zur **echten Web-Anwendung** 
 **Bearbeitet von:** Baran Turhan (mit Antigravity AI)
 **Version:** 3.0 - Web Dashboard & AI Expenses
 
+---
+
+### Phase 8: Mitarbeiter & Lohnabrechnung (Jan 02, 2026)
+
+**Das Personal-Update:**
+Jetzt können auch Mitarbeiter und deren Gehälter verwaltet werden – perfekt für Handwerker & Dienstleister.
+
+#### Neue Funktionen:
+
+**1. Mitarbeiterverwaltung 👔**
+- **Neuer Tab "Mitarbeiter"**: Übersicht aller Angestellten
+- **Stammdaten**: Name, Adresse, SV-Nummer, Steuerklasse, IBAN, Eintrittsdatum
+- Daten werden pro Mandant getrennt gespeichert (`mitarbeiter.json`)
+
+**2. Lohnabrechnung auf Knopfdruck 📄**
+- Professionelle **Verdienstabrechnung als PDF**
+- Mit Firmenlogo, Absender und allen Pflichtangaben
+- **Flexibel:** Für Festgehalt oder Stundenlohn
+
+**3. Stunden-Rechner für Handwerker 🧮**
+- Gib **Stundenlohn** und **geleistete Stunden** ein
+- Das System berechnet automatisch das Brutto-Gehalt
+- Ideal für wechselnde Arbeitszeiten oder Aushilfen
+
+**4. Historie & Archiv 🗂️**
+- Jede erstellte Abrechnung wird automatisch gespeichert
+- **Historien-Liste:** Alle alten PDFs direkt beim Mitarbeiter einsehbar und abrufbar
+
+**5. Mandanten-Einstellungen ⚙️**
+- Firmen-Stammdaten (Name, Adresse, Geschäftsführer, Bank) jetzt **direkt im Web bearbeitbar**
+- **Logo-Upload:** Eigenes Firmenlogo hochladen, das dann auf allen Dokumenten (Rechnung, Angebot, Lohn) erscheint
+
+**Geänderte Dateien:**
+- `backend/payroll_generator.py` (NEU)
+- `frontend/mitarbeiter.js` (NEU)
+- `frontend/mandant_config.js` (NEU)
+- `backend/api_server.py` (Neue Endpunkte)
+- `frontend/detail.html` (Neue Tabs & Modals)
+
+---
+
+**Letzte Aktualisierung:** 2026-01-02 17:35
+**Bearbeitet von:** Baran Turhan (mit Antigravity AI)
+**Version:** 3.1 - Mitarbeiter & Lohnabrechnung
+
 

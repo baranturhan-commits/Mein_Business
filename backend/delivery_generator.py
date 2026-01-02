@@ -8,7 +8,7 @@ import datetime
 import json
 from reportlab.lib import colors
 from reportlab.lib.pagesizes import A4
-from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer, Table, TableStyle
+from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer, Table, TableStyle, Image as ReportLabImage
 from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
 from reportlab.lib.units import cm
 from pathlib import Path
@@ -80,6 +80,28 @@ def create_delivery_pdf(mandant_path, mandant_config, kunde_name, positionen, ou
         fontSize=10,
         leading=12
     )
+
+    # --- HEADER BEREICH (Logo rechts, Absender links) ---
+    # Logo Check
+    logo_path = None
+    if mandant_config.get("logo"):
+        p_logo = os.path.join(mandant_path, mandant_config["logo"])
+        if os.path.exists(p_logo):
+            logo_path = p_logo
+
+    if logo_path:
+        # Logo Placement using Table to align right
+        im = ReportLabImage(logo_path, width=5*cm, height=2.5*cm, kind='proportional')
+        im.hAlign = 'RIGHT'
+        logo_table = Table([[im]], colWidths=[17*cm])
+        logo_table.setStyle(TableStyle([('ALIGN', (0,0), (-1,-1), 'RIGHT')]))
+        story.append(logo_table)
+        story.append(Spacer(1, 0.5*cm))
+    else:
+        # Fallback: Just Firma Name if no logo, similar to Invoice generic
+        firma = mandant_config.get('firma', 'Firma')
+        story.append(Paragraph(f"<b>{firma}</b>", styles['Normal']))
+        story.append(Spacer(1, 1*cm))
 
     # 1. Title
     story.append(Paragraph("ABNAHMEPROTOKOLL", title_style))
