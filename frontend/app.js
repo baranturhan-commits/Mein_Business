@@ -1,0 +1,262 @@
+// Mein Business - Frontend Application Logic
+const API_BASE_URL = 'http://localhost:5000/api';
+
+// State
+let allMandanten = [];
+let dashboardData = null;
+
+// Initialize App
+document.addEventListener('DOMContentLoaded', () => {
+    console.log('🚀 Initializing Mein Business Dashboard...');
+    loadDashboard();
+    updateLastUpdate();
+
+    // Auto-refresh every 30 seconds
+    setInterval(refreshData, 30000);
+});
+
+// Load Dashboard Data
+async function loadDashboard() {
+    try {
+        const response = await fetch(`${API_BASE_URL}/dashboard`);
+
+        if (!response.ok) {
+            throw new Error('API Server nicht erreichbar');
+        }
+
+        dashboardData = await response.json();
+
+        // Update Summary
+        updateSummary(dashboardData);
+
+        // Load Mandanten
+        allMandanten = dashboardData.mandanten_details || [];
+        renderMandanten(allMandanten);
+
+    } catch (error) {
+        console.error('Fehler beim Laden:', error);
+        showError('API Server nicht erreichbar. Starte: python backend/api_server.py');
+    }
+}
+
+// Update Summary Cards
+function updateSummary(data) {
+    document.getElementById('totalMandanten').textContent = data.total_mandanten || 0;
+    document.getElementById('totalEinnahmen').textContent = formatCurrency(data.total_einnahmen || 0);
+    document.getElementById('totalOffen').textContent = formatCurrency(data.total_offen || 0);
+}
+
+// Render Mandanten Grid
+function renderMandanten(mandanten) {
+    const grid = document.getElementById('mandantenGrid');
+
+    if (mandanten.length === 0) {
+        grid.innerHTML = `
+            <div class="loading">
+                <p>Keine Mandanten gefunden</p>
+            </div>
+        `;
+        return;
+    }
+
+    grid.innerHTML = mandanten.map(mandant => createMandantCard(mandant)).join('');
+}
+
+// Create Mandant Card HTML
+function createMandantCard(mandant) {
+    const stats = mandant.stats || {};
+    const einnahmen = stats.einnahmen || {};
+    const rechnungen = stats.rechnungen || {};
+    const kunden = stats.kunden || 0;
+
+    const initial = mandant.name.charAt(0).toUpperCase();
+
+    return `
+        <div class="mandant-card" onclick="openMandantDetails('${mandant.id}')">
+            <div class="mandant-header">
+                <div class="mandant-avatar">${initial}</div>
+                <div class="mandant-info">
+                    <h3>${mandant.name}</h3>
+                    <p class="mandant-id">${mandant.id}</p>
+                </div>
+            </div>
+            
+            <div class="mandant-stats">
+                <div class="stat-item">
+                    <p class="stat-item-label">💰 Einnahmen</p>
+                    <p class="stat-item-value">${formatCurrency(einnahmen.total || 0)}</p>
+                </div>
+                
+                <div class="stat-item">
+                    <p class="stat-item-label">⏳ Offen</p>
+                    <p class="stat-item-value warning">${formatCurrency(einnahmen.offen || 0)}</p>
+                </div>
+                
+                <div class="stat-item">
+                    <p class="stat-item-label">📄 Rechnungen</p>
+                    <p class="stat-item-value">${rechnungen.anzahl || 0}</p>
+                </div>
+                
+                <div class="stat-item">
+                    <p class="stat-item-label">👥 Kunden</p>
+                    <p class="stat-item-value">${kunden}</p>
+                </div>
+            </div>
+        </div>
+    `;
+}
+
+// Filter Mandanten
+function filterMandanten() {
+    const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+
+    const filtered = allMandanten.filter(mandant =>
+        mandant.name.toLowerCase().includes(searchTerm) ||
+        mandant.id.toLowerCase().includes(searchTerm)
+    );
+
+    renderMandanten(filtered);
+}
+
+// Open Mandant Details
+function openMandantDetails(mandantId) {
+    window.location.href = `detail.html?id=${mandantId}`;
+}
+
+// Refresh Data
+async function refreshData() {
+    console.log('🔄 Refreshing dashboard...');
+    await loadDashboard();
+    updateLastUpdate();
+}
+
+// Create Backup
+async function createBackup() {
+    if (!confirm('Backup jetzt erstellen?')) {
+        return;
+    }
+
+    try {
+        const response = await fetch(`${API_BASE_URL}/backup`, {
+            method: 'POST'
+        });
+
+        const result = await response.json();
+
+        if (result.success) {
+            alert(`✅ Backup erfolgreich erstellt!\n\n${result.backup_file}`);
+        } else {
+            alert(`❌ Fehler: ${result.error}`);
+        }
+    } catch (error) {
+        alert(`❌ Fehler beim Backup: ${error.message}`);
+    }
+}
+
+// Open Backend Scripts
+function openBackend(module) {
+    let command = '';
+
+    switch (module) {
+        case 'invoice':
+            command = 'python backend/03_Rechnungen/invoice.py';
+            break;
+        case 'scanner':
+            command = 'python backend/02_Buchhaltung/scanner.py';
+            break;
+        case 'payments':
+            command = 'python backend/03_Rechnungen/check_payments.py';
+            break;
+        case 'finance':
+            command = 'python backend/04_Controlling/finance_check.py';
+            break;
+    }
+
+    alert(`Terminal öffnen und ausführen:\n\n${command}`);
+    // In einer erweiterten Version könnten hier WebSockets verwendet werden
+}
+
+// Utility Functions
+function formatCurrency(value) {
+    return new Intl.NumberFormat('de-DE', {
+        style: 'currency',
+        currency: 'EUR'
+    }).format(value);
+}
+
+function updateLastUpdate() {
+    const now = new Date();
+    const timeString = now.toLocaleTimeString('de-DE');
+    document.getElementById('lastUpdate').textContent = timeString;
+}
+
+function showError(message) {
+    const grid = document.getElementById('mandantenGrid');
+    grid.innerHTML = `
+        <div class="loading">
+            <p style="color: var(--danger);">❌ ${message}</p>
+        </div>
+    `;
+}
+
+// Mandant Modal
+function showMandantModal() {
+    document.getElementById('mandantModal').classList.remove('hidden');
+}
+
+function closeMandantModal() {
+    document.getElementById('mandantModal').classList.add('hidden');
+    document.getElementById('mandantForm').reset();
+    document.getElementById('mandantStatus').innerHTML = '';
+}
+
+async function submitMandant(event) {
+    event.preventDefault();
+
+    const formData = {
+        firma: document.getElementById('mandantFirma').value.trim(),
+        strasse: document.getElementById('mandantStrasse').value.trim(),
+        ort: document.getElementById('mandantOrt').value.trim(),
+        geschaeftsfuehrer: document.getElementById('mandantGF').value.trim(),
+        iban: document.getElementById('mandantIBAN').value.trim(),
+        bic: document.getElementById('mandantBIC').value.trim(),
+        bank: document.getElementById('mandantBank').value.trim()
+    };
+
+    const statusDiv = document.getElementById('mandantStatus');
+    statusDiv.innerHTML = '<p>🏢 Erstelle Mandanten...</p>';
+
+    try {
+        const response = await fetch(`${API_BASE_URL}/mandanten`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(formData)
+        });
+
+        const result = await response.json();
+
+        if (result.success) {
+            statusDiv.innerHTML = '<p class="success">✅ Mandant erfolgreich angelegt!</p>';
+            setTimeout(() => {
+                closeMandantModal();
+                refreshData(); // Reload dashboard
+            }, 1500);
+        } else {
+            statusDiv.innerHTML = `<p class="error">❌ ${result.error}</p>`;
+        }
+    } catch (error) {
+        statusDiv.innerHTML = '<p class="error">❌ Fehler beim Erstellen</p>';
+    }
+}
+
+// Export for console debugging
+window.app = {
+    loadDashboard,
+    refreshData,
+    createBackup,
+    showMandantModal,
+    closeMandantModal,
+    submitMandant,
+    allMandanten,
+    dashboardData
+};

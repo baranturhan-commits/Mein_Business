@@ -120,7 +120,39 @@ def create_mandant():
         # 4. Excel Init (statt CSV)
         xlsx_path = os.path.join(mandant_path, "Kunden", "kunden.xlsx")
         excel_utils.init_file(xlsx_path, ['Firma', 'Email', 'Anrede'], "Kunden")
-            
+        
+        # 5. Einnahmen Excel Init
+        einnahmen_xlsx = os.path.join(mandant_path, "Einnahmen", "einnahmen.xlsx")
+        excel_utils.init_file(einnahmen_xlsx, 
+            ['Rechnungsnummer', 'Datum', 'Kunde', 'Beschreibung', 'Betrag_Netto', 'Betrag_Brutto', 'Status'], 
+            "Einnahmen")
+        
+        # 6. Ausgaben Excel Init  
+        ausgaben_xlsx = os.path.join(mandant_path, "Ausgaben", "ausgaben.xlsx")
+        excel_utils.init_file(
+            str(mandant_path / 'Ausgaben' / 'ausgaben.xlsx'),
+            ['Datum', 'Beleg-Nr.', 'Firma', 'Beschreibung', 'Kategorie', 'Netto', 'MwSt', 'Brutto'],
+            'Ausgaben'
+        )
+        
+        # 7. Preisliste Excel Init
+        preisliste_xlsx = os.path.join(mandant_path, "preisliste.xlsx")
+        excel_utils.init_file(preisliste_xlsx,
+            ['Pos', 'Bezeichnung', 'Einheit', 'Einzelpreis', 'Kategorie'],
+            "Preisliste")
+        
+        # 8. Angebote Excel Init  
+        angebote_xlsx = os.path.join(mandant_path, "Angebote", "angebote.xlsx")
+        excel_utils.init_file(angebote_xlsx,
+            ['Nummer', 'Datum', 'Kunde', 'Netto', 'Brutto', 'Status', 'PDF_Path'],
+            "Angebote")
+
+        # 9. Lieferscheine Excel Init
+        lieferscheine_xlsx = os.path.join(mandant_path, "Lieferscheine", "lieferscheine.xlsx")
+        os.makedirs(os.path.dirname(lieferscheine_xlsx), exist_ok=True)
+        excel_utils.init_file(lieferscheine_xlsx,
+            ['Nummer', 'Datum', 'Kunde', 'Angebot', 'PDF_Path', 'Status'],
+            "Lieferscheine")    
         print(f"\n✨ Mandant '{name}' erfolgreich angelegt!")
         print(f"   Ordner: {mandant_path}")
         

@@ -379,17 +379,21 @@ Vollständige Python-basierte Business-Automatisierung:
 - **Mahnwesen**: KI-gestützte Mahnung mit PDF-Generierung (nur offene Rechnungen)
 - **Buchhaltung**: Intelligente Belegverarbeitung
 - **Rechnungen**: Automatische Rechnungserstellung mit Status-Tracking
+- **Ausgaben**: KI-Belegscanner & Kosten-Tracking
+- **Preisliste**: Zentrale Verwaltung von Produkten & Dienstleistungen
 - **OP-Pflege**: Zahlungseingangs-Management (Offen/Bezahlt)
 - **Controlling**: Finanz-Dashboard
 
 Siehe [backend/README.md](backend/README.md) für Details.
 
-### 💻 Frontend (Geplant)
-Moderne Web-Oberfläche für:
-- Dashboard-Übersicht
-- Manuelle Dateneingabe
-- Visualisierung von Finanzdaten
-- Verwaltung von Mandanten und Kunden
+### 💻 Frontend (Live!)
+Moderne Web-Oberfläche unter `http://localhost:5000`:
+- **Dashboard-Übersicht**: Schnellzugriff auf alle Bereiche
+- **Dokumente**: Angebote, Lieferscheine, Rechnungen verwalten
+- **Ausgaben**: Belege scannen (KI) und verwalten
+- **Preisliste**: Artikel/Dienstleistungen pflegen
+- **Kunden**: Adressbuch verwalten
+- **OP-Check**: Zahlungseingänge prüfen
 
 ---
 
@@ -420,5 +424,5 @@ Dieses Projekt ist für den privaten/geschäftlichen Gebrauch.
 
 ---
 
-**Version:** 2.2
-**Letztes Update:** 2025-12-28
+**Version:** 3.0
+**Letztes Update:** 2026-01-02

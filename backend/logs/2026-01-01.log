@@ -1,0 +1,1095 @@
+2026-01-01 19:26:17,072 - mein_business - INFO - ✅ Logging system initialized
+2026-01-01 19:26:17,073 - mein_business - WARNING - ⚠️ This is a warning
+2026-01-01 19:26:17,073 - mein_business - ERROR - ❌ This is an error
+2026-01-01 19:34:32,947 - __main__ - INFO - 🚀 Starting API Server...
+2026-01-01 19:34:33,200 - werkzeug - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://192.168.178.199:5000
+2026-01-01 19:34:33,200 - werkzeug - INFO - [33mPress CTRL+C to quit[0m
+2026-01-01 19:34:33,203 - werkzeug - INFO -  * Restarting with stat
+2026-01-01 19:34:33,620 - __main__ - INFO - 🚀 Starting API Server...
+2026-01-01 19:34:33,644 - werkzeug - WARNING -  * Debugger is active!
+2026-01-01 19:34:33,650 - werkzeug - INFO -  * Debugger PIN: 447-598-156
+2026-01-01 19:34:52,518 - __main__ - INFO - Mandanten geladen: 2
+2026-01-01 19:34:52,522 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 19:34:52] "GET /api/dashboard HTTP/1.1" 200 -
+2026-01-01 19:35:22,197 - __main__ - INFO - Mandanten geladen: 2
+2026-01-01 19:35:22,200 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 19:35:22] "GET /api/dashboard HTTP/1.1" 200 -
+2026-01-01 19:35:52,518 - __main__ - INFO - Mandanten geladen: 2
+2026-01-01 19:35:52,521 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 19:35:52] "GET /api/dashboard HTTP/1.1" 200 -
+2026-01-01 19:36:22,207 - __main__ - INFO - Mandanten geladen: 2
+2026-01-01 19:36:22,210 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 19:36:22] "GET /api/dashboard HTTP/1.1" 200 -
+2026-01-01 19:36:52,512 - __main__ - INFO - Mandanten geladen: 2
+2026-01-01 19:36:52,515 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 19:36:52] "GET /api/dashboard HTTP/1.1" 200 -
+2026-01-01 19:37:22,199 - __main__ - INFO - Mandanten geladen: 2
+2026-01-01 19:37:22,202 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 19:37:22] "GET /api/dashboard HTTP/1.1" 200 -
+2026-01-01 19:37:52,521 - __main__ - INFO - Mandanten geladen: 2
+2026-01-01 19:37:52,524 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 19:37:52] "GET /api/dashboard HTTP/1.1" 200 -
+2026-01-01 19:38:22,197 - __main__ - INFO - Mandanten geladen: 2
+2026-01-01 19:38:22,200 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 19:38:22] "GET /api/dashboard HTTP/1.1" 200 -
+2026-01-01 19:38:52,510 - __main__ - INFO - Mandanten geladen: 2
+2026-01-01 19:38:52,513 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 19:38:52] "GET /api/dashboard HTTP/1.1" 200 -
+2026-01-01 19:39:22,198 - __main__ - INFO - Mandanten geladen: 2
+2026-01-01 19:39:22,201 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 19:39:22] "GET /api/dashboard HTTP/1.1" 200 -
+2026-01-01 19:39:52,510 - __main__ - INFO - Mandanten geladen: 2
+2026-01-01 19:39:52,514 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 19:39:52] "GET /api/dashboard HTTP/1.1" 200 -
+2026-01-01 19:40:22,197 - __main__ - INFO - Mandanten geladen: 2
+2026-01-01 19:40:22,200 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 19:40:22] "GET /api/dashboard HTTP/1.1" 200 -
+2026-01-01 19:40:52,509 - __main__ - INFO - Mandanten geladen: 2
+2026-01-01 19:40:52,512 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 19:40:52] "GET /api/dashboard HTTP/1.1" 200 -
+2026-01-01 19:41:22,209 - __main__ - INFO - Mandanten geladen: 2
+2026-01-01 19:41:22,212 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 19:41:22] "GET /api/dashboard HTTP/1.1" 200 -
+2026-01-01 19:41:52,521 - __main__ - INFO - Mandanten geladen: 2
+2026-01-01 19:41:52,525 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 19:41:52] "GET /api/dashboard HTTP/1.1" 200 -
+2026-01-01 19:42:22,203 - __main__ - INFO - Mandanten geladen: 2
+2026-01-01 19:42:22,207 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 19:42:22] "GET /api/dashboard HTTP/1.1" 200 -
+2026-01-01 19:42:50,792 - werkzeug - INFO -  * Detected change in 'C:\\Users\\Admin\\Desktop\\Mein_Business\\backend\\02_Buchhaltung\\scanner.py', reloading
+2026-01-01 19:42:50,840 - werkzeug - INFO -  * Restarting with stat
+2026-01-01 19:42:51,225 - __main__ - INFO - 🚀 Starting API Server...
+2026-01-01 19:42:51,247 - werkzeug - WARNING -  * Debugger is active!
+2026-01-01 19:42:51,253 - werkzeug - INFO -  * Debugger PIN: 447-598-156
+2026-01-01 19:42:52,516 - __main__ - INFO - Mandanten geladen: 2
+2026-01-01 19:42:52,520 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 19:42:52] "GET /api/dashboard HTTP/1.1" 200 -
+2026-01-01 19:43:15,430 - werkzeug - INFO -  * Detected change in 'C:\\Users\\Admin\\Desktop\\Mein_Business\\backend\\01_Mahnwesen\\agent.py', reloading
+2026-01-01 19:43:15,487 - werkzeug - INFO -  * Restarting with stat
+2026-01-01 19:43:15,851 - __main__ - INFO - 🚀 Starting API Server...
+2026-01-01 19:43:15,872 - werkzeug - WARNING -  * Debugger is active!
+2026-01-01 19:43:15,878 - werkzeug - INFO -  * Debugger PIN: 447-598-156
+2026-01-01 19:43:22,524 - __main__ - INFO - Mandanten geladen: 2
+2026-01-01 19:43:22,528 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 19:43:22] "GET /api/dashboard HTTP/1.1" 200 -
+2026-01-01 19:43:52,205 - __main__ - INFO - Mandanten geladen: 2
+2026-01-01 19:43:52,208 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 19:43:52] "GET /api/dashboard HTTP/1.1" 200 -
+2026-01-01 19:44:22,517 - __main__ - INFO - Mandanten geladen: 2
+2026-01-01 19:44:22,520 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 19:44:22] "GET /api/dashboard HTTP/1.1" 200 -
+2026-01-01 19:44:52,211 - __main__ - INFO - Mandanten geladen: 2
+2026-01-01 19:44:52,215 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 19:44:52] "GET /api/dashboard HTTP/1.1" 200 -
+2026-01-01 19:45:22,515 - __main__ - INFO - Mandanten geladen: 2
+2026-01-01 19:45:22,519 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 19:45:22] "GET /api/dashboard HTTP/1.1" 200 -
+2026-01-01 19:45:52,197 - __main__ - INFO - Mandanten geladen: 2
+2026-01-01 19:45:52,201 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 19:45:52] "GET /api/dashboard HTTP/1.1" 200 -
+2026-01-01 19:46:22,517 - __main__ - INFO - Mandanten geladen: 2
+2026-01-01 19:46:22,520 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 19:46:22] "GET /api/dashboard HTTP/1.1" 200 -
+2026-01-01 19:46:43,203 - werkzeug - INFO -  * Detected change in 'C:\\Users\\Admin\\Desktop\\Mein_Business\\backend\\api_server.py', reloading
+2026-01-01 19:46:43,252 - werkzeug - INFO -  * Restarting with stat
+2026-01-01 19:46:43,625 - __main__ - INFO - 🚀 Starting API Server...
+2026-01-01 19:46:43,647 - werkzeug - WARNING -  * Debugger is active!
+2026-01-01 19:46:43,653 - werkzeug - INFO -  * Debugger PIN: 447-598-156
+2026-01-01 19:46:52,512 - __main__ - INFO - Mandanten geladen: 2
+2026-01-01 19:46:52,516 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 19:46:52] "GET /api/dashboard HTTP/1.1" 200 -
+2026-01-01 19:47:22,206 - __main__ - INFO - Mandanten geladen: 2
+2026-01-01 19:47:22,209 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 19:47:22] "GET /api/dashboard HTTP/1.1" 200 -
+2026-01-01 19:47:52,522 - __main__ - INFO - Mandanten geladen: 2
+2026-01-01 19:47:52,525 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 19:47:52] "GET /api/dashboard HTTP/1.1" 200 -
+2026-01-01 19:48:22,201 - __main__ - INFO - Mandanten geladen: 2
+2026-01-01 19:48:22,204 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 19:48:22] "GET /api/dashboard HTTP/1.1" 200 -
+2026-01-01 19:48:52,511 - __main__ - INFO - Mandanten geladen: 2
+2026-01-01 19:48:52,514 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 19:48:52] "GET /api/dashboard HTTP/1.1" 200 -
+2026-01-01 19:49:03,559 - werkzeug - INFO -  * Detected change in 'C:\\Users\\Admin\\Desktop\\Mein_Business\\backend\\tasks\\monthly_report.py', reloading
+2026-01-01 19:49:03,632 - werkzeug - INFO -  * Restarting with stat
+2026-01-01 19:49:04,239 - __main__ - INFO - 🚀 Starting API Server...
+2026-01-01 19:49:04,275 - werkzeug - WARNING -  * Debugger is active!
+2026-01-01 19:49:04,287 - werkzeug - INFO -  * Debugger PIN: 447-598-156
+2026-01-01 19:49:05,362 - werkzeug - INFO -  * Detected change in 'C:\\Users\\Admin\\Desktop\\Mein_Business\\backend\\tasks\\auto_mahnung.py', reloading
+2026-01-01 19:49:05,431 - werkzeug - INFO -  * Restarting with stat
+2026-01-01 19:49:06,019 - __main__ - INFO - 🚀 Starting API Server...
+2026-01-01 19:49:06,055 - werkzeug - WARNING -  * Debugger is active!
+2026-01-01 19:49:06,067 - werkzeug - INFO -  * Debugger PIN: 447-598-156
+2026-01-01 19:49:22,510 - __main__ - INFO - Mandanten geladen: 2
+2026-01-01 19:49:22,513 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 19:49:22] "GET /api/dashboard HTTP/1.1" 200 -
+2026-01-01 19:49:52,203 - __main__ - INFO - Mandanten geladen: 2
+2026-01-01 19:49:52,206 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 19:49:52] "GET /api/dashboard HTTP/1.1" 200 -
+2026-01-01 19:50:22,514 - __main__ - INFO - Mandanten geladen: 2
+2026-01-01 19:50:22,517 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 19:50:22] "GET /api/dashboard HTTP/1.1" 200 -
+2026-01-01 19:50:52,210 - __main__ - INFO - Mandanten geladen: 2
+2026-01-01 19:50:52,213 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 19:50:52] "GET /api/dashboard HTTP/1.1" 200 -
+2026-01-01 19:51:22,519 - __main__ - INFO - Mandanten geladen: 2
+2026-01-01 19:51:22,522 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 19:51:22] "GET /api/dashboard HTTP/1.1" 200 -
+2026-01-01 19:51:52,206 - __main__ - INFO - Mandanten geladen: 2
+2026-01-01 19:51:52,210 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 19:51:52] "GET /api/dashboard HTTP/1.1" 200 -
+2026-01-01 19:52:13,150 - __main__ - INFO - Mandanten geladen: 2
+2026-01-01 19:52:13,153 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 19:52:13] "GET /api/dashboard HTTP/1.1" 200 -
+2026-01-01 19:52:16,718 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 19:52:16] "GET /api/mandanten/Elektroniker_Testbetrieb/stats HTTP/1.1" 200 -
+2026-01-01 19:52:17,018 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 19:52:17] "GET /api/mandanten/Elektroniker_Testbetrieb/rechnungen HTTP/1.1" 200 -
+2026-01-01 19:52:28,384 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 19:52:28] "[33mGET /api/pdf/MandantenElektroniker_TestbetriebRechnungenOma_Erna%10-12-2025_Rechnung_2025-001.pdf HTTP/1.1[0m" 404 -
+2026-01-01 19:52:36,177 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 19:52:36] "GET /api/mandanten/Elektroniker_Testbetrieb/stats HTTP/1.1" 200 -
+2026-01-01 19:52:36,177 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 19:52:36] "GET /api/mandanten/Elektroniker_Testbetrieb/rechnungen HTTP/1.1" 200 -
+2026-01-01 19:52:38,007 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 19:52:38] "[33mGET /api/pdf/MandantenElektroniker_TestbetriebRechnungenOma_Erna%10-12-2025_Rechnung_2025-001.pdf HTTP/1.1[0m" 404 -
+2026-01-01 19:53:55,655 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 19:53:55] "GET /api/mandanten/Elektroniker_Testbetrieb/stats HTTP/1.1" 200 -
+2026-01-01 19:53:55,656 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 19:53:55] "GET /api/mandanten/Elektroniker_Testbetrieb/rechnungen HTTP/1.1" 200 -
+2026-01-01 19:54:01,033 - __main__ - INFO - Mandanten geladen: 2
+2026-01-01 19:54:01,037 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 19:54:01] "GET /api/dashboard HTTP/1.1" 200 -
+2026-01-01 19:54:03,448 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 19:54:03] "GET /api/mandanten/Elektroniker_Testbetrieb/rechnungen HTTP/1.1" 200 -
+2026-01-01 19:54:03,448 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 19:54:03] "GET /api/mandanten/Elektroniker_Testbetrieb/stats HTTP/1.1" 200 -
+2026-01-01 19:54:05,306 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 19:54:05] "[33mGET /api/pdf/MandantenElektroniker_TestbetriebRechnungenOma_Erna%10-12-2025_Rechnung_2025-001.pdf HTTP/1.1[0m" 404 -
+2026-01-01 19:54:07,970 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 19:54:07] "[33mGET /api/pdf/MandantenElektroniker_TestbetriebRechnungenOma_Erna%10-12-2025_Rechnung_2025-001.pdf HTTP/1.1[0m" 404 -
+2026-01-01 19:55:36,699 - werkzeug - INFO -  * Detected change in 'C:\\Users\\Admin\\Desktop\\Mein_Business\\backend\\api_server.py', reloading
+2026-01-01 19:55:36,746 - werkzeug - INFO -  * Restarting with stat
+2026-01-01 19:55:37,113 - __main__ - INFO - 🚀 Starting API Server...
+2026-01-01 19:55:37,134 - werkzeug - WARNING -  * Debugger is active!
+2026-01-01 19:55:37,140 - werkzeug - INFO -  * Debugger PIN: 447-598-156
+2026-01-01 19:55:58,654 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 19:55:58] "GET /api/mandanten/Elektroniker_Testbetrieb/stats HTTP/1.1" 200 -
+2026-01-01 19:55:58,654 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 19:55:58] "GET /api/mandanten/Elektroniker_Testbetrieb/rechnungen HTTP/1.1" 200 -
+2026-01-01 19:56:23,780 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 19:56:23] "GET /api/mandanten/Elektroniker_Testbetrieb/stats HTTP/1.1" 200 -
+2026-01-01 19:56:24,091 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 19:56:24] "GET /api/mandanten/Elektroniker_Testbetrieb/rechnungen HTTP/1.1" 200 -
+2026-01-01 19:56:25,549 - __main__ - INFO - PDF Request: Mandanten/Elektroniker_Testbetrieb/Rechnungen/Oma_Erna/20-12-2025_Rechnung_2025-001.pdf -> C:\Users\Admin\Desktop\Mein_Business\backend\Mandanten\Elektroniker_Testbetrieb\Rechnungen\Oma_Erna\20-12-2025_Rechnung_2025-001.pdf
+2026-01-01 19:56:25,550 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 19:56:25] "GET /api/pdf/Mandanten/Elektroniker_Testbetrieb/Rechnungen/Oma_Erna/20-12-2025_Rechnung_2025-001.pdf HTTP/1.1" 200 -
+2026-01-01 19:56:39,302 - __main__ - INFO - PDF Request: Mandanten/Elektroniker_Testbetrieb/Rechnungen/Oma_Erna/22-12-2025_Rechnung_2025-002.pdf -> C:\Users\Admin\Desktop\Mein_Business\backend\Mandanten\Elektroniker_Testbetrieb\Rechnungen\Oma_Erna\22-12-2025_Rechnung_2025-002.pdf
+2026-01-01 19:56:39,304 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 19:56:39] "GET /api/pdf/Mandanten/Elektroniker_Testbetrieb/Rechnungen/Oma_Erna/22-12-2025_Rechnung_2025-002.pdf HTTP/1.1" 200 -
+2026-01-01 19:58:19,019 - __main__ - INFO - Mandanten geladen: 2
+2026-01-01 19:58:19,022 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 19:58:19] "GET /api/dashboard HTTP/1.1" 200 -
+2026-01-01 19:58:48,706 - __main__ - INFO - Mandanten geladen: 2
+2026-01-01 19:58:48,709 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 19:58:48] "GET /api/dashboard HTTP/1.1" 200 -
+2026-01-01 19:58:57,525 - werkzeug - INFO -  * Detected change in 'C:\\Users\\Admin\\Desktop\\Mein_Business\\backend\\api_server.py', reloading
+2026-01-01 19:58:57,584 - werkzeug - INFO -  * Restarting with stat
+2026-01-01 19:58:57,976 - __main__ - INFO - 🚀 Starting API Server...
+2026-01-01 19:58:57,997 - werkzeug - WARNING -  * Debugger is active!
+2026-01-01 19:58:58,003 - werkzeug - INFO -  * Debugger PIN: 447-598-156
+2026-01-01 19:59:19,013 - __main__ - INFO - Mandanten geladen: 2
+2026-01-01 19:59:21,921 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 19:59:21] "GET /api/dashboard HTTP/1.1" 200 -
+2026-01-01 19:59:49,022 - __main__ - INFO - Mandanten geladen: 2
+2026-01-01 19:59:49,034 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 19:59:49] "GET /api/dashboard HTTP/1.1" 200 -
+2026-01-01 20:00:18,711 - __main__ - INFO - Mandanten geladen: 2
+2026-01-01 20:00:18,722 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 20:00:18] "GET /api/dashboard HTTP/1.1" 200 -
+2026-01-01 20:00:49,028 - __main__ - INFO - Mandanten geladen: 2
+2026-01-01 20:00:49,040 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 20:00:49] "GET /api/dashboard HTTP/1.1" 200 -
+2026-01-01 20:01:18,710 - __main__ - INFO - Mandanten geladen: 2
+2026-01-01 20:01:18,722 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 20:01:18] "GET /api/dashboard HTTP/1.1" 200 -
+2026-01-01 20:01:39,151 - werkzeug - INFO -  * Detected change in 'C:\\Users\\Admin\\Desktop\\Mein_Business\\backend\\add_client.py', reloading
+2026-01-01 20:01:39,293 - werkzeug - INFO -  * Restarting with stat
+2026-01-01 20:01:39,670 - __main__ - INFO - 🚀 Starting API Server...
+2026-01-01 20:01:39,692 - werkzeug - WARNING -  * Debugger is active!
+2026-01-01 20:01:39,698 - werkzeug - INFO -  * Debugger PIN: 447-598-156
+2026-01-01 20:01:49,028 - __main__ - INFO - Mandanten geladen: 2
+2026-01-01 20:01:49,784 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 20:01:49] "GET /api/dashboard HTTP/1.1" 200 -
+2026-01-01 20:02:18,710 - __main__ - INFO - Mandanten geladen: 2
+2026-01-01 20:02:18,721 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 20:02:18] "GET /api/dashboard HTTP/1.1" 200 -
+2026-01-01 20:02:22,676 - __main__ - INFO - Mandanten geladen: 2
+2026-01-01 20:02:22,688 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 20:02:22] "GET /api/dashboard HTTP/1.1" 200 -
+2026-01-01 20:02:52,381 - __main__ - INFO - Mandanten geladen: 2
+2026-01-01 20:02:52,393 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 20:02:52] "GET /api/dashboard HTTP/1.1" 200 -
+2026-01-01 20:03:22,682 - __main__ - INFO - Mandanten geladen: 2
+2026-01-01 20:03:22,693 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 20:03:22] "GET /api/dashboard HTTP/1.1" 200 -
+2026-01-01 20:03:52,375 - __main__ - INFO - Mandanten geladen: 2
+2026-01-01 20:03:52,387 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 20:03:52] "GET /api/dashboard HTTP/1.1" 200 -
+2026-01-01 20:04:22,683 - __main__ - INFO - Mandanten geladen: 2
+2026-01-01 20:04:22,694 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 20:04:22] "GET /api/dashboard HTTP/1.1" 200 -
+2026-01-01 20:04:52,372 - __main__ - INFO - Mandanten geladen: 2
+2026-01-01 20:04:52,383 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 20:04:52] "GET /api/dashboard HTTP/1.1" 200 -
+2026-01-01 20:05:22,685 - __main__ - INFO - Mandanten geladen: 2
+2026-01-01 20:05:22,696 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 20:05:22] "GET /api/dashboard HTTP/1.1" 200 -
+2026-01-01 20:05:52,373 - __main__ - INFO - Mandanten geladen: 2
+2026-01-01 20:05:52,384 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 20:05:52] "GET /api/dashboard HTTP/1.1" 200 -
+2026-01-01 20:05:54,503 - werkzeug - INFO -  * Detected change in 'C:\\Users\\Admin\\Desktop\\Mein_Business\\backend\\api_server.py', reloading
+2026-01-01 20:05:54,656 - werkzeug - INFO -  * Restarting with stat
+2026-01-01 20:05:55,026 - __main__ - INFO - 🚀 Starting API Server...
+2026-01-01 20:05:55,046 - werkzeug - WARNING -  * Debugger is active!
+2026-01-01 20:05:55,052 - werkzeug - INFO -  * Debugger PIN: 447-598-156
+2026-01-01 20:06:22,697 - __main__ - INFO - Mandanten geladen: 2
+2026-01-01 20:06:23,415 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 20:06:23] "GET /api/dashboard HTTP/1.1" 200 -
+2026-01-01 20:06:52,374 - __main__ - INFO - Mandanten geladen: 2
+2026-01-01 20:06:52,386 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 20:06:52] "GET /api/dashboard HTTP/1.1" 200 -
+2026-01-01 20:07:22,680 - __main__ - INFO - Mandanten geladen: 2
+2026-01-01 20:07:22,693 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 20:07:22] "GET /api/dashboard HTTP/1.1" 200 -
+2026-01-01 20:07:52,376 - __main__ - INFO - Mandanten geladen: 2
+2026-01-01 20:07:52,388 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 20:07:52] "GET /api/dashboard HTTP/1.1" 200 -
+2026-01-01 20:07:56,709 - __main__ - INFO - Mandanten geladen: 2
+2026-01-01 20:07:56,721 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 20:07:56] "GET /api/dashboard HTTP/1.1" 200 -
+2026-01-01 20:08:26,420 - __main__ - INFO - Mandanten geladen: 2
+2026-01-01 20:08:26,431 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 20:08:26] "GET /api/dashboard HTTP/1.1" 200 -
+2026-01-01 20:08:32,131 - __main__ - INFO - Mandanten geladen: 2
+2026-01-01 20:08:32,143 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 20:08:32] "GET /api/dashboard HTTP/1.1" 200 -
+2026-01-01 20:08:56,091 - __main__ - INFO - Mandanten geladen: 2
+2026-01-01 20:08:56,105 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 20:08:56] "GET /api/dashboard HTTP/1.1" 200 -
+2026-01-01 20:08:57,589 - __main__ - INFO - Mandanten geladen: 2
+2026-01-01 20:08:57,600 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 20:08:57] "GET /api/dashboard HTTP/1.1" 200 -
+2026-01-01 20:09:04,967 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 20:09:04] "GET /api/mandanten/Elektroniker_Testbetrieb/stats HTTP/1.1" 200 -
+2026-01-01 20:09:05,270 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 20:09:05] "GET /api/mandanten/Elektroniker_Testbetrieb/rechnungen HTTP/1.1" 200 -
+2026-01-01 20:09:06,994 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 20:09:06] "[33mGET /api/mandanten/Elektroniker_Testbetrieb/einnahmen HTTP/1.1[0m" 404 -
+2026-01-01 20:09:12,646 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 20:09:12] "GET /api/mandanten/Elektroniker_Testbetrieb/kunden HTTP/1.1" 200 -
+2026-01-01 20:09:14,849 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 20:09:14] "[33mGET /api/mandanten/Elektroniker_Testbetrieb/einnahmen HTTP/1.1[0m" 404 -
+2026-01-01 20:10:10,874 - werkzeug - INFO -  * Detected change in 'C:\\Users\\Admin\\Desktop\\Mein_Business\\backend\\api_server.py', reloading
+2026-01-01 20:10:11,022 - werkzeug - INFO -  * Restarting with stat
+2026-01-01 20:10:11,409 - __main__ - INFO - 🚀 Starting API Server...
+2026-01-01 20:10:11,430 - werkzeug - WARNING -  * Debugger is active!
+2026-01-01 20:10:11,436 - werkzeug - INFO -  * Debugger PIN: 447-598-156
+2026-01-01 20:10:44,905 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 20:10:44] "GET /api/mandanten/Elektroniker_Testbetrieb/rechnungen HTTP/1.1" 200 -
+2026-01-01 20:10:45,759 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 20:10:45] "GET /api/mandanten/Elektroniker_Testbetrieb/stats HTTP/1.1" 200 -
+2026-01-01 20:10:46,663 - __main__ - INFO - Einnahmen geladen: 2 Rechnungen
+2026-01-01 20:10:46,664 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 20:10:46] "GET /api/mandanten/Elektroniker_Testbetrieb/einnahmen HTTP/1.1" 200 -
+2026-01-01 20:10:58,883 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 20:10:58] "GET /api/mandanten/Elektroniker_Testbetrieb/rechnungen HTTP/1.1" 200 -
+2026-01-01 20:10:58,892 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 20:10:58] "GET /api/mandanten/Elektroniker_Testbetrieb/stats HTTP/1.1" 200 -
+2026-01-01 20:11:00,691 - __main__ - INFO - Einnahmen geladen: 2 Rechnungen
+2026-01-01 20:11:00,692 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 20:11:00] "GET /api/mandanten/Elektroniker_Testbetrieb/einnahmen HTTP/1.1" 200 -
+2026-01-01 20:11:04,185 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 20:11:04] "OPTIONS /api/mandanten/Elektroniker_Testbetrieb/einnahmen/2025-004/status HTTP/1.1" 200 -
+2026-01-01 20:11:04,478 - __main__ - INFO - Status aktualisiert: Elektroniker_Testbetrieb/2025-004 → Offen
+2026-01-01 20:11:04,478 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 20:11:04] "PUT /api/mandanten/Elektroniker_Testbetrieb/einnahmen/2025-004/status HTTP/1.1" 200 -
+2026-01-01 20:11:04,518 - __main__ - INFO - Einnahmen geladen: 2 Rechnungen
+2026-01-01 20:11:04,519 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 20:11:04] "GET /api/mandanten/Elektroniker_Testbetrieb/einnahmen HTTP/1.1" 200 -
+2026-01-01 20:11:04,802 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 20:11:04] "GET /api/mandanten/Elektroniker_Testbetrieb/stats HTTP/1.1" 200 -
+2026-01-01 20:11:11,241 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 20:11:11] "OPTIONS /api/mandanten/Elektroniker_Testbetrieb/einnahmen/2025-003/status HTTP/1.1" 200 -
+2026-01-01 20:11:11,573 - __main__ - INFO - Status aktualisiert: Elektroniker_Testbetrieb/2025-003 → Bezahlt
+2026-01-01 20:11:11,574 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 20:11:11] "PUT /api/mandanten/Elektroniker_Testbetrieb/einnahmen/2025-003/status HTTP/1.1" 200 -
+2026-01-01 20:11:11,814 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 20:11:11] "OPTIONS /api/mandanten/Elektroniker_Testbetrieb/einnahmen/2025-004/status HTTP/1.1" 200 -
+2026-01-01 20:11:11,925 - __main__ - INFO - Status aktualisiert: Elektroniker_Testbetrieb/2025-004 → Bezahlt
+2026-01-01 20:11:11,925 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 20:11:11] "PUT /api/mandanten/Elektroniker_Testbetrieb/einnahmen/2025-004/status HTTP/1.1" 200 -
+2026-01-01 20:11:12,145 - __main__ - INFO - Einnahmen geladen: 2 Rechnungen
+2026-01-01 20:11:12,145 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 20:11:12] "GET /api/mandanten/Elektroniker_Testbetrieb/einnahmen HTTP/1.1" 200 -
+2026-01-01 20:11:12,244 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 20:11:12] "GET /api/mandanten/Elektroniker_Testbetrieb/stats HTTP/1.1" 200 -
+2026-01-01 20:12:31,804 - __main__ - INFO - Mandanten geladen: 2
+2026-01-01 20:12:31,816 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 20:12:31] "GET /api/dashboard HTTP/1.1" 200 -
+2026-01-01 20:13:01,495 - __main__ - INFO - Mandanten geladen: 2
+2026-01-01 20:13:01,506 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 20:13:01] "GET /api/dashboard HTTP/1.1" 200 -
+2026-01-01 20:13:31,813 - __main__ - INFO - Mandanten geladen: 2
+2026-01-01 20:13:31,824 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 20:13:31] "GET /api/dashboard HTTP/1.1" 200 -
+2026-01-01 20:14:01,493 - __main__ - INFO - Mandanten geladen: 2
+2026-01-01 20:14:01,504 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 20:14:01] "GET /api/dashboard HTTP/1.1" 200 -
+2026-01-01 20:14:31,802 - __main__ - INFO - Mandanten geladen: 2
+2026-01-01 20:14:31,813 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 20:14:31] "GET /api/dashboard HTTP/1.1" 200 -
+2026-01-01 20:15:01,493 - __main__ - INFO - Mandanten geladen: 2
+2026-01-01 20:15:01,504 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 20:15:01] "GET /api/dashboard HTTP/1.1" 200 -
+2026-01-01 20:15:31,804 - __main__ - INFO - Mandanten geladen: 2
+2026-01-01 20:15:31,815 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 20:15:31] "GET /api/dashboard HTTP/1.1" 200 -
+2026-01-01 20:15:43,767 - werkzeug - INFO -  * Detected change in 'C:\\Users\\Admin\\Desktop\\Mein_Business\\backend\\api_server.py', reloading
+2026-01-01 20:15:43,906 - werkzeug - INFO -  * Restarting with stat
+2026-01-01 20:15:44,281 - __main__ - INFO - 🚀 Starting API Server...
+2026-01-01 20:15:44,306 - werkzeug - WARNING -  * Debugger is active!
+2026-01-01 20:15:44,312 - werkzeug - INFO -  * Debugger PIN: 447-598-156
+2026-01-01 20:16:01,812 - __main__ - INFO - Mandanten geladen: 2
+2026-01-01 20:16:02,530 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 20:16:02] "GET /api/dashboard HTTP/1.1" 200 -
+2026-01-01 20:16:31,494 - __main__ - INFO - Mandanten geladen: 2
+2026-01-01 20:16:31,505 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 20:16:31] "GET /api/dashboard HTTP/1.1" 200 -
+2026-01-01 20:17:01,812 - __main__ - INFO - Mandanten geladen: 2
+2026-01-01 20:17:01,823 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 20:17:01] "GET /api/dashboard HTTP/1.1" 200 -
+2026-01-01 20:17:31,492 - __main__ - INFO - Mandanten geladen: 2
+2026-01-01 20:17:31,503 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 20:17:31] "GET /api/dashboard HTTP/1.1" 200 -
+2026-01-01 20:18:01,802 - __main__ - INFO - Mandanten geladen: 2
+2026-01-01 20:18:01,813 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 20:18:01] "GET /api/dashboard HTTP/1.1" 200 -
+2026-01-01 20:18:31,490 - __main__ - INFO - Mandanten geladen: 2
+2026-01-01 20:18:31,502 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 20:18:31] "GET /api/dashboard HTTP/1.1" 200 -
+2026-01-01 20:19:01,803 - __main__ - INFO - Mandanten geladen: 2
+2026-01-01 20:19:01,814 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 20:19:01] "GET /api/dashboard HTTP/1.1" 200 -
+2026-01-01 20:19:31,495 - __main__ - INFO - Mandanten geladen: 2
+2026-01-01 20:19:31,509 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 20:19:31] "GET /api/dashboard HTTP/1.1" 200 -
+2026-01-01 20:20:04,568 - __main__ - INFO - Mandanten geladen: 2
+2026-01-01 20:20:04,581 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 20:20:04] "GET /api/dashboard HTTP/1.1" 200 -
+2026-01-01 20:20:34,257 - __main__ - INFO - Mandanten geladen: 2
+2026-01-01 20:20:34,269 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 20:20:34] "GET /api/dashboard HTTP/1.1" 200 -
+2026-01-01 20:21:04,576 - __main__ - INFO - Mandanten geladen: 2
+2026-01-01 20:21:04,587 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 20:21:04] "GET /api/dashboard HTTP/1.1" 200 -
+2026-01-01 20:21:34,255 - __main__ - INFO - Mandanten geladen: 2
+2026-01-01 20:21:34,267 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 20:21:34] "GET /api/dashboard HTTP/1.1" 200 -
+2026-01-01 20:22:04,583 - __main__ - INFO - Mandanten geladen: 2
+2026-01-01 20:22:04,609 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 20:22:04] "GET /api/dashboard HTTP/1.1" 200 -
+2026-01-01 20:22:34,255 - __main__ - INFO - Mandanten geladen: 2
+2026-01-01 20:22:34,266 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 20:22:34] "GET /api/dashboard HTTP/1.1" 200 -
+2026-01-01 20:23:04,570 - __main__ - INFO - Mandanten geladen: 2
+2026-01-01 20:23:04,582 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 20:23:04] "GET /api/dashboard HTTP/1.1" 200 -
+2026-01-01 20:23:34,260 - __main__ - INFO - Mandanten geladen: 2
+2026-01-01 20:23:34,271 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 20:23:34] "GET /api/dashboard HTTP/1.1" 200 -
+2026-01-01 20:24:04,570 - __main__ - INFO - Mandanten geladen: 2
+2026-01-01 20:24:04,582 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 20:24:04] "GET /api/dashboard HTTP/1.1" 200 -
+2026-01-01 20:24:34,249 - __main__ - INFO - Mandanten geladen: 2
+2026-01-01 20:24:34,261 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 20:24:34] "GET /api/dashboard HTTP/1.1" 200 -
+2026-01-01 20:25:04,566 - __main__ - INFO - Mandanten geladen: 2
+2026-01-01 20:25:04,581 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 20:25:04] "GET /api/dashboard HTTP/1.1" 200 -
+2026-01-01 20:25:34,254 - __main__ - INFO - Mandanten geladen: 2
+2026-01-01 20:25:34,266 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 20:25:34] "GET /api/dashboard HTTP/1.1" 200 -
+2026-01-01 20:26:04,570 - __main__ - INFO - Mandanten geladen: 2
+2026-01-01 20:26:04,581 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 20:26:04] "GET /api/dashboard HTTP/1.1" 200 -
+2026-01-01 20:26:34,255 - __main__ - INFO - Mandanten geladen: 2
+2026-01-01 20:26:34,267 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 20:26:34] "GET /api/dashboard HTTP/1.1" 200 -
+2026-01-01 20:27:04,569 - __main__ - INFO - Mandanten geladen: 2
+2026-01-01 20:27:04,581 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 20:27:04] "GET /api/dashboard HTTP/1.1" 200 -
+2026-01-01 20:27:34,248 - __main__ - INFO - Mandanten geladen: 2
+2026-01-01 20:27:34,260 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 20:27:34] "GET /api/dashboard HTTP/1.1" 200 -
+2026-01-01 20:28:04,565 - __main__ - INFO - Mandanten geladen: 2
+2026-01-01 20:28:04,576 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 20:28:04] "GET /api/dashboard HTTP/1.1" 200 -
+2026-01-01 20:28:34,256 - __main__ - INFO - Mandanten geladen: 2
+2026-01-01 20:28:34,267 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 20:28:34] "GET /api/dashboard HTTP/1.1" 200 -
+2026-01-01 20:29:04,564 - __main__ - INFO - Mandanten geladen: 2
+2026-01-01 20:29:04,575 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 20:29:04] "GET /api/dashboard HTTP/1.1" 200 -
+2026-01-01 20:29:34,570 - __main__ - INFO - Mandanten geladen: 2
+2026-01-01 20:29:34,581 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 20:29:34] "GET /api/dashboard HTTP/1.1" 200 -
+2026-01-01 20:30:04,259 - __main__ - INFO - Mandanten geladen: 2
+2026-01-01 20:30:04,270 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 20:30:04] "GET /api/dashboard HTTP/1.1" 200 -
+2026-01-01 20:30:34,571 - __main__ - INFO - Mandanten geladen: 2
+2026-01-01 20:30:34,582 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 20:30:34] "GET /api/dashboard HTTP/1.1" 200 -
+2026-01-01 20:31:04,255 - __main__ - INFO - Mandanten geladen: 2
+2026-01-01 20:31:04,279 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 20:31:04] "GET /api/dashboard HTTP/1.1" 200 -
+2026-01-01 20:31:34,566 - __main__ - INFO - Mandanten geladen: 2
+2026-01-01 20:31:34,577 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 20:31:34] "GET /api/dashboard HTTP/1.1" 200 -
+2026-01-01 20:32:04,255 - __main__ - INFO - Mandanten geladen: 2
+2026-01-01 20:32:04,266 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 20:32:04] "GET /api/dashboard HTTP/1.1" 200 -
+2026-01-01 20:32:34,563 - __main__ - INFO - Mandanten geladen: 2
+2026-01-01 20:32:34,574 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 20:32:34] "GET /api/dashboard HTTP/1.1" 200 -
+2026-01-01 20:33:04,262 - __main__ - INFO - Mandanten geladen: 2
+2026-01-01 20:33:04,273 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 20:33:04] "GET /api/dashboard HTTP/1.1" 200 -
+2026-01-01 20:33:34,571 - __main__ - INFO - Mandanten geladen: 2
+2026-01-01 20:33:34,582 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 20:33:34] "GET /api/dashboard HTTP/1.1" 200 -
+2026-01-01 20:34:04,254 - __main__ - INFO - Mandanten geladen: 2
+2026-01-01 20:34:04,265 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 20:34:04] "GET /api/dashboard HTTP/1.1" 200 -
+2026-01-01 20:34:34,567 - __main__ - INFO - Mandanten geladen: 2
+2026-01-01 20:34:34,578 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 20:34:34] "GET /api/dashboard HTTP/1.1" 200 -
+2026-01-01 20:35:04,252 - __main__ - INFO - Mandanten geladen: 2
+2026-01-01 20:35:04,264 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 20:35:04] "GET /api/dashboard HTTP/1.1" 200 -
+2026-01-01 20:35:34,562 - __main__ - INFO - Mandanten geladen: 2
+2026-01-01 20:35:34,573 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 20:35:34] "GET /api/dashboard HTTP/1.1" 200 -
+2026-01-01 20:36:04,262 - __main__ - INFO - Mandanten geladen: 2
+2026-01-01 20:36:04,272 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 20:36:04] "GET /api/dashboard HTTP/1.1" 200 -
+2026-01-01 20:36:34,559 - __main__ - INFO - Mandanten geladen: 2
+2026-01-01 20:36:34,570 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 20:36:34] "GET /api/dashboard HTTP/1.1" 200 -
+2026-01-01 20:37:04,262 - __main__ - INFO - Mandanten geladen: 2
+2026-01-01 20:37:04,273 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 20:37:04] "GET /api/dashboard HTTP/1.1" 200 -
+2026-01-01 20:37:34,562 - __main__ - INFO - Mandanten geladen: 2
+2026-01-01 20:37:34,573 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 20:37:34] "GET /api/dashboard HTTP/1.1" 200 -
+2026-01-01 20:38:04,261 - __main__ - INFO - Mandanten geladen: 2
+2026-01-01 20:38:04,272 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 20:38:04] "GET /api/dashboard HTTP/1.1" 200 -
+2026-01-01 20:38:34,562 - __main__ - INFO - Mandanten geladen: 2
+2026-01-01 20:38:34,573 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 20:38:34] "GET /api/dashboard HTTP/1.1" 200 -
+2026-01-01 20:39:04,249 - __main__ - INFO - Mandanten geladen: 2
+2026-01-01 20:39:04,260 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 20:39:04] "GET /api/dashboard HTTP/1.1" 200 -
+2026-01-01 20:39:34,564 - __main__ - INFO - Mandanten geladen: 2
+2026-01-01 20:39:34,575 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 20:39:34] "GET /api/dashboard HTTP/1.1" 200 -
+2026-01-01 20:40:04,255 - __main__ - INFO - Mandanten geladen: 2
+2026-01-01 20:40:04,266 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 20:40:04] "GET /api/dashboard HTTP/1.1" 200 -
+2026-01-01 20:40:34,556 - __main__ - INFO - Mandanten geladen: 2
+2026-01-01 20:40:34,567 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 20:40:34] "GET /api/dashboard HTTP/1.1" 200 -
+2026-01-01 20:41:04,258 - __main__ - INFO - Mandanten geladen: 2
+2026-01-01 20:41:04,269 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 20:41:04] "GET /api/dashboard HTTP/1.1" 200 -
+2026-01-01 20:41:34,562 - __main__ - INFO - Mandanten geladen: 2
+2026-01-01 20:41:34,573 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 20:41:34] "GET /api/dashboard HTTP/1.1" 200 -
+2026-01-01 20:42:04,248 - __main__ - INFO - Mandanten geladen: 2
+2026-01-01 20:42:04,259 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 20:42:04] "GET /api/dashboard HTTP/1.1" 200 -
+2026-01-01 20:42:34,570 - __main__ - INFO - Mandanten geladen: 2
+2026-01-01 20:42:34,581 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 20:42:34] "GET /api/dashboard HTTP/1.1" 200 -
+2026-01-01 20:43:04,261 - __main__ - INFO - Mandanten geladen: 2
+2026-01-01 20:43:04,272 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 20:43:04] "GET /api/dashboard HTTP/1.1" 200 -
+2026-01-01 20:43:34,562 - __main__ - INFO - Mandanten geladen: 2
+2026-01-01 20:43:34,573 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 20:43:34] "GET /api/dashboard HTTP/1.1" 200 -
+2026-01-01 20:43:53,405 - __main__ - INFO - Mandanten geladen: 2
+2026-01-01 20:43:53,417 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 20:43:53] "GET /api/dashboard HTTP/1.1" 200 -
+2026-01-01 20:44:23,720 - __main__ - INFO - Mandanten geladen: 2
+2026-01-01 20:44:23,730 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 20:44:23] "GET /api/dashboard HTTP/1.1" 200 -
+2026-01-01 20:44:39,815 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 20:44:39] "GET /api/mandanten/Elektroniker_Testbetrieb/stats HTTP/1.1" 200 -
+2026-01-01 20:44:40,115 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 20:44:40] "GET /api/mandanten/Elektroniker_Testbetrieb/rechnungen HTTP/1.1" 200 -
+2026-01-01 20:44:42,215 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 20:44:42] "GET /api/mandanten/Elektroniker_Testbetrieb/kunden HTTP/1.1" 200 -
+2026-01-01 20:45:01,793 - __main__ - INFO - Mandanten geladen: 2
+2026-01-01 20:45:01,805 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 20:45:01] "GET /api/dashboard HTTP/1.1" 200 -
+2026-01-01 20:45:32,118 - __main__ - INFO - Mandanten geladen: 2
+2026-01-01 20:45:32,129 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 20:45:32] "GET /api/dashboard HTTP/1.1" 200 -
+2026-01-01 20:45:39,865 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 20:45:39] "GET /api/mandanten/Baran_Tech_Solutions/stats HTTP/1.1" 200 -
+2026-01-01 20:45:40,172 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 20:45:40] "GET /api/mandanten/Baran_Tech_Solutions/rechnungen HTTP/1.1" 200 -
+2026-01-01 20:45:42,418 - __main__ - INFO - PDF Request: Mandanten/Baran_Tech_Solutions/Rechnungen/Test_Kunde/20-12-2025_Rechnung_2025-001.pdf -> C:\Users\Admin\Desktop\Mein_Business\backend\Mandanten\Baran_Tech_Solutions\Rechnungen\Test_Kunde\20-12-2025_Rechnung_2025-001.pdf
+2026-01-01 20:45:42,419 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 20:45:42] "GET /api/pdf/Mandanten/Baran_Tech_Solutions/Rechnungen/Test_Kunde/20-12-2025_Rechnung_2025-001.pdf HTTP/1.1" 200 -
+2026-01-01 20:46:37,219 - __main__ - INFO - Einnahmen geladen: 0 Rechnungen
+2026-01-01 20:46:37,219 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 20:46:37] "GET /api/mandanten/Baran_Tech_Solutions/einnahmen HTTP/1.1" 200 -
+2026-01-01 20:46:57,874 - __main__ - INFO - Mandanten geladen: 2
+2026-01-01 20:46:57,886 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 20:46:57] "GET /api/dashboard HTTP/1.1" 200 -
+2026-01-01 20:47:28,195 - __main__ - INFO - Mandanten geladen: 2
+2026-01-01 20:47:28,206 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 20:47:28] "GET /api/dashboard HTTP/1.1" 200 -
+2026-01-01 20:47:57,887 - __main__ - INFO - Mandanten geladen: 2
+2026-01-01 20:47:57,898 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 20:47:57] "GET /api/dashboard HTTP/1.1" 200 -
+2026-01-01 20:48:28,191 - __main__ - INFO - Mandanten geladen: 2
+2026-01-01 20:48:28,202 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 20:48:28] "GET /api/dashboard HTTP/1.1" 200 -
+2026-01-01 20:48:57,886 - __main__ - INFO - Mandanten geladen: 2
+2026-01-01 20:48:57,897 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 20:48:57] "GET /api/dashboard HTTP/1.1" 200 -
+2026-01-01 20:49:28,190 - __main__ - INFO - Mandanten geladen: 2
+2026-01-01 20:49:28,201 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 20:49:28] "GET /api/dashboard HTTP/1.1" 200 -
+2026-01-01 20:49:57,876 - __main__ - INFO - Mandanten geladen: 2
+2026-01-01 20:49:57,887 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 20:49:57] "GET /api/dashboard HTTP/1.1" 200 -
+2026-01-01 20:50:28,192 - __main__ - INFO - Mandanten geladen: 2
+2026-01-01 20:50:28,203 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 20:50:28] "GET /api/dashboard HTTP/1.1" 200 -
+2026-01-01 20:50:57,887 - __main__ - INFO - Mandanten geladen: 2
+2026-01-01 20:50:57,898 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 20:50:57] "GET /api/dashboard HTTP/1.1" 200 -
+2026-01-01 20:51:28,203 - __main__ - INFO - Mandanten geladen: 2
+2026-01-01 20:51:28,214 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 20:51:28] "GET /api/dashboard HTTP/1.1" 200 -
+2026-01-01 20:51:57,883 - __main__ - INFO - Mandanten geladen: 2
+2026-01-01 20:51:57,894 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 20:51:57] "GET /api/dashboard HTTP/1.1" 200 -
+2026-01-01 20:52:28,201 - __main__ - INFO - Mandanten geladen: 2
+2026-01-01 20:52:28,212 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 20:52:28] "GET /api/dashboard HTTP/1.1" 200 -
+2026-01-01 20:52:57,879 - __main__ - INFO - Mandanten geladen: 2
+2026-01-01 20:52:57,890 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 20:52:57] "GET /api/dashboard HTTP/1.1" 200 -
+2026-01-01 20:53:28,183 - __main__ - INFO - Mandanten geladen: 2
+2026-01-01 20:53:28,193 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 20:53:28] "GET /api/dashboard HTTP/1.1" 200 -
+2026-01-01 20:53:57,887 - __main__ - INFO - Mandanten geladen: 2
+2026-01-01 20:53:57,897 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 20:53:57] "GET /api/dashboard HTTP/1.1" 200 -
+2026-01-01 20:54:28,186 - __main__ - INFO - Mandanten geladen: 2
+2026-01-01 20:54:28,197 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 20:54:28] "GET /api/dashboard HTTP/1.1" 200 -
+2026-01-01 20:54:57,878 - __main__ - INFO - Mandanten geladen: 2
+2026-01-01 20:54:57,889 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 20:54:57] "GET /api/dashboard HTTP/1.1" 200 -
+2026-01-01 20:55:28,196 - __main__ - INFO - Mandanten geladen: 2
+2026-01-01 20:55:28,207 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 20:55:28] "GET /api/dashboard HTTP/1.1" 200 -
+2026-01-01 20:55:57,882 - __main__ - INFO - Mandanten geladen: 2
+2026-01-01 20:55:57,893 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 20:55:57] "GET /api/dashboard HTTP/1.1" 200 -
+2026-01-01 20:56:28,198 - __main__ - INFO - Mandanten geladen: 2
+2026-01-01 20:56:28,218 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 20:56:28] "GET /api/dashboard HTTP/1.1" 200 -
+2026-01-01 20:56:57,890 - __main__ - INFO - Mandanten geladen: 2
+2026-01-01 20:56:57,901 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 20:56:57] "GET /api/dashboard HTTP/1.1" 200 -
+2026-01-01 20:57:28,198 - __main__ - INFO - Mandanten geladen: 2
+2026-01-01 20:57:28,208 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 20:57:28] "GET /api/dashboard HTTP/1.1" 200 -
+2026-01-01 20:57:57,876 - __main__ - INFO - Mandanten geladen: 2
+2026-01-01 20:57:57,887 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 20:57:57] "GET /api/dashboard HTTP/1.1" 200 -
+2026-01-01 20:58:28,194 - __main__ - INFO - Mandanten geladen: 2
+2026-01-01 20:58:28,205 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 20:58:28] "GET /api/dashboard HTTP/1.1" 200 -
+2026-01-01 20:58:57,875 - __main__ - INFO - Mandanten geladen: 2
+2026-01-01 20:58:57,885 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 20:58:57] "GET /api/dashboard HTTP/1.1" 200 -
+2026-01-01 20:59:28,197 - __main__ - INFO - Mandanten geladen: 2
+2026-01-01 20:59:28,208 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 20:59:28] "GET /api/dashboard HTTP/1.1" 200 -
+2026-01-01 20:59:57,876 - __main__ - INFO - Mandanten geladen: 2
+2026-01-01 20:59:57,887 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 20:59:57] "GET /api/dashboard HTTP/1.1" 200 -
+2026-01-01 21:00:28,202 - __main__ - INFO - Mandanten geladen: 2
+2026-01-01 21:00:28,212 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 21:00:28] "GET /api/dashboard HTTP/1.1" 200 -
+2026-01-01 21:00:57,883 - __main__ - INFO - Mandanten geladen: 2
+2026-01-01 21:00:57,894 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 21:00:57] "GET /api/dashboard HTTP/1.1" 200 -
+2026-01-01 21:01:28,199 - __main__ - INFO - Mandanten geladen: 2
+2026-01-01 21:01:28,209 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 21:01:28] "GET /api/dashboard HTTP/1.1" 200 -
+2026-01-01 21:01:57,887 - __main__ - INFO - Mandanten geladen: 2
+2026-01-01 21:01:57,898 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 21:01:57] "GET /api/dashboard HTTP/1.1" 200 -
+2026-01-01 21:02:23,693 - werkzeug - INFO -  * Detected change in 'C:\\Users\\Admin\\Desktop\\Mein_Business\\backend\\add_client.py', reloading
+2026-01-01 21:02:23,832 - werkzeug - INFO -  * Restarting with stat
+2026-01-01 21:02:24,321 - __main__ - INFO - 🚀 Starting API Server...
+2026-01-01 21:02:24,343 - werkzeug - WARNING -  * Debugger is active!
+2026-01-01 21:02:24,349 - werkzeug - INFO -  * Debugger PIN: 447-598-156
+2026-01-01 21:02:27,399 - werkzeug - INFO -  * Detected change in 'C:\\Users\\Admin\\Desktop\\Mein_Business\\backend\\api_server.py', reloading
+2026-01-01 21:02:27,480 - werkzeug - INFO -  * Restarting with stat
+2026-01-01 21:02:27,856 - __main__ - INFO - 🚀 Starting API Server...
+2026-01-01 21:02:27,877 - werkzeug - WARNING -  * Debugger is active!
+2026-01-01 21:02:27,883 - werkzeug - INFO -  * Debugger PIN: 447-598-156
+2026-01-01 21:02:28,192 - __main__ - INFO - Mandanten geladen: 2
+2026-01-01 21:02:29,049 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 21:02:29] "GET /api/dashboard HTTP/1.1" 200 -
+2026-01-01 21:02:29,931 - werkzeug - INFO -  * Detected change in 'C:\\Users\\Admin\\Desktop\\Mein_Business\\backend\\api_server.py', reloading
+2026-01-01 21:02:30,062 - werkzeug - INFO -  * Restarting with stat
+2026-01-01 21:02:30,432 - __main__ - INFO - 🚀 Starting API Server...
+2026-01-01 21:02:30,453 - werkzeug - WARNING -  * Debugger is active!
+2026-01-01 21:02:30,460 - werkzeug - INFO -  * Debugger PIN: 447-598-156
+2026-01-01 21:02:58,200 - __main__ - INFO - Mandanten geladen: 2
+2026-01-01 21:02:58,921 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 21:02:58] "GET /api/dashboard HTTP/1.1" 200 -
+2026-01-01 21:03:27,888 - __main__ - INFO - Mandanten geladen: 2
+2026-01-01 21:03:27,900 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 21:03:27] "GET /api/dashboard HTTP/1.1" 200 -
+2026-01-01 21:03:58,190 - __main__ - INFO - Mandanten geladen: 2
+2026-01-01 21:03:58,201 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 21:03:58] "GET /api/dashboard HTTP/1.1" 200 -
+2026-01-01 21:04:27,876 - __main__ - INFO - Mandanten geladen: 2
+2026-01-01 21:04:27,888 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 21:04:27] "GET /api/dashboard HTTP/1.1" 200 -
+2026-01-01 21:04:39,409 - __main__ - INFO - Mandanten geladen: 2
+2026-01-01 21:04:39,423 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 21:04:39] "GET /api/dashboard HTTP/1.1" 200 -
+2026-01-01 21:04:54,464 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 21:04:54] "GET /api/mandanten/Elektroniker_Testbetrieb/stats HTTP/1.1" 200 -
+2026-01-01 21:04:54,762 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 21:04:54] "GET /api/mandanten/Elektroniker_Testbetrieb/rechnungen HTTP/1.1" 200 -
+2026-01-01 21:04:56,005 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 21:04:56] "GET /api/mandanten/Elektroniker_Testbetrieb/preisliste HTTP/1.1" 200 -
+2026-01-01 21:10:39,933 - werkzeug - INFO -  * Detected change in 'C:\\Users\\Admin\\Desktop\\Mein_Business\\backend\\api_server.py', reloading
+2026-01-01 21:10:40,073 - werkzeug - INFO -  * Restarting with stat
+2026-01-01 21:10:40,469 - __main__ - INFO - 🚀 Starting API Server...
+2026-01-01 21:10:40,491 - werkzeug - WARNING -  * Debugger is active!
+2026-01-01 21:10:40,498 - werkzeug - INFO -  * Debugger PIN: 447-598-156
+2026-01-01 21:12:07,428 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 21:12:07] "GET /api/mandanten/Elektroniker_Testbetrieb/rechnungen HTTP/1.1" 200 -
+2026-01-01 21:12:08,336 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 21:12:08] "GET /api/mandanten/Elektroniker_Testbetrieb/stats HTTP/1.1" 200 -
+2026-01-01 21:12:10,081 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 21:12:10] "GET /api/mandanten/Elektroniker_Testbetrieb/preisliste HTTP/1.1" 200 -
+2026-01-01 21:18:29,821 - werkzeug - INFO -  * Detected change in 'C:\\Users\\Admin\\Desktop\\Mein_Business\\backend\\add_client.py', reloading
+2026-01-01 21:18:29,957 - werkzeug - INFO -  * Restarting with stat
+2026-01-01 21:18:30,341 - __main__ - INFO - 🚀 Starting API Server...
+2026-01-01 21:18:30,363 - werkzeug - WARNING -  * Debugger is active!
+2026-01-01 21:18:30,369 - werkzeug - INFO -  * Debugger PIN: 447-598-156
+2026-01-01 21:19:29,829 - werkzeug - INFO -  * Detected change in 'C:\\Users\\Admin\\Desktop\\Mein_Business\\backend\\api_server.py', reloading
+2026-01-01 21:19:29,913 - werkzeug - INFO -  * Restarting with stat
+2026-01-01 21:19:30,579 - __main__ - INFO - 🚀 Starting API Server...
+2026-01-01 21:19:30,642 - werkzeug - WARNING -  * Debugger is active!
+2026-01-01 21:19:30,653 - werkzeug - INFO -  * Debugger PIN: 447-598-156
+2026-01-01 21:22:38,736 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 21:22:38] "GET /api/mandanten/Elektroniker_Testbetrieb/rechnungen HTTP/1.1" 200 -
+2026-01-01 21:22:39,489 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 21:22:39] "GET /api/mandanten/Elektroniker_Testbetrieb/stats HTTP/1.1" 200 -
+2026-01-01 21:22:41,282 - __main__ - INFO - Mandanten geladen: 2
+2026-01-01 21:22:41,296 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 21:22:41] "GET /api/dashboard HTTP/1.1" 200 -
+2026-01-01 21:22:47,005 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 21:22:47] "GET /api/mandanten/Elektroniker_Testbetrieb/rechnungen HTTP/1.1" 200 -
+2026-01-01 21:22:47,013 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 21:22:47] "GET /api/mandanten/Elektroniker_Testbetrieb/stats HTTP/1.1" 200 -
+2026-01-01 21:22:59,123 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 21:22:59] "GET /api/mandanten/Elektroniker_Testbetrieb/kunden HTTP/1.1" 200 -
+2026-01-01 21:22:59,437 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 21:22:59] "GET /api/mandanten/Elektroniker_Testbetrieb/preisliste HTTP/1.1" 200 -
+2026-01-01 21:27:55,866 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 21:27:55] "GET /api/mandanten/Elektroniker_Testbetrieb/preisliste HTTP/1.1" 200 -
+2026-01-01 21:28:34,576 - __main__ - ERROR - Fehler beim Import: <HttpError 400 when requesting https://generativelanguage.googleapis.com/$discovery/rest?version=v1beta&key=AIzaSyDlINelVYDCUymkS1yrq9RL9ZFBd17Jjhg returned "API key not valid. Please pass a valid API key.". Details: "[{'@type': 'type.googleapis.com/google.rpc.ErrorInfo', 'reason': 'API_KEY_INVALID', 'domain': 'googleapis.com', 'metadata': {'service': 'generativelanguage.googleapis.com'}}, {'@type': 'type.googleapis.com/google.rpc.LocalizedMessage', 'locale': 'en-US', 'message': 'API key not valid. Please pass a valid API key.'}]">
+2026-01-01 21:28:34,580 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 21:28:34] "[35m[1mPOST /api/mandanten/Elektroniker_Testbetrieb/preisliste/import HTTP/1.1[0m" 500 -
+2026-01-01 21:30:55,104 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 21:30:55] "GET /api/mandanten/Elektroniker_Testbetrieb/rechnungen HTTP/1.1" 200 -
+2026-01-01 21:30:55,114 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 21:30:55] "GET /api/mandanten/Elektroniker_Testbetrieb/stats HTTP/1.1" 200 -
+2026-01-01 21:30:57,675 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 21:30:57] "GET /api/mandanten/Elektroniker_Testbetrieb/preisliste HTTP/1.1" 200 -
+2026-01-01 21:31:03,825 - __main__ - ERROR - Fehler beim Import: <HttpError 400 when requesting https://generativelanguage.googleapis.com/$discovery/rest?version=v1beta&key=AIzaSyDlINelVYDCUymkS1yrq9RL9ZFBd17Jjhg returned "API key not valid. Please pass a valid API key.". Details: "[{'@type': 'type.googleapis.com/google.rpc.ErrorInfo', 'reason': 'API_KEY_INVALID', 'domain': 'googleapis.com', 'metadata': {'service': 'generativelanguage.googleapis.com'}}, {'@type': 'type.googleapis.com/google.rpc.LocalizedMessage', 'locale': 'en-US', 'message': 'API key not valid. Please pass a valid API key.'}]">
+2026-01-01 21:31:03,828 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 21:31:03] "[35m[1mPOST /api/mandanten/Elektroniker_Testbetrieb/preisliste/import HTTP/1.1[0m" 500 -
+2026-01-01 21:32:30,372 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 21:32:30] "GET /api/mandanten/Elektroniker_Testbetrieb/rechnungen HTTP/1.1" 200 -
+2026-01-01 21:32:30,379 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 21:32:30] "GET /api/mandanten/Elektroniker_Testbetrieb/stats HTTP/1.1" 200 -
+2026-01-01 21:32:31,286 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 21:32:31] "GET /api/mandanten/Elektroniker_Testbetrieb/preisliste HTTP/1.1" 200 -
+2026-01-01 21:32:35,995 - __main__ - ERROR - Fehler beim Import: <HttpError 400 when requesting https://generativelanguage.googleapis.com/$discovery/rest?version=v1beta&key=AIzaSyDlINelVYDCUymkS1yrq9RL9ZFBd17Jjhg returned "API key not valid. Please pass a valid API key.". Details: "[{'@type': 'type.googleapis.com/google.rpc.ErrorInfo', 'reason': 'API_KEY_INVALID', 'domain': 'googleapis.com', 'metadata': {'service': 'generativelanguage.googleapis.com'}}, {'@type': 'type.googleapis.com/google.rpc.LocalizedMessage', 'locale': 'en-US', 'message': 'API key not valid. Please pass a valid API key.'}]">
+2026-01-01 21:32:35,998 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 21:32:35] "[35m[1mPOST /api/mandanten/Elektroniker_Testbetrieb/preisliste/import HTTP/1.1[0m" 500 -
+2026-01-01 21:34:00,534 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 21:34:00] "GET /api/mandanten/Elektroniker_Testbetrieb/rechnungen HTTP/1.1" 200 -
+2026-01-01 21:34:00,542 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 21:34:00] "GET /api/mandanten/Elektroniker_Testbetrieb/stats HTTP/1.1" 200 -
+2026-01-01 21:34:03,595 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 21:34:03] "GET /api/mandanten/Elektroniker_Testbetrieb/preisliste HTTP/1.1" 200 -
+2026-01-01 21:34:12,227 - __main__ - ERROR - Fehler beim Import: <HttpError 400 when requesting https://generativelanguage.googleapis.com/$discovery/rest?version=v1beta&key=AIzaSyDlINelVYDCUymkS1yrq9RL9ZFBd17Jjhg returned "API key not valid. Please pass a valid API key.". Details: "[{'@type': 'type.googleapis.com/google.rpc.ErrorInfo', 'reason': 'API_KEY_INVALID', 'domain': 'googleapis.com', 'metadata': {'service': 'generativelanguage.googleapis.com'}}, {'@type': 'type.googleapis.com/google.rpc.LocalizedMessage', 'locale': 'en-US', 'message': 'API key not valid. Please pass a valid API key.'}]">
+2026-01-01 21:34:12,230 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 21:34:12] "[35m[1mPOST /api/mandanten/Elektroniker_Testbetrieb/preisliste/import HTTP/1.1[0m" 500 -
+2026-01-01 21:36:09,687 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 21:36:09] "GET /api/mandanten/Elektroniker_Testbetrieb/rechnungen HTTP/1.1" 200 -
+2026-01-01 21:36:09,695 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 21:36:09] "GET /api/mandanten/Elektroniker_Testbetrieb/stats HTTP/1.1" 200 -
+2026-01-01 21:36:11,350 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 21:36:11] "GET /api/mandanten/Elektroniker_Testbetrieb/preisliste HTTP/1.1" 200 -
+2026-01-01 21:36:26,319 - __main__ - ERROR - Fehler beim Import: <HttpError 400 when requesting https://generativelanguage.googleapis.com/$discovery/rest?version=v1beta&key=AIzaSyDlINelVYDCUymkS1yrq9RL9ZFBd17Jjhg returned "API key not valid. Please pass a valid API key.". Details: "[{'@type': 'type.googleapis.com/google.rpc.ErrorInfo', 'reason': 'API_KEY_INVALID', 'domain': 'googleapis.com', 'metadata': {'service': 'generativelanguage.googleapis.com'}}, {'@type': 'type.googleapis.com/google.rpc.LocalizedMessage', 'locale': 'en-US', 'message': 'API key not valid. Please pass a valid API key.'}]">
+2026-01-01 21:36:26,322 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 21:36:26] "[35m[1mPOST /api/mandanten/Elektroniker_Testbetrieb/preisliste/import HTTP/1.1[0m" 500 -
+2026-01-01 21:36:36,025 - __main__ - ERROR - Fehler beim Import: <HttpError 400 when requesting https://generativelanguage.googleapis.com/$discovery/rest?version=v1beta&key=AIzaSyDlINelVYDCUymkS1yrq9RL9ZFBd17Jjhg returned "API key not valid. Please pass a valid API key.". Details: "[{'@type': 'type.googleapis.com/google.rpc.ErrorInfo', 'reason': 'API_KEY_INVALID', 'domain': 'googleapis.com', 'metadata': {'service': 'generativelanguage.googleapis.com'}}, {'@type': 'type.googleapis.com/google.rpc.LocalizedMessage', 'locale': 'en-US', 'message': 'API key not valid. Please pass a valid API key.'}]">
+2026-01-01 21:36:36,028 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 21:36:36] "[35m[1mPOST /api/mandanten/Elektroniker_Testbetrieb/preisliste/import HTTP/1.1[0m" 500 -
+2026-01-01 21:47:41,523 - __main__ - INFO - 🚀 Starting API Server...
+2026-01-01 21:47:41,560 - werkzeug - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://192.168.178.199:5000
+2026-01-01 21:47:41,561 - werkzeug - INFO - [33mPress CTRL+C to quit[0m
+2026-01-01 21:47:41,563 - werkzeug - INFO -  * Restarting with stat
+2026-01-01 21:47:41,940 - __main__ - INFO - 🚀 Starting API Server...
+2026-01-01 21:47:41,962 - werkzeug - WARNING -  * Debugger is active!
+2026-01-01 21:47:41,968 - werkzeug - INFO -  * Debugger PIN: 447-598-156
+2026-01-01 21:48:01,560 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 21:48:01] "GET / HTTP/1.1" 200 -
+2026-01-01 21:48:01,824 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 21:48:01] "[33mGET /favicon.ico HTTP/1.1[0m" 404 -
+2026-01-01 21:48:30,745 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 21:48:30] "GET / HTTP/1.1" 200 -
+2026-01-01 21:49:35,065 - __main__ - INFO - Mandanten geladen: 2
+2026-01-01 21:49:35,077 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 21:49:35] "GET /api/dashboard HTTP/1.1" 200 -
+2026-01-01 21:50:04,159 - __main__ - INFO - 🚀 Starting API Server...
+2026-01-01 21:50:04,194 - werkzeug - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://192.168.178.199:5000
+2026-01-01 21:50:04,195 - werkzeug - INFO - [33mPress CTRL+C to quit[0m
+2026-01-01 21:50:04,197 - werkzeug - INFO -  * Restarting with stat
+2026-01-01 21:50:04,571 - __main__ - INFO - 🚀 Starting API Server...
+2026-01-01 21:50:04,597 - werkzeug - WARNING -  * Debugger is active!
+2026-01-01 21:50:04,603 - werkzeug - INFO -  * Debugger PIN: 447-598-156
+2026-01-01 21:50:05,102 - __main__ - INFO - Mandanten geladen: 2
+2026-01-01 21:50:05,114 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 21:50:05] "GET /api/dashboard HTTP/1.1" 200 -
+2026-01-01 21:50:11,706 - __main__ - INFO - Mandanten geladen: 2
+2026-01-01 21:50:11,718 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 21:50:11] "GET /api/dashboard HTTP/1.1" 200 -
+2026-01-01 21:50:13,926 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 21:50:13] "GET /api/mandanten/Elektroniker_Testbetrieb/rechnungen HTTP/1.1" 200 -
+2026-01-01 21:50:13,934 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 21:50:13] "GET /api/mandanten/Elektroniker_Testbetrieb/stats HTTP/1.1" 200 -
+2026-01-01 21:50:19,350 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 21:50:19] "GET /api/mandanten/Elektroniker_Testbetrieb/preisliste HTTP/1.1" 200 -
+2026-01-01 21:50:23,258 - __main__ - ERROR - Fehler beim Import: <HttpError 400 when requesting https://generativelanguage.googleapis.com/$discovery/rest?version=v1beta&key=AIzaSyDlINelVYDCUymkS1yrq9RL9ZFBd17Jjhg returned "API key not valid. Please pass a valid API key.". Details: "[{'@type': 'type.googleapis.com/google.rpc.ErrorInfo', 'reason': 'API_KEY_INVALID', 'domain': 'googleapis.com', 'metadata': {'service': 'generativelanguage.googleapis.com'}}, {'@type': 'type.googleapis.com/google.rpc.LocalizedMessage', 'locale': 'en-US', 'message': 'API key not valid. Please pass a valid API key.'}]">
+2026-01-01 21:50:23,261 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 21:50:23] "[35m[1mPOST /api/mandanten/Elektroniker_Testbetrieb/preisliste/import HTTP/1.1[0m" 500 -
+2026-01-01 21:51:25,712 - __main__ - INFO - 🚀 Starting API Server...
+2026-01-01 21:51:25,746 - werkzeug - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://192.168.178.199:5000
+2026-01-01 21:51:25,746 - werkzeug - INFO - [33mPress CTRL+C to quit[0m
+2026-01-01 21:51:25,749 - werkzeug - INFO -  * Restarting with stat
+2026-01-01 21:51:26,109 - __main__ - INFO - 🚀 Starting API Server...
+2026-01-01 21:51:26,134 - werkzeug - WARNING -  * Debugger is active!
+2026-01-01 21:51:26,140 - werkzeug - INFO -  * Debugger PIN: 447-598-156
+2026-01-01 21:51:54,955 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 21:51:54] "GET /api/mandanten/Elektroniker_Testbetrieb/rechnungen HTTP/1.1" 200 -
+2026-01-01 21:51:54,962 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 21:51:54] "GET /api/mandanten/Elektroniker_Testbetrieb/stats HTTP/1.1" 200 -
+2026-01-01 21:52:49,363 - __main__ - INFO - 🚀 Starting API Server...
+2026-01-01 21:52:49,400 - werkzeug - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://192.168.178.199:5000
+2026-01-01 21:52:49,400 - werkzeug - INFO - [33mPress CTRL+C to quit[0m
+2026-01-01 21:52:49,403 - werkzeug - INFO -  * Restarting with stat
+2026-01-01 21:52:49,755 - __main__ - INFO - 🚀 Starting API Server...
+2026-01-01 21:52:49,778 - werkzeug - WARNING -  * Debugger is active!
+2026-01-01 21:52:49,783 - werkzeug - INFO -  * Debugger PIN: 447-598-156
+2026-01-01 21:53:32,038 - __main__ - INFO - 🚀 Starting API Server...
+2026-01-01 21:53:32,071 - werkzeug - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://192.168.178.199:5000
+2026-01-01 21:53:32,071 - werkzeug - INFO - [33mPress CTRL+C to quit[0m
+2026-01-01 21:53:32,073 - werkzeug - INFO -  * Restarting with stat
+2026-01-01 21:53:32,425 - __main__ - INFO - 🚀 Starting API Server...
+2026-01-01 21:53:32,444 - werkzeug - WARNING -  * Debugger is active!
+2026-01-01 21:53:32,450 - werkzeug - INFO -  * Debugger PIN: 447-598-156
+2026-01-01 21:54:20,774 - __main__ - INFO - 🚀 Starting API Server...
+2026-01-01 21:54:20,810 - werkzeug - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://192.168.178.199:5000
+2026-01-01 21:54:20,811 - werkzeug - INFO - [33mPress CTRL+C to quit[0m
+2026-01-01 21:54:20,813 - werkzeug - INFO -  * Restarting with stat
+2026-01-01 21:54:21,191 - __main__ - INFO - 🚀 Starting API Server...
+2026-01-01 21:54:21,211 - werkzeug - WARNING -  * Debugger is active!
+2026-01-01 21:54:21,218 - werkzeug - INFO -  * Debugger PIN: 447-598-156
+2026-01-01 21:54:37,388 - __main__ - INFO - Mandanten geladen: 2
+2026-01-01 21:54:37,400 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 21:54:37] "GET /api/dashboard HTTP/1.1" 200 -
+2026-01-01 21:54:37,733 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 21:54:37] "[33mGET /favicon.ico HTTP/1.1[0m" 404 -
+2026-01-01 21:54:45,528 - __main__ - INFO - Mandanten geladen: 2
+2026-01-01 21:54:45,529 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 21:54:45] "GET /api/mandanten HTTP/1.1" 200 -
+2026-01-01 21:55:33,576 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 21:55:33] "GET / HTTP/1.1" 200 -
+2026-01-01 21:55:33,839 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 21:55:33] "[33mGET /favicon.ico HTTP/1.1[0m" 404 -
+2026-01-01 21:56:19,449 - __main__ - INFO - Mandanten geladen: 2
+2026-01-01 21:56:19,463 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 21:56:19] "GET /api/dashboard HTTP/1.1" 200 -
+2026-01-01 21:56:42,632 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 21:56:42] "GET /api/mandanten/Elektroniker_Testbetrieb/stats HTTP/1.1" 200 -
+2026-01-01 21:56:42,929 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 21:56:42] "GET /api/mandanten/Elektroniker_Testbetrieb/rechnungen HTTP/1.1" 200 -
+2026-01-01 21:56:44,016 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 21:56:44] "GET /api/mandanten/Elektroniker_Testbetrieb/preisliste HTTP/1.1" 200 -
+2026-01-01 21:56:47,721 - __main__ - ERROR - Fehler beim Import: <HttpError 400 when requesting https://generativelanguage.googleapis.com/$discovery/rest?version=v1beta&key=AIzaSyDlINelVYDCUymkS1yrq9RL9ZFBd17Jjhg returned "API key not valid. Please pass a valid API key.". Details: "[{'@type': 'type.googleapis.com/google.rpc.ErrorInfo', 'reason': 'API_KEY_INVALID', 'domain': 'googleapis.com', 'metadata': {'service': 'generativelanguage.googleapis.com'}}, {'@type': 'type.googleapis.com/google.rpc.LocalizedMessage', 'locale': 'en-US', 'message': 'API key not valid. Please pass a valid API key.'}]">
+2026-01-01 21:56:47,724 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 21:56:47] "[35m[1mPOST /api/mandanten/Elektroniker_Testbetrieb/preisliste/import HTTP/1.1[0m" 500 -
+2026-01-01 21:58:25,873 - __main__ - INFO - Mandanten geladen: 2
+2026-01-01 21:58:25,885 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 21:58:25] "GET /api/dashboard HTTP/1.1" 200 -
+2026-01-01 21:58:55,581 - __main__ - INFO - Mandanten geladen: 2
+2026-01-01 21:58:55,592 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 21:58:55] "GET /api/dashboard HTTP/1.1" 200 -
+2026-01-01 21:59:25,884 - __main__ - INFO - Mandanten geladen: 2
+2026-01-01 21:59:25,895 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 21:59:25] "GET /api/dashboard HTTP/1.1" 200 -
+2026-01-01 21:59:55,577 - __main__ - INFO - Mandanten geladen: 2
+2026-01-01 21:59:55,589 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 21:59:55] "GET /api/dashboard HTTP/1.1" 200 -
+2026-01-01 21:59:58,769 - werkzeug - INFO -  * Detected change in 'C:\\Users\\Admin\\Desktop\\Mein_Business\\backend\\api_server.py', reloading
+2026-01-01 22:00:01,046 - werkzeug - INFO -  * Restarting with stat
+2026-01-01 22:00:03,218 - __main__ - INFO - 🚀 Starting API Server...
+2026-01-01 22:00:03,238 - werkzeug - WARNING -  * Debugger is active!
+2026-01-01 22:00:03,244 - werkzeug - INFO -  * Debugger PIN: 447-598-156
+2026-01-01 22:00:25,896 - __main__ - INFO - Mandanten geladen: 2
+2026-01-01 22:00:25,912 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 22:00:25] "GET /api/dashboard HTTP/1.1" 200 -
+2026-01-01 22:00:33,267 - __main__ - INFO - 🚀 Starting API Server...
+2026-01-01 22:00:33,296 - werkzeug - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://192.168.178.199:5000
+2026-01-01 22:00:33,297 - werkzeug - INFO - [33mPress CTRL+C to quit[0m
+2026-01-01 22:00:33,298 - werkzeug - INFO -  * Restarting with stat
+2026-01-01 22:00:35,155 - __main__ - INFO - 🚀 Starting API Server...
+2026-01-01 22:00:35,174 - werkzeug - WARNING -  * Debugger is active!
+2026-01-01 22:00:35,180 - werkzeug - INFO -  * Debugger PIN: 447-598-156
+2026-01-01 22:00:44,011 - __main__ - INFO - Mandanten geladen: 2
+2026-01-01 22:00:44,024 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 22:00:44] "GET /api/dashboard HTTP/1.1" 200 -
+2026-01-01 22:00:48,608 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 22:00:48] "GET /api/mandanten/Elektroniker_Testbetrieb/rechnungen HTTP/1.1" 200 -
+2026-01-01 22:00:48,615 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 22:00:48] "GET /api/mandanten/Elektroniker_Testbetrieb/stats HTTP/1.1" 200 -
+2026-01-01 22:00:49,572 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 22:00:49] "GET /api/mandanten/Elektroniker_Testbetrieb/preisliste HTTP/1.1" 200 -
+2026-01-01 22:00:54,440 - __main__ - ERROR - Fehler beim Import: <HttpError 400 when requesting https://generativelanguage.googleapis.com/$discovery/rest?version=v1beta&key=AIzaSyDlINelVYDCUymkS1yrq9RL9ZFBd17Jjhg returned "API key not valid. Please pass a valid API key.". Details: "[{'@type': 'type.googleapis.com/google.rpc.ErrorInfo', 'reason': 'API_KEY_INVALID', 'domain': 'googleapis.com', 'metadata': {'service': 'generativelanguage.googleapis.com'}}, {'@type': 'type.googleapis.com/google.rpc.LocalizedMessage', 'locale': 'en-US', 'message': 'API key not valid. Please pass a valid API key.'}]">
+2026-01-01 22:00:54,443 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 22:00:54] "[35m[1mPOST /api/mandanten/Elektroniker_Testbetrieb/preisliste/import HTTP/1.1[0m" 500 -
+2026-01-01 22:03:09,572 - __main__ - INFO - 🚀 Starting API Server...
+2026-01-01 22:03:09,601 - werkzeug - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://192.168.178.199:5000
+2026-01-01 22:03:09,601 - werkzeug - INFO - [33mPress CTRL+C to quit[0m
+2026-01-01 22:03:09,603 - werkzeug - INFO -  * Restarting with stat
+2026-01-01 22:03:11,472 - __main__ - INFO - 🚀 Starting API Server...
+2026-01-01 22:03:11,495 - werkzeug - WARNING -  * Debugger is active!
+2026-01-01 22:03:11,500 - werkzeug - INFO -  * Debugger PIN: 447-598-156
+2026-01-01 22:03:46,260 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 22:03:46] "GET /api/mandanten/Elektroniker_Testbetrieb/rechnungen HTTP/1.1" 200 -
+2026-01-01 22:03:46,273 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 22:03:46] "GET /api/mandanten/Elektroniker_Testbetrieb/stats HTTP/1.1" 200 -
+2026-01-01 22:03:54,236 - __main__ - INFO - Mandanten geladen: 2
+2026-01-01 22:03:58,188 - __main__ - INFO - Mandanten geladen: 2
+2026-01-01 22:04:52,118 - __main__ - INFO - 🚀 Starting API Server...
+2026-01-01 22:04:52,147 - werkzeug - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://192.168.178.199:5000
+2026-01-01 22:04:52,147 - werkzeug - INFO - [33mPress CTRL+C to quit[0m
+2026-01-01 22:04:52,149 - werkzeug - INFO -  * Restarting with stat
+2026-01-01 22:04:53,917 - __main__ - INFO - 🚀 Starting API Server...
+2026-01-01 22:04:53,938 - werkzeug - WARNING -  * Debugger is active!
+2026-01-01 22:04:53,944 - werkzeug - INFO -  * Debugger PIN: 447-598-156
+2026-01-01 22:05:05,225 - __main__ - INFO - Mandanten geladen: 2
+2026-01-01 22:05:05,241 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 22:05:05] "GET /api/dashboard HTTP/1.1" 200 -
+2026-01-01 22:05:06,618 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 22:05:06] "GET /api/mandanten/Elektroniker_Testbetrieb/stats HTTP/1.1" 200 -
+2026-01-01 22:05:06,923 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 22:05:06] "GET /api/mandanten/Elektroniker_Testbetrieb/rechnungen HTTP/1.1" 200 -
+2026-01-01 22:05:08,344 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 22:05:08] "GET /api/mandanten/Elektroniker_Testbetrieb/preisliste HTTP/1.1" 200 -
+2026-01-01 22:05:18,705 - __main__ - ERROR - Fehler beim Import: <HttpError 400 when requesting https://generativelanguage.googleapis.com/$discovery/rest?version=v1beta&key=AIzaSyDlINelVYDCUymkS1yrq9RL9ZFBd17Jjhg returned "API key not valid. Please pass a valid API key.". Details: "[{'@type': 'type.googleapis.com/google.rpc.ErrorInfo', 'reason': 'API_KEY_INVALID', 'domain': 'googleapis.com', 'metadata': {'service': 'generativelanguage.googleapis.com'}}, {'@type': 'type.googleapis.com/google.rpc.LocalizedMessage', 'locale': 'en-US', 'message': 'API key not valid. Please pass a valid API key.'}]">
+2026-01-01 22:05:18,707 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 22:05:18] "[35m[1mPOST /api/mandanten/Elektroniker_Testbetrieb/preisliste/import HTTP/1.1[0m" 500 -
+2026-01-01 22:12:34,556 - werkzeug - INFO -  * Detected change in 'C:\\Users\\Admin\\Desktop\\Mein_Business\\backend\\test_api_key.py', reloading
+2026-01-01 22:12:36,856 - werkzeug - INFO -  * Restarting with stat
+2026-01-01 22:12:38,860 - __main__ - INFO - 🚀 Starting API Server...
+2026-01-01 22:12:38,881 - werkzeug - WARNING -  * Debugger is active!
+2026-01-01 22:12:38,886 - werkzeug - INFO -  * Debugger PIN: 447-598-156
+2026-01-01 22:12:53,013 - werkzeug - INFO -  * Detected change in 'C:\\Users\\Admin\\Desktop\\Mein_Business\\backend\\preisliste_import.py', reloading
+2026-01-01 22:12:53,285 - werkzeug - INFO -  * Restarting with stat
+2026-01-01 22:12:55,220 - __main__ - INFO - 🚀 Starting API Server...
+2026-01-01 22:12:55,238 - werkzeug - WARNING -  * Debugger is active!
+2026-01-01 22:12:55,244 - werkzeug - INFO -  * Debugger PIN: 447-598-156
+2026-01-01 22:13:48,884 - __main__ - INFO - 🚀 Starting API Server...
+2026-01-01 22:13:48,913 - werkzeug - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://192.168.178.199:5000
+2026-01-01 22:13:48,914 - werkzeug - INFO - [33mPress CTRL+C to quit[0m
+2026-01-01 22:13:48,915 - werkzeug - INFO -  * Restarting with stat
+2026-01-01 22:13:50,712 - __main__ - INFO - 🚀 Starting API Server...
+2026-01-01 22:13:50,733 - werkzeug - WARNING -  * Debugger is active!
+2026-01-01 22:13:50,739 - werkzeug - INFO -  * Debugger PIN: 447-598-156
+2026-01-01 22:14:02,174 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 22:14:02] "GET /api/mandanten/Elektroniker_Testbetrieb/rechnungen HTTP/1.1" 200 -
+2026-01-01 22:14:02,188 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 22:14:02] "GET /api/mandanten/Elektroniker_Testbetrieb/stats HTTP/1.1" 200 -
+2026-01-01 22:14:03,530 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 22:14:03] "GET /api/mandanten/Elektroniker_Testbetrieb/preisliste HTTP/1.1" 200 -
+2026-01-01 22:14:34,905 - __main__ - INFO - Preisliste importiert: 18 Positionen
+2026-01-01 22:14:34,906 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 22:14:34] "POST /api/mandanten/Elektroniker_Testbetrieb/preisliste/import HTTP/1.1" 200 -
+2026-01-01 22:15:06,153 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 22:15:06] "OPTIONS /api/mandanten/Elektroniker_Testbetrieb/preisliste/import/confirm HTTP/1.1" 200 -
+2026-01-01 22:15:07,094 - __main__ - INFO - 18 Positionen importiert: Elektroniker_Testbetrieb
+2026-01-01 22:15:07,094 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 22:15:07] "POST /api/mandanten/Elektroniker_Testbetrieb/preisliste/import/confirm HTTP/1.1" 200 -
+2026-01-01 22:15:09,146 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 22:15:09] "GET /api/mandanten/Elektroniker_Testbetrieb/preisliste HTTP/1.1" 200 -
+2026-01-01 22:15:17,973 - __main__ - INFO - Einnahmen geladen: 2 Rechnungen
+2026-01-01 22:15:17,974 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 22:15:17] "GET /api/mandanten/Elektroniker_Testbetrieb/einnahmen HTTP/1.1" 200 -
+2026-01-01 22:16:09,946 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 22:16:09] "GET /api/mandanten/Elektroniker_Testbetrieb/kunden HTTP/1.1" 200 -
+2026-01-01 22:16:10,264 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 22:16:10] "GET /api/mandanten/Elektroniker_Testbetrieb/preisliste HTTP/1.1" 200 -
+2026-01-01 22:18:02,127 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 22:18:02] "OPTIONS /api/mandanten/Elektroniker_Testbetrieb/angebot HTTP/1.1" 200 -
+2026-01-01 22:18:02,399 - __main__ - ERROR - Fehler beim Erstellen des Angebots: [Errno 2] No such file or directory: 'C:\\Users\\Admin\\Desktop\\Mein_Business\\backend\\Mandanten\\Elektroniker_Testbetrieb\\Angebote\\Angebot_ANG-2026-001.pdf'
+2026-01-01 22:18:02,399 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 22:18:02] "[35m[1mPOST /api/mandanten/Elektroniker_Testbetrieb/angebot HTTP/1.1[0m" 500 -
+2026-01-01 22:18:29,881 - werkzeug - INFO -  * Detected change in 'C:\\Users\\Admin\\Desktop\\Mein_Business\\backend\\api_server.py', reloading
+2026-01-01 22:18:32,166 - werkzeug - INFO -  * Restarting with stat
+2026-01-01 22:18:34,079 - __main__ - INFO - 🚀 Starting API Server...
+2026-01-01 22:18:34,098 - werkzeug - WARNING -  * Debugger is active!
+2026-01-01 22:18:34,103 - werkzeug - INFO -  * Debugger PIN: 447-598-156
+2026-01-01 22:19:12,593 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 22:19:12] "OPTIONS /api/mandanten/Elektroniker_Testbetrieb/angebot HTTP/1.1" 200 -
+2026-01-01 22:19:12,867 - __main__ - ERROR - Fehler beim Erstellen des Angebots: type object 'datetime.datetime' has no attribute 'datetime'
+2026-01-01 22:19:12,868 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 22:19:12] "[35m[1mPOST /api/mandanten/Elektroniker_Testbetrieb/angebot HTTP/1.1[0m" 500 -
+2026-01-01 22:19:35,597 - werkzeug - INFO -  * Detected change in 'C:\\Users\\Admin\\Desktop\\Mein_Business\\backend\\api_server.py', reloading
+2026-01-01 22:19:35,853 - werkzeug - INFO -  * Restarting with stat
+2026-01-01 22:19:37,690 - __main__ - INFO - 🚀 Starting API Server...
+2026-01-01 22:19:37,708 - werkzeug - WARNING -  * Debugger is active!
+2026-01-01 22:19:37,714 - werkzeug - INFO -  * Debugger PIN: 447-598-156
+2026-01-01 22:19:52,352 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 22:19:52] "OPTIONS /api/mandanten/Elektroniker_Testbetrieb/angebot HTTP/1.1" 200 -
+2026-01-01 22:19:52,678 - __main__ - INFO - Angebot erstellt: Elektroniker_Testbetrieb/ANG-2026-001
+2026-01-01 22:19:52,679 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 22:19:52] "POST /api/mandanten/Elektroniker_Testbetrieb/angebot HTTP/1.1" 200 -
+2026-01-01 22:20:15,672 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 22:20:15] "GET /api/mandanten/Elektroniker_Testbetrieb/angebote HTTP/1.1" 200 -
+2026-01-01 22:20:32,155 - werkzeug - INFO -  * Detected change in 'C:\\Users\\Admin\\Desktop\\Mein_Business\\backend\\api_server.py', reloading
+2026-01-01 22:20:32,448 - werkzeug - INFO -  * Restarting with stat
+2026-01-01 22:28:08,390 - __main__ - INFO - 🚀 Starting API Server...
+2026-01-01 22:28:08,418 - werkzeug - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://192.168.178.199:5000
+2026-01-01 22:28:08,418 - werkzeug - INFO - [33mPress CTRL+C to quit[0m
+2026-01-01 22:28:08,420 - werkzeug - INFO -  * Restarting with stat
+2026-01-01 22:28:10,261 - __main__ - INFO - 🚀 Starting API Server...
+2026-01-01 22:28:10,282 - werkzeug - WARNING -  * Debugger is active!
+2026-01-01 22:28:10,288 - werkzeug - INFO -  * Debugger PIN: 447-598-156
+2026-01-01 22:28:10,306 - __main__ - INFO - Mandanten geladen: 2
+2026-01-01 22:28:10,324 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 22:28:10] "GET /api/dashboard HTTP/1.1" 200 -
+2026-01-01 22:28:15,978 - __main__ - INFO - Mandanten geladen: 2
+2026-01-01 22:28:15,991 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 22:28:15] "GET /api/dashboard HTTP/1.1" 200 -
+2026-01-01 22:28:25,581 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 22:28:25] "GET /api/mandanten/Elektroniker_Testbetrieb/rechnungen HTTP/1.1" 200 -
+2026-01-01 22:28:25,589 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 22:28:25] "GET /api/mandanten/Elektroniker_Testbetrieb/stats HTTP/1.1" 200 -
+2026-01-01 22:28:26,667 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 22:28:26] "GET /api/mandanten/Elektroniker_Testbetrieb/preisliste HTTP/1.1" 200 -
+2026-01-01 22:28:28,716 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 22:28:28] "GET /api/mandanten/Elektroniker_Testbetrieb/kunden HTTP/1.1" 200 -
+2026-01-01 22:28:28,967 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 22:28:28] "GET /api/mandanten/Elektroniker_Testbetrieb/preisliste HTTP/1.1" 200 -
+2026-01-01 22:28:31,258 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 22:28:31] "GET /api/mandanten/Elektroniker_Testbetrieb/kunden HTTP/1.1" 200 -
+2026-01-01 22:28:31,573 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 22:28:31] "GET /api/mandanten/Elektroniker_Testbetrieb/preisliste HTTP/1.1" 200 -
+2026-01-01 22:29:00,707 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 22:29:00] "OPTIONS /api/mandanten/Elektroniker_Testbetrieb/angebot HTTP/1.1" 200 -
+2026-01-01 22:29:01,050 - __main__ - INFO - Angebot erstellt: Elektroniker_Testbetrieb/ANG-2026-001
+2026-01-01 22:29:01,050 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 22:29:01] "POST /api/mandanten/Elektroniker_Testbetrieb/angebot HTTP/1.1" 200 -
+2026-01-01 22:30:37,465 - werkzeug - INFO -  * Detected change in 'C:\\Users\\Admin\\Desktop\\Mein_Business\\backend\\offer_generator.py', reloading
+2026-01-01 22:30:37,735 - werkzeug - INFO -  * Restarting with stat
+2026-01-01 22:30:39,715 - __main__ - INFO - 🚀 Starting API Server...
+2026-01-01 22:30:39,738 - werkzeug - WARNING -  * Debugger is active!
+2026-01-01 22:30:39,744 - werkzeug - INFO -  * Debugger PIN: 447-598-156
+2026-01-01 22:35:12,962 - werkzeug - INFO -  * Detected change in 'C:\\Users\\Admin\\Desktop\\Mein_Business\\backend\\start.py', reloading
+2026-01-01 22:35:13,228 - werkzeug - INFO -  * Restarting with stat
+2026-01-01 22:35:15,246 - __main__ - INFO - 🚀 Starting API Server...
+2026-01-01 22:35:15,268 - werkzeug - WARNING -  * Debugger is active!
+2026-01-01 22:35:15,273 - werkzeug - INFO -  * Debugger PIN: 447-598-156
+2026-01-01 22:35:18,319 - werkzeug - INFO -  * Detected change in 'C:\\Users\\Admin\\Desktop\\Mein_Business\\backend\\invoice_generator.py', reloading
+2026-01-01 22:35:18,622 - werkzeug - INFO -  * Restarting with stat
+2026-01-01 22:35:20,580 - __main__ - INFO - 🚀 Starting API Server...
+2026-01-01 22:35:20,601 - werkzeug - WARNING -  * Debugger is active!
+2026-01-01 22:35:20,607 - werkzeug - INFO -  * Debugger PIN: 447-598-156
+2026-01-01 22:35:21,637 - werkzeug - INFO -  * Detected change in 'C:\\Users\\Admin\\Desktop\\Mein_Business\\backend\\receipt_scanner.py', reloading
+2026-01-01 22:35:21,903 - werkzeug - INFO -  * Restarting with stat
+2026-01-01 22:35:23,731 - __main__ - INFO - 🚀 Starting API Server...
+2026-01-01 22:35:23,753 - werkzeug - WARNING -  * Debugger is active!
+2026-01-01 22:35:23,759 - werkzeug - INFO -  * Debugger PIN: 447-598-156
+2026-01-01 22:35:41,922 - werkzeug - INFO -  * Detected change in 'C:\\Users\\Admin\\Desktop\\Mein_Business\\backend\\dunning_service.py', reloading
+2026-01-01 22:35:42,207 - werkzeug - INFO -  * Restarting with stat
+2026-01-01 22:35:44,376 - __main__ - INFO - 🚀 Starting API Server...
+2026-01-01 22:35:44,398 - werkzeug - WARNING -  * Debugger is active!
+2026-01-01 22:35:44,404 - werkzeug - INFO -  * Debugger PIN: 447-598-156
+2026-01-01 22:54:17,794 - __main__ - INFO - Mandanten geladen: 2
+2026-01-01 22:54:17,812 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 22:54:17] "GET /api/dashboard HTTP/1.1" 200 -
+2026-01-01 22:54:24,919 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 22:54:24] "GET /api/mandanten/Elektroniker_Testbetrieb/stats HTTP/1.1" 200 -
+2026-01-01 22:54:25,213 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 22:54:25] "GET /api/mandanten/Elektroniker_Testbetrieb/rechnungen HTTP/1.1" 200 -
+2026-01-01 22:54:30,589 - __main__ - INFO - Einnahmen geladen: 2 Rechnungen
+2026-01-01 22:54:30,590 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 22:54:30] "GET /api/mandanten/Elektroniker_Testbetrieb/einnahmen HTTP/1.1" 200 -
+2026-01-01 22:54:38,333 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 22:54:38] "GET /api/mandanten/Elektroniker_Testbetrieb/kunden HTTP/1.1" 200 -
+2026-01-01 22:54:42,638 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 22:54:42] "GET /api/mandanten/Elektroniker_Testbetrieb/preisliste HTTP/1.1" 200 -
+2026-01-01 22:54:50,722 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 22:54:50] "GET /api/mandanten/Elektroniker_Testbetrieb/kunden HTTP/1.1" 200 -
+2026-01-01 22:54:51,048 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 22:54:51] "GET /api/mandanten/Elektroniker_Testbetrieb/preisliste HTTP/1.1" 200 -
+2026-01-01 22:55:31,555 - __main__ - INFO - Mandanten geladen: 2
+2026-01-01 22:55:31,567 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 22:55:31] "GET /api/dashboard HTTP/1.1" 200 -
+2026-01-01 22:56:01,870 - __main__ - INFO - Mandanten geladen: 2
+2026-01-01 22:56:01,880 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 22:56:01] "GET /api/dashboard HTTP/1.1" 200 -
+2026-01-01 22:56:31,556 - __main__ - INFO - Mandanten geladen: 2
+2026-01-01 22:56:31,567 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 22:56:31] "GET /api/dashboard HTTP/1.1" 200 -
+2026-01-01 22:57:01,875 - __main__ - INFO - Mandanten geladen: 2
+2026-01-01 22:57:01,886 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 22:57:01] "GET /api/dashboard HTTP/1.1" 200 -
+2026-01-01 22:57:31,561 - __main__ - INFO - Mandanten geladen: 2
+2026-01-01 22:57:31,572 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 22:57:31] "GET /api/dashboard HTTP/1.1" 200 -
+2026-01-01 22:58:01,876 - __main__ - INFO - Mandanten geladen: 2
+2026-01-01 22:58:01,887 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 22:58:01] "GET /api/dashboard HTTP/1.1" 200 -
+2026-01-01 22:58:31,565 - __main__ - INFO - Mandanten geladen: 2
+2026-01-01 22:58:31,577 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 22:58:31] "GET /api/dashboard HTTP/1.1" 200 -
+2026-01-01 22:59:01,868 - __main__ - INFO - Mandanten geladen: 2
+2026-01-01 22:59:01,879 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 22:59:01] "GET /api/dashboard HTTP/1.1" 200 -
+2026-01-01 22:59:31,560 - __main__ - INFO - Mandanten geladen: 2
+2026-01-01 22:59:31,571 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 22:59:31] "GET /api/dashboard HTTP/1.1" 200 -
+2026-01-01 23:00:01,873 - __main__ - INFO - Mandanten geladen: 2
+2026-01-01 23:00:01,884 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 23:00:01] "GET /api/dashboard HTTP/1.1" 200 -
+2026-01-01 23:00:31,567 - __main__ - INFO - Mandanten geladen: 2
+2026-01-01 23:00:31,578 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 23:00:31] "GET /api/dashboard HTTP/1.1" 200 -
+2026-01-01 23:01:01,875 - __main__ - INFO - Mandanten geladen: 2
+2026-01-01 23:01:01,886 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 23:01:01] "GET /api/dashboard HTTP/1.1" 200 -
+2026-01-01 23:01:31,564 - __main__ - INFO - Mandanten geladen: 2
+2026-01-01 23:01:31,575 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 23:01:31] "GET /api/dashboard HTTP/1.1" 200 -
+2026-01-01 23:02:01,871 - __main__ - INFO - Mandanten geladen: 2
+2026-01-01 23:02:01,881 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 23:02:01] "GET /api/dashboard HTTP/1.1" 200 -
+2026-01-01 23:02:31,563 - __main__ - INFO - Mandanten geladen: 2
+2026-01-01 23:02:31,574 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 23:02:31] "GET /api/dashboard HTTP/1.1" 200 -
+2026-01-01 23:03:01,867 - __main__ - INFO - Mandanten geladen: 2
+2026-01-01 23:03:01,878 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 23:03:01] "GET /api/dashboard HTTP/1.1" 200 -
+2026-01-01 23:03:31,570 - __main__ - INFO - Mandanten geladen: 2
+2026-01-01 23:03:31,581 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 23:03:31] "GET /api/dashboard HTTP/1.1" 200 -
+2026-01-01 23:04:01,880 - __main__ - INFO - Mandanten geladen: 2
+2026-01-01 23:04:01,891 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 23:04:01] "GET /api/dashboard HTTP/1.1" 200 -
+2026-01-01 23:04:31,559 - __main__ - INFO - Mandanten geladen: 2
+2026-01-01 23:04:31,571 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 23:04:31] "GET /api/dashboard HTTP/1.1" 200 -
+2026-01-01 23:05:01,878 - __main__ - INFO - Mandanten geladen: 2
+2026-01-01 23:05:01,889 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 23:05:01] "GET /api/dashboard HTTP/1.1" 200 -
+2026-01-01 23:05:31,567 - __main__ - INFO - Mandanten geladen: 2
+2026-01-01 23:05:31,578 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 23:05:31] "GET /api/dashboard HTTP/1.1" 200 -
+2026-01-01 23:06:01,874 - __main__ - INFO - Mandanten geladen: 2
+2026-01-01 23:06:01,885 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 23:06:01] "GET /api/dashboard HTTP/1.1" 200 -
+2026-01-01 23:06:31,881 - __main__ - INFO - Mandanten geladen: 2
+2026-01-01 23:06:31,892 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 23:06:31] "GET /api/dashboard HTTP/1.1" 200 -
+2026-01-01 23:07:01,566 - __main__ - INFO - Mandanten geladen: 2
+2026-01-01 23:07:01,578 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 23:07:01] "GET /api/dashboard HTTP/1.1" 200 -
+2026-01-01 23:07:31,872 - __main__ - INFO - Mandanten geladen: 2
+2026-01-01 23:07:31,883 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 23:07:31] "GET /api/dashboard HTTP/1.1" 200 -
+2026-01-01 23:08:01,563 - __main__ - INFO - Mandanten geladen: 2
+2026-01-01 23:08:01,574 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 23:08:01] "GET /api/dashboard HTTP/1.1" 200 -
+2026-01-01 23:08:31,867 - __main__ - INFO - Mandanten geladen: 2
+2026-01-01 23:08:31,878 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 23:08:31] "GET /api/dashboard HTTP/1.1" 200 -
+2026-01-01 23:09:01,560 - __main__ - INFO - Mandanten geladen: 2
+2026-01-01 23:09:01,571 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 23:09:01] "GET /api/dashboard HTTP/1.1" 200 -
+2026-01-01 23:09:31,865 - __main__ - INFO - Mandanten geladen: 2
+2026-01-01 23:09:31,876 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 23:09:31] "GET /api/dashboard HTTP/1.1" 200 -
+2026-01-01 23:10:01,558 - __main__ - INFO - Mandanten geladen: 2
+2026-01-01 23:10:01,569 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 23:10:01] "GET /api/dashboard HTTP/1.1" 200 -
+2026-01-01 23:10:31,880 - __main__ - INFO - Mandanten geladen: 2
+2026-01-01 23:10:31,892 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 23:10:31] "GET /api/dashboard HTTP/1.1" 200 -
+2026-01-01 23:11:01,565 - __main__ - INFO - Mandanten geladen: 2
+2026-01-01 23:11:01,576 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 23:11:01] "GET /api/dashboard HTTP/1.1" 200 -
+2026-01-01 23:11:31,874 - __main__ - INFO - Mandanten geladen: 2
+2026-01-01 23:11:31,885 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 23:11:31] "GET /api/dashboard HTTP/1.1" 200 -
+2026-01-01 23:12:01,560 - __main__ - INFO - Mandanten geladen: 2
+2026-01-01 23:12:01,571 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 23:12:01] "GET /api/dashboard HTTP/1.1" 200 -
+2026-01-01 23:12:31,880 - __main__ - INFO - Mandanten geladen: 2
+2026-01-01 23:12:31,891 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 23:12:31] "GET /api/dashboard HTTP/1.1" 200 -
+2026-01-01 23:13:01,563 - __main__ - INFO - Mandanten geladen: 2
+2026-01-01 23:13:01,574 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 23:13:01] "GET /api/dashboard HTTP/1.1" 200 -
+2026-01-01 23:13:31,877 - __main__ - INFO - Mandanten geladen: 2
+2026-01-01 23:13:31,888 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 23:13:31] "GET /api/dashboard HTTP/1.1" 200 -
+2026-01-01 23:14:01,561 - __main__ - INFO - Mandanten geladen: 2
+2026-01-01 23:14:01,572 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 23:14:01] "GET /api/dashboard HTTP/1.1" 200 -
+2026-01-01 23:14:31,875 - __main__ - INFO - Mandanten geladen: 2
+2026-01-01 23:14:31,886 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 23:14:31] "GET /api/dashboard HTTP/1.1" 200 -
+2026-01-01 23:15:01,560 - __main__ - INFO - Mandanten geladen: 2
+2026-01-01 23:15:01,571 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 23:15:01] "GET /api/dashboard HTTP/1.1" 200 -
+2026-01-01 23:15:31,877 - __main__ - INFO - Mandanten geladen: 2
+2026-01-01 23:15:31,888 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 23:15:31] "GET /api/dashboard HTTP/1.1" 200 -
+2026-01-01 23:16:01,556 - __main__ - INFO - Mandanten geladen: 2
+2026-01-01 23:16:01,567 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 23:16:01] "GET /api/dashboard HTTP/1.1" 200 -
+2026-01-01 23:16:31,879 - __main__ - INFO - Mandanten geladen: 2
+2026-01-01 23:16:31,890 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 23:16:31] "GET /api/dashboard HTTP/1.1" 200 -
+2026-01-01 23:17:01,568 - __main__ - INFO - Mandanten geladen: 2
+2026-01-01 23:17:01,579 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 23:17:01] "GET /api/dashboard HTTP/1.1" 200 -
+2026-01-01 23:17:31,879 - __main__ - INFO - Mandanten geladen: 2
+2026-01-01 23:17:31,890 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 23:17:31] "GET /api/dashboard HTTP/1.1" 200 -
+2026-01-01 23:18:01,568 - __main__ - INFO - Mandanten geladen: 2
+2026-01-01 23:18:01,579 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 23:18:01] "GET /api/dashboard HTTP/1.1" 200 -
+2026-01-01 23:18:31,872 - __main__ - INFO - Mandanten geladen: 2
+2026-01-01 23:18:31,883 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 23:18:31] "GET /api/dashboard HTTP/1.1" 200 -
+2026-01-01 23:19:01,568 - __main__ - INFO - Mandanten geladen: 2
+2026-01-01 23:19:01,579 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 23:19:01] "GET /api/dashboard HTTP/1.1" 200 -
+2026-01-01 23:19:31,883 - __main__ - INFO - Mandanten geladen: 2
+2026-01-01 23:19:31,894 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 23:19:31] "GET /api/dashboard HTTP/1.1" 200 -
+2026-01-01 23:20:01,564 - __main__ - INFO - Mandanten geladen: 2
+2026-01-01 23:20:01,575 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 23:20:01] "GET /api/dashboard HTTP/1.1" 200 -
+2026-01-01 23:20:31,874 - __main__ - INFO - Mandanten geladen: 2
+2026-01-01 23:20:31,885 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 23:20:31] "GET /api/dashboard HTTP/1.1" 200 -
+2026-01-01 23:21:01,570 - __main__ - INFO - Mandanten geladen: 2
+2026-01-01 23:21:01,581 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 23:21:01] "GET /api/dashboard HTTP/1.1" 200 -
+2026-01-01 23:21:31,865 - __main__ - INFO - Mandanten geladen: 2
+2026-01-01 23:21:31,876 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 23:21:31] "GET /api/dashboard HTTP/1.1" 200 -
+2026-01-01 23:22:01,567 - __main__ - INFO - Mandanten geladen: 2
+2026-01-01 23:22:01,578 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 23:22:01] "GET /api/dashboard HTTP/1.1" 200 -
+2026-01-01 23:22:31,875 - __main__ - INFO - Mandanten geladen: 2
+2026-01-01 23:22:31,886 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 23:22:31] "GET /api/dashboard HTTP/1.1" 200 -
+2026-01-01 23:23:01,556 - __main__ - INFO - Mandanten geladen: 2
+2026-01-01 23:23:01,567 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 23:23:01] "GET /api/dashboard HTTP/1.1" 200 -
+2026-01-01 23:23:31,878 - __main__ - INFO - Mandanten geladen: 2
+2026-01-01 23:23:31,890 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 23:23:31] "GET /api/dashboard HTTP/1.1" 200 -
+2026-01-01 23:24:01,571 - __main__ - INFO - Mandanten geladen: 2
+2026-01-01 23:24:01,582 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 23:24:01] "GET /api/dashboard HTTP/1.1" 200 -
+2026-01-01 23:24:31,875 - __main__ - INFO - Mandanten geladen: 2
+2026-01-01 23:24:31,886 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 23:24:31] "GET /api/dashboard HTTP/1.1" 200 -
+2026-01-01 23:25:01,558 - __main__ - INFO - Mandanten geladen: 2
+2026-01-01 23:25:01,569 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 23:25:01] "GET /api/dashboard HTTP/1.1" 200 -
+2026-01-01 23:25:31,877 - __main__ - INFO - Mandanten geladen: 2
+2026-01-01 23:25:31,888 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 23:25:31] "GET /api/dashboard HTTP/1.1" 200 -
+2026-01-01 23:26:01,559 - __main__ - INFO - Mandanten geladen: 2
+2026-01-01 23:26:01,570 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 23:26:01] "GET /api/dashboard HTTP/1.1" 200 -
+2026-01-01 23:26:31,867 - __main__ - INFO - Mandanten geladen: 2
+2026-01-01 23:26:31,878 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 23:26:31] "GET /api/dashboard HTTP/1.1" 200 -
+2026-01-01 23:27:01,571 - __main__ - INFO - Mandanten geladen: 2
+2026-01-01 23:27:01,582 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 23:27:01] "GET /api/dashboard HTTP/1.1" 200 -
+2026-01-01 23:27:31,868 - __main__ - INFO - Mandanten geladen: 2
+2026-01-01 23:27:31,879 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 23:27:31] "GET /api/dashboard HTTP/1.1" 200 -
+2026-01-01 23:28:01,557 - __main__ - INFO - Mandanten geladen: 2
+2026-01-01 23:28:01,569 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 23:28:01] "GET /api/dashboard HTTP/1.1" 200 -
+2026-01-01 23:28:31,867 - __main__ - INFO - Mandanten geladen: 2
+2026-01-01 23:28:31,878 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 23:28:31] "GET /api/dashboard HTTP/1.1" 200 -
+2026-01-01 23:29:01,564 - __main__ - INFO - Mandanten geladen: 2
+2026-01-01 23:29:01,575 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 23:29:01] "GET /api/dashboard HTTP/1.1" 200 -
+2026-01-01 23:29:31,880 - __main__ - INFO - Mandanten geladen: 2
+2026-01-01 23:29:31,891 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 23:29:31] "GET /api/dashboard HTTP/1.1" 200 -
+2026-01-01 23:30:01,560 - __main__ - INFO - Mandanten geladen: 2
+2026-01-01 23:30:01,571 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 23:30:01] "GET /api/dashboard HTTP/1.1" 200 -
+2026-01-01 23:30:31,870 - __main__ - INFO - Mandanten geladen: 2
+2026-01-01 23:30:31,881 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 23:30:31] "GET /api/dashboard HTTP/1.1" 200 -
+2026-01-01 23:31:01,555 - __main__ - INFO - Mandanten geladen: 2
+2026-01-01 23:31:01,566 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 23:31:01] "GET /api/dashboard HTTP/1.1" 200 -
+2026-01-01 23:31:31,868 - __main__ - INFO - Mandanten geladen: 2
+2026-01-01 23:31:31,879 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 23:31:31] "GET /api/dashboard HTTP/1.1" 200 -
+2026-01-01 23:32:01,556 - __main__ - INFO - Mandanten geladen: 2
+2026-01-01 23:32:01,567 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 23:32:01] "GET /api/dashboard HTTP/1.1" 200 -
+2026-01-01 23:32:31,876 - __main__ - INFO - Mandanten geladen: 2
+2026-01-01 23:32:31,887 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 23:32:31] "GET /api/dashboard HTTP/1.1" 200 -
+2026-01-01 23:33:01,564 - __main__ - INFO - Mandanten geladen: 2
+2026-01-01 23:33:01,575 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 23:33:01] "GET /api/dashboard HTTP/1.1" 200 -
+2026-01-01 23:33:31,877 - __main__ - INFO - Mandanten geladen: 2
+2026-01-01 23:33:31,888 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 23:33:31] "GET /api/dashboard HTTP/1.1" 200 -
+2026-01-01 23:34:01,555 - __main__ - INFO - Mandanten geladen: 2
+2026-01-01 23:34:01,566 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 23:34:01] "GET /api/dashboard HTTP/1.1" 200 -
+2026-01-01 23:34:31,878 - __main__ - INFO - Mandanten geladen: 2
+2026-01-01 23:34:31,889 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 23:34:31] "GET /api/dashboard HTTP/1.1" 200 -
+2026-01-01 23:35:01,565 - __main__ - INFO - Mandanten geladen: 2
+2026-01-01 23:35:01,576 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 23:35:01] "GET /api/dashboard HTTP/1.1" 200 -
+2026-01-01 23:35:31,871 - __main__ - INFO - Mandanten geladen: 2
+2026-01-01 23:35:31,884 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 23:35:31] "GET /api/dashboard HTTP/1.1" 200 -
+2026-01-01 23:36:01,560 - __main__ - INFO - Mandanten geladen: 2
+2026-01-01 23:36:01,571 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 23:36:01] "GET /api/dashboard HTTP/1.1" 200 -
+2026-01-01 23:36:31,879 - __main__ - INFO - Mandanten geladen: 2
+2026-01-01 23:36:31,890 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 23:36:31] "GET /api/dashboard HTTP/1.1" 200 -
+2026-01-01 23:37:01,563 - __main__ - INFO - Mandanten geladen: 2
+2026-01-01 23:37:01,574 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 23:37:01] "GET /api/dashboard HTTP/1.1" 200 -
+2026-01-01 23:37:31,876 - __main__ - INFO - Mandanten geladen: 2
+2026-01-01 23:37:31,887 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 23:37:31] "GET /api/dashboard HTTP/1.1" 200 -
+2026-01-01 23:38:01,565 - __main__ - INFO - Mandanten geladen: 2
+2026-01-01 23:38:01,576 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 23:38:01] "GET /api/dashboard HTTP/1.1" 200 -
+2026-01-01 23:38:31,871 - __main__ - INFO - Mandanten geladen: 2
+2026-01-01 23:38:31,882 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 23:38:31] "GET /api/dashboard HTTP/1.1" 200 -
+2026-01-01 23:39:01,557 - __main__ - INFO - Mandanten geladen: 2
+2026-01-01 23:39:01,568 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 23:39:01] "GET /api/dashboard HTTP/1.1" 200 -
+2026-01-01 23:39:31,876 - __main__ - INFO - Mandanten geladen: 2
+2026-01-01 23:39:31,887 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 23:39:31] "GET /api/dashboard HTTP/1.1" 200 -
+2026-01-01 23:40:01,561 - __main__ - INFO - Mandanten geladen: 2
+2026-01-01 23:40:01,572 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 23:40:01] "GET /api/dashboard HTTP/1.1" 200 -
+2026-01-01 23:40:31,882 - __main__ - INFO - Mandanten geladen: 2
+2026-01-01 23:40:31,893 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 23:40:31] "GET /api/dashboard HTTP/1.1" 200 -
+2026-01-01 23:41:01,555 - __main__ - INFO - Mandanten geladen: 2
+2026-01-01 23:41:01,566 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 23:41:01] "GET /api/dashboard HTTP/1.1" 200 -
+2026-01-01 23:41:31,873 - __main__ - INFO - Mandanten geladen: 2
+2026-01-01 23:41:31,884 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 23:41:31] "GET /api/dashboard HTTP/1.1" 200 -
+2026-01-01 23:42:01,568 - __main__ - INFO - Mandanten geladen: 2
+2026-01-01 23:42:01,579 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 23:42:01] "GET /api/dashboard HTTP/1.1" 200 -
+2026-01-01 23:42:31,866 - __main__ - INFO - Mandanten geladen: 2
+2026-01-01 23:42:31,877 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 23:42:31] "GET /api/dashboard HTTP/1.1" 200 -
+2026-01-01 23:43:01,563 - __main__ - INFO - Mandanten geladen: 2
+2026-01-01 23:43:01,574 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 23:43:01] "GET /api/dashboard HTTP/1.1" 200 -
+2026-01-01 23:43:31,871 - __main__ - INFO - Mandanten geladen: 2
+2026-01-01 23:43:31,882 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 23:43:31] "GET /api/dashboard HTTP/1.1" 200 -
+2026-01-01 23:44:01,570 - __main__ - INFO - Mandanten geladen: 2
+2026-01-01 23:44:01,581 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 23:44:01] "GET /api/dashboard HTTP/1.1" 200 -
+2026-01-01 23:44:31,877 - __main__ - INFO - Mandanten geladen: 2
+2026-01-01 23:44:31,888 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 23:44:31] "GET /api/dashboard HTTP/1.1" 200 -
+2026-01-01 23:45:01,559 - __main__ - INFO - Mandanten geladen: 2
+2026-01-01 23:45:01,570 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 23:45:01] "GET /api/dashboard HTTP/1.1" 200 -
+2026-01-01 23:45:31,882 - __main__ - INFO - Mandanten geladen: 2
+2026-01-01 23:45:31,893 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 23:45:31] "GET /api/dashboard HTTP/1.1" 200 -
+2026-01-01 23:46:01,558 - __main__ - INFO - Mandanten geladen: 2
+2026-01-01 23:46:01,569 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 23:46:01] "GET /api/dashboard HTTP/1.1" 200 -
+2026-01-01 23:46:31,879 - __main__ - INFO - Mandanten geladen: 2
+2026-01-01 23:46:31,889 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 23:46:31] "GET /api/dashboard HTTP/1.1" 200 -
+2026-01-01 23:47:01,570 - __main__ - INFO - Mandanten geladen: 2
+2026-01-01 23:47:01,581 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 23:47:01] "GET /api/dashboard HTTP/1.1" 200 -
+2026-01-01 23:47:31,867 - __main__ - INFO - Mandanten geladen: 2
+2026-01-01 23:47:31,878 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 23:47:31] "GET /api/dashboard HTTP/1.1" 200 -
+2026-01-01 23:48:01,560 - __main__ - INFO - Mandanten geladen: 2
+2026-01-01 23:48:01,571 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 23:48:01] "GET /api/dashboard HTTP/1.1" 200 -
+2026-01-01 23:48:31,869 - __main__ - INFO - Mandanten geladen: 2
+2026-01-01 23:48:31,881 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 23:48:31] "GET /api/dashboard HTTP/1.1" 200 -
+2026-01-01 23:49:01,570 - __main__ - INFO - Mandanten geladen: 2
+2026-01-01 23:49:01,582 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 23:49:01] "GET /api/dashboard HTTP/1.1" 200 -
+2026-01-01 23:49:31,872 - __main__ - INFO - Mandanten geladen: 2
+2026-01-01 23:49:31,883 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 23:49:31] "GET /api/dashboard HTTP/1.1" 200 -
+2026-01-01 23:50:01,560 - __main__ - INFO - Mandanten geladen: 2
+2026-01-01 23:50:01,571 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 23:50:01] "GET /api/dashboard HTTP/1.1" 200 -
+2026-01-01 23:50:31,868 - __main__ - INFO - Mandanten geladen: 2
+2026-01-01 23:50:31,880 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 23:50:31] "GET /api/dashboard HTTP/1.1" 200 -
+2026-01-01 23:51:01,567 - __main__ - INFO - Mandanten geladen: 2
+2026-01-01 23:51:01,577 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 23:51:01] "GET /api/dashboard HTTP/1.1" 200 -
+2026-01-01 23:51:31,870 - __main__ - INFO - Mandanten geladen: 2
+2026-01-01 23:51:31,881 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 23:51:31] "GET /api/dashboard HTTP/1.1" 200 -
+2026-01-01 23:52:01,559 - __main__ - INFO - Mandanten geladen: 2
+2026-01-01 23:52:01,570 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 23:52:01] "GET /api/dashboard HTTP/1.1" 200 -
+2026-01-01 23:52:31,879 - __main__ - INFO - Mandanten geladen: 2
+2026-01-01 23:52:31,889 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 23:52:31] "GET /api/dashboard HTTP/1.1" 200 -
+2026-01-01 23:53:01,560 - __main__ - INFO - Mandanten geladen: 2
+2026-01-01 23:53:01,571 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 23:53:01] "GET /api/dashboard HTTP/1.1" 200 -
+2026-01-01 23:53:31,874 - __main__ - INFO - Mandanten geladen: 2
+2026-01-01 23:53:31,886 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 23:53:31] "GET /api/dashboard HTTP/1.1" 200 -
+2026-01-01 23:54:01,571 - __main__ - INFO - Mandanten geladen: 2
+2026-01-01 23:54:01,582 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 23:54:01] "GET /api/dashboard HTTP/1.1" 200 -
+2026-01-01 23:54:31,880 - __main__ - INFO - Mandanten geladen: 2
+2026-01-01 23:54:31,892 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 23:54:31] "GET /api/dashboard HTTP/1.1" 200 -
+2026-01-01 23:55:01,565 - __main__ - INFO - Mandanten geladen: 2
+2026-01-01 23:55:01,577 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 23:55:01] "GET /api/dashboard HTTP/1.1" 200 -
+2026-01-01 23:55:31,881 - __main__ - INFO - Mandanten geladen: 2
+2026-01-01 23:55:31,892 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 23:55:31] "GET /api/dashboard HTTP/1.1" 200 -
+2026-01-01 23:56:01,562 - __main__ - INFO - Mandanten geladen: 2
+2026-01-01 23:56:01,573 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 23:56:01] "GET /api/dashboard HTTP/1.1" 200 -
+2026-01-01 23:56:26,784 - __main__ - INFO - Mandanten geladen: 2
+2026-01-01 23:56:26,795 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 23:56:26] "GET /api/dashboard HTTP/1.1" 200 -
+2026-01-01 23:56:28,430 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 23:56:28] "GET /api/mandanten/Elektroniker_Testbetrieb/stats HTTP/1.1" 200 -
+2026-01-01 23:56:28,736 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 23:56:28] "GET /api/mandanten/Elektroniker_Testbetrieb/rechnungen HTTP/1.1" 200 -
+2026-01-01 23:56:38,862 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 23:56:38] "GET /api/mandanten/Elektroniker_Testbetrieb/kunden HTTP/1.1" 200 -
+2026-01-01 23:56:39,130 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 23:56:39] "GET /api/mandanten/Elektroniker_Testbetrieb/preisliste HTTP/1.1" 200 -
+2026-01-01 23:57:24,077 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 23:57:24] "GET /api/mandanten/Elektroniker_Testbetrieb/stats HTTP/1.1" 200 -
+2026-01-01 23:57:24,383 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 23:57:24] "GET /api/mandanten/Elektroniker_Testbetrieb/rechnungen HTTP/1.1" 200 -
+2026-01-01 23:57:27,801 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 23:57:27] "GET /api/mandanten/Elektroniker_Testbetrieb/rechnungen HTTP/1.1" 200 -
+2026-01-01 23:57:27,810 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 23:57:27] "GET /api/mandanten/Elektroniker_Testbetrieb/stats HTTP/1.1" 200 -
+2026-01-01 23:57:39,748 - __main__ - INFO - Mandanten geladen: 2
+2026-01-01 23:57:39,760 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 23:57:39] "GET /api/dashboard HTTP/1.1" 200 -
+2026-01-01 23:57:42,039 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 23:57:42] "GET /api/mandanten/Elektroniker_Testbetrieb/rechnungen HTTP/1.1" 200 -
+2026-01-01 23:57:42,047 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 23:57:42] "GET /api/mandanten/Elektroniker_Testbetrieb/stats HTTP/1.1" 200 -
+2026-01-01 23:57:45,773 - __main__ - INFO - Mandanten geladen: 2
+2026-01-01 23:57:45,786 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 23:57:45] "GET /api/dashboard HTTP/1.1" 200 -
+2026-01-01 23:58:16,095 - __main__ - INFO - Mandanten geladen: 2
+2026-01-01 23:58:16,106 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 23:58:16] "GET /api/dashboard HTTP/1.1" 200 -
+2026-01-01 23:58:24,728 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 23:58:24] "GET /api/mandanten/Elektroniker_Testbetrieb/stats HTTP/1.1" 200 -
+2026-01-01 23:58:25,028 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 23:58:25] "GET /api/mandanten/Elektroniker_Testbetrieb/rechnungen HTTP/1.1" 200 -
+2026-01-01 23:58:28,409 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 23:58:28] "GET /api/mandanten/Elektroniker_Testbetrieb/rechnungen HTTP/1.1" 200 -
+2026-01-01 23:58:28,417 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 23:58:28] "GET /api/mandanten/Elektroniker_Testbetrieb/stats HTTP/1.1" 200 -
+2026-01-01 23:58:33,881 - __main__ - INFO - Mandanten geladen: 2
+2026-01-01 23:58:33,893 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 23:58:33] "GET /api/dashboard HTTP/1.1" 200 -
+2026-01-01 23:59:04,206 - __main__ - INFO - Mandanten geladen: 2
+2026-01-01 23:59:04,217 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 23:59:04] "GET /api/dashboard HTTP/1.1" 200 -
+2026-01-01 23:59:33,881 - __main__ - INFO - Mandanten geladen: 2
+2026-01-01 23:59:33,892 - werkzeug - INFO - 127.0.0.1 - - [01/Jan/2026 23:59:33] "GET /api/dashboard HTTP/1.1" 200 -
+2026-01-02 00:00:04,201 - __main__ - INFO - Mandanten geladen: 2
+2026-01-02 00:00:04,212 - werkzeug - INFO - 127.0.0.1 - - [02/Jan/2026 00:00:04] "GET /api/dashboard HTTP/1.1" 200 -
+2026-01-02 00:00:30,032 - __main__ - INFO - Mandanten geladen: 2
+2026-01-02 00:00:30,044 - werkzeug - INFO - 127.0.0.1 - - [02/Jan/2026 00:00:30] "GET /api/dashboard HTTP/1.1" 200 -
+2026-01-02 00:00:33,084 - werkzeug - INFO - 127.0.0.1 - - [02/Jan/2026 00:00:33] "GET /api/mandanten/Elektroniker_Testbetrieb/rechnungen HTTP/1.1" 200 -
+2026-01-02 00:00:33,092 - werkzeug - INFO - 127.0.0.1 - - [02/Jan/2026 00:00:33] "GET /api/mandanten/Elektroniker_Testbetrieb/stats HTTP/1.1" 200 -
+2026-01-02 00:01:49,766 - werkzeug - INFO - 127.0.0.1 - - [02/Jan/2026 00:01:49] "GET /api/mandanten/Elektroniker_Testbetrieb/kunden HTTP/1.1" 200 -
+2026-01-02 00:01:51,217 - werkzeug - INFO - 127.0.0.1 - - [02/Jan/2026 00:01:51] "GET /api/mandanten/Elektroniker_Testbetrieb/angebote HTTP/1.1" 200 -
+2026-01-02 00:03:09,393 - werkzeug - INFO - 127.0.0.1 - - [02/Jan/2026 00:03:09] "GET /api/mandanten/Elektroniker_Testbetrieb/rechnungen HTTP/1.1" 200 -
+2026-01-02 00:03:09,400 - werkzeug - INFO - 127.0.0.1 - - [02/Jan/2026 00:03:09] "GET /api/mandanten/Elektroniker_Testbetrieb/stats HTTP/1.1" 200 -
+2026-01-02 00:03:46,718 - werkzeug - INFO - 127.0.0.1 - - [02/Jan/2026 00:03:46] "GET /api/mandanten/Elektroniker_Testbetrieb/stats HTTP/1.1" 200 -
+2026-01-02 00:03:47,019 - werkzeug - INFO - 127.0.0.1 - - [02/Jan/2026 00:03:47] "GET /api/mandanten/Elektroniker_Testbetrieb/rechnungen HTTP/1.1" 200 -
+2026-01-02 00:05:54,497 - werkzeug - INFO - 127.0.0.1 - - [02/Jan/2026 00:05:54] "GET /api/mandanten/Elektroniker_Testbetrieb/rechnungen HTTP/1.1" 200 -
+2026-01-02 00:05:54,505 - werkzeug - INFO - 127.0.0.1 - - [02/Jan/2026 00:05:54] "GET /api/mandanten/Elektroniker_Testbetrieb/stats HTTP/1.1" 200 -
+2026-01-02 00:07:37,519 - werkzeug - INFO - 127.0.0.1 - - [02/Jan/2026 00:07:37] "GET /api/mandanten/Elektroniker_Testbetrieb/rechnungen HTTP/1.1" 200 -
+2026-01-02 00:07:37,525 - werkzeug - INFO - 127.0.0.1 - - [02/Jan/2026 00:07:37] "GET /api/mandanten/Elektroniker_Testbetrieb/stats HTTP/1.1" 200 -
+2026-01-02 00:07:38,389 - werkzeug - INFO - 127.0.0.1 - - [02/Jan/2026 00:07:38] "GET /api/mandanten/Elektroniker_Testbetrieb/angebote HTTP/1.1" 200 -
+2026-01-02 00:07:38,694 - werkzeug - INFO - 127.0.0.1 - - [02/Jan/2026 00:07:38] "GET /api/mandanten/Elektroniker_Testbetrieb/kunden HTTP/1.1" 200 -
+2026-01-02 00:09:09,713 - werkzeug - INFO - 127.0.0.1 - - [02/Jan/2026 00:09:09] "GET /api/mandanten/Elektroniker_Testbetrieb/rechnungen HTTP/1.1" 200 -
+2026-01-02 00:09:09,720 - werkzeug - INFO - 127.0.0.1 - - [02/Jan/2026 00:09:09] "GET /api/mandanten/Elektroniker_Testbetrieb/stats HTTP/1.1" 200 -
+2026-01-02 00:09:23,886 - werkzeug - INFO - 127.0.0.1 - - [02/Jan/2026 00:09:23] "GET /api/mandanten/Elektroniker_Testbetrieb/stats HTTP/1.1" 200 -
+2026-01-02 00:09:24,185 - werkzeug - INFO - 127.0.0.1 - - [02/Jan/2026 00:09:24] "GET /api/mandanten/Elektroniker_Testbetrieb/rechnungen HTTP/1.1" 200 -
+2026-01-02 00:09:26,346 - werkzeug - INFO - 127.0.0.1 - - [02/Jan/2026 00:09:26] "GET /api/mandanten/Elektroniker_Testbetrieb/kunden HTTP/1.1" 200 -
+2026-01-02 00:09:26,354 - werkzeug - INFO - 127.0.0.1 - - [02/Jan/2026 00:09:26] "GET /api/mandanten/Elektroniker_Testbetrieb/angebote HTTP/1.1" 200 -
+2026-01-02 00:09:32,162 - werkzeug - INFO - 127.0.0.1 - - [02/Jan/2026 00:09:32] "[33mOPTIONS /api/mandanten/Elektroniker_Testbetrieb/lieferschein HTTP/1.1[0m" 404 -
+2026-01-02 00:09:37,282 - werkzeug - INFO - 127.0.0.1 - - [02/Jan/2026 00:09:37] "[33mOPTIONS /api/mandanten/Elektroniker_Testbetrieb/lieferschein HTTP/1.1[0m" 404 -
+2026-01-02 00:10:29,945 - werkzeug - INFO -  * Detected change in 'C:\\Users\\Admin\\Desktop\\Mein_Business\\backend\\api_server.py', reloading
+2026-01-02 00:10:30,278 - werkzeug - INFO -  * Restarting with stat

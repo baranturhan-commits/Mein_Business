@@ -65,19 +65,19 @@ def main():
         elif choice == '2':
             cmd_info = ("add_client.py", ["kunde"])
         elif choice == '3':
-            cmd_info = (os.path.join("03_Rechnungen", "invoice.py"), [])
+            cmd_info = ("invoice_generator.py", [])
         elif choice == '4':
-            cmd_info = (os.path.join("01_Mahnwesen", "agent.py"), [])
+            cmd_info = ("dunning_service.py", [])
         elif choice == '5':
-            cmd_info = (os.path.join("02_Buchhaltung", "scanner.py"), [])
+            cmd_info = ("receipt_scanner.py", [])
         elif choice == '6':
-            cmd_info = (os.path.join("03_Rechnungen", "check_payments.py"), [])
+            cmd_info = ("payment_checker.py", [])
         elif choice == '7':
-            cmd_info = (os.path.join("04_Controlling", "finance_check.py"), [])
+            cmd_info = ("finance_checker.py", [])
         elif choice == '8':
-            cmd_info = (os.path.join("05_Angebote", "offer.py"), [])
+            cmd_info = ("offer_cli.py", [])
         elif choice == '9':
-            cmd_info = (os.path.join("06_Lieferscheine", "delivery.py"), [])
+            cmd_info = ("delivery_cli.py", [])
         
         if cmd_info:
             rel_path, args = cmd_info

@@ -21,8 +21,7 @@
             "smtp": {
                 "server": "smtp.gmail.com",
                 "port": "587",
-                "email": "Celo.turi@gmail.com",
-                "password": "gesz ovyc zrah axzc"
+                "email": "Celo.turi@gmail.com"
             }
         }
     ]

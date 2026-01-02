@@ -138,6 +138,10 @@ def read_data(filepath, sheet_name=0):
         return []
     try:
         df = pd.read_excel(filepath, sheet_name=sheet_name)
+        # Robust cleanup: Cast to object to allow None everywhere
+        df = df.astype(object)
+        # Replace all pandas/numpy NaNs with None
+        df = df.where(pd.notnull(df), None)
         return df.to_dict('records')
     except Exception as e:
         print(f"⚠️  Fehler beim Lesen von Excel {filepath}: {e}")

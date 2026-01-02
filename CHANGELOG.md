@@ -467,3 +467,55 @@ Mein_Business/
 **Bearbeitet von:** Baran Turhan (mit Antigravity AI)
 **Version:** 2.2 - Angebote, Lieferscheine & Blanko-Protokolle
 
+
+---
+
+### Phase 7: Das Web-Dashboard & KI-Ausgaben (Jan 02, 2026)
+
+**Das große Update:**
+Wir haben den Schritt vom reinen Terminal-Programm zur **echten Web-Anwendung** gemacht!
+
+#### Was ist neu?
+
+**1. Das Web-Dashboard (Frontend)**
+- Eine moderne Benutzeroberfläche im Browser (`http://localhost:5000`)
+- **Tabs für alles:** Übersicht, Dokumente, OP-Check, Ausgaben, Kunden, Preisliste
+- Funktioniert parallel zu den Terminal-Skripten (nutzt dieselben Daten!)
+
+**2. Intelligente Ausgaben-Erfassung 💸**
+- **Neuer Tab "Ausgaben"**: Liste aller Kosten.
+- **Beleg-Scanner mit KI:**
+  1. Klicke "Beleg scannen" 📸
+  2. Lade ein Foto hoch (PDF/Bild)
+  3. **Gemini AI analysiert das Bild** und findet: Datum, Firma, Betrag, Kategorie
+  4. Trägt alles automatisch in die Liste ein!
+- Belege werden direkt gespeichert und verlinkt (👁️).
+
+**3. Preislisten-Verwaltung 💰**
+- **Neuer Tab "Preisliste"**:
+  - Produkte/Dienstleistungen anlegen, bearbeiten, löschen
+  - **Import-Funktion**: Lade bestehende Excel/CSV-Listen hoch
+- Diese Preise können direkt in Angeboten und Rechnungen genutzt werden.
+
+**4. Dokumenten-Management 📂**
+- Schöne Übersicht aller Angebote, Lieferscheine und Rechnungen
+- PDF-Vorschau direkt im Browser
+- Status-Tracking (Offen/Bezahlt) visualisiert
+
+**Technische Änderungen:**
+- `backend/api_server.py`: Massiv erweitert (alle Endpunkte für Tabs)
+- `backend/receipt_utils.py`: KI-Logik für Belege
+- `backend/excel_utils.py`: Stabilisiert (keine NaN-Fehler mehr)
+- `frontend/`: HTML, CSS (Grid-Layout), JS-Module (`ausgaben.js`, `documents.js`)
+
+**Status:**
+- Version 3.0 ist live! 🚀
+- Server läuft stabil auf Port 5000.
+
+---
+
+**Letzte Aktualisierung:** 2026-01-02 01:25
+**Bearbeitet von:** Baran Turhan (mit Antigravity AI)
+**Version:** 3.0 - Web Dashboard & AI Expenses
+
+
