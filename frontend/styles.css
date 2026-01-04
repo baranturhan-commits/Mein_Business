@@ -283,6 +283,247 @@ body {
     color: var(--text-secondary);
 }
 
+/* Beleg Preview Modal */
+.beleg-preview-container {
+    display: flex;
+    gap: 20px;
+    height: 70vh;
+    /* Fixed height for modal body */
+}
+
+.beleg-view {
+    flex: 2;
+    background: #f0f0f0;
+    border-radius: 8px;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid #ddd;
+}
+
+.beleg-view img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+}
+
+.beleg-view iframe {
+    width: 100%;
+    height: 100%;
+    border: none;
+}
+
+.beleg-details {
+    flex: 1;
+    padding: 20px;
+    background: #f9f9f9;
+    border-radius: 8px;
+    border: 1px solid #eee;
+    overflow-y: auto;
+}
+
+.beleg-details h4 {
+    margin-top: 0;
+    margin-bottom: 20px;
+    border-bottom: 2px solid var(--primary-color);
+    padding-bottom: 10px;
+    color: var(--primary-color);
+}
+
+.detail-row {
+    margin-bottom: 15px;
+}
+
+.detail-label {
+    font-size: 0.85rem;
+    color: #666;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 4px;
+}
+
+.detail-value {
+    font-size: 1.1rem;
+    font-weight: 500;
+    color: #333;
+}
+
+/* Document Grid Layout (3 Columns) */
+.doc-grid-layout {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+    align-items: start;
+    /* Cards only as high as needed */
+    margin-top: 20px;
+}
+
+@media (max-width: 1200px) {
+    .doc-grid-layout {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .col-protocols {
+        grid-column: span 2;
+        /* Protocols take full width on medium screens */
+    }
+}
+
+@media (max-width: 768px) {
+    .doc-grid-layout {
+        grid-template-columns: 1fr;
+    }
+
+    .col-protocols {
+        grid-column: span 1;
+    }
+}
+
+.doc-column {
+    background: var(--card-bg);
+    border-radius: 12px;
+    border: 1px solid var(--border-color);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    height: 100%;
+}
+
+.column-header {
+    background: rgba(255, 255, 255, 0.03);
+    padding: 15px 20px;
+    border-bottom: 1px solid var(--border-color);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.column-header h2 {
+    font-size: 1.2rem;
+    margin: 0;
+    font-weight: 600;
+    color: var(--text-color);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.column-content {
+    padding: 15px;
+    flex: 1;
+}
+
+/* Compact List items */
+.doc-list-compact {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    max-height: 600px;
+    overflow-y: auto;
+}
+
+/* Items in list */
+.doc-item-compact {
+    display: flex;
+    align-items: center;
+    padding: 10px;
+    background: rgba(255, 255, 255, 0.02);
+    border-radius: 6px;
+    border: 1px solid transparent;
+    transition: all 0.2s;
+    cursor: pointer;
+}
+
+.doc-item-compact:hover {
+    background: rgba(255, 255, 255, 0.05);
+    border-color: var(--primary-color);
+    transform: translateY(-2px);
+}
+
+.doc-icon {
+    font-size: 1.5rem;
+    margin-right: 15px;
+    opacity: 0.8;
+}
+
+.doc-info {
+    flex: 1;
+}
+
+.doc-title {
+    font-weight: 600;
+    color: var(--text-color);
+    font-size: 0.95rem;
+}
+
+.doc-meta {
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+    margin-top: 2px;
+}
+
+.sub-section {
+    margin-bottom: 20px;
+}
+
+.sub-section h4 {
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    color: var(--text-secondary);
+    letter-spacing: 1px;
+    margin-bottom: 10px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    padding-bottom: 5px;
+}
+
+
+.doc-list-mini {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+/* Batch Upload Progress */
+.batch-progress {
+    margin: 20px 0;
+}
+
+.progress-bar {
+    width: 100%;
+    height: 24px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
+    overflow: hidden;
+    margin: 10px 0;
+    border: 1px solid var(--border-color);
+}
+
+.progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--primary-color), var(--success-color));
+    transition: width 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-weight: 600;
+    font-size: 0.85rem;
+}
+
+.batch-progress p {
+    margin: 8px 0;
+    color: var(--text-color);
+}
+
+#batchStatus {
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+}
+
+
+
 .mandant-stats {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
@@ -799,9 +1040,37 @@ body {
 /* Document Tab Grid */
 .doc-sections {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: 1fr 1fr;
     gap: 1.5rem;
-    align-items: start;
+}
+
+/* Status Indicators for Mandant Cards */
+.status-green {
+    border-left: 5px solid var(--success) !important;
+}
+
+.status-yellow {
+    border-left: 5px solid var(--warning) !important;
+}
+
+.status-red {
+    border-left: 5px solid var(--danger) !important;
+    box-shadow: 0 4px 15px rgba(239, 68, 68, 0.2) !important;
+}
+
+/* Progress Bar */
+.progress-container {
+    background: var(--surface-light);
+    height: 8px;
+    border-radius: 4px;
+    overflow: hidden;
+    margin-top: 0.5rem;
+}
+
+.progress-bar {
+    height: 100%;
+    background: var(--success);
+    transition: width 0.5s ease;
 }
 
 .doc-list {

@@ -59,6 +59,14 @@
                             <option value="2026">2026</option>
                         </select>
                     </div>
+                    <button class="btn btn-warning" onclick="finishWorkDay()"
+                        title="Erstellt Backup und beendet den Tag" style="margin-right: 10px;">
+                        <span class="icon">🏁</span> Feierabend
+                    </button>
+                    <button class="btn" onclick="logout()" title="Abmelden"
+                        style="background: rgba(255, 60, 60, 0.2); margin-right: 10px;">
+                        <span class="icon">🚪</span>
+                    </button>
                     <button class="btn btn-outline"
                         style="margin-right: 10px; color: white; border-color: rgba(255,255,255,0.5);"
                         onclick="openConfigModal()">
@@ -88,6 +96,7 @@
         <nav class="tabs">
             <button class="tab active" onclick="switchTab('overview')">📊 Übersicht</button>
             <button class="tab" onclick="switchTab('documents')">📂 Dokumente</button>
+            <button class="tab" onclick="switchTab('recurring')">🔄 Abos</button>
             <button class="tab" onclick="switchTab('op')">💶 OP-Check</button>
             <button class="tab" onclick="switchTab('ausgaben')">💸 Ausgaben</button>
             <button class="tab" onclick="switchTab('kunden')">👥 Kunden</button>
@@ -131,6 +140,31 @@
             </section>
         </div>
 
+        <!-- Tab Content: Recurring Invoices (Abos) -->
+        <div id="tab-recurring" class="tab-content">
+            <section class="mandanten-section">
+                <div class="section-header">
+                    <h2>🔄 Wiederkehrende Rechnungen (Abos)</h2>
+                    <div class="button-group">
+                        <button class="btn btn-secondary"
+                            onclick="fetch(`http://localhost:5000/api/mandanten/${new URLSearchParams(window.location.search).get('id')}/recurring/process`, {method:'POST'}).then(r=>r.json()).then(d=>{alert(d.count + ' Rechnungen erstellt!'); RecurringManager.loadRecurring();})">
+                            ⚡ Jetzt prüfen (Manuell)
+                        </button>
+                        <button class="btn btn-primary" onclick="RecurringManager.openModal()">
+                            <span class="icon">➕</span>
+                            Neues Abo
+                        </button>
+                    </div>
+                </div>
+                <div id="recurringList" class="op-list">
+                    <div class="loading">
+                        <div class="spinner"></div>
+                        <p>Lade Abos...</p>
+                    </div>
+                </div>
+            </section>
+        </div>
+
         <!-- Tab Content: Overview -->
         <div id="tab-overview" class="tab-content active">
             <!-- Simplified Dashboard View -->
@@ -146,68 +180,77 @@
                     <button class="btn btn-secondary big-btn" onclick="showExportModal()">
                         <span class="icon">🏦</span> Steuerberater Export
                     </button>
+
                 </div>
             </section>
         </div>
 
         <!-- Tab Content: Documents -->
         <div id="tab-documents" class="tab-content">
+            <div class="doc-grid-layout">
 
-            <!-- Sub Tabs or Sections -->
-            <div class="doc-sections">
-
-                <!-- 1. Angebote -->
-                <section class="mandanten-section">
-                    <div class="section-header">
+                <!-- Spalte 1: Angebote -->
+                <div class="doc-column col-offers">
+                    <div class="column-header">
                         <h2>📝 Angebote</h2>
-                        <button class="btn btn-sm btn-outline" onclick="showAngebotModal()">Neu +</button>
+                        <button class="btn btn-sm btn-primary-outline" onclick="showAngebotModal()">
+                            <span class="icon">➕</span> Neu
+                        </button>
                     </div>
-                    <div id="doc-angebote-list" class="doc-list">
-                        <div class="loading">
-                            <div class="spinner"></div>
+                    <div class="column-content">
+                        <div id="doc-angebote-list" class="doc-list-compact">
+                            <div class="loading">
+                                <div class="spinner"></div>
+                            </div>
                         </div>
                     </div>
-                </section>
+                </div>
 
-                <!-- 2. Protokolle / Lieferscheine -->
-                <section class="mandanten-section">
-                    <div class="section-header">
-                        <h2>📋 Abnahmeprotokolle</h2>
-                        <div class="btn-group">
-                            <button class="btn btn-sm btn-outline"
-                                onclick="if(window.LieferscheinModal) { LieferscheinModal.open() }">
-                                Leer Drucken
-                            </button>
-                            <button class="btn btn-sm btn-success" onclick="showProtocolUploadModal()">
-                                Scan -> Rechnung
-                            </button>
-                        </div>
-                    </div>
-                    <div class="split-list">
-                        <div class="sub-list">
-                            <h3>Ausgefüllt</h3>
-                            <div id="doc-lieferscheine-filled-list" class="doc-list"></div>
-                        </div>
-                        <div class="sub-list">
-                            <h3>Blanko (Leer)</h3>
-                            <div id="doc-lieferscheine-blank-list" class="doc-list"></div>
-                        </div>
-                    </div>
-                </section>
-
-                <!-- 3. Rechnungen -->
-                <section class="mandanten-section">
-                    <div class="section-header">
+                <!-- Spalte 2: Rechnungen -->
+                <div class="doc-column col-invoices">
+                    <div class="column-header">
                         <h2>🧾 Rechnungen</h2>
-                        <!-- Manual Invoice Button (Placeholder for Sprint 4) -->
-                        <button class="btn btn-sm btn-outline" disabled title="Kommt bald">Manuell +</button>
+                        <button class="btn btn-sm btn-primary-outline" onclick="InvoiceModal.open()">
+                            <span class="icon">➕</span> Manuell
+                        </button>
                     </div>
-                    <div id="doc-rechnungen-list" class="doc-list">
-                        <div class="loading">
-                            <div class="spinner"></div>
+                    <div class="column-content">
+                        <div id="doc-rechnungen-list" class="doc-list-compact">
+                            <div class="loading">
+                                <div class="spinner"></div>
+                            </div>
                         </div>
                     </div>
-                </section>
+                </div>
+
+                <!-- Spalte 3: Protokolle & Lieferscheine -->
+                <div class="doc-column col-protocols">
+                    <div class="column-header">
+                        <h2>📋 Protokolle</h2>
+                        <div class="header-actions">
+                            <button class="btn btn-sm btn-secondary-outline"
+                                onclick="if(window.LieferscheinModal) { LieferscheinModal.open() }"
+                                title="Blanko drucken">
+                                🖨️ Leer
+                            </button>
+                            <button class="btn btn-sm btn-success-outline" onclick="showProtocolUploadModal()"
+                                title="Scan hochladen & Invoice">
+                                📲 Scan
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="column-content">
+                        <div class="sub-section">
+                            <h4>✅ Ausgefüllt (Scans)</h4>
+                            <div id="doc-lieferscheine-filled-list" class="doc-list-mini"></div>
+                        </div>
+                        <div class="sub-section">
+                            <h4>📄 Blanko (Vorlagen)</h4>
+                            <div id="doc-lieferscheine-blank-list" class="doc-list-mini"></div>
+                        </div>
+                    </div>
+                </div>
 
             </div>
         </div>
@@ -286,8 +329,9 @@
             <div class="modal-body">
                 <div class="upload-zone" id="uploadZone">
                     <p class="upload-icon">📁</p>
-                    <p>Datei hier ablegen oder klicken</p>
-                    <input type="file" id="fileInput" accept=".pdf,.jpg,.jpeg,.png" hidden>
+                    <p>Datei(en) hier ablegen oder klicken</p>
+                    <small style="color:#aaa">Mehrere Scans gleichzeitig möglich!</small>
+                    <input type="file" id="fileInput" accept=".pdf,.jpg,.jpeg,.png,.txt" hidden multiple>
                 </div>
                 <div id="uploadStatus"></div>
             </div>
@@ -400,8 +444,10 @@
                     <div class="upload-zone" id="importZone"
                         onclick="document.getElementById('importFileInput').click()">
                         <p class="upload-icon">📁</p>
-                        <p>Datei hier ablegen oder klicken</p>
-                        <input type="file" id="importFileInput" hidden>
+                        <p>Datei(en) hier ablegen oder klicken</p>
+                        <small style="color: #999;">💡 Mehrere Dateien gleichzeitig möglich!</small>
+                        <input type="file" id="importFileInput" hidden multiple
+                            accept=".xlsx,.xls,.csv,.pdf,.jpg,.jpeg,.png">
                     </div>
                     <div id="importStatus"></div>
                 </div>
@@ -551,7 +597,8 @@
                 <div id="exportStatus"></div>
                 <div class="form-actions">
                     <button class="btn" onclick="closeExportModal()">Abbrechen</button>
-                    <button class="btn btn-primary" onclick="startExport()">Export starten</button>
+                    <button class="btn btn-secondary" onclick="startReport()">📊 Report PDF</button>
+                    <button class="btn btn-primary" onclick="startExport()">Export ZIP</button>
                 </div>
             </div>
         </div>
@@ -680,6 +727,10 @@
         </div>
     </div>
 
+    <!-- Firebase Auth -->
+    <script src="firebase_config.js"></script>
+    <script type="module" src="auth.js"></script>
+
     <script src="detail.js"></script>
     <script src="detail_extensions.js"></script>
     <script src="preisliste.js"></script>
@@ -695,6 +746,7 @@
     <!-- Employee Edit Modal & Logic -->
 
     <script src="mitarbeiter.js"></script>
+    <script src="recurring.js"></script>
 
     <div id="editMitarbeiterModal" class="modal" style="display: none;">
         <div class="modal-content" style="max-width: 700px;">
@@ -845,6 +897,77 @@
     </div>
 
     <script src="mitarbeiter.js"></script>
+    <!-- Recurring Invoice Modal -->
+    <div id="recurringModal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>🔄 Neues Abo anlegen</h3>
+                <button class="close-modal" onclick="RecurringManager.closeModal()">×</button>
+            </div>
+            <div class="modal-body">
+                <form id="recForm" onsubmit="event.preventDefault(); RecurringManager.saveRecurring();">
+                    <div class="form-group">
+                        <label>Kunde *</label>
+                        <select id="recKunde" class="form-control" required></select>
+                    </div>
+                    <div class="form-group">
+                        <label>Beschreibung (Leistung) *</label>
+                        <input type="text" id="recDesc" class="form-control" placeholder="z.B. Wartungspauschale"
+                            required>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Betrag (Netto €) *</label>
+                            <input type="number" step="0.01" id="recAmount" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Intervall *</label>
+                            <select id="recInterval" class="form-control">
+                                <option value="monatlich">Monatlich</option>
+                                <option value="quartalsweise">Quartalsweise</option>
+                                <option value="jaehrlich">Jährlich</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Startdatum / Erste Fälligkeit *</label>
+                        <input type="date" id="recStart" class="form-control" required>
+                    </div>
+
+                    <div class="modal-footer" style="margin-top:20px;">
+                        <button type="button" class="btn btn-outline"
+                            onclick="RecurringManager.closeModal()">Abbrechen</button>
+                        <button type="submit" class="btn btn-primary">Abo anlegen</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <!-- Beleg Preview Modal -->
+    <div id="belegPreviewModal" class="modal" style="display: none;">
+        <div class="modal-content" style="max-width: 90vw;"> <!-- Wide modal -->
+            <div class="modal-header">
+                <h3>🔍 Beleg Vorschau</h3>
+                <button class="close-modal" onclick="closeBelegModal()">×</button>
+            </div>
+            <div class="modal-body">
+                <div class="beleg-preview-container">
+                    <!-- Linke Seite: Bild/PDF -->
+                    <div id="belegView" class="beleg-view">
+                        <p class="beleg-missing">Kein Bild geladen</p>
+                    </div>
+
+                    <!-- Rechte Seite: Details -->
+                    <div class="beleg-details">
+                        <h4>Belegdaten</h4>
+                        <div id="belegDataView">
+                            <!-- Wird per JS gefüllt -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </body>
 
 </html>

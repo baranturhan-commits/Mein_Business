@@ -32,17 +32,27 @@ app = Flask(__name__)
 CORS(app)  # Enable CORS for frontend access
 
 # Paths
-BACKEND_DIR = Path(__file__).parent
+BACKEND_DIR = Path(__file__).resolve().parent
 MANDANTEN_DIR = BACKEND_DIR / 'Mandanten'
 
-@app.route('/')
-def index():
+FRONTEND_DIR = BACKEND_DIR.parent / 'frontend'
+
+@app.route('/api/health')
+def health_check():
     """Health check"""
     return jsonify({
         'status': 'online',
         'service': 'Mein Business API',
         'version': '1.0'
     })
+
+@app.route('/')
+def serve_index():
+    return send_from_directory(FRONTEND_DIR, 'index.html')
+
+@app.route('/<path:path>')
+def serve_static(path):
+    return send_from_directory(FRONTEND_DIR, path)
 
 @app.route('/api/mandanten', methods=['GET'])
 def get_mandanten():
@@ -256,22 +266,7 @@ def get_dashboard():
         logger.error(f"Fehler beim Laden des Dashboards: {str(e)}")
         return jsonify({'error': str(e)}), 500
 
-@app.route('/api/backup', methods=['POST'])
-def trigger_backup():
-    """Backup manuell auslösen"""
-    try:
-        import backup
-        backup_file = backup.create_backup()
-        
-        return jsonify({
-            'success': True,
-            'backup_file': str(backup_file),
-            'timestamp': datetime.now().isoformat()
-        })
-    
-    except Exception as e:
-        logger.error(f"Fehler beim Backup: {str(e)}")
-        return jsonify({'error': str(e)}), 500
+
 
 @app.route('/api/mandanten/<mandant_id>/rechnungen', methods=['GET'])
 def get_mandant_rechnungen(mandant_id):
@@ -557,23 +552,104 @@ def serve_pdf(filepath):
     """Liefert PDF-Dateien aus"""
     try:
         # Normalize path for Windows
-        filepath_clean = filepath.replace('/', os.sep)
+        filepath_clean = filepath.lstrip('/').lstrip('\\').replace('/', os.sep)
         full_path = BACKEND_DIR / filepath_clean
+        
+        print(f"DEBUG PDF REQUEST: '{filepath}'")
+        print(f"DEBUG FULL PATH:   '{full_path}'")
+        print(f"DEBUG EXISTS?:     {full_path.exists()}")
         
         logger.info(f"PDF Request: {filepath} -> {full_path}")
         
         if not full_path.exists():
             logger.error(f"PDF nicht gefunden: {full_path}")
-            return jsonify({'error': 'Datei nicht gefunden'}), 404
+            return jsonify({'error': f'Datei nicht gefunden: {full_path}'}), 404
         
         from flask import send_file
-        return send_file(full_path, mimetype='application/pdf')
+        # Determine mimetype based on extension
+        mimetype = None
+        if full_path.suffix.lower() == '.pdf':
+            mimetype = 'application/pdf'
+        elif full_path.suffix.lower() in ['.png', '.jpg', '.jpeg']:
+            mimetype = 'image/jpeg' if full_path.suffix.lower() in ['.jpg', '.jpeg'] else 'image/png'
+            
+        return send_file(full_path, mimetype=mimetype)
     
     except Exception as e:
         logger.error(f"Fehler beim PDF-Abruf: {str(e)}")
         return jsonify({'error': str(e)}), 500
 
 
+
+@app.route('/api/mandanten/<mandant_id>/check-duplicate', methods=['POST'])
+def check_duplicate_invoice(mandant_id):
+    """Prüft auf ähnliche Rechnungen (Duplikat-Warnung)"""
+    try:
+        data = request.get_json()
+        kunde_name = data.get('kunde', '').strip()
+        new_total = float(data.get('total', 0))
+        
+        # Einstellungen
+        DAYS_THRESHOLD = 30
+        AMOUNT_TOLERANCE = 0.50 # 50 cent toleranz
+        
+        mandant_dir = MANDANTEN_DIR / mandant_id
+        xlsx_file = mandant_dir / 'Einnahmen' / 'einnahmen.xlsx'
+        csv_file = mandant_dir / 'Einnahmen' / 'einnahmen.csv'
+        
+        invoices = []
+        if xlsx_file.exists():
+            import excel_utils
+            invoices = excel_utils.read_data(str(xlsx_file), 'Einnahmen')
+        elif csv_file.exists():
+            with open(csv_file, 'r', encoding='utf-8') as f:
+                invoices = list(csv.DictReader(f))
+                
+        matches = []
+        now = datetime.now()
+        
+        for inv in invoices:
+            # 1. Check Kunde (fuzzy or exact)
+            inv_kunde = inv.get('Kunde', '')
+            if kunde_name.lower() not in inv_kunde.lower() and inv_kunde.lower() not in kunde_name.lower():
+                continue
+                
+            # 2. Check Amount
+            try:
+                # Parse amount (handle Deutsche Formate 1.000,00)
+                raw_amt = str(inv.get('Betrag_Netto', '0')).replace('.', '').replace(',', '.')
+                old_total = float(raw_amt)
+                
+                if abs(old_total - new_total) > AMOUNT_TOLERANCE:
+                    continue
+            except:
+                continue
+                
+            # 3. Check Date
+            try:
+                inv_date_str = inv.get('Datum', '')
+                inv_date = datetime.strptime(inv_date_str, '%d.%m.%Y')
+                days_diff = (now - inv_date).days
+                
+                if days_diff <= DAYS_THRESHOLD:
+                    matches.append({
+                        'nummer': inv.get('Rechnungsnummer'),
+                        'datum': inv_date_str,
+                        'kunde': inv_kunde,
+                        'betrag': old_total,
+                        'days_ago': days_diff
+                    })
+            except:
+                continue
+
+        return jsonify({
+            'duplicate': len(matches) > 0,
+            'matches': matches
+        })
+
+    except Exception as e:
+        logger.error(f"Fehler Check-Duplicate: {e}")
+        return jsonify({'error': str(e)}), 500
 
 @app.route('/api/mandanten/<mandant_id>/einnahmen', methods=['GET'])
 def get_mandant_einnahmen(mandant_id):
@@ -793,6 +869,68 @@ def create_kunde(mandant_id):
     
     except Exception as e:
         logger.error(f"Fehler beim Anlegen des Kunden: {str(e)}")
+        return jsonify({'error': str(e)}), 500
+
+@app.route('/api/mandanten/<mandant_id>/recurring', methods=['GET'])
+def get_recurring(mandant_id):
+    """Liste aller Abos"""
+    try:
+        import recurring_invoices
+        mandant_dir = MANDANTEN_DIR / mandant_id
+        data = recurring_invoices.load_recurring(mandant_dir)
+        return jsonify(data)
+    except Exception as e:
+        logger.error(f"Error loading recurring: {e}")
+        return jsonify({'error': str(e)}), 500
+
+@app.route('/api/mandanten/<mandant_id>/recurring', methods=['POST'])
+def add_recurring(mandant_id):
+    """Neues Abo anlegen"""
+    try:
+        data = request.get_json()
+        import recurring_invoices
+        mandant_dir = MANDANTEN_DIR / mandant_id
+        
+        entry = recurring_invoices.add_recurring(mandant_dir, data)
+        return jsonify({'success': True, 'entry': entry})
+        
+    except Exception as e:
+        logger.error(f"Error adding recurring: {e}")
+        return jsonify({'error': str(e)}), 500
+
+@app.route('/api/mandanten/<mandant_id>/recurring/<entry_id>', methods=['DELETE'])
+def delete_recurring(mandant_id, entry_id):
+    """Abo löschen"""
+    try:
+        import recurring_invoices
+        mandant_dir = MANDANTEN_DIR / mandant_id
+        recurring_invoices.delete_recurring(mandant_dir, entry_id)
+        return jsonify({'success': True})
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
+@app.route('/api/mandanten/<mandant_id>/recurring/process', methods=['POST'])
+def process_recurring(mandant_id):
+    """Manuell Abos prüfen und ausführen"""
+    try:
+        import recurring_invoices
+        mandant_dir = MANDANTEN_DIR / mandant_id
+        
+        # Load Config
+        config_file = mandant_dir / 'mandant_config.json'
+        with open(config_file, 'r', encoding='utf-8') as f:
+            config = json.load(f)
+            
+        created = recurring_invoices.process_due_invoices(mandant_dir, config)
+        
+        return jsonify({
+            'success': True, 
+            'count': len(created),
+            'invoices': [str(p) for p in created]
+        })
+        
+    except Exception as e:
+        logger.error(f"Error processing recurring: {e}")
         return jsonify({'error': str(e)}), 500
 
 # ===== PREISLISTE ENDPOINTS =====
@@ -1748,6 +1886,168 @@ def get_angebote_list(mandant_id):
     except Exception as e:
         logger.error(f"Error loading angebote: {e}")
         return jsonify({'error': str(e)}), 500
+
+@app.route('/api/mandanten/<mandant_id>/report/generate', methods=['POST'])
+def generate_report_endpoint(mandant_id):
+    """Generates monthly report PDF"""
+    try:
+        data = request.json
+        year_str = str(data.get('year'))
+        month_str = str(data.get('month'))
+        
+        try:
+            year = int(year_str)
+            month = int(month_str)
+        except:
+             return jsonify({'error': 'Invalid Date'}), 400
+             
+        mandant_path = MANDANTEN_DIR / mandant_id
+        if not mandant_path.exists():
+            return jsonify({'error': 'Mandant nicht gefunden'}), 404
+            
+        # 1. Gather Data
+        import excel_utils
+        
+        # Einnahmen
+        einnahmen = []
+        path_in = mandant_path / 'Einnahmen' / 'einnahmen.xlsx'
+        if path_in.exists():
+            all_in = excel_utils.read_data(str(path_in), 'Einnahmen')
+            einnahmen = filter_by_month(all_in, year, month)
+            
+        # Ausgaben
+        ausgaben = []
+        path_out = mandant_path / 'Ausgaben' / 'ausgaben.xlsx'
+        if path_out.exists():
+            all_out = excel_utils.read_data(str(path_out), 'Ausgaben')
+            ausgaben = filter_by_month(all_out, year, month)
+            
+        # 2. Config
+        import json
+        config_path = mandant_path / 'mandant_config.json'
+        config = {}
+        if config_path.exists():
+            with open(config_path,'r',encoding='utf-8') as f:
+                config = json.load(f)
+                
+        # 3. Generate PDF
+        import report_generator
+        
+        output_dir = mandant_path / 'Controlling' / 'Reports'
+        output_dir.mkdir(parents=True, exist_ok=True)
+        
+        filename = f"Report_{year}_{month:02d}.pdf"
+        output_path = output_dir / filename
+        
+        report_generator.generate_report(
+            str(mandant_path),
+            month,
+            year,
+            einnahmen,
+            ausgaben,
+            str(output_path),
+            config
+        )
+        
+        # Verify creation
+        if not output_path.exists():
+             raise Exception("PDF File was not created by generator")
+
+        # 4. Return
+        # Frontend expects path relative to /api/pdf/ or raw path?
+        # serve_pdf route is /api/pdf/<path:filepath>
+        # If we return "Mandanten/...", frontend might use it directly.
+        # But frontend logic (viewPdf) appends it to API_BASE_URL + '/pdf/'?
+        # Let's check frontend. But based on error, it requested /api/pdf/Mandanten...
+        # Wait, serve_pdf receives "api/pdf/Mandanten..." as filepath!
+        # This means the URL was /api/pdf/api/pdf/Mandanten...
+        # So frontend likely converts path to URL incorrectly OR we returned absolute path?
+        
+        # Current return: /api/pdf/Mandanten/...
+        # Browser requests: /api/pdf/api/pdf/Mandanten...
+        # This implies frontend does: base + path.
+        # IF path already has /api/pdf, and base has /api/pdf?
+        
+        # Change to return "Mandanten/..." (clean relative path)
+        rel_path = f"Mandanten/{mandant_id}/Controlling/Reports/{filename}"
+        return jsonify({
+            'success': True,
+            'path': rel_path,
+            'filename': filename
+        })
+
+    except Exception as e:
+        logger.error(f"Report Gen Error: {e}")
+        return jsonify({'error': str(e)}), 500
+
+def filter_by_month(data, year, month):
+    filtered = []
+    for row in data:
+        d_str = row.get('Datum')
+        if not d_str: continue
+        
+        try:
+            # Try formats
+            dt = None
+            for fmt in ['%Y-%m-%d', '%d.%m.%Y']:
+                try: 
+                    dt = datetime.strptime(str(d_str), fmt)
+                    break 
+                except: pass
+            
+            if dt and dt.year == year and dt.month == month:
+                filtered.append(row)
+        except: pass
+    return filtered
+
+# --- BACKUP SYSTEM ---
+import threading
+import time
+from datetime import datetime
+
+# Lazy import to avoid circular issues if any, or just standard import
+# import backup  <-- assumed available in same dir
+
+def run_scheduler():
+    """Background thread checks time for daily backup"""
+    logger.info("⏰ Scheduler gestartet (Backup täglich um 23:00)")
+    last_run = None
+    
+    while True:
+        now = datetime.now()
+        # Run at 23:00
+        if now.hour == 23 and now.minute == 0:
+            today = now.strftime('%Y-%m-%d')
+            if last_run != today:
+                try:
+                    logger.info("⏰ Starte automatisches Backup...")
+                    import backup
+                    backup.create_backup()
+                    last_run = today
+                except Exception as e:
+                    logger.error(f"Auto-Backup failed: {e}")
+                    
+        time.sleep(30) # Check every 30s
+
+# Start Scheduler
+scheduler_thread = threading.Thread(target=run_scheduler, daemon=True)
+scheduler_thread.start()
+
+@app.route('/api/backup/now', methods=['POST'])
+def trigger_backup():
+    """Manuelles Backup auslösen"""
+    try:
+        import backup
+        backup_file = backup.create_backup()
+        return jsonify({
+            'success': True,
+            'message': 'Backup erfolgreich erstellt!',
+            'filename': str(backup_file.name),
+            'size_mb': round(backup_file.stat().st_size / (1024*1024), 2)
+        })
+    except Exception as e:
+        logger.error(f"Backup Fehler: {e}")
+        return jsonify({'success': False, 'error': str(e)}), 500
 
 if __name__ == '__main__':
     # Restart Trigger

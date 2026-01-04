@@ -73,6 +73,7 @@ function isItemInFilter(item, dateField) {
 }
 
 // --- ANGEBOTE ---
+// --- ANGEBOTE ---
 async function fetchAngebote() {
     try {
         const id = getMandantId();
@@ -93,16 +94,16 @@ function renderAngeboteList() {
 
     if (filtered.length > 0) {
         container.innerHTML = filtered.map(a => `
-            <div class="doc-item" onclick="openPdf('${a.pdf_path}')">
-                <span class="icon">📝</span>
+            <div class="doc-item-compact" onclick="openPdf('${a.pdf_path}')">
+                <span class="doc-icon">📝</span>
                 <div class="doc-info">
-                    <strong>${a.nummer || 'Angebot'}</strong>
-                    <small>${a.date || a.datum} | ${a.kunde}</small>
+                    <div class="doc-title">${a.nummer || 'Angebot'}</div>
+                    <div class="doc-meta">${a.date || a.datum} | ${a.kunde}</div>
                 </div>
             </div>
         `).join('');
     } else {
-        container.innerHTML = '<div class="empty-state">Keine Angebote im gewählten Zeitraum</div>';
+        container.innerHTML = '<div class="empty-state">Keine Angebote</div>';
     }
 }
 
@@ -142,14 +143,14 @@ function renderLieferscheineList() {
     if (filled.length > 0) {
         containerFilled.innerHTML = filled.map(l => createDocItem(l, '📋')).join('');
     } else {
-        containerFilled.innerHTML = '<div class="empty-state">Keine ausgefüllten Protokolle</div>';
+        containerFilled.innerHTML = '<div class="empty-state small">Leer</div>';
     }
 
     // Render Blank
     if (blank.length > 0) {
         containerBlank.innerHTML = blank.map(l => createDocItem(l, '📄')).join('');
     } else {
-        containerBlank.innerHTML = '<div class="empty-state">Keine Blanko Protokolle</div>';
+        containerBlank.innerHTML = '<div class="empty-state small">Leer</div>';
     }
 }
 
@@ -175,26 +176,26 @@ function renderRechnungenListDoc() {
 
     if (filtered.length > 0) {
         container.innerHTML = filtered.map(r => `
-            <div class="doc-item" onclick="openPdf('${r.path}')">
-                <span class="icon">🧾</span>
+            <div class="doc-item-compact" onclick="openPdf('${r.path}')">
+                <span class="doc-icon">🧾</span>
                 <div class="doc-info">
-                    <strong>${r.name}</strong>
-                    <small>${new Date(r.modified * 1000).toLocaleDateString()}</small>
+                    <div class="doc-title">${r.name}</div>
+                    <div class="doc-meta">${new Date(r.modified * 1000).toLocaleDateString()}</div>
                 </div>
             </div>
         `).join('');
     } else {
-        container.innerHTML = '<div class="empty-state">Keine Rechnungen im gewählten Zeitraum</div>';
+        container.innerHTML = '<div class="empty-state">Keine Rechnungen</div>';
     }
 }
 
 function createDocItem(doc, icon) {
     return `
-        <div class="doc-item" onclick="openPdf('${doc.pdf_path}')">
-            <span class="icon">${icon}</span>
+        <div class="doc-item-compact" onclick="openPdf('${doc.pdf_path}')">
+            <span class="doc-icon">${icon}</span>
             <div class="doc-info">
-                <strong>${doc.nummer || 'Dokument'}</strong>
-                <small>${doc.datum || ''} | ${doc.kunde || ''}</small>
+                <div class="doc-title">${doc.nummer || 'Dokument'}</div>
+                <div class="doc-meta">${doc.datum || ''} | ${doc.kunde || ''}</div>
             </div>
         </div>
     `;

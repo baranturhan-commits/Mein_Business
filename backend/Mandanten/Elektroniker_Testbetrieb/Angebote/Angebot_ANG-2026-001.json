@@ -3,23 +3,17 @@
     "kunde": "Oma_Erna",
     "positionen": [
         {
-            "bezeichnung": "NYM-J Kabel 3x1,5",
+            "bezeichnung": "E-Herd Anschluss",
             "menge": 1,
             "einheit": "Stk",
-            "einzelpreis": 1.5
+            "einzelpreis": 60
         },
         {
             "bezeichnung": "Meisterstunde",
-            "menge": 1,
+            "menge": 5,
             "einheit": "Std",
             "einzelpreis": 75
-        },
-        {
-            "bezeichnung": "Anfahrt pauschal",
-            "menge": 1,
-            "einheit": "Stk",
-            "einzelpreis": 35
         }
     ],
-    "datum": "2026-01-02T00:30:21.196653"
+    "datum": "2026-01-03T01:13:54.072913"
 }

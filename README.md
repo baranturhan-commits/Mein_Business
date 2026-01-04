@@ -425,5 +425,5 @@ Dieses Projekt ist für den privaten/geschäftlichen Gebrauch.
 
 ---
 
-**Version:** 3.1
-**Letztes Update:** 2026-01-02 17:35
+**Version:** 3.2
+**Letztes Update:** 2026-01-03 00:30

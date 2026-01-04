@@ -1,0 +1,13 @@
+[
+    {
+        "id": "633d7de8",
+        "kunde": "Oma_Erna",
+        "beschreibung": "Heizungswartung",
+        "betrag": 100.0,
+        "intervall": "monatlich",
+        "start_datum": "2026-01-02",
+        "naechste_faelligkeit": "2026-01-02",
+        "aktiv": true,
+        "created_at": "2026-01-02T23:06:59.185837"
+    }
+]

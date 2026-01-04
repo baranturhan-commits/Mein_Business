@@ -212,6 +212,46 @@ const InvoiceModal = {
         if (!kunde) return alert("Bitte Kunden wählen!");
         if (this.items.length === 0) return alert("Bitte Positionen hinzufügen!");
 
+        // Calculate Total Netto
+        let totalNetto = 0;
+        this.items.forEach(i => {
+            const m = parseFloat(i.menge) || 0;
+            const p = parseFloat(i.einzelpreis) || 0;
+            totalNetto += m * p;
+        });
+
+        // 1. Check for Duplicates
+        try {
+            const id = this.getId();
+            const checkRes = await fetch(`${this.getApiUrl()}/mandanten/${id}/check-duplicate`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    kunde: kunde,
+                    total: totalNetto
+                })
+            });
+            const checkResult = await checkRes.json();
+
+            if (checkResult.duplicate && checkResult.matches.length > 0) {
+                const match = checkResult.matches[0];
+                const msg = `⚠️ ACHTUNG: MÖGLICHES DUPLIKAT! ⚠️\n\n` +
+                    `Es gibt bereits eine ähnliche Rechnung:\n` +
+                    `- Rechnung: ${match.nummer}\n` +
+                    `- Kunde: ${match.kunde}\n` +
+                    `- Betrag: ${match.betrag.toFixed(2)} €\n` +
+                    `- Datum: ${match.datum} (vor ${match.days_ago} Tagen)\n\n` +
+                    `Möchten Sie diese Rechnung TROTZDEM erstellen?`;
+
+                if (!confirm(msg)) {
+                    return; // Abbruch
+                }
+            }
+        } catch (e) {
+            console.warn("Duplikat-Check fehlgeschlagen (ignoriere):", e);
+        }
+
+        // 2. Submit Real Invoice
         const payload = {
             kunde: kunde,
             items: this.items

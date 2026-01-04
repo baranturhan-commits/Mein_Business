@@ -16,45 +16,150 @@ function showProtocolUploadModal() {
     // Show Modal
     modal.classList.remove('hidden');
 
-    // Hijack File Input
+    // Hijack File Input for BATCH upload
     const input = document.getElementById('importFileInput');
     input.onchange = async function (e) {
         if (window.IMPORT_MODE !== 'PROTOCOL') return;
-        const file = e.target.files[0];
-        if (!file) return;
+        const files = Array.from(e.target.files);
+        if (files.length === 0) return;
 
-        await scanProtocol(file);
+        await scanProtocolBatch(files);
     }
 }
 
-async function scanProtocol(file) {
+async function scanProtocolBatch(files) {
     const status = document.getElementById('importStatus');
-    status.innerHTML = '<div class="loading"><div class="spinner"></div><p>🤖 KI analysiert Handschrift...</p></div>';
+    const totalFiles = files.length;
 
+    // Initial UI
+    status.innerHTML = `
+        <div class="batch-progress">
+            <p><strong>📦 Verarbeite ${totalFiles} Datei(en)...</strong></p>
+            <div class="progress-bar">
+                <div class="progress-fill" id="batchProgressBar" style="width: 0%"></div>
+            </div>
+            <p id="batchStatus">0 von ${totalFiles} verarbeitet</p>
+        </div>
+        <div id="batchResults" style="margin-top: 20px;"></div>
+    `;
+
+    const results = [];
+
+    // Process files sequentially
+    for (let i = 0; i < files.length; i++) {
+        const file = files[i];
+        const progress = Math.round(((i) / totalFiles) * 100);
+
+        // Update progress
+        document.getElementById('batchProgressBar').style.width = `${progress}%`;
+        document.getElementById('batchStatus').textContent = `${i} von ${totalFiles} verarbeitet - aktuell: ${file.name}`;
+
+        try {
+            const result = await scanSingleProtocol(file);
+            results.push({
+                filename: file.name,
+                success: result.success,
+                data: result,
+                error: null
+            });
+        } catch (error) {
+            results.push({
+                filename: file.name,
+                success: false,
+                data: null,
+                error: error.message || 'Unbekannter Fehler'
+            });
+        }
+    }
+
+    // Final progress
+    document.getElementById('batchProgressBar').style.width = '100%';
+    document.getElementById('batchStatus').textContent = `✅ ${totalFiles} von ${totalFiles} verarbeitet`;
+
+    // Show results table
+    displayBatchResults(results);
+}
+
+async function scanSingleProtocol(file) {
     const formData = new FormData();
     formData.append('file', file);
 
-    try {
-        const mandantId = new URLSearchParams(window.location.search).get('mandant') || new URLSearchParams(window.location.search).get('id');
-        const res = await fetch(`${API_BASE_URL}/mandanten/${mandantId}/protocol/scan`, {
-            method: 'POST',
-            body: formData
-        });
+    const mandantId = new URLSearchParams(window.location.search).get('mandant') || new URLSearchParams(window.location.search).get('id');
+    const res = await fetch(`${API_BASE_URL}/mandanten/${mandantId}/protocol/scan`, {
+        method: 'POST',
+        body: formData
+    });
 
-        const data = await res.json();
-
-        if (data.success) {
-            status.innerHTML = '✅ Analyse fertig!';
-            closeImportModal();
-            showInvoiceEditor(data.items);
-        } else {
-            status.innerHTML = `<p class="error">❌ Fehler: ${data.error}</p>`;
-        }
-
-    } catch (err) {
-        status.innerHTML = `<p class="error">❌ Netzwerkfehler: ${err}</p>`;
-    }
+    const data = await res.json();
+    return data;
 }
+
+function displayBatchResults(results) {
+    const container = document.getElementById('batchResults');
+    const successCount = results.filter(r => r.success).length;
+    const failCount = results.length - successCount;
+
+    let html = `
+        <div style="background: #e8f5e9; padding: 15px; border-radius: 8px; margin-bottom: 15px;">
+            <h4 style="margin: 0 0 10px 0;">📊 Zusammenfassung</h4>
+            <p style="margin: 5px 0;">✅ Erfolgreich: <strong>${successCount}</strong></p>
+            <p style="margin: 5px 0;">❌ Fehler: <strong>${failCount}</strong></p>
+        </div>
+        
+        <table class="op-table">
+            <thead>
+                <tr>
+                    <th style="width: 50px">Status</th>
+                    <th>Datei</th>
+                    <th>Positionen</th>
+                    <th>Aktion</th>
+                </tr>
+            </thead>
+            <tbody>
+    `;
+
+    results.forEach((result, idx) => {
+        const statusIcon = result.success ? '✅' : '❌';
+        const itemCount = result.success ? (result.data.items?.length || 0) : 0;
+        const details = result.success
+            ? `${itemCount} Pos.`
+            : `<span style="color: #d32f2f;">${result.error || result.data?.error || 'Fehler'}</span>`;
+
+        const action = result.success
+            ? `<button class="btn btn-sm btn-primary" onclick="createInvoiceFromScan(${idx})">💰 Rechnung</button>`
+            : '-';
+
+        html += `
+            <tr>
+                <td style="text-align: center; font-size: 1.2rem;">${statusIcon}</td>
+                <td><small>${result.filename}</small></td>
+                <td>${details}</td>
+                <td>${action}</td>
+            </tr>
+        `;
+    });
+
+    html += `
+            </tbody>
+        </table>
+        <div style="margin-top: 15px; text-align: right;">
+            <button class="btn" onclick="closeImportModal()">Schließen</button>
+        </div>
+    `;
+
+    container.innerHTML = html;
+
+    // Store results globally for invoice creation
+    window.batchScanResults = results;
+}
+
+window.createInvoiceFromScan = function (index) {
+    const result = window.batchScanResults[index];
+    if (!result || !result.success) return;
+
+    closeImportModal();
+    showInvoiceEditor(result.data.items);
+};
 
 // Reuse Angebot Modal for Invoice Editing?
 // It's similar but we need "Rechnung erstellen" title and action.
