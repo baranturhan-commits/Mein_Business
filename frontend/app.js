@@ -153,6 +153,62 @@ async function createBackup() {
     }
 }
 
+
+// Feierabend & Backup
+async function finishWorkDay() {
+    if (!confirm("🛑 Feierabend machen?\n\nDas System erstellt noch kurz ein Backup für dich.\nDanach kannst du den PC ausschalten.")) return;
+
+    // Create custom overlay
+    const overlay = document.createElement('div');
+    overlay.style.position = 'fixed';
+    overlay.style.top = '0'; overlay.style.left = '0';
+    overlay.style.width = '100%'; overlay.style.height = '100%';
+    overlay.style.backgroundColor = 'rgba(0,0,0,0.85)';
+    overlay.style.zIndex = '9999';
+    overlay.style.display = 'flex';
+    overlay.style.flexDirection = 'column';
+    overlay.style.justifyContent = 'center';
+    overlay.style.alignItems = 'center';
+    overlay.style.color = 'white';
+    overlay.innerHTML = `
+        <div class="spinner" style="width: 60px; height: 60px; border-width: 6px;"></div>
+        <h2 style="margin-top: 20px;">Backup wird erstellt...</h2>
+        <p>Bitte warten...</p>
+    `;
+    document.body.appendChild(overlay);
+
+    try {
+        const res = await fetch(`${API_BASE_URL}/backup/now`, { method: 'POST' });
+        const data = await res.json();
+
+        if (data.success) {
+            overlay.innerHTML = `
+                <div style="font-size: 80px;">✅</div>
+                <h2>Fertig!</h2>
+                <p>Backup: ${data.filename}</p>
+                <p>Größe: ${data.size_mb} MB</p>
+                <br>
+                <h3>Schönen Feierabend! 👋</h3>
+                <button class="btn btn-primary" onclick="location.reload()" style="margin-top: 20px;">Schließen</button>
+            `;
+        } else {
+            overlay.innerHTML = `
+                <div style="font-size: 80px;">❌</div>
+                <h2>Fehler beim Backup</h2>
+                <p>${data.error}</p>
+                <button class="btn" onclick="location.reload()" style="margin-top: 20px;">Schließen</button>
+            `;
+        }
+    } catch (e) {
+        overlay.innerHTML = `
+            <div style="font-size: 80px;">❌</div>
+            <h2>Netzwerkfehler</h2>
+            <p>${e}</p>
+            <button class="btn" onclick="location.reload()" style="margin-top: 20px;">Schließen</button>
+        `;
+    }
+}
+
 // Open Backend Scripts
 function openBackend(module) {
     let command = '';

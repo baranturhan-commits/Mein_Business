@@ -6,9 +6,10 @@
     },
     "geschaeftsfuehrer": "Kerim Engizek",
     "bank": {
+        "name": "Sparkasse Köln Bonn",
         "iban": "DE55 9802 1289 1203 0003 00",
-        "bic": "KIJ90KWDA",
-        "name": "Sparkasse Köln Bonn"
+        "bic": "KIJ90KWDA"
     },
-    "logo": null
+    "logo": null,
+    "mandant_nummer": "001"
 }

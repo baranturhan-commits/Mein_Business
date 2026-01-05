@@ -1,0 +1,973 @@
+﻿<!DOCTYPE html>
+<html lang="de">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mandant Details - Mein Business</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-content">
+                <div class="brand">
+                    <button class="btn btn-icon" onclick="window.location.href='index.html'" title="Zur├╝ck">
+                        <span class="icon">ÔùÇ</span>
+                    </button>
+                    <div>
+                        <h1 id="mandantName">Mandant</h1>
+                        <p class="subtitle">Detail-Ansicht</p>
+                    </div>
+                </div>
+                <div class="header-actions">
+                    <style>
+                        /* Fix for select options visibility in dropdowns */
+                        #docFilterMonth option,
+                        #docFilterYear option {
+                            background-color: #1a1a2e;
+                            /* Dark surface color */
+                            color: white;
+                        }
+                    </style>
+                    <div class="filter-group"
+                        style="display: flex; gap: 10px; align-items: center; margin-right: 20px;">
+                        <select id="docFilterMonth" onchange="applyDocFilter()" class="btn btn-outline"
+                            style="background: rgba(255,255,255,0.1); color: white; border-color: rgba(255,255,255,0.3);">
+                            <option value="all">Alle Monate</option>
+                            <option value="1">Januar</option>
+                            <option value="2">Februar</option>
+                            <option value="3">M├ñrz</option>
+                            <option value="4">April</option>
+                            <option value="5">Mai</option>
+                            <option value="6">Juni</option>
+                            <option value="7">Juli</option>
+                            <option value="8">August</option>
+                            <option value="9">September</option>
+                            <option value="10">Oktober</option>
+                            <option value="11">November</option>
+                            <option value="12">Dezember</option>
+                        </select>
+                        <select id="docFilterYear" onchange="applyDocFilter()" class="btn btn-outline"
+                            style="background: rgba(255,255,255,0.1); color: white; border-color: rgba(255,255,255,0.3);">
+                            <option value="all">Alle Jahre</option>
+                            <option value="2024">2024</option>
+                            <option value="2025" selected>2025</option>
+                            <option value="2026">2026</option>
+                        </select>
+                    </div>
+                    <button class="btn btn-warning" onclick="finishWorkDay()"
+                        title="Erstellt Backup und beendet den Tag" style="margin-right: 10px;">
+                        <span class="icon">­ƒÅü</span> Feierabend
+                    </button>
+                    <button class="btn" onclick="logout()" title="Abmelden"
+                        style="background: rgba(255, 60, 60, 0.2); margin-right: 10px;">
+                        <span class="icon">­ƒÜ¬</span>
+                    </button>
+                    <button class="btn btn-outline"
+                        style="margin-right: 10px; color: white; border-color: rgba(255,255,255,0.5);"
+                        onclick="openConfigModal()">
+                        <span class="icon">Ô£Å´©Å</span>
+                        Bearbeiten
+                    </button>
+                    <button class="btn btn-primary" onclick="showUploadModal()">
+                        <span class="icon">­ƒôñ</span>
+                        Beleg hochladen
+                    </button>
+                    <button class="btn btn-primary"
+                        style="margin-left: 10px; background-color: #28a745; border-color: #28a745;"
+                        onclick="InvoiceModal.open()">
+                        <span class="icon">­ƒÆÂ</span>
+                        Rechnung schreiben
+                    </button>
+                </div>
+            </div>
+        </header>
+
+        <!-- Stats -->
+        <section class="dashboard-summary" id="detailStats">
+            <!-- Wird dynamisch geladen -->
+        </section>
+
+        <!-- Tabs -->
+        <nav class="tabs">
+            <button class="tab active" onclick="switchTab('overview')">­ƒôè ├£bersicht</button>
+            <button class="tab" onclick="switchTab('documents')">­ƒôé Dokumente</button>
+            <button class="tab" onclick="switchTab('recurring')">­ƒöä Abos</button>
+            <button class="tab" onclick="switchTab('op')">­ƒÆÂ OP-Check</button>
+            <button class="tab" onclick="switchTab('ausgaben')">­ƒÆ© Ausgaben</button>
+            <button class="tab" onclick="switchTab('kunden')">­ƒæÑ Kunden</button>
+            <button class="tab" onclick="switchTab('mitarbeiter')">­ƒæö Mitarbeiter</button>
+            <button class="tab" onclick="switchTab('preisliste')">­ƒÆ░ Preisliste</button>
+        </nav>
+
+        <!-- ... (Overview and Documents tabs unchanged) ... -->
+
+        <!-- Tab Content: Mitarbeiter -->
+        <div id="tab-mitarbeiter" class="tab-content">
+            <section class="mandanten-section">
+                <div class="section-header">
+                    <h2>­ƒæö Mitarbeiterverwaltung</h2>
+                    <button class="btn btn-primary" onclick="MitarbeiterManager.openEditModal()">
+                        <span class="icon">Ô×ò</span> Mitarbeiter anlegen
+                    </button>
+                </div>
+                <div id="mitarbeiterList" class="mandanten-grid">
+                    <!-- Loaded dynamically -->
+                    <p class="loading">Lade Mitarbeiter...</p>
+                </div>
+            </section>
+        </div>
+
+        <!-- Tab Content: Ausgaben (NEW) -->
+        <div id="tab-ausgaben" class="tab-content">
+            <section class="mandanten-section">
+                <div class="section-header">
+                    <h2>­ƒÆ© Ausgaben & Belege</h2>
+                    <button class="btn btn-primary" onclick="showUploadModal()">
+                        <span class="icon">­ƒô©</span>
+                        Beleg scannen
+                    </button>
+                </div>
+                <div id="ausgabenList" class="op-list">
+                    <div class="loading">
+                        <div class="spinner"></div>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <!-- Tab Content: Recurring Invoices (Abos) -->
+        <div id="tab-recurring" class="tab-content">
+            <section class="mandanten-section">
+                <div class="section-header">
+                    <h2>­ƒöä Wiederkehrende Rechnungen (Abos)</h2>
+                    <div class="button-group">
+                        <button class="btn btn-secondary"
+                            onclick="fetch(`http://localhost:5000/api/mandanten/${new URLSearchParams(window.location.search).get('id')}/recurring/process`, {method:'POST'}).then(r=>r.json()).then(d=>{alert(d.count + ' Rechnungen erstellt!'); RecurringManager.loadRecurring();})">
+                            ÔÜí Jetzt pr├╝fen (Manuell)
+                        </button>
+                        <button class="btn btn-primary" onclick="RecurringManager.openModal()">
+                            <span class="icon">Ô×ò</span>
+                            Neues Abo
+                        </button>
+                    </div>
+                </div>
+                <div id="recurringList" class="op-list">
+                    <div class="loading">
+                        <div class="spinner"></div>
+                        <p>Lade Abos...</p>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <!-- Tab Content: Overview -->
+        <div id="tab-overview" class="tab-content active">
+            <!-- Simplified Dashboard View -->
+            <section class="mandanten-section">
+                <h2>Schnellzugriff</h2>
+                <div class="dashboard-grid">
+                    <button class="btn btn-primary big-btn" onclick="switchTab('documents')">
+                        <span class="icon">­ƒôé</span> Dokumente verwalten
+                    </button>
+                    <button class="btn btn-success big-btn" onclick="showProtocolUploadModal()">
+                        <span class="icon">­ƒñû</span> Rechnung scannen
+                    </button>
+                    <button class="btn btn-secondary big-btn" onclick="showExportModal()">
+                        <span class="icon">­ƒÅª</span> Steuerberater Export
+                    </button>
+
+                </div>
+            </section>
+        </div>
+
+        <!-- Tab Content: Documents -->
+        <div id="tab-documents" class="tab-content">
+            <div class="doc-grid-layout">
+
+                <!-- Spalte 1: Angebote -->
+                <div class="doc-column col-offers">
+                    <div class="column-header">
+                        <h2>­ƒôØ Angebote</h2>
+                        <button class="btn btn-sm btn-primary-outline" onclick="showAngebotModal()">
+                            <span class="icon">Ô×ò</span> Neu
+                        </button>
+                    </div>
+                    <div class="column-content">
+                        <div id="doc-angebote-list" class="doc-list-compact">
+                            <div class="loading">
+                                <div class="spinner"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Spalte 2: Rechnungen -->
+                <div class="doc-column col-invoices">
+                    <div class="column-header">
+                        <h2>­ƒº¥ Rechnungen</h2>
+                        <button class="btn btn-sm btn-primary-outline" onclick="InvoiceModal.open()">
+                            <span class="icon">Ô×ò</span> Manuell
+                        </button>
+                    </div>
+                    <div class="column-content">
+                        <div id="doc-rechnungen-list" class="doc-list-compact">
+                            <div class="loading">
+                                <div class="spinner"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Spalte 3: Protokolle & Lieferscheine -->
+                <div class="doc-column col-protocols">
+                    <div class="column-header">
+                        <h2>­ƒôï Protokolle</h2>
+                        <div class="header-actions">
+                            <button class="btn btn-sm btn-secondary-outline"
+                                onclick="if(window.LieferscheinModal) { LieferscheinModal.open() }"
+                                title="Blanko drucken">
+                                ­ƒû¿´©Å Leer
+                            </button>
+                            <button class="btn btn-sm btn-success-outline" onclick="showProtocolUploadModal()"
+                                title="Scan hochladen & Invoice">
+                                ­ƒô▓ Scan
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="column-content">
+                        <div class="sub-section">
+                            <h4>Ô£à Ausgef├╝llt (Scans)</h4>
+                            <div id="doc-lieferscheine-filled-list" class="doc-list-mini"></div>
+                        </div>
+                        <div class="sub-section">
+                            <h4>­ƒôä Blanko (Vorlagen)</h4>
+                            <div id="doc-lieferscheine-blank-list" class="doc-list-mini"></div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- Tab Content: OP Check -> (Rest unchanged) -->
+        <div id="tab-op" class="tab-content">
+            <section class="mandanten-section">
+                <div class="section-header">
+                    <h2>­ƒÆÂ Offene Posten</h2>
+                    <button class="btn btn-primary" onclick="savePaymentStatus()">
+                        <span class="icon">­ƒÆ¥</span>
+                        ├änderungen speichern
+                    </button>
+                </div>
+                <div id="opCheckList" class="op-list">
+                    <div class="loading">
+                        <div class="spinner"></div>
+                        <p>Lade Rechnungen...</p>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <!-- Tab Content: Kunden -->
+        <div id="tab-kunden" class="tab-content">
+            <section class="mandanten-section">
+                <div class="section-header">
+                    <h2>­ƒæÑ Kunden</h2>
+                    <button class="btn btn-primary" onclick="showKundeModal()">
+                        <span class="icon">Ô×ò</span>
+                        Neuer Kunde
+                    </button>
+                </div>
+                <div id="kundenList" class="kunden-list">
+                    <div class="loading">
+                        <div class="spinner"></div>
+                        <p>Lade Kunden...</p>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <!-- Tab Content: Preisliste -->
+        <div id="tab-preisliste" class="tab-content">
+            <section class="mandanten-section">
+                <div class="section-header">
+                    <h2>­ƒÆ░ Preisliste</h2>
+                    <div class="button-group">
+                        <button class="btn btn-secondary" onclick="showImportModal()">
+                            <span class="icon">­ƒôñ</span>
+                            Importieren
+                        </button>
+                        <button class="btn btn-primary" onclick="showPositionModal()">
+                            <span class="icon">Ô×ò</span>
+                            Position hinzuf├╝gen
+                        </button>
+                    </div>
+                </div>
+                <div id="preislisteTable" class="preisliste-table">
+                    <div class="loading">
+                        <div class="spinner"></div>
+                        <p>Lade Preisliste...</p>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </div>
+
+    <!-- Upload Modal -->
+    <div id="uploadModal" class="modal hidden">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Beleg hochladen</h2>
+                <button class="modal-close" onclick="closeUploadModal()">├ù</button>
+            </div>
+            <div class="modal-body">
+                <div class="upload-zone" id="uploadZone">
+                    <p class="upload-icon">­ƒôü</p>
+                    <p>Datei(en) hier ablegen oder klicken</p>
+                    <small style="color:#aaa">Mehrere Scans gleichzeitig m├Âglich!</small>
+                    <input type="file" id="fileInput" accept=".pdf,.jpg,.jpeg,.png,.txt" hidden multiple>
+                </div>
+                <div id="uploadStatus"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Kunde Modal -->
+    <div id="kundeModal" class="modal hidden">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Ô×ò Neuer Kunde</h2>
+                <button class="modal-close" onclick="closeKundeModal()">├ù</button>
+            </div>
+            <div class="modal-body">
+                <form id="kundeForm" onsubmit="submitKunde(event)">
+                    <div class="form-group">
+                        <label>Firma / Name *</label>
+                        <input type="text" id="kundeFirma" required placeholder="z.B. Adobe GmbH">
+                    </div>
+                    <div class="form-group">
+                        <label>Email</label>
+                        <input type="email" id="kundeEmail" placeholder="kunde@beispiel.de">
+                    </div>
+                    <div class="form-group">
+                        <label>Anrede</label>
+                        <select id="kundeAnrede">
+                            <option>Sehr geehrte Damen und Herren</option>
+                            <option>Sehr geehrter Herr</option>
+                            <option>Sehr geehrte Frau</option>
+                        </select>
+                    </div>
+                    <div id="kundeStatus"></div>
+                    <div class="form-actions">
+                        <button type="button" class="btn" onclick="closeKundeModal()">Abbrechen</button>
+                        <button type="submit" class="btn btn-primary">Kunde anlegen</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Angebot Modal -->
+    <div id="angebotModal" class="modal hidden">
+        <div class="modal-content modal-large">
+            <div class="modal-header">
+                <h2>­ƒôØ Angebot erstellen</h2>
+                <button class="modal-close" onclick="closeAngebotModal()">├ù</button>
+            </div>
+            <div class="modal-body">
+                <!-- Step 1: Kunde w├ñhlen -->
+                <div id="angebot-step-1" class="angebot-step">
+                    <h3>Schritt 1: Kunde w├ñhlen</h3>
+                    <div id="kundenAuswahl" class="kunden-selection"></div>
+                    <div class="form-actions">
+                        <button class="btn" onclick="closeAngebotModal()">Abbrechen</button>
+                        <button class="btn btn-primary" onclick="nextToPositionen()">Weiter ÔåÆ</button>
+                    </div>
+                </div>
+
+                <!-- Step 2: Positionen -->
+                <div id="angebot-step-2" class="angebot-step hidden">
+                    <h3>Schritt 2: Positionen hinzuf├╝gen</h3>
+                    <div class="form-group">
+                        <label>Aus Preisliste:</label>
+                        <div class="form-row">
+                            <select id="preislistenSelect" class="flex-grow"></select>
+                            <input type="number" id="positionMenge" value="1" min="0.1" step="0.1"
+                                style="width: 100px;">
+                            <button type="button" class="btn btn-secondary"
+                                onclick="addPositionFromPreisliste()">+</button>
+                        </div>
+                    </div>
+                    <div id="positionenList" class="positionen-list"></div>
+                    <div class="form-actions">
+                        <button class="btn" onclick="showAngebotStep(1)">ÔåÉ Zur├╝ck</button>
+                        <button class="btn btn-primary" onclick="nextToPreview()">Weiter ÔåÆ</button>
+                    </div>
+                </div>
+
+                <!-- Step 3: Vorschau -->
+                <div id="angebot-step-3" class="angebot-step hidden">
+                    <h3>Schritt 3: Vorschau & Best├ñtigung</h3>
+                    <div id="angebotPreview"></div>
+                    <div id="angebotStatus"></div>
+                    <div class="form-actions">
+                        <button class="btn" onclick="showAngebotStep(2)">ÔåÉ Zur├╝ck</button>
+                        <button class="btn btn-primary" onclick="submitAngebot()">Angebot erstellen</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Import Modal -->
+    <div id="importModal" class="modal hidden">
+        <div class="modal-content modal-large">
+            <div class="modal-header">
+                <h2>­ƒôñ Preisliste importieren</h2>
+                <button class="modal-close" onclick="closeImportModal()">├ù</button>
+            </div>
+            <div class="modal-body">
+                <div id="importUpload">
+                    <p><strong>Unterst├╝tzte Formate:</strong></p>
+                    <ul>
+                        <li>­ƒôè Excel (.xlsx, .xls)</li>
+                        <li>­ƒôä CSV (.csv)</li>
+                        <li>­ƒôæ PDF</li>
+                        <li>­ƒô© Bilder (.jpg, .png) - mit AI-Texterkennung!</li>
+                    </ul>
+                    <div class="upload-zone" id="importZone"
+                        onclick="document.getElementById('importFileInput').click()">
+                        <p class="upload-icon">­ƒôü</p>
+                        <p>Datei(en) hier ablegen oder klicken</p>
+                        <small style="color: #999;">­ƒÆí Mehrere Dateien gleichzeitig m├Âglich!</small>
+                        <input type="file" id="importFileInput" hidden multiple
+                            accept=".xlsx,.xls,.csv,.pdf,.jpg,.jpeg,.png">
+                    </div>
+                    <div id="importStatus"></div>
+                </div>
+                <div id="importPreview" class="hidden">
+                    <h3>Vorschau (<span id="importCount">0</span> Positionen gefunden)</h3>
+                    <div id="importTable" class="import-preview-table"></div>
+                    <div class="form-actions">
+                        <button class="btn" onclick="closeImportModal()">Abbrechen</button>
+                        <button class="btn btn-primary" onclick="confirmImport()">Alle importieren</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Position Modal -->
+    <div id="positionModal" class="modal hidden">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="positionModalTitle">Position hinzuf├╝gen</h2>
+                <button class="modal-close" onclick="closePositionModal()">├ù</button>
+            </div>
+            <div class="modal-body">
+                <form id="positionForm" onsubmit="submitPosition(event)">
+                    <input type="hidden" id="positionId">
+                    <div class="form-group">
+                        <label>Bezeichnung *</label>
+                        <input type="text" id="positionBezeichnung" required placeholder="z.B. Beratungsstunde">
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Einheit *</label>
+                            <select id="positionEinheit">
+                                <option value="Stk">St├╝ck</option>
+                                <option value="Std">Stunde</option>
+                                <option value="m">Meter</option>
+                                <option value="m┬▓">Quadratmeter</option>
+                                <option value="kg">Kilogramm</option>
+                                <option value="Pauschale">Pauschale</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Einzelpreis (Ôé¼) *</label>
+                            <input type="number" id="positionPreis" required step="0.01" min="0" placeholder="0.00">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Kategorie</label>
+                        <input type="text" id="positionKategorie" placeholder="z.B. Material, Dienstleistung">
+                    </div>
+                    <div id="positionStatus"></div>
+                    <div class="form-actions">
+                        <button type="button" class="btn" onclick="closePositionModal()">Abbrechen</button>
+                        <button type="submit" class="btn btn-primary">Speichern</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Lieferschein Modal -->
+    <div id="lieferscheinModal" class="modal hidden">
+        <div class="modal-content modal-large">
+            <div class="modal-header">
+                <h2>­ƒÜÜ Lieferschein erstellen</h2>
+                <button class="modal-close" onclick="LieferscheinModal.close()">├ù</button>
+            </div>
+            <div class="modal-body">
+                <div id="ls-step-1" class="step-content active">
+                    <h3>Einstellungen</h3>
+                    <div class="form-group">
+                        <label>Kunde (Empf├ñnger) *</label>
+                        <select id="ls-kunde-select" class="full-width"
+                            style="width: 100%; padding: 8px; margin-bottom: 10px;"></select>
+                    </div>
+                    <div class="form-group">
+                        <label>Aus Angebot ├╝bernehmen (Optional)</label>
+                        <select id="ls-angebot-select" class="full-width"
+                            style="width: 100%; padding: 8px; margin-bottom: 10px;"
+                            onchange="LieferscheinModal.onAngebotSelect()"></select>
+                    </div>
+
+                    <h3 style="margin-top: 20px;">Positionen</h3>
+                    <div id="ls-positionen-wrapper" style="margin-bottom: 15px;">
+                        <!-- Rows -->
+                    </div>
+                    <button type="button" class="btn btn-secondary small" onclick="LieferscheinModal.addPosition()">+
+                        Position hinzuf├╝gen</button>
+
+                    <div class="form-actions" style="margin-top: 20px; border-top: 1px solid #eee; padding-top: 15px;">
+                        <button class="btn" onclick="LieferscheinModal.close()">Abbrechen</button>
+                        <button class="btn btn-primary" onclick="LieferscheinModal.submit()">Lieferschein
+                            erstellen</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- PDF Viewer Modal -->
+    <div id="pdfModal" class="modal hidden">
+        <div class="modal-content modal-large">
+            <div class="modal-header">
+                <h2 id="pdfTitle">PDF Vorschau</h2>
+                <button class="modal-close" onclick="closePdfModal()">├ù</button>
+            </div>
+            <div class="modal-body">
+                <iframe id="pdfViewer" style="width:100%; height:600px; border:none;"></iframe>
+            </div>
+        </div>
+    </div>
+
+    <!-- Export Modal -->
+    <div id="exportModal" class="modal hidden">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>­ƒÅª Export f├╝r Steuerberater</h2>
+                <button class="modal-close" onclick="closeExportModal()">├ù</button>
+            </div>
+            <div class="modal-body">
+                <p>Erstellt ein ZIP-Archiv mit allen Einnahmen, Ausgaben und einer Zusammenfassung f├╝r den gew├ñhlten
+                    Monat.</p>
+                <div class="form-group">
+                    <label>Monat/Jahr</label>
+                    <div class="form-row">
+                        <select id="exportMonth" class="flex-grow">
+                            <option value="1">Januar</option>
+                            <option value="2">Februar</option>
+                            <option value="3">M├ñrz</option>
+                            <option value="4">April</option>
+                            <option value="5">Mai</option>
+                            <option value="6">Juni</option>
+                            <option value="7">Juli</option>
+                            <option value="8">August</option>
+                            <option value="9">September</option>
+                            <option value="10">Oktober</option>
+                            <option value="11">November</option>
+                            <option value="12">Dezember</option>
+                        </select>
+                        <select id="exportYear" style="width: 100px;">
+                            <option value="2024">2024</option>
+                            <option value="2025" selected>2025</option>
+                            <option value="2026">2026</option>
+                        </select>
+                    </div>
+                </div>
+                <div id="exportStatus"></div>
+                <div class="form-actions">
+                    <button class="btn" onclick="closeExportModal()">Abbrechen</button>
+                    <button class="btn btn-secondary" onclick="startReport()">­ƒôè Report PDF</button>
+                    <button class="btn btn-primary" onclick="startExport()">Export ZIP</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Invoice Modal -->
+    <div id="invoiceModal" class="modal hidden">
+        <div class="modal-content modal-large">
+            <div class="modal-header">
+                <h2>­ƒÆÂ Rechnung erstellen</h2>
+                <button class="modal-close" onclick="InvoiceModal.close()">├ù</button>
+            </div>
+            <div class="modal-body">
+
+                <!-- 1. Customer & Base -->
+                <div class="form-row">
+                    <div class="form-group flex-grow">
+                        <label>Kunde *</label>
+                        <select id="inv-kunde-select" class="full-width" style="width: 100%; padding: 8px;"></select>
+                    </div>
+                </div>
+
+                <!-- 2. Smart Import Section -->
+                <div class="smart-import-box"
+                    style="background: rgba(52, 152, 219, 0.1); padding: 15px; border-radius: 8px; margin-bottom: 20px; border: 1px solid rgba(52, 152, 219, 0.3);">
+                    <h3 style="margin-top: 0; color: #3498db; font-size: 1rem;">ÔÜí Smart Import (Optional)</h3>
+                    <p style="font-size: 0.9rem; opacity: 0.8; margin-bottom: 10px;">
+                        Kombiniere <strong>Mengen aus Protokoll</strong> mit <strong>Preisen aus Angebot</strong>.
+                    </p>
+
+                    <div class="form-row" style="align-items: flex-end; gap: 10px;">
+                        <div class="form-group flex-grow">
+                            <label>Basis-Angebot (f├╝r Preise)</label>
+                            <select id="inv-angebot-select" style="width: 100%; padding: 8px;">
+                                <option value="">- Kein Angebot gew├ñhlt -</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group flex-grow">
+                            <label>Abnahmeprotokoll (f├╝r Mengen)</label>
+                            <input type="file" id="inv-protocol-input" accept=".pdf,.jpg,.png" style="width: 100%;">
+                        </div>
+
+                        <button class="btn btn-secondary" onclick="InvoiceModal.runSmartImport()" style="height: 38px;">
+                            <span class="icon">­ƒöä</span> Daten abgleichen
+                        </button>
+                    </div>
+                    <div id="inv-import-status" style="margin-top: 5px; font-size: 0.9em;"></div>
+                </div>
+
+                <!-- 3. Items -->
+                <h3>Positionen</h3>
+                <div id="inv-items-wrapper">
+                    <!-- Dynamic Rows -->
+                </div>
+
+                <button type="button" class="btn btn-secondary small" onclick="InvoiceModal.addPosition()">
+                    + Position hinzuf├╝gen
+                </button>
+
+                <!-- Total -->
+                <div style="margin-top: 20px; text-align: right; font-size: 1.2rem; font-weight: bold;">
+                    Gesamt (Netto): <span id="inv-total-netto">0.00 Ôé¼</span>
+                </div>
+
+                <div class="form-actions" style="margin-top: 20px; border-top: 1px solid #eee; padding-top: 15px;">
+                    <button class="btn" onclick="InvoiceModal.close()">Abbrechen</button>
+                    <button class="btn btn-primary" onclick="InvoiceModal.submit()">Rechnung erstellen</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Edit Mandant Modal -->
+    <div id="editConfigModal" class="modal" style="display: none;">
+        <div class="modal-content" style="max-width: 600px;">
+            <div class="modal-header">
+                <h3>Mandant bearbeiten</h3>
+                <button class="close-modal" onclick="closeConfigModal()">├ù</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label>Firmenname</label>
+                    <input type="text" id="cfgFirma" class="form-control">
+                </div>
+                <div class="form-group">
+                    <label>Gesch├ñftsf├╝hrer</label>
+                    <input type="text" id="cfgGF" class="form-control">
+                </div>
+                <h4 style="margin-top:15px; margin-bottom:10px; color:#aaa;">Adresse</h4>
+                <div class="form-group">
+                    <label>Stra├ƒe & Nr.</label>
+                    <input type="text" id="cfgStrasse" class="form-control">
+                </div>
+                <div class="form-group">
+                    <label>PLZ & Ort</label>
+                    <input type="text" id="cfgOrt" class="form-control">
+                </div>
+                <h4 style="margin-top:15px; margin-bottom:10px; color:#aaa;">Bankverbindung</h4>
+                <div class="form-group">
+                    <label>Bank Name</label>
+                    <input type="text" id="cfgBankName" class="form-control">
+                </div>
+                <div class="form-group">
+                    <label>IBAN</label>
+                    <input type="text" id="cfgIBAN" class="form-control">
+                </div>
+                <div class="form-group">
+                    <label>BIC</label>
+                    <input type="text" id="cfgBIC" class="form-control">
+                </div>
+                <h4 style="margin-top:15px; margin-bottom:10px; color:#aaa;">Design</h4>
+                <div class="form-group">
+                    <label>Logo</label>
+                    <div style="margin-bottom: 5px;">
+                        Aktuell: <span id="cfgCurrentLogo" style="font-weight:bold; color: #aaa;">-</span>
+                    </div>
+                    <input type="file" id="cfgLogoFile" class="form-control" accept="image/*">
+                    <small style="color:#888;">Neu ausw├ñhlen zum ├£berschreiben</small>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-outline" onclick="closeConfigModal()">Abbrechen</button>
+                <button class="btn btn-primary" onclick="saveMandantConfig()">Speichern</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Firebase Auth -->
+    <script src="firebase_config.js"></script>
+    <script type="module" src="auth.js"></script>
+
+    <script src="detail.js"></script>
+    <script src="detail_extensions.js"></script>
+    <script src="preisliste.js"></script>
+    <script src="import.js"></script>
+    <script src="angebot.js"></script>
+    <!-- <script src="lieferschein.js"></script> -->
+    <script src="lieferschein_merged.js"></script>
+    <script src="invoice.js"></script>
+    <script src="protocol_scanner.js"></script>
+    <script src="documents.js"></script>
+    <script src="ausgaben.js"></script>
+    <script src="mandant_config.js"></script>
+    <!-- Employee Edit Modal & Logic -->
+
+    <script src="mitarbeiter.js"></script>
+    <script src="recurring.js"></script>
+
+    <div id="editMitarbeiterModal" class="modal" style="display: none;">
+        <div class="modal-content" style="max-width: 700px;">
+            <div class="modal-header">
+                <h3>Mitarbeiter bearbeiten</h3>
+                <button class="close-modal" onclick="MitarbeiterManager.closeEditModal()">├ù</button>
+            </div>
+            <div class="modal-body">
+                <input type="hidden" id="empId">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Vorname</label>
+                        <input type="text" id="empVorname" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label>Nachname</label>
+                        <input type="text" id="empNachname" class="form-control">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Adresszeile (Strasse, Nr)</label>
+                    <input type="text" id="empStrasse" class="form-control">
+                </div>
+                <div class="form-group">
+                    <label>PLZ & Ort</label>
+                    <input type="text" id="empOrt" class="form-control">
+                </div>
+
+                <h4 style="margin-top:15px; margin-bottom:10px; color:#aaa;">Lohnrelevante Daten</h4>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Personal-Nr.</label>
+                        <input type="text" id="empPersNr" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label>Geburtsdatum</label>
+                        <input type="date" id="empGeb" class="form-control">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Eintrittsdatum</label>
+                        <input type="date" id="empEintritt" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label>Steuerklasse</label>
+                        <select id="empStKl" class="form-control">
+                            <option value="-">-</option>
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                            <option value="3">3</option>
+                            <option value="4">4</option>
+                            <option value="5">5</option>
+                            <option value="6">6</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>SV-Nummer</label>
+                    <input type="text" id="empSV" class="form-control">
+                </div>
+                <div class="form-group">
+                    <label>IBAN (f├╝r Auszahlung)</label>
+                    <input type="text" id="empIBAN" class="form-control">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-outline" onclick="MitarbeiterManager.closeEditModal()">Abbrechen</button>
+                <button class="btn btn-primary" onclick="MitarbeiterManager.saveMitarbeiter()">Speichern</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Payslip Generation Modal -->
+    <div id="payslipModal" class="modal" style="display: none;">
+        <div class="modal-content" style="max-width: 500px;">
+            <div class="modal-header">
+                <h3>Lohnabrechnung erstellen</h3>
+                <button class="close-modal" onclick="MitarbeiterManager.closePayslipModal()">├ù</button>
+            </div>
+            <div class="modal-body">
+                <input type="hidden" id="slipEmpId">
+                <p id="slipEmpName" style="margin-bottom: 20px; font-weight: bold;"></p>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Monat</label>
+                        <select id="slipMonth" class="form-control">
+                            <option value="Januar">Januar</option>
+                            <option value="Februar">Februar</option>
+                            <option value="M├ñrz">M├ñrz</option>
+                            <option value="April">April</option>
+                            <option value="Mai">Mai</option>
+                            <option value="Juni">Juni</option>
+                            <option value="Juli">Juli</option>
+                            <option value="August">August</option>
+                            <option value="September">September</option>
+                            <option value="Oktober">Oktober</option>
+                            <option value="November">November</option>
+                            <option value="Dezember">Dezember</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Jahr</label>
+                        <input type="number" id="slipYear" class="form-control" value="2025">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Brutto-Lohn / Gehalt (Ôé¼)</label>
+                    <input type="number" step="0.01" id="slipBrutto" class="form-control" placeholder="z.B. 2500.00">
+                </div>
+                <div class="form-group">
+                    <label>Einmalzahlung / Bonus (Ôé¼)</label>
+                    <input type="number" step="0.01" id="slipBonus" class="form-control" value="0.00">
+                </div>
+
+                <hr style="border-color: #444; margin: 15px 0;">
+                <label>Abz├╝ge (Steuer & SV) - Manuelle Eingabe</label>
+
+                <div class="form-group">
+                    <label>Lohnsteuer (Ôé¼)</label>
+                    <input type="number" step="0.01" id="slipTaxLohn" class="form-control" value="0.00">
+                    <small style="color: #aaa;">Bei Minijob meist 0,00 Ôé¼</small>
+                </div>
+                <div class="form-group">
+                    <label>Sozialversicherung Gesamt (Ôé¼)</label>
+                    <input type="number" step="0.01" id="slipTaxSV" class="form-control" value="0.00">
+                    <small style="color: #aaa;">Arbeitnehmeranteil (KV, RV, AV, PV). Bei Minijob meist 0,00 Ôé¼</small>
+                </div>
+
+                <div style="background: rgba(0,255,0,0.1); padding: 10px; border-radius: 8px; margin-top: 10px;">
+                    Netto (Vorschau): <strong id="slipNettoPreview">0.00 Ôé¼</strong>
+                </div>
+
+                <hr style="border-color: #444; margin: 20px 0 10px 0;">
+                <h4 style="color: #aaa; font-size: 0.9em; margin-bottom: 10px;">Bisherige Abrechnungen</h4>
+                <div id="slipHistoryList" style="max-height: 120px; overflow-y: auto; font-size: 0.9em;">
+                    <!-- Loaded dynamically -->
+                </div>
+
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-outline" onclick="MitarbeiterManager.closePayslipModal()">Abbrechen</button>
+                <button class="btn btn-primary" onclick="MitarbeiterManager.generatePayslip()">PDF Erstellen</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="mitarbeiter.js"></script>
+    <!-- Recurring Invoice Modal -->
+    <div id="recurringModal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>­ƒöä Neues Abo anlegen</h3>
+                <button class="close-modal" onclick="RecurringManager.closeModal()">├ù</button>
+            </div>
+            <div class="modal-body">
+                <form id="recForm" onsubmit="event.preventDefault(); RecurringManager.saveRecurring();">
+                    <div class="form-group">
+                        <label>Kunde *</label>
+                        <select id="recKunde" class="form-control" required></select>
+                    </div>
+                    <div class="form-group">
+                        <label>Beschreibung (Leistung) *</label>
+                        <input type="text" id="recDesc" class="form-control" placeholder="z.B. Wartungspauschale"
+                            required>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Betrag (Netto Ôé¼) *</label>
+                            <input type="number" step="0.01" id="recAmount" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Intervall *</label>
+                            <select id="recInterval" class="form-control">
+                                <option value="monatlich">Monatlich</option>
+                                <option value="quartalsweise">Quartalsweise</option>
+                                <option value="jaehrlich">J├ñhrlich</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Startdatum / Erste F├ñlligkeit *</label>
+                        <input type="date" id="recStart" class="form-control" required>
+                    </div>
+
+                    <div class="modal-footer" style="margin-top:20px;">
+                        <button type="button" class="btn btn-outline"
+                            onclick="RecurringManager.closeModal()">Abbrechen</button>
+                        <button type="submit" class="btn btn-primary">Abo anlegen</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <!-- Beleg Preview Modal -->
+    <div id="belegPreviewModal" class="modal" style="display: none;">
+        <div class="modal-content" style="max-width: 90vw;"> <!-- Wide modal -->
+            <div class="modal-header">
+                <h3>­ƒöì Beleg Vorschau</h3>
+                <button class="close-modal" onclick="closeBelegModal()">├ù</button>
+            </div>
+            <div class="modal-body">
+                <div class="beleg-preview-container">
+                    <!-- Linke Seite: Bild/PDF -->
+                    <div id="belegView" class="beleg-view">
+                        <p class="beleg-missing">Kein Bild geladen</p>
+                    </div>
+
+                    <!-- Rechte Seite: Details -->
+                    <div class="beleg-details">
+                        <h4>Belegdaten</h4>
+                        <div id="belegDataView">
+                            <!-- Wird per JS gef├╝llt -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

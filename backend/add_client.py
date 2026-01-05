@@ -49,6 +49,13 @@ def create_mandant():
         print("❌ Name darf nicht leer sein.")
         return
 
+    mandant_nr = input("Mandantennummer (z.B. '101'): ").strip()
+    if not mandant_nr:
+        # Default fallback or require? Let's default to generic if empty, but better to encourage it.
+        # But for new clients we want it.
+        print("⚠️  Keine Nummer angegeben. Verwende '000'.")
+        mandant_nr = "000"
+
     safe_name = clean_name(name)
     mandant_path = os.path.join(MANDANTEN_DIR, safe_name)
     
@@ -98,6 +105,7 @@ def create_mandant():
         # 3. Config JSON
         config_data = {
             "firma": name,
+            "mandant_nummer": mandant_nr,
             "adresse": {
                 "strasse": strasse,
                 "ort": ort,

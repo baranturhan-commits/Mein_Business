@@ -4,22 +4,34 @@
     "positionen": [
         {
             "bezeichnung": "NYM-J Kabel 3x1,5",
-            "menge": 1,
-            "einheit": "Stk",
+            "menge": 50,
+            "einheit": "m",
             "einzelpreis": 1.5
         },
         {
             "bezeichnung": "Meisterstunde",
-            "menge": 1,
+            "menge": 3,
             "einheit": "Std",
             "einzelpreis": 75
         },
         {
             "bezeichnung": "Anfahrt pauschal",
-            "menge": 1,
+            "menge": 2,
             "einheit": "Stk",
             "einzelpreis": 35
+        },
+        {
+            "bezeichnung": "Steckdose Standard Wei\u00df",
+            "menge": 2,
+            "einheit": "Stk",
+            "einzelpreis": 12.5
+        },
+        {
+            "bezeichnung": "E-Herd Anschluss",
+            "menge": 3,
+            "einheit": "Stk",
+            "einzelpreis": 75
         }
     ],
-    "datum": "2026-01-02T00:30:21.196653"
+    "datum": "2026-01-04T22:05:30.295925"
 }

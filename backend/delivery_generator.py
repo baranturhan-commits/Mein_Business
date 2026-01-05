@@ -182,19 +182,39 @@ def create_delivery_pdf(mandant_path, mandant_config, kunde_name, positionen, ou
     story.append(date_table)
     story.append(Spacer(1, 1*cm))
     
-    # 5. Main Table (Empty for handwriting)
+    # 5. Main Table (Items)
     # Cols: Gewerk, Beschreibung, ok, nok, Bemerkung
     # Header Style: Dark Gray, White Text
     
     header = ["Gewerk", "Beschreibung (Mängel / Restarbeiten)", "ok", "nok", "Bemerkung"]
-    
-    # Generate ~15 empty rows
     main_data = [header]
-    for i in range(15):
-        main_data.append([str(i+1), "", "", "", ""]) # Using index as Gewerk placeholder? Or just empty? Image shows empty. 
-        # Actually image shows numbered rows 1..15 on the left outside? 
-        # Let's put numbers in first col for Reference
     
+    # If items provided, fill them
+    if positionen:
+        for i, item in enumerate(positionen, 1):
+            # Parse item text - handle 'titel', 'text', 'bezeichnung'
+            # Assuming item structure from offer/invoice
+            desc = item.get('text', item.get('titel', item.get('bezeichnung', '')))
+            
+            # If quantity > 1, maybe show it? "5x Steckdosen"
+            qty = float(item.get('menge', 1)) 
+            if qty != 1:
+                desc = f"{qty:g}x {desc}"
+                
+            main_data.append([str(i), Paragraph(desc, value_style), "", "", ""])
+            
+        # Add some empty rows at bottom for extra notes
+        # Calculate how many empty rows to add to fill page or min 5
+        rows_to_add = max(5, 15 - len(positionen))
+        current_rows = len(positionen)
+        for i in range(rows_to_add):
+            main_data.append([str(current_rows + i + 1), "", "", "", ""])
+
+    else:
+        # Standard Blanko (15 empty rows)
+        for i in range(15):
+            main_data.append([str(i+1), "", "", "", ""])
+
     main_table = Table(main_data, colWidths=[1.5*cm, 8*cm, 1.5*cm, 1.5*cm, 4.5*cm])
     main_table.setStyle(TableStyle([
         # Header
@@ -209,6 +229,7 @@ def create_delivery_pdf(mandant_path, mandant_config, kunde_name, positionen, ou
         ('BACKGROUND', (0,1), (-1,-1), colors.HexColor('#e8e8e8')),
         ('GRID', (0,0), (-1,-1), 1, colors.white),
         ('MINROWHEIGHT', (0,1), (-1,-1), 20),
+        ('VALIGN', (0,1), (-1,-1), 'TOP'), # Align text top for items
     ]))
     
     story.append(main_table)

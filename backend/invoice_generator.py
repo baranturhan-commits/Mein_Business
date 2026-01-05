@@ -80,6 +80,17 @@ def load_kunden(mandant_path):
 
 def get_and_increment_counter(mandant_path):
     counter_file = os.path.join(mandant_path, "counter.json")
+    config_file = os.path.join(mandant_path, "mandant_config.json")
+    
+    # Load Mandant Nummer
+    mandant_nr = "000"
+    if os.path.exists(config_file):
+        try:
+            with open(config_file, 'r', encoding='utf-8') as f:
+                c = json.load(f)
+                mandant_nr = c.get("mandant_nummer", "000")
+        except: pass
+
     current_year = datetime.date.today().year
     data = {"year": current_year, "count": 0}
     
@@ -101,129 +112,234 @@ def get_and_increment_counter(mandant_path):
     except Exception as e:
         print(f"⚠️  Fehler beim Speichern des Counters: {e}")
         
-    return f"{current_year}-{data['count']:03d}"
+    # Format: RE-[NR]-[YEAR]-[COUNT]
+    return f"RE-{mandant_nr}-{current_year}-{data['count']:03d}"
 
 def create_pdf(invoice_data, mandant_path, mandant_config, kunde_data):
-    """Erstellt PDF mit Logo und Stammdaten."""
+    """Erstellt PDF im neuen 'Green Design'."""
     
-    # 1. Zielordner: Mandanten/[Mandant]/Rechnungen/[Kunde]/
+    # 1. Zielordner & Dateiname
     kunde_safe = re.sub(r'[^\w\-_]', '_', kunde_data['firma'])
     save_dir = os.path.join(mandant_path, "Rechnungen", kunde_safe)
     
     if not os.path.exists(save_dir):
-        try:
-            os.makedirs(save_dir)
-        except OSError as e:
-            print(f"❌ Fehler beim Erstellen des Ordners: {e}")
-            return False
+        try: os.makedirs(save_dir)
+        except OSError: return False
 
-    # 2. Dateiname
-    datum_safe = invoice_data['datum'].replace('.', '-')
     nr_safe = re.sub(r'[^\w\-]', '_', invoice_data['nummer'])
-    filename = os.path.join(save_dir, f"{datum_safe}_Rechnung_{nr_safe}.pdf")
+    filename = os.path.join(save_dir, f"{nr_safe}.pdf")
 
-    # 3. PDF Generierung
+    # 2. Setup ReportLab
     try:
-        doc = SimpleDocTemplate(filename, pagesize=A4, rightMargin=2*cm, leftMargin=2*cm, topMargin=2*cm, bottomMargin=2*cm)
+        # Colors
+        ACCENT_COLOR = colors.HexColor("#2E8B57") # SeaGreen
+        TEXT_COLOR = colors.HexColor("#333333")
+        LINE_COLOR = colors.HexColor("#dddddd")
+
+        doc = SimpleDocTemplate(filename, pagesize=A4, 
+                                rightMargin=2*cm, leftMargin=2*cm, 
+                                topMargin=1.5*cm, bottomMargin=2*cm)
         story = []
         styles = getSampleStyleSheet()
         
-        # --- HEADER BEREICH (Logo rechts, Absender links) ---
+        # Custom Styles
+        style_norm = styles['Normal']
+        style_norm.fontName = 'Helvetica'
+        style_norm.fontSize = 10
+        style_norm.textColor = TEXT_COLOR
         
-        # Logo Check
-        logo_path = None
+        style_bold = ParagraphStyle('Bold', parent=style_norm, fontName='Helvetica-Bold')
+        style_small = ParagraphStyle('Small', parent=style_norm, fontSize=8, textColor=colors.grey)
+        
+        style_heading = ParagraphStyle('Heading', parent=styles['Heading1'], 
+                                       fontName='Helvetica-Bold', fontSize=18, 
+                                       textColor=TEXT_COLOR, spaceAfter=20)
+
+        # --- HEADER (Logo Right, Sender Left) ---
+        # Logo
+        logo_img = []
         if mandant_config.get("logo"):
             p_logo = os.path.join(mandant_path, mandant_config["logo"])
             if os.path.exists(p_logo):
-                logo_path = p_logo
-
-        if logo_path:
-            # Logo Placement using Table to align right
-            im = ReportLabImage(logo_path, width=5*cm, height=2.5*cm, kind='proportional')
-            im.hAlign = 'RIGHT'
-            logo_table = Table([[im]], colWidths=[17*cm])
-            logo_table.setStyle(TableStyle([('ALIGN', (0,0), (-1,-1), 'RIGHT')]))
-            story.append(logo_table)
-            story.append(Spacer(1, 0.5*cm))
-        else:
-            story.append(Spacer(1, 1*cm))
-
-        # Absender (Klein über Empfänger oder oben links)
+                im = ReportLabImage(p_logo, width=5*cm, height=2.5*cm, kind='proportional')
+                im.hAlign = 'RIGHT'
+                logo_img = [im]
+        
+        # Sender Address (Small Line)
         m_adr = mandant_config.get('adresse', {})
-        firmen_block = f"{mandant_config.get('firma', '')}<br/>{m_adr.get('strasse', '')}<br/>{m_adr.get('ort', '')}"
+        sender_line = f"{mandant_config.get('firma', '')} · {m_adr.get('strasse', '')} · {m_adr.get('ort', '')}"
         
-        story.append(Paragraph(firmen_block, styles['Normal']))
-        story.append(Spacer(1, 1.5*cm))
+        # Header Layout: invisible table
+        # Row 1: Logo (Right)
+        # Row 2: Sender Line (Left)
         
-        # Empfänger
-        empf_text = f"An:\n{kunde_data['firma']}\n{kunde_data['anrede']}"
-        story.append(Paragraph(empf_text.replace('\n', '<br/>'), styles['Normal']))
-        story.append(Spacer(1, 1.5*cm))
-        
-        # Titel & Datum
-        story.append(Paragraph(f"Rechnung {invoice_data['nummer']}", styles['Heading1']))
-        story.append(Paragraph(f"Datum: {invoice_data['datum']}", styles['Normal']))
-        story.append(Spacer(1, 1*cm))
-        
-        # --- POSITIONEN ---
-        table_data = [['Beschreibung', 'Betrag (Netto)']]
-        total = 0.0
-        
-        for item in invoice_data['items']:
-            desc = item['beschreibung']
-            price = item['betrag']
-            total += price
-            table_data.append([desc, f"{price:.2f} €"])
+        if logo_img:
+            tbl_logo = Table([[logo_img[0]]], colWidths=[17*cm])
+            tbl_logo.setStyle(TableStyle([('ALIGN', (0,0), (-1,-1), 'RIGHT')]))
+            story.append(tbl_logo)
+        else:
+            story.append(Spacer(1, 2*cm))
             
-        mwst = total * 0.19
-        brutto = total + mwst
+        story.append(Spacer(1, 1*cm))
+        story.append(Paragraph(sender_line, style_small))
+        story.append(Spacer(1, 0.5*cm))
+
+        # --- ADDRESS & INFO BLOCK ---
+        # Left: Recipient
+        kunde_text = f"{kunde_data['firma']}<br/>{kunde_data['anrede']}"
+        p_kunde = Paragraph(kunde_text, style_bold)
         
-        table_data.append(['', ''])
-        table_data.append(['Netto:', f"{total:.2f} €"])
-        table_data.append(['MwSt 19%:', f"{mwst:.2f} €"])
-        table_data.append(['Gesamtbetrag:', f"{brutto:.2f} €"])
+        # Right: Metadata Block
+        # Nummer, Kundennummer, Datum
+        meta_data = [
+            ["Nummer:", invoice_data['nummer']],
+            ["Kundennummer:", "K-" + str(len(kunde_data['firma']))], # Dummy logic if no ID
+            ["Datum:", invoice_data['datum']],
+            ["Sachbearbeiter:", mandant_config.get('geschaeftsfuehrer', '')]
+        ]
         
-        t = Table(table_data, colWidths=[12*cm, 4*cm])
-        ts = [
-            ('BACKGROUND', (0,0), (-1,0), colors.lightgrey),
+        tbl_meta = Table(meta_data, colWidths=[3.5*cm, 4*cm])
+        tbl_meta.setStyle(TableStyle([
+            ('FONTNAME', (0,0), (-1,-1), 'Helvetica'),
+            ('FONTSIZE', (0,0), (-1,-1), 10),
+            ('TEXTCOLOR', (0,0), (-1,-1), TEXT_COLOR),
             ('ALIGN', (0,0), (0,-1), 'LEFT'),
-            ('ALIGN', (1,0), (1,-1), 'RIGHT'),
-            ('GRID', (0,0), (-1,-1), 0.5, colors.grey),
+            ('ALIGN', (1,0), (1,-1), 'LEFT'),
+        ]))
+        
+        # Combine Address and Meta in a Table
+        tbl_layout = Table([[p_kunde, tbl_meta]], colWidths=[9*cm, 8*cm])
+        tbl_layout.setStyle(TableStyle([
+            ('VALIGN', (0,0), (-1,-1), 'TOP'),
+        ]))
+        story.append(tbl_layout)
+        
+        story.append(Spacer(1, 1.5*cm))
+        
+        # --- TITLE ---
+        story.append(Paragraph("Rechnung", style_heading))
+        # Subject / Description line (optional first item desc?)
+        if invoice_data.get('subject'):
+             story.append(Paragraph(f"<b>{invoice_data['subject']}</b>", style_norm))
+        story.append(Spacer(1, 0.5*cm))
+
+        # --- ITEMS TABLE ---
+        # Headers: Pos, Menge, Einbeit, Bezeichnung, E-Preis, Gesamt
+        data = [['Pos', 'Menge', 'Einh.', 'Bezeichnung', 'E-Preis', 'Gesamt']]
+        
+        total_netto = 0.0
+        
+        for i, item in enumerate(invoice_data['items'], 1):
+            # Parse structured data or fallback
+            qty = item.get('menge', 1.0)
+            unit = item.get('einheit', 'Stk')
+            text = item.get('text', item.get('beschreibung', '')) # 'beschreibung' might be full string in legacy
+            price = item.get('einzelpreis', 0.0)
+            
+            # Legacy fallback: if price is 0 but 'betrag' exists (manual mode old)
+            if price == 0 and item.get('betrag', 0) > 0 and qty == 1:
+                price = item['betrag']
+            
+            total = qty * price
+            total_netto += total
+            
+            data.append([
+                str(i),
+                f"{qty:.2f}".replace('.', ','),
+                unit,
+                Paragraph(text, style_norm), # Wrap long text
+                f"{price:.2f} €".replace('.', ','),
+                f"{total:.2f} €".replace('.', ',')
+            ])
+            
+        # Summary Calculation
+        mwst = total_netto * 0.19
+        total_brutto = total_netto + mwst
+        
+        # Append empty row for spacing
+        data.append(['', '', '', '', '', ''])
+        
+        # Table Styling
+        col_widths = [1*cm, 2*cm, 1.5*cm, 7.5*cm, 2.5*cm, 2.5*cm]
+        t = Table(data, colWidths=col_widths)
+        
+        ts = [
+            # Header Style
+            ('LINEBELOW', (0,0), (-1,0), 1, TEXT_COLOR),
             ('FONTNAME', (0,0), (-1,0), 'Helvetica-Bold'),
-            ('FONTNAME', (0,-1), (-1,-1), 'Helvetica-Bold'),
+            ('ALIGN', (0,0), (-1,0), 'LEFT'),
+            ('ALIGN', (-2,0), (-1,-1), 'RIGHT'), # Prices right aligned
+            ('ALIGN', (1,0), (1,-1), 'RIGHT'),  # Qty right aligned
+            ('VALIGN', (0,0), (-1,-1), 'TOP'),
+            ('LEFTPADDING', (0,0), (-1,-1), 0),
+            ('RIGHTPADDING', (-1,0), (-1,-1), 0),
         ]
         t.setStyle(TableStyle(ts))
         story.append(t)
         
+        # --- SUMMARY BLOCK ---
+        story.append(Spacer(1, 0.5*cm))
+        
+        sum_data = [
+            ['Summe netto', f"{total_netto:.2f} €".replace('.', ',')],
+            ['Umsatzsteuer 19%', f"{mwst:.2f} €".replace('.', ',')],
+            ['Gesamtsumme', f"{total_brutto:.2f} €".replace('.', ',')]
+        ]
+        
+        t_sum = Table(sum_data, colWidths=[4*cm, 3*cm])
+        t_sum.setStyle(TableStyle([
+            ('ALIGN', (0,0), (-1,-1), 'RIGHT'),
+            ('LINEABOVE', (0,2), (-1,2), 1, TEXT_COLOR), # Line above Total
+            ('FONTNAME', (0,2), (-1,2), 'Helvetica-Bold'),
+            ('FONTSIZE', (0,2), (-1,2), 11),
+        ]))
+        # Align to right side of page
+        t_sum_wrap = Table([[t_sum]], colWidths=[17*cm])
+        t_sum_wrap.setStyle(TableStyle([('ALIGN', (0,0), (-1,-1), 'RIGHT')]))
+        story.append(t_sum_wrap)
+
+        story.append(Spacer(1, 1.5*cm))
+        
         # --- FOOTER ---
-        story.append(Spacer(1, 2*cm))
+        # Payment Terms
+        pay_text = "Der Rechnungsbetrag ist zahlbar innerhalb von 14 Tagen ohne Abzug."
+        story.append(Paragraph(pay_text, style_norm))
+        story.append(Spacer(1, 1*cm))
         
+        # 3 Column Footer
         bank = mandant_config.get('bank', {})
-        footer_info = (
-            f"Bitte überweisen Sie den Betrag innerhalb von 14 Tagen.<br/><br/>"
-            f"<b>Geschäftsführer:</b> {mandant_config.get('geschaeftsfuehrer', '')} | "
-            f"<b>Bank:</b> {bank.get('name', '')} | "
-            f"<b>IBAN:</b> {bank.get('iban', '')} | "
-            f"<b>BIC:</b> {bank.get('bic', '')}"
-        )
         
-        story.append(Paragraph(footer_info, styles['Normal']))
+        f1 = f"<b>{mandant_config.get('firma', '')}</b><br/>{m_adr.get('strasse', '')}<br/>{m_adr.get('ort', '')}"
         
+        f2 = "<b>Bankverbindung</b><br/>" \
+             f"Bank: {bank.get('name', '')}<br/>" \
+             f"IBAN: {bank.get('iban', '')}<br/>" \
+             f"BIC: {bank.get('bic', '')}"
+             
+        f3 = f"<b>Kontakt</b><br/>Geschäftsführer: {mandant_config.get('geschaeftsfuehrer', '')}<br/>" \
+             "Steuer-Nr: -folgt-"
+
+        t_foot = Table([[Paragraph(f1, style_small), Paragraph(f2, style_small), Paragraph(f3, style_small)]], 
+                       colWidths=[5.6*cm, 5.6*cm, 5.6*cm])
+        t_foot.setStyle(TableStyle([
+             ('VALIGN', (0,0), (-1,-1), 'TOP'),
+             ('LINEABOVE', (0,0), (-1,0), 0.5, LINE_COLOR),
+             ('TOPPADDING', (0,0), (-1,0), 10),
+        ]))
+        story.append(t_foot)
+
         doc.build(story)
-        print(f"\n✅ PDF erfolgreich erstellt!")
+        print(f"\n✅ PDF erfolgreich erstellt (Green Design)!")
         print(f"📂 Pfad: {filename}")
 
-
-
-        # --- UMSATZ VERBUCHEN (EXCEL) ---
+        # --- BOOKKEEPING (Excel) ---
         try:
             einnahmen_dir = os.path.join(mandant_path, "Einnahmen")
             if not os.path.exists(einnahmen_dir): os.makedirs(einnahmen_dir, exist_ok=True)
-            
             xlsx_path = os.path.join(einnahmen_dir, "einnahmen.xlsx")
 
-            # Beschreibungen zusammenfügen
-            desc_list = [i['beschreibung'] for i in invoice_data['items']]
+            # Simple Desc for Booking
+            desc_list = [i.get('text', i.get('beschreibung','Item')) for i in invoice_data['items']]
             full_desc = ", ".join(desc_list)
             
             data_row = {
@@ -231,23 +347,23 @@ def create_pdf(invoice_data, mandant_path, mandant_config, kunde_data):
                 "Datum": invoice_data['datum'],
                 "Kunde": kunde_data['firma'],
                 "Beschreibung": full_desc,
-                "Betrag_Netto": f"{total:.2f}",
-                "Betrag_Brutto": f"{brutto:.2f}",
+                "Betrag_Netto": f"{total_netto:.2f}",
+                "Betrag_Brutto": f"{total_brutto:.2f}",
                 "Status": "Offen"
             }
-            
             headers = ["Rechnungsnummer", "Datum", "Kunde", "Beschreibung", "Betrag_Netto", "Betrag_Brutto", "Status"]
             excel_utils.append_data(xlsx_path, data_row, "Einnahmen", headers)
-                
-            print(f"✅ Umsatz in Einnahmen/einnahmen.xlsx verbucht.")
+            print(f"✅ Umsatz verbucht.")
             
         except Exception as e:
-            print(f"⚠️  Fehler beim Verbuchen des Umsatzes: {e}")
+            print(f"⚠️  Fehler beim Verbuchen: {e}")
 
         return filename
         
     except Exception as e:
-        print(f"❌ Fehler bei der PDF-Erstellung: {e}")
+        import traceback
+        traceback.print_exc()
+        print(f"❌ Fehler bei PDF-Erstellung: {e}")
         return None
 
 def main():
@@ -373,8 +489,11 @@ def main():
                 final_desc = f"{qty}x {desc_text} (EP: {price:.2f}€)"
                 
                 items.append({
-                    'beschreibung': final_desc,
-                    'betrag': line_total
+                    'text': desc_text,
+                    'menge': qty,
+                    'einheit': it.get('einheit', 'Stk'),
+                    'einzelpreis': price, 
+                    'bericht': final_desc # Legacy holder
                 })
                 
             print(f"✅ Positionen übernommen.")
@@ -386,13 +505,32 @@ def main():
         # Manuell
         print("\n📦 Positionen eingeben:")
         while True:
-            desc = input("   Beschreibung: ").strip()
-            if not desc: break
+            text = input("   Bezeichnung: ").strip()
+            if not text: break
+            
             try:
-                amt_s = input("   Betrag (Netto): ").replace(',', '.')
-                if not amt_s: break
-                amt = float(amt_s)
-                items.append({'beschreibung': desc, 'betrag': amt})
+                # Ask for Quantity
+                qty_s = input("   Menge [1.0]: ").strip().replace(',', '.')
+                qty = float(qty_s) if qty_s else 1.0
+
+                unit = input("   Einheit [Stk]: ").strip()
+                if not unit: unit = "Stk"
+                
+                # Ask for Unit Price
+                price_s = input("   Einzelpreis (Netto): ").replace(',', '.')
+                if not price_s: break
+                price = float(price_s)
+                
+                items.append({
+                    'text': text,
+                    'menge': qty,
+                    'einheit': unit,
+                    'einzelpreis': price,
+                    # 'beschreibung' for legacy compat (simplified)
+                    'beschreibung': f"{qty}x {text}"
+                })
+                print(f"   ok: {qty} {unit} x {price:.2f}€")
+                
             except ValueError:
                 print("❌ Ungültig.")
             

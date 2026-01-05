@@ -190,13 +190,13 @@ function renderRechnungenListDoc() {
 
 function createDocItem(doc, icon) {
     return `
-        <div class="doc-item" onclick="openPdf('${doc.pdf_path}')">
+        <a class="doc-item" href="${getPdfUrl(doc.pdf_path)}" target="_blank" style="text-decoration: none; color: inherit; display: flex; align-items: center; cursor: pointer;">
             <span class="icon">${icon}</span>
             <div class="doc-info">
                 <strong>${doc.nummer || 'Dokument'}</strong>
                 <small>${doc.datum || ''} | ${doc.kunde || ''}</small>
             </div>
-        </div>
+        </a>
     `;
 }
 
@@ -204,8 +204,28 @@ function openPdf(path) {
     if (!path) return;
     let url = path;
     if (!url.startsWith('http')) {
-        url = API_BASE_URL.replace('/api', '') + path;
+        // More robust URL construction
+        // If we are on file:// protocol, window.location.origin is useless.
+        // We MUST use the API_BASE_URL host.
+
+        let apiRoot = API_BASE_URL;
+        if (apiRoot.endsWith('/api')) {
+            apiRoot = apiRoot.slice(0, -4); // Remove /api
+        }
+        if (apiRoot.endsWith('/')) {
+            apiRoot = apiRoot.slice(0, -1);
+        }
+
+        if (path.startsWith('/')) {
+            url = apiRoot + path;
+        } else {
+            url = apiRoot + '/' + path;
+        }
+
+        // Remove potential double slashes (except protocol)
+        url = url.replace(/([^:]\/)\/+/g, "$1");
     }
+    console.log("Opening PDF:", url);
     window.open(url, '_blank');
 }
 
@@ -228,4 +248,29 @@ if (typeof window.switchTab === 'function') {
 
 function getMandantId() {
     return new URLSearchParams(window.location.search).get('mandant') || new URLSearchParams(window.location.search).get('id');
+}
+
+function getPdfUrl(path) {
+    if (!path) return '#';
+    if (path.startsWith('http')) return path;
+
+    // Construct absolute URL from API_BASE_URL
+    let apiRoot = API_BASE_URL;
+    if (apiRoot.endsWith('/api')) {
+        apiRoot = apiRoot.slice(0, -4);
+    }
+    if (apiRoot.endsWith('/')) {
+        apiRoot = apiRoot.slice(0, -1);
+    }
+
+    let url = '';
+    if (path.startsWith('/')) {
+        url = apiRoot + path;
+    } else {
+        url = apiRoot + '/' + path;
+    }
+
+    // Remove potential double slashes
+    url = url.replace(/([^:]\/)\/+/g, "$1");
+    return url;
 }

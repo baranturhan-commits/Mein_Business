@@ -33,13 +33,13 @@ document.addEventListener('DOMContentLoaded', () => {
         uploadZone.classList.remove('dragover');
         const files = e.dataTransfer.files;
         if (files.length > 0) {
-            handleFileUpload(files[0]);
+            handleFileUpload(files);
         }
     });
 
     fileInput.addEventListener('change', (e) => {
         if (e.target.files.length > 0) {
-            handleFileUpload(e.target.files[0]);
+            handleFileUpload(e.target.files);
         }
     });
 });
@@ -130,35 +130,56 @@ async function loadRechnungen() {
 }
 
 // File Upload
-async function handleFileUpload(file) {
-    const formData = new FormData();
-    formData.append('file', file);
-    formData.append('mandant_id', mandantId);
-    formData.append('category', 'Sonstiges');
+async function handleFileUpload(files) {
+    // Determine if single file or FileList/Array
+    const fileList = (files instanceof FileList || Array.isArray(files)) ? files : [files];
+    const total = fileList.length;
+    let successCount = 0;
 
     const statusDiv = document.getElementById('uploadStatus');
-    statusDiv.innerHTML = '<p>📤 Uploading...</p>';
+    statusDiv.innerHTML = `<p>📤 Uploading ${total} Datei(en)...</p>`;
 
-    try {
-        const response = await fetch(`${API_BASE_URL}/upload/beleg`, {
-            method: 'POST',
-            body: formData
-        });
+    for (let i = 0; i < total; i++) {
+        const file = fileList[i];
+        const formData = new FormData();
+        formData.append('file', file);
+        formData.append('mandant_id', mandantId);
+        formData.append('category', 'Sonstiges'); // Default category
 
-        const result = await response.json();
+        try {
+            const response = await fetch(`${API_BASE_URL}/upload/beleg`, {
+                method: 'POST',
+                body: formData
+            });
+            const result = await response.json();
 
-        if (result.success) {
-            statusDiv.innerHTML = '<p class="success">✅ ' + result.message + '</p>';
-            setTimeout(() => {
-                closeUploadModal();
-                statusDiv.innerHTML = '';
-            }, 2000);
-        } else {
-            statusDiv.innerHTML = '<p class="error">❌ ' + result.error + '</p>';
+            if (result.success) {
+                successCount++;
+            } else {
+                console.error(`Upload error for ${file.name}: ${result.error}`);
+            }
+        } catch (error) {
+            console.error(`Network error for ${file.name}: ${error}`);
         }
-    } catch (error) {
-        statusDiv.innerHTML = '<p class="error">❌ Upload fehlgeschlagen</p>';
+
+        // Update progress
+        statusDiv.innerHTML = `<p>📤 Uploading... (${i + 1}/${total})</p>`;
     }
+
+    if (successCount === total) {
+        statusDiv.innerHTML = `<p class="success">✅ Alle ${total} Dateien erfolgreich hochgeladen!</p>`;
+    } else {
+        statusDiv.innerHTML = `<p class="warning">⚠️ ${successCount} von ${total} Dateien hochgeladen.</p>`;
+    }
+
+    setTimeout(() => {
+        // Refresh Lists if necessary
+        if (window.AusgabenManager) AusgabenManager.init();
+
+        closeUploadModal();
+        statusDiv.innerHTML = '';
+        document.getElementById('fileInput').value = ''; // Reset input
+    }, 2000);
 }
 
 // View PDF

@@ -269,6 +269,99 @@ async function startExport() {
     }
 }
 
+
+// Report & Export Logic
+async function startReport() {
+    const month = document.getElementById('exportMonth').value;
+    const year = document.getElementById('exportYear').value;
+    const status = document.getElementById('exportStatus');
+    const mandantId = getMandantIdFromUrl();
+
+    if (!status) return;
+    status.innerHTML = '<div class="spinner"></div> PDF Report wird generiert...';
+
+    try {
+        const response = await fetch(`${API_BASE_URL}/mandanten/${mandantId}/report/generate`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ month, year })
+        });
+
+        const data = await response.json();
+
+        if (data.success) {
+            status.innerHTML = '<p class="success">✅ Report erstellt!</p>';
+            // Close modal after delay
+            // setTimeout(closeExportModal, 1500); 
+            // Better: Open PDF
+            if (window.viewPdf) {
+                // If we have a viewPdf helper
+                // window.viewPdf(data.path, data.filename);
+            }
+            window.open(`http://localhost:5000/api/pdf/${data.path}`, '_blank');
+        } else {
+            status.innerHTML = `<p class="error">❌ Fehler: ${data.error}</p>`;
+        }
+    } catch (error) {
+        status.innerHTML = `<p class="error">❌ Netzwerkfehler: ${error}</p>`;
+    }
+}
+
+// Feierabend
+async function finishWorkDay() {
+    if (!confirm("🛑 Feierabend machen?\n\nDas System erstellt noch kurz ein Backup für dich.\nDanach kannst du den PC ausschalten.")) return;
+
+    // Create custom overlay
+    const overlay = document.createElement('div');
+    overlay.style.position = 'fixed';
+    overlay.style.top = '0'; overlay.style.left = '0';
+    overlay.style.width = '100%'; overlay.style.height = '100%';
+    overlay.style.backgroundColor = 'rgba(0,0,0,0.85)';
+    overlay.style.zIndex = '9999';
+    overlay.style.display = 'flex';
+    overlay.style.flexDirection = 'column';
+    overlay.style.justifyContent = 'center';
+    overlay.style.alignItems = 'center';
+    overlay.style.color = 'white';
+    overlay.innerHTML = `
+        <div class="spinner" style="width: 60px; height: 60px; border-width: 6px;"></div>
+        <h2 style="margin-top: 20px;">Backup wird erstellt...</h2>
+        <p>Bitte warten...</p>
+    `;
+    document.body.appendChild(overlay);
+
+    try {
+        const res = await fetch(`${API_BASE_URL}/backup/now`, { method: 'POST' });
+        const data = await res.json();
+
+        if (data.success) {
+            overlay.innerHTML = `
+                <div style="font-size: 80px;">✅</div>
+                <h2>Fertig!</h2>
+                <p>Backup: ${data.filename}</p>
+                <p>Größe: ${data.size_mb} MB</p>
+                <br>
+                <h3>Schönen Feierabend! 👋</h3>
+                <button class="btn btn-primary" onclick="location.reload()" style="margin-top: 20px;">Schließen</button>
+            `;
+        } else {
+            overlay.innerHTML = `
+                <div style="font-size: 80px;">❌</div>
+                <h2>Fehler beim Backup</h2>
+                <p>${data.error}</p>
+                <button class="btn" onclick="location.reload()" style="margin-top: 20px;">Schließen</button>
+            `;
+        }
+    } catch (e) {
+        overlay.innerHTML = `
+            <div style="font-size: 80px;">❌</div>
+            <h2>Netzwerkfehler</h2>
+            <p>${e}</p>
+            <button class="btn" onclick="location.reload()" style="margin-top: 20px;">Schließen</button>
+        `;
+    }
+}
+
 // Helper needed if not available globally
 function getMandantIdFromUrl() {
     return new URLSearchParams(window.location.search).get('mandant') || new URLSearchParams(window.location.search).get('id');

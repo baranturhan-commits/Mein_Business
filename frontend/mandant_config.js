@@ -46,6 +46,9 @@ async function loadMandantConfig() {
         const logoEl = document.getElementById('cfgCurrentLogo');
         if (logoEl) logoEl.textContent = currentLogo;
 
+        // New Mandant Number
+        document.getElementById('cfgMandantNr').value = config.mandant_nummer || '000';
+
         // Reset File Input
         const fileInput = document.getElementById('cfgLogoFile');
         if (fileInput) fileInput.value = '';
@@ -75,6 +78,7 @@ async function saveMandantConfig() {
     const data = {
         firma: document.getElementById('cfgFirma').value,
         geschaeftsfuehrer: document.getElementById('cfgGF').value,
+        mandant_nummer: document.getElementById('cfgMandantNr').value,
         // logo is handled via file upload
         adresse: {
             strasse: document.getElementById('cfgStrasse').value,
