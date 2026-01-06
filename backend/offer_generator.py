@@ -13,10 +13,25 @@ from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
 from reportlab.lib.units import cm
 from pathlib import Path
 
-def get_and_increment_offer_counter(mandant_path):
-    """Generiert und inkrementiert Angebots-Nummer"""
+def get_and_increment_offer_counter(mandant_path, mandant_config=None):
+    """Generiert und inkrementiert Angebots-Nummer mit Mandantennummer"""
     counter_file = Path(mandant_path) / "offer_counter.json"
     current_year = datetime.date.today().year
+    
+    # Get Mandantennummer from config
+    mandanten_nr = "000"
+    if mandant_config:
+        mandanten_nr = mandant_config.get('mandantennummer', '000')
+    else:
+        # Try to load from config file
+        config_file = Path(mandant_path) / "mandant_config.json"
+        if config_file.exists():
+            try:
+                with open(config_file, 'r', encoding='utf-8') as f:
+                    cfg = json.load(f)
+                    mandanten_nr = cfg.get('mandantennummer', '000')
+            except:
+                pass
     
     if counter_file.exists():
         with open(counter_file, 'r') as f:
@@ -29,7 +44,8 @@ def get_and_increment_offer_counter(mandant_path):
         data = {'year': year_key, 'counter': 0}
     
     data['counter'] += 1
-    nummer = f"ANG-{current_year}-{data['counter']:03d}"
+    # Format: ANG-[MandantenNr]-[Jahr]-[Counter]
+    nummer = f"ANG-{mandanten_nr}-{current_year}-{data['counter']:03d}"
     
     with open(counter_file, 'w') as f:
         json.dump(data, f, indent=4)

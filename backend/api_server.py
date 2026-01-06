@@ -37,6 +37,54 @@ MANDANTEN_DIR = BACKEND_DIR / 'Mandanten'
 
 FRONTEND_DIR = BACKEND_DIR.parent / 'frontend'
 
+# Firebase Admin SDK
+import firebase_admin
+from firebase_admin import credentials, auth as firebase_auth
+
+# Initialize Firebase Admin
+try:
+    # Try Application Default Credentials first (for Cloud Run)
+    firebase_admin.initialize_app()
+    logger.info("🔥 Firebase Admin SDK initialized with ADC")
+except:
+    # Fallback to service account key file (for local development)
+    service_account_path = BACKEND_DIR / 'service-account-key.json'
+    if service_account_path.exists():
+        cred = credentials.Certificate(str(service_account_path))
+        firebase_admin.initialize_app(cred)
+        logger.info("🔥 Firebase Admin SDK initialized with Service Account Key")
+    else:
+        logger.warning("⚠️ Firebase Admin SDK not initialized - no credentials found")
+
+# Authentication decorator
+from functools import wraps
+
+def require_auth(f):
+    """Decorator to require Firebase authentication"""
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        # Get Authorization header
+        auth_header = request.headers.get('Authorization')
+        
+        if not auth_header or not auth_header.startswith('Bearer '):
+            logger.warning(f"Unauthorized access attempt to {request.path}")
+            return jsonify({'error': 'Unauthorized - No token provided'}), 401
+        
+        # Extract token
+        id_token = auth_header.split('Bearer ')[1]
+        
+        try:
+            # Verify the token
+            decoded_token = firebase_auth.verify_id_token(id_token)
+            request.user = decoded_token  # Attach user info to request
+            logger.info(f"Authenticated user: {decoded_token.get('email')}")
+            return f(*args, **kwargs)
+        except Exception as e:
+            logger.error(f"Token verification failed: {e}")
+            return jsonify({'error': 'Unauthorized - Invalid token'}), 401
+    
+    return decorated_function
+
 @app.route('/api/health')
 def health_check():
     """Health check"""
@@ -330,7 +378,7 @@ def handle_mandant_config(mandant_id):
             
             # Update fields
             # Allow specific fields to be updated
-            allowed_fields = ['firma', 'geschaeftsfuehrer', 'logo', 'adresse', 'bank']
+            allowed_fields = ['firma', 'mandantennummer', 'geschaeftsfuehrer', 'logo', 'adresse', 'bank']
             
             for key in allowed_fields:
                 if key in new_data:
@@ -649,6 +697,45 @@ def check_duplicate_invoice(mandant_id):
 
     except Exception as e:
         logger.error(f"Fehler Check-Duplicate: {e}")
+        return jsonify({'error': str(e)}), 500
+
+@app.route('/api/mandanten/<mandant_id>/rechnungen', methods=['GET'])
+def get_mandant_rechnungen_files(mandant_id):
+    """Listet alle Rechnungs-PDFs aus dem Rechnungen-Ordner auf"""
+    try:
+        mandant_dir = MANDANTEN_DIR / mandant_id
+        rechnungen_dir = mandant_dir / 'Rechnungen'
+        
+        if not rechnungen_dir.exists():
+            return jsonify({'rechnungen': []})
+            
+        files = []
+        # Scan all PDF files in Rechnungen directory and subdirectories
+        for f in rechnungen_dir.rglob('*.pdf'):
+            try:
+                stat = f.stat()
+                # Create path relative to backend dir for the PDF serving endpoint
+                # Format: "Mandanten/ID/Rechnungen/File.pdf" or "Mandanten/ID/Rechnungen/Subdir/File.pdf"
+                rel_path = str(f.relative_to(BACKEND_DIR)).replace('\\', '/')
+                
+                files.append({
+                    'name': f.name,
+                    'path': rel_path,
+                    'size': stat.st_size,
+                    'modified': stat.st_mtime
+                })
+            except Exception as e:
+                logger.error(f"Error reading file {f}: {e}")
+                continue
+                
+        # Sort by modification time descending (newest first)
+        files.sort(key=lambda x: x['modified'], reverse=True)
+        
+        logger.info(f"Found {len(files)} invoice PDFs for {mandant_id}")
+        return jsonify({'rechnungen': files})
+
+    except Exception as e:
+        logger.error(f"Fehler beim Laden der Rechnungs-Dateien: {str(e)}")
         return jsonify({'error': str(e)}), 500
 
 @app.route('/api/mandanten/<mandant_id>/einnahmen', methods=['GET'])
@@ -1154,37 +1241,73 @@ def confirm_import_preisliste(mandant_id):
 
 @app.route('/api/mandanten/<mandant_id>/angebote', methods=['GET'])
 def get_angebote(mandant_id):
-    """Liste aller Angebote"""
+    """Liste aller Angebote - scannt PDFs direkt aus Ordner"""
     try:
         mandant_dir = MANDANTEN_DIR / mandant_id
-        angebote_file = mandant_dir / 'Angebote' / 'angebote.xlsx'
+        angebote_dir = mandant_dir / 'Angebote'
         
-        if not angebote_file.exists():
+        if not angebote_dir.exists():
             return jsonify({'angebote': []})
         
-        import excel_utils
-        data = excel_utils.read_data(str(angebote_file), 'Angebote')
-        
-        # Normalize keys (Nummer -> nummer, PDF_Path -> pdf_path)
-        normalized = []
-        for row in data:
-            item = {}
-            for k, v in row.items():
-                key = k.lower()
-                if key == 'pdf_path': key = 'pdf_path' # Ensure specific underscore style if needed
-                item[key] = v
+        # Scan ALL PDFs in directory
+        all_pdfs = {}
+        for pdf_file in angebote_dir.rglob('*.pdf'):
+            try:
+                stat = pdf_file.stat()
+                rel_path = pdf_file.relative_to(angebote_dir)
                 
-            # Add path prefix if missing
-            if 'pdf_path' in item:
-                 # It's usually just filename in Excel based on current save logic
-                 # Frontend needs /api/pdf/Mandanten/<id>/Angebote/<filename>
-                 fname = item['pdf_path']
-                 if not fname.startswith('/api'):
-                     item['pdf_path'] = f"/api/pdf/Mandanten/{mandant_id}/Angebote/{fname}"
-            
-            normalized.append(item)
+                # Extract info from filename
+                name = pdf_file.stem
+                nummer = name
+                # Try to extract structured number (e.g., ANG-001-2026-001)
+                if '-' in name:
+                    nummer = name  # Use full name as nummer
+                
+                all_pdfs[str(rel_path)] = {
+                    'nummer': nummer,
+                    'filename': pdf_file.name,
+                    'pdf_path': f"/api/pdf/Mandanten/{mandant_id}/Angebote/{rel_path}".replace('\\', '/'),
+                    'datum': datetime.fromtimestamp(stat.st_mtime).strftime('%Y-%m-%d'),
+                    'kunde': '',  # Will be filled from Excel if available
+                    'status': 'Offen',
+                    'size': stat.st_size,
+                    'modified': stat.st_mtime
+                }
+            except Exception as e:
+                logger.error(f"Error reading PDF {pdf_file}: {e}")
+                continue
         
-        return jsonify({'angebote': sorted(normalized, key=lambda x: str(x.get('nummer', '0')), reverse=True)})
+        # Try to enrich with Excel data
+        angebote_file = mandant_dir / 'Angebote' / 'angebote.xlsx'
+        if angebote_file.exists():
+            try:
+                import excel_utils
+                data = excel_utils.read_data(str(angebote_file), 'Angebote')
+                
+                for row in data:
+                    item = {k.lower(): v for k, v in row.items()}
+                    nummer = item.get('nummer') or ''
+                    kunde = item.get('kunde') or ''
+                    status = item.get('status') or 'Offen'
+                    datum = item.get('datum') or ''
+                    
+                    # Try to match with PDF by nummer
+                    for key, pdf_info in all_pdfs.items():
+                        if nummer and nummer in pdf_info['nummer']:
+                            pdf_info['kunde'] = kunde
+                            pdf_info['status'] = status
+                            if datum:
+                                pdf_info['datum'] = str(datum)
+                            break
+            except Exception as e:
+                logger.warning(f"Could not read Excel: {e}")
+        
+        # Convert to list and sort by date
+        result = list(all_pdfs.values())
+        result.sort(key=lambda x: x.get('modified', 0), reverse=True)
+        
+        logger.info(f"Found {len(result)} Angebote for {mandant_id}")
+        return jsonify({'angebote': result})
     
     except Exception as e:
         logger.error(f"Fehler beim Laden der Angebote: {str(e)}")
@@ -1295,78 +1418,166 @@ def create_angebot(mandant_id):
 
 @app.route('/api/mandanten/<mandant_id>/lieferscheine', methods=['GET'])
 def get_lieferscheine(mandant_id):
+    """Liste aller Lieferscheine/Protokolle - scannt auch PDFs direkt"""
     try:
         mandant_path = MANDANTEN_DIR / mandant_id
         if not mandant_path.exists():
             return jsonify({'error': 'Mandant nicht gefunden'}), 404
             
-        file_path = mandant_path / 'Lieferscheine' / 'lieferscheine.xlsx'
-        if not file_path.exists():
-             return jsonify({'lieferscheine': []})
-             
-        import excel_utils
-        data = excel_utils.read_data(str(file_path), 'Lieferscheine')
+        lieferscheine_dir = mandant_path / 'Lieferscheine'
+        if not lieferscheine_dir.exists():
+            return jsonify({'lieferscheine': []})
         
-        # Normalize
-        normalized = []
-        for row in data:
-            item = {}
-            for k, v in row.items():
-                item[k.lower()] = v
+        # Scan ALL PDFs in directory (including subdirectories)
+        all_pdfs = {}
+        for pdf_file in lieferscheine_dir.rglob('*.pdf'):
+            try:
+                stat = pdf_file.stat()
+                rel_path = pdf_file.relative_to(lieferscheine_dir)
                 
-            # Fix path
-            # Fix path
-            # Search for relevant key
-            path_val = item.get('pdf_path') or item.get('pdf path') or item.get('path') or item.get('dateipfad')
-            
-            # Fallback: Construct from Number if path needs validation or is missing
-            if not path_val:
-                nummer = item.get('lieferscheinnummer') or item.get('nummer')
-                if nummer:
-                    path_val = f"{nummer}.pdf"
-            
-            if path_val:
-                 fname = str(path_val).strip()
-                 
-                 # Verify existence
-                 lieferscheine_dir = mandant_path / 'Lieferscheine'
-                 full_path = lieferscheine_dir / fname
-                 
-                 if not full_path.exists():
-                     # Try with .pdf extension
-                     if not fname.lower().endswith('.pdf'):
-                         test_path = lieferscheine_dir / f"{fname}.pdf"
-                         if test_path.exists():
-                             fname = f"{fname}.pdf"
-                             full_path = test_path
-                         else:
-                             # File really not found
-                             continue
-                     else:
-                         continue
-
-                 if not fname.startswith('/api') and not fname.startswith('http'):
-                     final_path = f"/api/pdf/Mandanten/{mandant_id}/Lieferscheine/{fname}"
-                 else:
-                     final_path = fname
-                     
-                 item['pdf_path'] = final_path
-                 
-                 # Ensure Date and Customer are set (mapping from screenshot headers)
-                 if 'datum' not in item and 'date' in item: item['datum'] = item['date']
-                 # Map 'lieferscheinnummer' to 'nummer' for frontend consistency
-                 if 'nummer' not in item and 'lieferscheinnummer' in item: 
-                     item['nummer'] = item['lieferscheinnummer']
-                     
-                 normalized.append(item)
-            else:
-                 # No path and no number -> invalid row
-                 continue
-            
-        return jsonify({'lieferscheine': sorted(normalized, key=lambda x: str(x.get('nummer', '0')), reverse=True)})
+                # Extract info from filename
+                name = pdf_file.stem
+                # Try to extract number from filename like "Lieferschein_PROT-2026-001_..."
+                nummer = name
+                if '_' in name:
+                    parts = name.split('_')
+                    if len(parts) >= 2:
+                        nummer = parts[1]  # e.g., "PROT-2026-001"
+                
+                all_pdfs[str(rel_path)] = {
+                    'nummer': nummer,
+                    'filename': pdf_file.name,
+                    'pdf_path': f"/api/pdf/Mandanten/{mandant_id}/Lieferscheine/{rel_path}".replace('\\', '/'),
+                    'datum': datetime.fromtimestamp(stat.st_mtime).strftime('%Y-%m-%d'),
+                    'kunde': '',  # Will be filled from Excel if available
+                    'size': stat.st_size,
+                    'modified': stat.st_mtime
+                }
+            except Exception as e:
+                logger.error(f"Error reading PDF {pdf_file}: {e}")
+                continue
+        
+        # Try to enrich with Excel data
+        file_path = mandant_path / 'Lieferscheine' / 'lieferscheine.xlsx'
+        if file_path.exists():
+            try:
+                import excel_utils
+                data = excel_utils.read_data(str(file_path), 'Lieferscheine')
+                
+                for row in data:
+                    # Normalize keys
+                    item = {k.lower(): v for k, v in row.items()}
+                    nummer = item.get('lieferscheinnummer') or item.get('nummer') or ''
+                    kunde = item.get('kunde') or ''
+                    datum = item.get('datum') or ''
+                    
+                    # Try to match with PDF
+                    for key, pdf_info in all_pdfs.items():
+                        if nummer and nummer in pdf_info['nummer']:
+                            pdf_info['kunde'] = kunde
+                            if datum:
+                                pdf_info['datum'] = str(datum)
+                            break
+            except Exception as e:
+                logger.warning(f"Could not read Excel: {e}")
+        
+        # Convert to list and sort by date
+        result = list(all_pdfs.values())
+        result.sort(key=lambda x: x.get('modified', 0), reverse=True)
+        
+        logger.info(f"Found {len(result)} Lieferscheine for {mandant_id}")
+        return jsonify({'lieferscheine': result})
         
     except Exception as e:
         logger.error(f"LS Fehler: {e}")
+        return jsonify({'error': str(e)}), 500
+
+@app.route('/api/mandanten/<mandant_id>/lieferscheine/sync', methods=['POST'])
+def sync_lieferscheine(mandant_id):
+    """Synchronisiert alle PDFs im Lieferscheine-Ordner mit der Excel-Tabelle"""
+    try:
+        mandant_path = MANDANTEN_DIR / mandant_id
+        if not mandant_path.exists():
+            return jsonify({'error': 'Mandant nicht gefunden'}), 404
+            
+        lieferscheine_dir = mandant_path / 'Lieferscheine'
+        file_path = lieferscheine_dir / 'lieferscheine.xlsx'
+        
+        if not lieferscheine_dir.exists():
+            return jsonify({'error': 'Lieferscheine-Ordner nicht gefunden'}), 404
+        
+        # Read existing Excel entries
+        import excel_utils
+        existing_entries = set()
+        if file_path.exists():
+            try:
+                data = excel_utils.read_data(str(file_path), 'Lieferscheine')
+                for row in data:
+                    # Get the PDF path/filename
+                    pdf_path = row.get('PDF_Path') or row.get('pdf_path') or ''
+                    if pdf_path:
+                        existing_entries.add(str(pdf_path))
+                    # Also track by number
+                    nummer = row.get('Lieferscheinnummer') or row.get('Nummer') or row.get('nummer') or ''
+                    if nummer:
+                        existing_entries.add(str(nummer))
+            except Exception as e:
+                logger.warning(f"Could not read existing Excel: {e}")
+        
+        # Scan all PDFs
+        added = 0
+        for pdf_file in lieferscheine_dir.rglob('*.pdf'):
+            filename = pdf_file.name
+            
+            # Check if already in Excel
+            if filename in existing_entries:
+                continue
+            
+            # Extract info from filename
+            name = pdf_file.stem
+            nummer = name
+            if '_' in name:
+                parts = name.split('_')
+                if len(parts) >= 2:
+                    nummer = parts[1]
+            
+            if nummer in existing_entries:
+                continue
+            
+            # Extract customer name from subdirectory if exists
+            rel_path = pdf_file.relative_to(lieferscheine_dir)
+            kunde = ''
+            if len(rel_path.parts) > 1:
+                kunde = rel_path.parts[0]  # Parent folder name as customer
+            
+            # Add to Excel
+            stat = pdf_file.stat()
+            new_row = {
+                'Lieferscheinnummer': nummer,
+                'Datum': datetime.fromtimestamp(stat.st_mtime).strftime('%d.%m.%Y'),
+                'Kunde': kunde,
+                'AngebotRef': '',
+                'Status': 'Offen',
+                'Items': ''
+            }
+            
+            try:
+                excel_utils.append_data(str(file_path), new_row, sheet_name="Lieferscheine")
+                added += 1
+                existing_entries.add(filename)
+                existing_entries.add(nummer)
+            except Exception as e:
+                logger.error(f"Could not add {filename} to Excel: {e}")
+        
+        logger.info(f"Synced Lieferscheine for {mandant_id}: {added} new entries added")
+        return jsonify({
+            'success': True,
+            'added': added,
+            'message': f'{added} neue Einträge hinzugefügt'
+        })
+        
+    except Exception as e:
+        logger.error(f"Sync Fehler: {e}")
         return jsonify({'error': str(e)}), 500
 
 @app.route('/api/mandanten/<mandant_id>/lieferschein', methods=['POST'])

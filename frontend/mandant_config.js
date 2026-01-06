@@ -40,6 +40,7 @@ async function loadMandantConfig() {
 
         // Fill Fields
         document.getElementById('cfgFirma').value = config.firma || '';
+        document.getElementById('cfgMandantenNr').value = config.mandantennummer || '';
         document.getElementById('cfgGF').value = config.geschaeftsfuehrer || '';
 
         const currentLogo = config.logo || 'Kein Logo';
@@ -74,6 +75,7 @@ async function saveMandantConfig() {
     // 1. Save Text Config
     const data = {
         firma: document.getElementById('cfgFirma').value,
+        mandantennummer: document.getElementById('cfgMandantenNr').value,
         geschaeftsfuehrer: document.getElementById('cfgGF').value,
         // logo is handled via file upload
         adresse: {

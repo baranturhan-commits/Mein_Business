@@ -4,12 +4,13 @@ echo    Stoppe Mein Business Dashboard
 echo ========================================
 echo.
 
-taskkill /FI "WINDOWTITLE eq Mein Business API*" /F >nul 2>&1
+echo Beende alle Python-Prozesse...
+taskkill /F /IM python.exe >nul 2>&1
 
 if %errorlevel% equ 0 (
-    echo API Server wurde gestoppt!
+    echo ✓ Alle Server wurden gestoppt!
 ) else (
-    echo Kein laufender API Server gefunden.
+    echo Kein laufender Server gefunden.
 )
 
 echo.

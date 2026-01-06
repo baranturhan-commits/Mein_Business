@@ -10,5 +10,6 @@
         "iban": "DE55 9802 1289 1203 0003 00",
         "bic": "KIJ90KWDA"
     },
-    "logo": "OIP.webp"
+    "logo": "OIP.webp",
+    "mandantennummer": "001"
 }

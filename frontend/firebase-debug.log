@@ -1,0 +1,194 @@
+[debug] [2026-01-06T06:35:08.007Z] ----------------------------------------------------------------------
+[debug] [2026-01-06T06:35:08.010Z] Command:       C:\Program Files\nodejs\node.exe C:\Users\Admin\AppData\Roaming\npm\node_modules\firebase-tools\lib\bin\firebase.js deploy --only hosting --message Final working deployment
+[debug] [2026-01-06T06:35:08.010Z] CLI Version:   15.1.0
+[debug] [2026-01-06T06:35:08.010Z] Platform:      win32
+[debug] [2026-01-06T06:35:08.010Z] Node Version:  v25.2.1
+[debug] [2026-01-06T06:35:08.011Z] Time:          Tue Jan 06 2026 07:35:08 GMT+0100 (Mitteleuropäische Normalzeit)
+[debug] [2026-01-06T06:35:08.011Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2026-01-06T06:35:10.631Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2026-01-06T06:35:10.632Z] > authorizing via signed-in user (baran.turhan@outlook.de)
+[debug] [2026-01-06T06:35:10.632Z] [iam] checking project baran-481415 for permissions ["firebase.projects.get","firebasehosting.sites.update"]
+[debug] [2026-01-06T06:35:10.633Z] Checked if tokens are valid: true, expires at: 1767684597571
+[debug] [2026-01-06T06:35:10.633Z] Checked if tokens are valid: true, expires at: 1767684597571
+[debug] [2026-01-06T06:35:10.634Z] >>> [apiv2][query] POST https://cloudresourcemanager.googleapis.com/v1/projects/baran-481415:testIamPermissions [none]
+[debug] [2026-01-06T06:35:10.634Z] >>> [apiv2][(partial)header] POST https://cloudresourcemanager.googleapis.com/v1/projects/baran-481415:testIamPermissions x-goog-quota-user=projects/baran-481415
+[debug] [2026-01-06T06:35:10.634Z] >>> [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects/baran-481415:testIamPermissions {"permissions":["firebase.projects.get","firebasehosting.sites.update"]}
+[debug] [2026-01-06T06:35:10.904Z] <<< [apiv2][status] POST https://cloudresourcemanager.googleapis.com/v1/projects/baran-481415:testIamPermissions 200
+[debug] [2026-01-06T06:35:10.904Z] <<< [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects/baran-481415:testIamPermissions {"permissions":["firebase.projects.get","firebasehosting.sites.update"]}
+[debug] [2026-01-06T06:35:10.905Z] Checked if tokens are valid: true, expires at: 1767684597571
+[debug] [2026-01-06T06:35:10.905Z] Checked if tokens are valid: true, expires at: 1767684597571
+[debug] [2026-01-06T06:35:10.905Z] >>> [apiv2][query] GET https://firebase.googleapis.com/v1beta1/projects/baran-481415 [none]
+[debug] [2026-01-06T06:35:11.506Z] <<< [apiv2][status] GET https://firebase.googleapis.com/v1beta1/projects/baran-481415 404
+[debug] [2026-01-06T06:35:11.506Z] <<< [apiv2][body] GET https://firebase.googleapis.com/v1beta1/projects/baran-481415 {"error":{"code":404,"message":"Requested entity was not found.","status":"NOT_FOUND"}}
+[debug] [2026-01-06T06:35:11.507Z] Couldn't get project info from firedata for baran-481415, trying resource manager. Original error: FirebaseError: Request to https://firebase.googleapis.com/v1beta1/projects/baran-481415 had HTTP Error: 404, Requested entity was not found.
+[debug] [2026-01-06T06:35:11.508Z] Checked if tokens are valid: true, expires at: 1767684597571
+[debug] [2026-01-06T06:35:11.508Z] Checked if tokens are valid: true, expires at: 1767684597571
+[debug] [2026-01-06T06:35:11.508Z] >>> [apiv2][query] GET https://cloudresourcemanager.googleapis.com/v1/projects/baran-481415 [none]
+[debug] [2026-01-06T06:35:11.696Z] <<< [apiv2][status] GET https://cloudresourcemanager.googleapis.com/v1/projects/baran-481415 200
+[debug] [2026-01-06T06:35:11.696Z] <<< [apiv2][body] GET https://cloudresourcemanager.googleapis.com/v1/projects/baran-481415 {"projectNumber":"365435811796","projectId":"baran-481415","lifecycleState":"ACTIVE","name":"Baran","createTime":"2025-12-16T15:34:54.924625Z"}
+[debug] [2026-01-06T06:35:11.696Z] the default site does not exist on the Firebase project; asking Hosting.
+[debug] [2026-01-06T06:35:11.696Z] Checked if tokens are valid: true, expires at: 1767684597571
+[debug] [2026-01-06T06:35:11.696Z] Checked if tokens are valid: true, expires at: 1767684597571
+[debug] [2026-01-06T06:35:11.696Z] >>> [apiv2][query] GET https://firebasehosting.googleapis.com/v1beta1/projects/baran-481415/sites pageToken=&pageSize=10
+[debug] [2026-01-06T06:35:12.604Z] <<< [apiv2][status] GET https://firebasehosting.googleapis.com/v1beta1/projects/baran-481415/sites 200
+[debug] [2026-01-06T06:35:12.604Z] <<< [apiv2][body] GET https://firebasehosting.googleapis.com/v1beta1/projects/baran-481415/sites {}
+[info] i  No Hosting site detected. 
+[debug] [2026-01-06T06:35:12.606Z] Checked if tokens are valid: true, expires at: 1767684597571
+[debug] [2026-01-06T06:35:12.606Z] Checked if tokens are valid: true, expires at: 1767684597571
+[debug] [2026-01-06T06:35:12.606Z] >>> [apiv2][query] GET https://cloudresourcemanager.googleapis.com/v1/projects/baran-481415 [none]
+[debug] [2026-01-06T06:35:12.792Z] <<< [apiv2][status] GET https://cloudresourcemanager.googleapis.com/v1/projects/baran-481415 200
+[debug] [2026-01-06T06:35:12.792Z] <<< [apiv2][body] GET https://cloudresourcemanager.googleapis.com/v1/projects/baran-481415 {"projectNumber":"365435811796","projectId":"baran-481415","lifecycleState":"ACTIVE","name":"Baran","createTime":"2025-12-16T15:34:54.924625Z"}
+[debug] [2026-01-06T06:35:12.792Z] Checked if tokens are valid: true, expires at: 1767684597571
+[debug] [2026-01-06T06:35:12.792Z] Checked if tokens are valid: true, expires at: 1767684597571
+[debug] [2026-01-06T06:35:12.792Z] >>> [apiv2][query] POST https://firebasehosting.googleapis.com/v1beta1/projects/365435811796/sites siteId=baran-481415&validateOnly=true
+[debug] [2026-01-06T06:35:12.792Z] >>> [apiv2][body] POST https://firebasehosting.googleapis.com/v1beta1/projects/365435811796/sites {"appId":""}
+[debug] [2026-01-06T06:35:13.188Z] <<< [apiv2][status] POST https://firebasehosting.googleapis.com/v1beta1/projects/365435811796/sites 200
+[debug] [2026-01-06T06:35:13.188Z] <<< [apiv2][body] POST https://firebasehosting.googleapis.com/v1beta1/projects/365435811796/sites {"name":"projects/365435811796/sites/baran-481415","defaultUrl":"https://baran-481415.web.app","type":"DEFAULT_SITE"}
+[debug] [2026-01-06T06:35:34.852Z] Checked if tokens are valid: true, expires at: 1767684597571
+[debug] [2026-01-06T06:35:34.853Z] Checked if tokens are valid: true, expires at: 1767684597571
+[debug] [2026-01-06T06:35:34.853Z] >>> [apiv2][query] POST https://firebasehosting.googleapis.com/v1beta1/projects/365435811796/sites siteId=mein-business-auth-2026&validateOnly=true
+[debug] [2026-01-06T06:35:34.853Z] >>> [apiv2][body] POST https://firebasehosting.googleapis.com/v1beta1/projects/365435811796/sites {"appId":""}
+[debug] [2026-01-06T06:35:35.858Z] <<< [apiv2][status] POST https://firebasehosting.googleapis.com/v1beta1/projects/365435811796/sites 400
+[debug] [2026-01-06T06:35:35.858Z] <<< [apiv2][body] POST https://firebasehosting.googleapis.com/v1beta1/projects/365435811796/sites {"error":{"code":400,"message":"Invalid name: `mein-business-auth-2026` is reserved by another project; try something like `mein-business-auth-2026-66bda` instead","status":"FAILED_PRECONDITION"}}
+[warn] !  Invalid name: `mein-business-auth-2026` is reserved by another project; try something like `mein-business-auth-2026-66bda` instead 
+[debug] [2026-01-06T06:35:45.629Z] Checked if tokens are valid: true, expires at: 1767684597571
+[debug] [2026-01-06T06:35:45.630Z] Checked if tokens are valid: true, expires at: 1767684597571
+[debug] [2026-01-06T06:35:45.630Z] >>> [apiv2][query] POST https://firebasehosting.googleapis.com/v1beta1/projects/365435811796/sites siteId=mein-business-auth-2026&validateOnly=true
+[debug] [2026-01-06T06:35:45.630Z] >>> [apiv2][body] POST https://firebasehosting.googleapis.com/v1beta1/projects/365435811796/sites {"appId":""}
+[debug] [2026-01-06T06:35:46.523Z] <<< [apiv2][status] POST https://firebasehosting.googleapis.com/v1beta1/projects/365435811796/sites 400
+[debug] [2026-01-06T06:35:46.523Z] <<< [apiv2][body] POST https://firebasehosting.googleapis.com/v1beta1/projects/365435811796/sites {"error":{"code":400,"message":"Invalid name: `mein-business-auth-2026` is reserved by another project; try something like `mein-business-auth-2026-8eaa1` instead","status":"FAILED_PRECONDITION"}}
+[warn] !  Invalid name: `mein-business-auth-2026` is reserved by another project; try something like `mein-business-auth-2026-8eaa1` instead 
+[debug] [2026-01-06T06:35:57.516Z] ExitPromptError: User force closed the prompt with SIGINT
+    at Interface.sigint (C:\Users\Admin\AppData\Roaming\npm\node_modules\firebase-tools\node_modules\@inquirer\core\dist\commonjs\lib\create-prompt.js:101:37)
+    at Interface.emit (node:events:508:28)
+    at [_ttyWrite] [as _ttyWrite] (node:internal/readline/interface:1327:18)
+    at ReadStream.onkeypress (node:internal/readline/interface:284:20)
+    at ReadStream.emit (node:events:520:35)
+    at emitKeys (node:internal/readline/utils:371:14)
+    at emitKeys.next (<anonymous>)
+    at ReadStream.onData (node:internal/readline/emitKeypressEvents:64:36)
+    at ReadStream.emit (node:events:508:28)
+    at addChunk (node:internal/streams/readable:559:12)
+[error] 
+[error] Error: An unexpected error has occurred.
+[debug] [2026-01-06T06:36:31.499Z] ----------------------------------------------------------------------
+[debug] [2026-01-06T06:36:31.502Z] Command:       C:\Program Files\nodejs\node.exe C:\Users\Admin\AppData\Roaming\npm\node_modules\firebase-tools\lib\bin\firebase.js deploy --only hosting --message Final working deployment with App Engine Backend
+[debug] [2026-01-06T06:36:31.503Z] CLI Version:   15.1.0
+[debug] [2026-01-06T06:36:31.503Z] Platform:      win32
+[debug] [2026-01-06T06:36:31.503Z] Node Version:  v25.2.1
+[debug] [2026-01-06T06:36:31.503Z] Time:          Tue Jan 06 2026 07:36:31 GMT+0100 (Mitteleuropäische Normalzeit)
+[debug] [2026-01-06T06:36:31.503Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2026-01-06T06:36:34.197Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2026-01-06T06:36:34.197Z] > authorizing via signed-in user (baran.turhan@outlook.de)
+[debug] [2026-01-06T06:36:34.197Z] [iam] checking project baran-481415 for permissions ["firebase.projects.get","firebasehosting.sites.update"]
+[debug] [2026-01-06T06:36:34.199Z] Checked if tokens are valid: true, expires at: 1767684597571
+[debug] [2026-01-06T06:36:34.199Z] Checked if tokens are valid: true, expires at: 1767684597571
+[debug] [2026-01-06T06:36:34.200Z] >>> [apiv2][query] POST https://cloudresourcemanager.googleapis.com/v1/projects/baran-481415:testIamPermissions [none]
+[debug] [2026-01-06T06:36:34.200Z] >>> [apiv2][(partial)header] POST https://cloudresourcemanager.googleapis.com/v1/projects/baran-481415:testIamPermissions x-goog-quota-user=projects/baran-481415
+[debug] [2026-01-06T06:36:34.200Z] >>> [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects/baran-481415:testIamPermissions {"permissions":["firebase.projects.get","firebasehosting.sites.update"]}
+[debug] [2026-01-06T06:36:34.439Z] <<< [apiv2][status] POST https://cloudresourcemanager.googleapis.com/v1/projects/baran-481415:testIamPermissions 200
+[debug] [2026-01-06T06:36:34.439Z] <<< [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects/baran-481415:testIamPermissions {"permissions":["firebase.projects.get","firebasehosting.sites.update"]}
+[debug] [2026-01-06T06:36:34.440Z] Checked if tokens are valid: true, expires at: 1767684597571
+[debug] [2026-01-06T06:36:34.440Z] Checked if tokens are valid: true, expires at: 1767684597571
+[debug] [2026-01-06T06:36:34.440Z] >>> [apiv2][query] GET https://firebase.googleapis.com/v1beta1/projects/baran-481415 [none]
+[debug] [2026-01-06T06:36:34.948Z] <<< [apiv2][status] GET https://firebase.googleapis.com/v1beta1/projects/baran-481415 404
+[debug] [2026-01-06T06:36:34.948Z] <<< [apiv2][body] GET https://firebase.googleapis.com/v1beta1/projects/baran-481415 {"error":{"code":404,"message":"Requested entity was not found.","status":"NOT_FOUND"}}
+[debug] [2026-01-06T06:36:34.948Z] Couldn't get project info from firedata for baran-481415, trying resource manager. Original error: FirebaseError: Request to https://firebase.googleapis.com/v1beta1/projects/baran-481415 had HTTP Error: 404, Requested entity was not found.
+[debug] [2026-01-06T06:36:34.949Z] Checked if tokens are valid: true, expires at: 1767684597571
+[debug] [2026-01-06T06:36:34.949Z] Checked if tokens are valid: true, expires at: 1767684597571
+[debug] [2026-01-06T06:36:34.949Z] >>> [apiv2][query] GET https://cloudresourcemanager.googleapis.com/v1/projects/baran-481415 [none]
+[debug] [2026-01-06T06:36:35.141Z] <<< [apiv2][status] GET https://cloudresourcemanager.googleapis.com/v1/projects/baran-481415 200
+[debug] [2026-01-06T06:36:35.141Z] <<< [apiv2][body] GET https://cloudresourcemanager.googleapis.com/v1/projects/baran-481415 {"projectNumber":"365435811796","projectId":"baran-481415","lifecycleState":"ACTIVE","name":"Baran","createTime":"2025-12-16T15:34:54.924625Z"}
+[debug] [2026-01-06T06:36:35.141Z] the default site does not exist on the Firebase project; asking Hosting.
+[debug] [2026-01-06T06:36:35.141Z] Checked if tokens are valid: true, expires at: 1767684597571
+[debug] [2026-01-06T06:36:35.141Z] Checked if tokens are valid: true, expires at: 1767684597571
+[debug] [2026-01-06T06:36:35.142Z] >>> [apiv2][query] GET https://firebasehosting.googleapis.com/v1beta1/projects/baran-481415/sites pageToken=&pageSize=10
+[debug] [2026-01-06T06:36:36.081Z] <<< [apiv2][status] GET https://firebasehosting.googleapis.com/v1beta1/projects/baran-481415/sites 200
+[debug] [2026-01-06T06:36:36.081Z] <<< [apiv2][body] GET https://firebasehosting.googleapis.com/v1beta1/projects/baran-481415/sites {}
+[info] i  No Hosting site detected. 
+[debug] [2026-01-06T06:36:36.082Z] Checked if tokens are valid: true, expires at: 1767684597571
+[debug] [2026-01-06T06:36:36.083Z] Checked if tokens are valid: true, expires at: 1767684597571
+[debug] [2026-01-06T06:36:36.083Z] >>> [apiv2][query] GET https://cloudresourcemanager.googleapis.com/v1/projects/baran-481415 [none]
+[debug] [2026-01-06T06:36:36.274Z] <<< [apiv2][status] GET https://cloudresourcemanager.googleapis.com/v1/projects/baran-481415 200
+[debug] [2026-01-06T06:36:36.274Z] <<< [apiv2][body] GET https://cloudresourcemanager.googleapis.com/v1/projects/baran-481415 {"projectNumber":"365435811796","projectId":"baran-481415","lifecycleState":"ACTIVE","name":"Baran","createTime":"2025-12-16T15:34:54.924625Z"}
+[debug] [2026-01-06T06:36:36.274Z] Checked if tokens are valid: true, expires at: 1767684597571
+[debug] [2026-01-06T06:36:36.274Z] Checked if tokens are valid: true, expires at: 1767684597571
+[debug] [2026-01-06T06:36:36.274Z] >>> [apiv2][query] POST https://firebasehosting.googleapis.com/v1beta1/projects/365435811796/sites siteId=baran-481415&validateOnly=true
+[debug] [2026-01-06T06:36:36.275Z] >>> [apiv2][body] POST https://firebasehosting.googleapis.com/v1beta1/projects/365435811796/sites {"appId":""}
+[debug] [2026-01-06T06:36:36.653Z] <<< [apiv2][status] POST https://firebasehosting.googleapis.com/v1beta1/projects/365435811796/sites 200
+[debug] [2026-01-06T06:36:36.654Z] <<< [apiv2][body] POST https://firebasehosting.googleapis.com/v1beta1/projects/365435811796/sites {"name":"projects/365435811796/sites/baran-481415","defaultUrl":"https://baran-481415.web.app","type":"DEFAULT_SITE"}
+[debug] [2026-01-06T06:36:59.391Z] ExitPromptError: User force closed the prompt with SIGINT
+    at Interface.sigint (C:\Users\Admin\AppData\Roaming\npm\node_modules\firebase-tools\node_modules\@inquirer\core\dist\commonjs\lib\create-prompt.js:101:37)
+    at Interface.emit (node:events:508:28)
+    at [_ttyWrite] [as _ttyWrite] (node:internal/readline/interface:1327:18)
+    at ReadStream.onkeypress (node:internal/readline/interface:284:20)
+    at ReadStream.emit (node:events:520:35)
+    at emitKeys (node:internal/readline/utils:371:14)
+    at emitKeys.next (<anonymous>)
+    at ReadStream.onData (node:internal/readline/emitKeypressEvents:64:36)
+    at ReadStream.emit (node:events:508:28)
+    at addChunk (node:internal/streams/readable:559:12)
+[error] 
+[error] Error: An unexpected error has occurred.
+[debug] [2026-01-06T06:37:06.571Z] ----------------------------------------------------------------------
+[debug] [2026-01-06T06:37:06.575Z] Command:       C:\Program Files\nodejs\node.exe C:\Users\Admin\AppData\Roaming\npm\node_modules\firebase-tools\lib\bin\firebase.js deploy --only hosting:app --message Final working deployment with App Engine Backend
+[debug] [2026-01-06T06:37:06.575Z] CLI Version:   15.1.0
+[debug] [2026-01-06T06:37:06.575Z] Platform:      win32
+[debug] [2026-01-06T06:37:06.575Z] Node Version:  v25.2.1
+[debug] [2026-01-06T06:37:06.575Z] Time:          Tue Jan 06 2026 07:37:06 GMT+0100 (Mitteleuropäische Normalzeit)
+[debug] [2026-01-06T06:37:06.575Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2026-01-06T06:37:09.197Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2026-01-06T06:37:09.197Z] > authorizing via signed-in user (baran.turhan@outlook.de)
+[debug] [2026-01-06T06:37:09.197Z] [iam] checking project baran-481415 for permissions ["firebase.projects.get","firebasehosting.sites.update"]
+[debug] [2026-01-06T06:37:09.199Z] Checked if tokens are valid: true, expires at: 1767684597571
+[debug] [2026-01-06T06:37:09.199Z] Checked if tokens are valid: true, expires at: 1767684597571
+[debug] [2026-01-06T06:37:09.200Z] >>> [apiv2][query] POST https://cloudresourcemanager.googleapis.com/v1/projects/baran-481415:testIamPermissions [none]
+[debug] [2026-01-06T06:37:09.200Z] >>> [apiv2][(partial)header] POST https://cloudresourcemanager.googleapis.com/v1/projects/baran-481415:testIamPermissions x-goog-quota-user=projects/baran-481415
+[debug] [2026-01-06T06:37:09.200Z] >>> [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects/baran-481415:testIamPermissions {"permissions":["firebase.projects.get","firebasehosting.sites.update"]}
+[debug] [2026-01-06T06:37:09.445Z] <<< [apiv2][status] POST https://cloudresourcemanager.googleapis.com/v1/projects/baran-481415:testIamPermissions 200
+[debug] [2026-01-06T06:37:09.445Z] <<< [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects/baran-481415:testIamPermissions {"permissions":["firebase.projects.get","firebasehosting.sites.update"]}
+[debug] [2026-01-06T06:37:09.446Z] Checked if tokens are valid: true, expires at: 1767684597571
+[debug] [2026-01-06T06:37:09.446Z] Checked if tokens are valid: true, expires at: 1767684597571
+[debug] [2026-01-06T06:37:09.446Z] >>> [apiv2][query] GET https://firebase.googleapis.com/v1beta1/projects/baran-481415 [none]
+[debug] [2026-01-06T06:37:10.001Z] <<< [apiv2][status] GET https://firebase.googleapis.com/v1beta1/projects/baran-481415 404
+[debug] [2026-01-06T06:37:10.001Z] <<< [apiv2][body] GET https://firebase.googleapis.com/v1beta1/projects/baran-481415 {"error":{"code":404,"message":"Requested entity was not found.","status":"NOT_FOUND"}}
+[debug] [2026-01-06T06:37:10.001Z] Couldn't get project info from firedata for baran-481415, trying resource manager. Original error: FirebaseError: Request to https://firebase.googleapis.com/v1beta1/projects/baran-481415 had HTTP Error: 404, Requested entity was not found.
+[debug] [2026-01-06T06:37:10.002Z] Checked if tokens are valid: true, expires at: 1767684597571
+[debug] [2026-01-06T06:37:10.002Z] Checked if tokens are valid: true, expires at: 1767684597571
+[debug] [2026-01-06T06:37:10.002Z] >>> [apiv2][query] GET https://cloudresourcemanager.googleapis.com/v1/projects/baran-481415 [none]
+[debug] [2026-01-06T06:37:10.178Z] <<< [apiv2][status] GET https://cloudresourcemanager.googleapis.com/v1/projects/baran-481415 200
+[debug] [2026-01-06T06:37:10.178Z] <<< [apiv2][body] GET https://cloudresourcemanager.googleapis.com/v1/projects/baran-481415 {"projectNumber":"365435811796","projectId":"baran-481415","lifecycleState":"ACTIVE","name":"Baran","createTime":"2025-12-16T15:34:54.924625Z"}
+[debug] [2026-01-06T06:37:10.178Z] the default site does not exist on the Firebase project; asking Hosting.
+[debug] [2026-01-06T06:37:10.178Z] Checked if tokens are valid: true, expires at: 1767684597571
+[debug] [2026-01-06T06:37:10.178Z] Checked if tokens are valid: true, expires at: 1767684597571
+[debug] [2026-01-06T06:37:10.178Z] >>> [apiv2][query] GET https://firebasehosting.googleapis.com/v1beta1/projects/baran-481415/sites pageToken=&pageSize=10
+[debug] [2026-01-06T06:37:11.060Z] <<< [apiv2][status] GET https://firebasehosting.googleapis.com/v1beta1/projects/baran-481415/sites 200
+[debug] [2026-01-06T06:37:11.060Z] <<< [apiv2][body] GET https://firebasehosting.googleapis.com/v1beta1/projects/baran-481415/sites {}
+[info] i  No Hosting site detected. 
+[debug] [2026-01-06T06:37:11.061Z] Checked if tokens are valid: true, expires at: 1767684597571
+[debug] [2026-01-06T06:37:11.061Z] Checked if tokens are valid: true, expires at: 1767684597571
+[debug] [2026-01-06T06:37:11.061Z] >>> [apiv2][query] GET https://cloudresourcemanager.googleapis.com/v1/projects/baran-481415 [none]
+[debug] [2026-01-06T06:37:11.250Z] <<< [apiv2][status] GET https://cloudresourcemanager.googleapis.com/v1/projects/baran-481415 200
+[debug] [2026-01-06T06:37:11.251Z] <<< [apiv2][body] GET https://cloudresourcemanager.googleapis.com/v1/projects/baran-481415 {"projectNumber":"365435811796","projectId":"baran-481415","lifecycleState":"ACTIVE","name":"Baran","createTime":"2025-12-16T15:34:54.924625Z"}
+[debug] [2026-01-06T06:37:11.251Z] Checked if tokens are valid: true, expires at: 1767684597571
+[debug] [2026-01-06T06:37:11.251Z] Checked if tokens are valid: true, expires at: 1767684597571
+[debug] [2026-01-06T06:37:11.251Z] >>> [apiv2][query] POST https://firebasehosting.googleapis.com/v1beta1/projects/365435811796/sites siteId=baran-481415&validateOnly=true
+[debug] [2026-01-06T06:37:11.251Z] >>> [apiv2][body] POST https://firebasehosting.googleapis.com/v1beta1/projects/365435811796/sites {"appId":""}
+[debug] [2026-01-06T06:37:11.612Z] <<< [apiv2][status] POST https://firebasehosting.googleapis.com/v1beta1/projects/365435811796/sites 200
+[debug] [2026-01-06T06:37:11.612Z] <<< [apiv2][body] POST https://firebasehosting.googleapis.com/v1beta1/projects/365435811796/sites {"name":"projects/365435811796/sites/baran-481415","defaultUrl":"https://baran-481415.web.app","type":"DEFAULT_SITE"}
+[debug] [2026-01-06T06:37:37.220Z] ExitPromptError: User force closed the prompt with SIGINT
+    at Interface.sigint (C:\Users\Admin\AppData\Roaming\npm\node_modules\firebase-tools\node_modules\@inquirer\core\dist\commonjs\lib\create-prompt.js:101:37)
+    at Interface.emit (node:events:508:28)
+    at [_ttyWrite] [as _ttyWrite] (node:internal/readline/interface:1327:18)
+    at ReadStream.onkeypress (node:internal/readline/interface:284:20)
+    at ReadStream.emit (node:events:520:35)
+    at emitKeys (node:internal/readline/utils:371:14)
+    at emitKeys.next (<anonymous>)
+    at ReadStream.onData (node:internal/readline/emitKeypressEvents:64:36)
+    at ReadStream.emit (node:events:508:28)
+    at addChunk (node:internal/streams/readable:559:12)
+[error] 
+[error] Error: An unexpected error has occurred.
