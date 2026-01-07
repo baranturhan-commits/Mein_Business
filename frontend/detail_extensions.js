@@ -59,11 +59,16 @@ function renderOPCheck(invoices) {
                     <th>Datum</th>
                     <th>Kunde</th>
                     <th>Betrag</th>
+                    <th>Aktion</th>
                 </tr>
             </thead>
             <tbody>
-                ${invoices.map(inv => `
-                    <tr class="${inv.Status === 'Offen' ? 'status-open' : 'status-paid'}">
+                ${invoices.map(inv => {
+        const overdue = isOverdue(inv.Datum, inv.Status);
+        const rowClass = inv.Status === 'Bezahlt' ? 'status-paid' : (overdue ? 'status-overdue' : 'status-open');
+
+        return `
+                    <tr class="${rowClass}">
                         <td>
                             <label class="checkbox-label">
                                 <input type="checkbox" 
@@ -72,19 +77,112 @@ function renderOPCheck(invoices) {
                                        onchange="togglePaymentStatus('${inv.Rechnungsnummer}', this.checked)">
                                 <span>${inv.Status}</span>
                             </label>
+                            ${overdue ? '<br><span class="badge-overdue">Überfällig</span>' : ''}
                         </td>
                         <td>${inv.Rechnungsnummer}</td>
                         <td>${inv.Datum}</td>
                         <td>${inv.Kunde}</td>
                         <td>${inv.Betrag_Brutto}€</td>
+                        <td>
+                            ${inv.Status === 'Offen' ?
+                `<button class="btn btn-sm btn-warning" onclick="createMahnung('${inv.Rechnungsnummer}')">⚠️ Mahnung</button>
+                 <button class="btn btn-sm btn-info" onclick="sendMahnungEmail('${inv.Rechnungsnummer}')" style="margin-left:5px;">📧 Senden</button>`
+                : '-'}
+                        </td>
                     </tr>
-                `).join('')}
+                    `
+    }).join('')}
             </tbody>
         </table>
     `;
 
     list.innerHTML = html;
 }
+
+function isOverdue(dateStr, status) {
+    if (status === 'Bezahlt' || !dateStr) return false;
+
+    try {
+        // Parse DD.MM.YYYY
+        const parts = dateStr.split('.');
+        if (parts.length !== 3) return false;
+
+        const invDate = new Date(parts[2], parts[1] - 1, parts[0]);
+        const now = new Date();
+
+        // 14 Tage Zahlungsziel
+        const diffTime = Math.abs(now - invDate);
+        const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+
+        return (now > invDate && diffDays > 14);
+    } catch (e) { return false; }
+}
+
+async function createMahnung(invoiceNum) {
+    if (!confirm(`Mahnung für Rechnung ${invoiceNum} erstellen?`)) return;
+
+    const mandantId = getMandantIdFromUrl();
+
+    try {
+        const res = await fetch(`${API_BASE_URL}/mandanten/${mandantId}/invoices/generate-reminder`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                invoice_num: invoiceNum,
+                level: 1 // Default to 1st reminder
+            })
+        });
+
+        const data = await res.json();
+
+        if (data.success && data.pdf_path) {
+            // Open PDF
+            if (window.viewPdf) {
+                // Determine filename from path
+                const parts = data.pdf_path.split('/');
+                const filename = parts[parts.length - 1];
+                window.viewPdf(data.pdf_path, filename);
+            } else {
+                window.open(`${API_BASE_URL.replace('/api', '')}${data.pdf_path}`, '_blank');
+            }
+            alert('Mahnung erfolgreich erstellt!');
+        } else {
+            alert('Fehler: ' + (data.error || 'Unbekannter Fehler'));
+        }
+    } catch (e) {
+        console.error('Fehler:', e);
+        alert('Netzwerkfehler beim Erstellen der Mahnung.');
+    }
+}
+
+async function sendMahnungEmail(invoiceNum) {
+    if (!confirm(`Mahnung für Rechnung ${invoiceNum} per E-Mail an den Kunden senden?`)) return;
+
+    const mandantId = getMandantIdFromUrl();
+
+    try {
+        const res = await fetch(`${API_BASE_URL}/mandanten/${mandantId}/invoices/send-reminder`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                invoice_num: invoiceNum,
+                level: 1
+            })
+        });
+
+        const data = await res.json();
+
+        if (data.success) {
+            alert(data.message || 'Mahnung erfolgreich versendet!');
+        } else {
+            alert('Fehler beim Senden: ' + (data.error || 'Unbekannter Fehler'));
+        }
+    } catch (e) {
+        console.error('Fehler beim Senden:', e);
+        alert('Netzwerkfehler beim Senden der Email.');
+    }
+}
+
 
 function togglePaymentStatus(rechnungNr, isPaid) {
     const newStatus = isPaid ? 'Bezahlt' : 'Offen';
@@ -117,7 +215,8 @@ async function savePaymentStatus() {
 
         // Reload
         loadOPCheck();
-        loadMandantDetails(); // Refresh stats
+        // Refresh detail stats if available
+        if (typeof loadMandantDetails === 'function') loadMandantDetails();
 
     } catch (error) {
         alert('❌ Fehler beim Speichern: ' + error.message);

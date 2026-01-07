@@ -378,7 +378,7 @@ def handle_mandant_config(mandant_id):
             
             # Update fields
             # Allow specific fields to be updated
-            allowed_fields = ['firma', 'mandantennummer', 'geschaeftsfuehrer', 'logo', 'adresse', 'bank']
+            allowed_fields = ['firma', 'mandantennummer', 'geschaeftsfuehrer', 'logo', 'adresse', 'bank', 'smtp']
             
             for key in allowed_fields:
                 if key in new_data:
@@ -2259,6 +2259,239 @@ def trigger_backup():
     except Exception as e:
         logger.error(f"Backup Fehler: {e}")
         return jsonify({'success': False, 'error': str(e)}), 500
+
+import dunning_generator
+
+@app.route('/api/mandanten/<mandant_id>/invoices/generate-reminder', methods=['POST'])
+def generate_invoice_reminder(mandant_id):
+    """Generiert Mahnung PDF"""
+    try:
+        data = request.get_json()
+        invoice_num = data.get('invoice_num')
+        level = int(data.get('level', 1))
+        
+        if not invoice_num:
+            return jsonify({'error': 'Rechnungsnummer erforderlich'}), 400
+
+        mandant_dir = MANDANTEN_DIR / mandant_id
+        if not mandant_dir.exists():
+            return jsonify({'error': 'Mandant nicht gefunden'}), 404
+            
+        # 1. Load Invoice Data
+        # Try to find in einnahmen.xlsx
+        einnahmen_file = mandant_dir / 'Einnahmen' / 'einnahmen.xlsx'
+        invoice_data = {}
+        
+        if einnahmen_file.exists():
+            import excel_utils
+            invoices = excel_utils.read_data(str(einnahmen_file), 'Einnahmen')
+            for inv in invoices:
+                curr_num = str(inv.get('Rechnungsnummer', inv.get('nummer', '')))
+                if curr_num == invoice_num:
+                    invoice_data = {
+                        'nummer': curr_num,
+                        'datum': inv.get('Datum', inv.get('datum', '')),
+                        'kunde': inv.get('Kunde', inv.get('kunde', '')),
+                        'betrag': inv.get('Betrag_Brutto', inv.get('betrag_brutto', inv.get('Gesamtbetrag', 0)))
+                    }
+                    break
+        
+        if not invoice_data:
+             invoice_data = {
+                'nummer': invoice_num,
+                'datum': datetime.now().strftime("%d.%m.%Y"),
+                'kunde': 'Kunde',
+                'betrag': 0.00
+             }
+
+        # 2. Load Mandant Config
+        config_path = mandant_dir / 'mandant_config.json'
+        mandant_config = {}
+        if config_path.exists():
+            with open(config_path, 'r', encoding='utf-8') as f:
+                mandant_config = json.load(f)
+
+        # 3. Generate PDF
+        mahnungen_dir = mandant_dir / 'Mahnungen'
+        mahnungen_dir.mkdir(parents=True, exist_ok=True)
+        
+        timestamp = int(datetime.now().timestamp())
+        # Sanitize filename
+        safe_num = str(invoice_num).replace('/', '_').replace('\\', '_').strip()
+        filename = f"Mahnung_{level}_{safe_num}_{timestamp}.pdf"
+        output_path = mahnungen_dir / filename
+        
+        success = dunning_generator.create_dunning_pdf(
+            str(mandant_dir), 
+            mandant_config, 
+            invoice_data, 
+            str(output_path), 
+            dunning_level=level
+        )
+        
+        if success:
+             web_path = f"Mandanten/{mandant_id}/Mahnungen/{filename}"
+             return jsonify({'success': True, 'pdf_path': web_path})
+        else:
+             return jsonify({'error': 'Fehler bei PDF Erstellung'}), 500
+
+    except Exception as e:
+        logger.error(f"Dunning Error: {e}")
+        return jsonify({'error': str(e)}), 500
+
+# --- EMAIL & DUNNING ---
+import smtplib
+from email.mime.text import MIMEText
+from email.mime.multipart import MIMEMultipart
+from email.mime.application import MIMEApplication
+
+def send_email_with_attachments(to_email, subject, body, attachment_paths, mandant_config):
+    """Sende Email mit mehreren Anhängen via SMTP (Mandanten-Config)"""
+    smtp_config = mandant_config.get('smtp', {})
+    
+    smtp_server = smtp_config.get('server')
+    smtp_port = int(smtp_config.get('port', 587))
+    smtp_user = smtp_config.get('user')
+    smtp_pass = smtp_config.get('pass')
+    smtp_sender = smtp_config.get('sender') or mandant_config.get('firma', 'Buchhaltung')
+    
+    if not smtp_server or not smtp_user or not smtp_pass:
+        raise Exception("SMTP Config Missing: Bitte in 'Mandant bearbeiten' die Email-Zugangsdaten (SMTP) hinterlegen.")
+
+    sender_email = smtp_user
+    msg = MIMEMultipart()
+    # Use calibrated sender name if provided
+    msg['From'] = f"{smtp_sender} <{sender_email}>"
+    msg['To'] = to_email
+    msg['Subject'] = subject
+
+    msg.attach(MIMEText(body, 'plain'))
+
+    for path in attachment_paths:
+        p = Path(path)
+        if p.exists():
+            with open(p, "rb") as f:
+                attach = MIMEApplication(f.read(), _subtype="pdf")
+                attach.add_header('Content-Disposition', 'attachment', filename=p.name)
+                msg.attach(attach)
+        else:
+            logger.warning(f"Attachment not found: {path}")
+
+    with smtplib.SMTP(smtp_server, smtp_port) as server:
+        server.starttls()
+        server.login(smtp_user, smtp_pass)
+        server.send_message(msg)
+
+@app.route('/api/mandanten/<mandant_id>/invoices/send-reminder', methods=['POST'])
+def send_invoice_reminder(mandant_id):
+    """Sende Mahnung per E-Mail (Mahnung + Originalrechnung)"""
+    try:
+        data = request.get_json()
+        invoice_num = data.get('invoice_num')
+        level = int(data.get('level', 1))
+        
+        if not invoice_num:
+            return jsonify({'error': 'Rechnungsnummer erforderlich'}), 400
+
+        mandant_dir = MANDANTEN_DIR / mandant_id
+        if not mandant_dir.exists():
+            return jsonify({'error': 'Mandant nicht gefunden'}), 404
+            
+        # 1. Load Data & Config
+        config_path = mandant_dir / 'mandant_config.json'
+        mandant_config = {}
+        if config_path.exists():
+            with open(config_path, 'r', encoding='utf-8') as f:
+                mandant_config = json.load(f)
+
+        # Load Invoice Data
+        einnahmen_file = mandant_dir / 'Einnahmen' / 'einnahmen.xlsx'
+        invoice_data = {}
+        if einnahmen_file.exists():
+            import excel_utils
+            invoices = excel_utils.read_data(str(einnahmen_file), 'Einnahmen')
+            for inv in invoices:
+                curr_num = str(inv.get('Rechnungsnummer', inv.get('nummer', '')))
+                if curr_num == invoice_num:
+                    invoice_data = {
+                        'nummer': curr_num,
+                        'datum': inv.get('Datum', inv.get('datum', '')),
+                        'kunde': inv.get('Kunde', inv.get('kunde', '')),
+                        'betrag': inv.get('Betrag_Brutto', inv.get('betrag_brutto', inv.get('Gesamtbetrag', 0)))
+                    }
+                    break
+        
+        if not invoice_data:
+             return jsonify({'error': f'Rechnung {invoice_num} nicht gefunden'}), 404
+
+        kunde_name = invoice_data.get('kunde')
+        kunde_email = None
+        
+        # Lookup Email form Customers
+        kunden_file = mandant_dir / 'Kunden' / 'kunden.xlsx'
+        if kunden_file.exists():
+            kunden = excel_utils.read_data(str(kunden_file), 'Kunden')
+            for k in kunden:
+                if k.get('Firma') == kunde_name:
+                    kunde_email = k.get('Email')
+                    break
+        
+        if not kunde_email:
+            kunde_email = data.get('email')
+        
+        if not kunde_email:
+             return jsonify({'error': f'Keine E-Mail-Adresse für Kunde "{kunde_name}" gefunden'}), 400
+
+        # 2. Files to Attach
+        attachments = []
+        
+        # A) Mahnung PDF (Re-Generate)
+        import dunning_generator
+        mahnungen_dir = mandant_dir / 'Mahnungen'
+        mahnungen_dir.mkdir(parents=True, exist_ok=True)
+        timestamp = int(datetime.now().timestamp())
+        safe_num = str(invoice_num).replace('/', '_').replace('\\', '_').strip()
+        mahnung_filename = f"Mahnung_{level}_{safe_num}_{timestamp}.pdf"
+        mahnung_path = mahnungen_dir / mahnung_filename
+        
+        success = dunning_generator.create_dunning_pdf(
+            str(mandant_dir), 
+            mandant_config, 
+            invoice_data, 
+            str(mahnung_path), 
+            dunning_level=level
+        )
+        if success:
+            attachments.append(str(mahnung_path))
+            
+        # B) Original Invoice PDF
+        rechnungen_dir = mandant_dir / 'Rechnungen'
+        for f in rechnungen_dir.rglob('*.pdf'):
+            if invoice_num in f.name:
+                attachments.append(str(f))
+                break
+
+        # 3. Send Email
+        subject = f"Zahlungserinnerung: Rechnung {invoice_num}"
+        betrag_fmt = f"{invoice_data.get('betrag', 0):.2f}".replace('.', ',')
+        
+        body = f"""Sehr geehrte Damen und Herren,
+
+anbei erhalten Sie unsere Zahlungserinnerung zur Rechnung {invoice_num} über {betrag_fmt} €.
+Eine Kopie der ursprünglichen Rechnung liegt ebenfalls bei.
+
+Wir bitten um zeitnahe Überweisung.
+
+Mit freundlichen Grüßen,
+{mandant_config.get('firma', 'Buchhaltung')}
+"""
+        send_email_with_attachments(kunde_email, subject, body, attachments, mandant_config)
+        
+        return jsonify({'success': True, 'message': f'Mahnung per E-Mail an {kunde_email} versendet!'})
+
+    except Exception as e:
+        logger.error(f"Send Reminder Error: {e}")
+        return jsonify({'error': str(e)}), 500
 
 if __name__ == '__main__':
     # Restart Trigger

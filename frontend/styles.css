@@ -1116,3 +1116,23 @@ body {
         grid-template-columns: 1fr;
     }
 }
+
+/* --- OP Check Overdue Styles --- */
+.status-overdue {
+    background-color: rgba(255, 99, 132, 0.1) !important; /* Light Red */
+}
+
+.status-overdue td {
+    color: #ff6384;
+}
+
+.badge-overdue {
+    display: inline-block;
+    padding: 2px 6px;
+    background-color: #ff6384;
+    color: white;
+    border-radius: 4px;
+    font-size: 0.7rem;
+    margin-top: 4px;
+    font-weight: bold;
+}

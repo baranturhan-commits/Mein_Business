@@ -62,6 +62,22 @@ async function loadMandantConfig() {
             document.getElementById('cfgBIC').value = config.bank.bic || '';
         }
 
+        // SMTP
+        if (config.smtp) {
+            document.getElementById('cfgSmtpServer').value = config.smtp.server || '';
+            document.getElementById('cfgSmtpPort').value = config.smtp.port || '';
+            document.getElementById('cfgSmtpUser').value = config.smtp.user || '';
+            document.getElementById('cfgSmtpPass').value = config.smtp.pass || '';
+            document.getElementById('cfgSmtpSender').value = config.smtp.sender || '';
+        } else {
+            // Reset if empty
+            document.getElementById('cfgSmtpServer').value = '';
+            document.getElementById('cfgSmtpPort').value = '';
+            document.getElementById('cfgSmtpUser').value = '';
+            document.getElementById('cfgSmtpPass').value = '';
+            document.getElementById('cfgSmtpSender').value = '';
+        }
+
     } catch (e) {
         console.error('Config Load Error:', e);
         alert('Fehler beim Laden der Daten.');
@@ -86,6 +102,13 @@ async function saveMandantConfig() {
             name: document.getElementById('cfgBankName').value,
             iban: document.getElementById('cfgIBAN').value,
             bic: document.getElementById('cfgBIC').value
+        },
+        smtp: {
+            server: document.getElementById('cfgSmtpServer').value,
+            port: document.getElementById('cfgSmtpPort').value,
+            user: document.getElementById('cfgSmtpUser').value,
+            pass: document.getElementById('cfgSmtpPass').value,
+            sender: document.getElementById('cfgSmtpSender').value
         }
     };
 

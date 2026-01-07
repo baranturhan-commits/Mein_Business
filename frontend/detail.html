@@ -715,6 +715,31 @@
                     <label>BIC</label>
                     <input type="text" id="cfgBIC" class="form-control">
                 </div>
+
+                <h4 style="margin-top:15px; margin-bottom:10px; color:#aaa;">Email-Einstellungen (SMTP)</h4>
+                <div class="row" style="display: flex; gap: 10px;">
+                    <div class="form-group" style="flex: 1;">
+                        <label>SMTP Server</label>
+                        <input type="text" id="cfgSmtpServer" class="form-control" placeholder="smtp.beispiel.de">
+                    </div>
+                    <div class="form-group" style="width: 80px;">
+                        <label>Port</label>
+                        <input type="number" id="cfgSmtpPort" class="form-control" placeholder="587">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>SMTP Benutzer / Email</label>
+                    <input type="text" id="cfgSmtpUser" class="form-control">
+                </div>
+                <div class="form-group">
+                    <label>SMTP Passwort</label>
+                    <input type="password" id="cfgSmtpPass" class="form-control">
+                </div>
+                <div class="form-group">
+                    <label>Absender-Name</label>
+                    <input type="text" id="cfgSmtpSender" class="form-control" placeholder="Buchhaltung">
+                </div>
+
                 <h4 style="margin-top:15px; margin-bottom:10px; color:#aaa;">Design</h4>
                 <div class="form-group">
                     <label>Logo</label>
