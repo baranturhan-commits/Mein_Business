@@ -9,7 +9,7 @@ echo    Erledigt.
 echo.
 echo 2. Starte Server neu...
 cd backend
-start "Mein Business API" python api_server.py
+start "Mein Business API" py api_server.py
 echo.
 echo ========================================
 echo   FERTIG!

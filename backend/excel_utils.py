@@ -132,17 +132,37 @@ def append_data(filepath, data_dict, sheet_name="Data", headers=None):
     wb.close()
     return True
 
+_CACHE = {}
+
 def read_data(filepath, sheet_name=0):
-    """Liest Daten via Pandas als Liste von Dicts."""
+    """Liest Daten via Pandas als Liste von Dicts (mit Cache für bessere Performance)."""
     if not os.path.exists(filepath):
         return []
+        
+    # Check cache based on file modification time
+    try:
+        mtime = os.path.getmtime(filepath)
+        cache_key = f"{filepath}_{sheet_name}"
+        if cache_key in _CACHE and _CACHE[cache_key]['mtime'] == mtime:
+            return _CACHE[cache_key]['data']
+    except Exception:
+        pass
+        
     try:
         df = pd.read_excel(filepath, sheet_name=sheet_name)
         # Robust cleanup: Cast to object to allow None everywhere
         df = df.astype(object)
         # Replace all pandas/numpy NaNs with None
         df = df.where(pd.notnull(df), None)
-        return df.to_dict('records')
+        data = df.to_dict('records')
+        
+        # Save to cache
+        try:
+            _CACHE[cache_key] = {'mtime': mtime, 'data': data}
+        except Exception:
+            pass
+            
+        return data
     except Exception as e:
         print(f"⚠️  Fehler beim Lesen von Excel {filepath}: {e}")
         return []

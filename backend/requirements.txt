@@ -4,3 +4,5 @@ python-dotenv
 flask
 flask-cors
 openpyxl
+pandas
+firebase-admin

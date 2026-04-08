@@ -13,7 +13,7 @@ echo.
 :loop
 echo Starte API Server... (Druecke Strg+C zum Beenden)
 cd backend
-python api_server.py
+py api_server.py
 cd ..
 
 echo.
