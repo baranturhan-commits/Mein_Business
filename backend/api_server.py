@@ -1043,6 +1043,7 @@ def create_kunde(mandant_id):
         
         mandant_dir = MANDANTEN_DIR / mandant_id
         kunden_xlsx = mandant_dir / 'Kunden' / 'kunden.xlsx'
+        kunden_xlsx.parent.mkdir(parents=True, exist_ok=True)
         
         # Prepare data
         kunde_data = {
