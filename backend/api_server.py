@@ -970,30 +970,27 @@ def delete_mandant(mandant_id):
             return jsonify({'error': 'Mandant nicht gefunden'}), 404
         
         import shutil
-        import stat
-        import time
+        import subprocess
+        import os
         
-        def remove_readonly(func, path, excinfo):
-            try:
-                os.chmod(path, stat.S_IWRITE)
-                func(path)
-            except Exception:
-                pass
-                
-        # Retry logic for Windows file locks
-        for _ in range(3):
-            try:
-                if mandant_path.exists():
-                    shutil.rmtree(mandant_path, onerror=remove_readonly)
-                break
-            except Exception:
-                time.sleep(0.5)
-        
-        if mandant_path.exists():
+        # Erst normaler Versuch
+        try:
             shutil.rmtree(mandant_path, ignore_errors=True)
-            
+        except Exception:
+            pass
+        
+        # Falls noch vorhanden: Linux Fallback (Railway) oder Windows Fallback
         if mandant_path.exists():
-            raise Exception("Dateien sind blockiert/geöffnet. Bitte schließe alle PDFs oder Excel-Dateien des Mandanten.")
+            try:
+                if os.name == 'nt':
+                    subprocess.run(['cmd', '/c', 'rmdir', '/s', '/q', str(mandant_path)])
+                else:
+                    subprocess.run(['rm', '-rf', str(mandant_path)])
+            except Exception as sub_e:
+                logger.error(f"Fallback delete failed: {sub_e}")
+                
+        if mandant_path.exists():
+            raise Exception("Dateien sind blockiert/geöffnet. Löschen fehlgeschlagen.")
         
         logger.info(f"Mandant gelöscht: {mandant_id}")
         return jsonify({'success': True})
