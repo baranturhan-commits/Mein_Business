@@ -85,11 +85,8 @@ sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8')
 load_dotenv()
 GOOGLE_API_KEY = os.getenv('GOOGLE_API_KEY')
 
-if not GOOGLE_API_KEY:
-    print("❌ Fehler: GOOGLE_API_KEY nicht in .env gefunden!")
-    sys.exit(1)
-
-genai.configure(api_key=GOOGLE_API_KEY)
+if GOOGLE_API_KEY:
+    genai.configure(api_key=GOOGLE_API_KEY)
 # Gemini 2.0 Flash-Lite: schnell, günstig, perfekt für Belege
 model = genai.GenerativeModel('models/gemini-2.0-flash-lite')
 

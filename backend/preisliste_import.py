@@ -13,10 +13,8 @@ import google.generativeai as genai
 load_dotenv()
 GOOGLE_API_KEY = os.getenv('GOOGLE_API_KEY')
 
-if not GOOGLE_API_KEY:
-    raise ValueError("GOOGLE_API_KEY nicht in .env gefunden!")
-
-genai.configure(api_key=GOOGLE_API_KEY)
+if GOOGLE_API_KEY:
+    genai.configure(api_key=GOOGLE_API_KEY)
 
 def parse_excel(file_path):
     """Liest Excel-Datei"""
