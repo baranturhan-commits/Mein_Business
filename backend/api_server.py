@@ -1035,8 +1035,11 @@ def create_kunde(mandant_id):
         plz = data.get('plz', '').strip()
         ort = data.get('ort', '').strip()
         
+        if not firma and not email:
+            return jsonify({'error': 'Bitte gib zumindest einen Namen/Firma oder eine Email an'}), 400
+            
         if not firma:
-            return jsonify({'error': 'Firma ist erforderlich'}), 400
+            firma = email # Fallback für die Anzeige in der Liste
         
         mandant_dir = MANDANTEN_DIR / mandant_id
         kunden_xlsx = mandant_dir / 'Kunden' / 'kunden.xlsx'
