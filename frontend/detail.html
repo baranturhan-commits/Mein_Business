@@ -147,7 +147,7 @@
                     <h2>🔄 Wiederkehrende Rechnungen (Abos)</h2>
                     <div class="button-group">
                         <button class="btn btn-secondary"
-                            onclick="fetch(`http://localhost:5000/api/mandanten/${new URLSearchParams(window.location.search).get('id')}/recurring/process`, {method:'POST'}).then(r=>r.json()).then(d=>{alert(d.count + ' Rechnungen erstellt!'); RecurringManager.loadRecurring();})">
+                            onclick="fetch(`${API_BASE_URL}/mandanten/${new URLSearchParams(window.location.search).get('id')}/recurring/process`, {method:'POST'}).then(r=>r.json()).then(d=>{alert(d.count + ' Rechnungen erstellt!'); RecurringManager.loadRecurring();})">
                             ⚡ Jetzt prüfen (Manuell)
                         </button>
                         <button class="btn btn-primary" onclick="RecurringManager.openModal()">

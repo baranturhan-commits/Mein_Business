@@ -7,10 +7,8 @@ function getMandantIdForConfig() {
 }
 
 function getApiUrlForConfig() {
-    if (window.location.protocol === 'file:') {
-        return 'https://meinbusiness-production.up.railway.app/api';
-    }
-    return `${window.location.protocol}//${window.location.hostname}:5000/api`;
+    if (typeof API !== 'undefined') return API;
+    return 'https://meinbusiness-production.up.railway.app/api';
 }
 
 function openConfigModal() {
