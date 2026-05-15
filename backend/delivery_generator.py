@@ -13,10 +13,27 @@ from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
 from reportlab.lib.units import cm
 from pathlib import Path
 
-def get_and_increment_delivery_counter(mandant_path):
-    """Generiert und inkrementiert Protokoll-Nummer"""
+def get_and_increment_delivery_counter(mandant_path, mandant_config=None):
+    """Generiert und inkrementiert Protokoll/Lieferschein-Nummer mit Mandantennummer"""
     counter_file = Path(mandant_path) / "delivery_counter.json"
-    current_year = datetime.date.today().year
+    today = datetime.date.today()
+    current_year = str(today.year)
+    current_month = f"{today.month:02d}"
+    
+    # Get Mandantennummer from config
+    mandanten_nr = "000"
+    if mandant_config:
+        mandanten_nr = mandant_config.get('mandantennummer', '000')
+    else:
+        # Try to load from config file
+        config_file = Path(mandant_path) / "mandant_config.json"
+        if config_file.exists():
+            try:
+                with open(config_file, 'r', encoding='utf-8') as f:
+                    cfg = json.load(f)
+                    mandanten_nr = cfg.get('mandantennummer', '000')
+            except:
+                pass
     
     if counter_file.exists():
         with open(counter_file, 'r') as f:
@@ -24,12 +41,18 @@ def get_and_increment_delivery_counter(mandant_path):
     else:
         data = {}
     
-    year_key = str(current_year)
-    if year_key not in data or data.get('year') != year_key:
-        data = {'year': year_key, 'counter': 0}
+    # Reset if month or year changed
+    if (data.get('year') != current_year) or (data.get('month') != current_month):
+        data = {'year': current_year, 'month': current_month, 'counter': 0}
     
     data['counter'] += 1
-    nummer = f"PROT-{current_year}-{data['counter']:03d}"
+    
+    # Ensure current data
+    data['year'] = current_year
+    data['month'] = current_month
+    
+    # Format: LS-[MandantenNr]-[Jahr]-[Monat]-[Counter]
+    nummer = f"LS-{mandanten_nr}-{current_year}-{current_month}-{data['counter']:03d}"
     
     with open(counter_file, 'w') as f:
         json.dump(data, f, indent=4)
@@ -182,39 +205,30 @@ def create_delivery_pdf(mandant_path, mandant_config, kunde_name, positionen, ou
     story.append(date_table)
     story.append(Spacer(1, 1*cm))
     
-    # 5. Main Table (Items)
+    # 5. Main Table
     # Cols: Gewerk, Beschreibung, ok, nok, Bemerkung
     # Header Style: Dark Gray, White Text
     
     header = ["Gewerk", "Beschreibung (Mängel / Restarbeiten)", "ok", "nok", "Bemerkung"]
+    
     main_data = [header]
     
-    # If items provided, fill them
-    if positionen:
-        for i, item in enumerate(positionen, 1):
-            # Parse item text - handle 'titel', 'text', 'bezeichnung'
-            # Assuming item structure from offer/invoice
-            desc = item.get('text', item.get('titel', item.get('bezeichnung', '')))
+    if positionen and len(positionen) > 0:
+        # Use positions from offer
+        for i, pos in enumerate(positionen):
+            # Format description: "Menge Einheit Bezeichnung"
+            menge = pos.get('menge', '')
+            einheit = pos.get('einheit', '')
+            bez = pos.get('bezeichnung', '')
+            desc = f"{menge} {einheit} {bez}".strip()
             
-            # If quantity > 1, maybe show it? "5x Steckdosen"
-            qty = float(item.get('menge', 1)) 
-            if qty != 1:
-                desc = f"{qty:g}x {desc}"
-                
-            main_data.append([str(i), Paragraph(desc, value_style), "", "", ""])
+            main_data.append([str(i+1), desc, "", "", ""])
             
-        # Add some empty rows at bottom for extra notes
-        # Calculate how many empty rows to add to fill page or min 5
-        rows_to_add = max(5, 15 - len(positionen))
-        current_rows = len(positionen)
-        for i in range(rows_to_add):
-            main_data.append([str(current_rows + i + 1), "", "", "", ""])
-
     else:
-        # Standard Blanko (15 empty rows)
+        # Generate ~15 empty rows for manual entry
         for i in range(15):
-            main_data.append([str(i+1), "", "", "", ""])
-
+             main_data.append([str(i+1), "", "", "", ""]) # Empty rows
+    
     main_table = Table(main_data, colWidths=[1.5*cm, 8*cm, 1.5*cm, 1.5*cm, 4.5*cm])
     main_table.setStyle(TableStyle([
         # Header
@@ -229,7 +243,6 @@ def create_delivery_pdf(mandant_path, mandant_config, kunde_name, positionen, ou
         ('BACKGROUND', (0,1), (-1,-1), colors.HexColor('#e8e8e8')),
         ('GRID', (0,0), (-1,-1), 1, colors.white),
         ('MINROWHEIGHT', (0,1), (-1,-1), 20),
-        ('VALIGN', (0,1), (-1,-1), 'TOP'), # Align text top for items
     ]))
     
     story.append(main_table)

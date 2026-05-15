@@ -302,8 +302,11 @@ def analyze_beleg(filepath):
             uploaded_file = genai.upload_file(filepath)
             response = model.generate_content([prompt, uploaded_file])
         else:
-            img = Image.open(filepath)
-            response = model.generate_content([prompt, img])
+            # Use context manager and convert to RGB to avoid alpha channel issues
+            with Image.open(filepath) as img:
+                if img.mode not in ('RGB', 'L'):
+                    img = img.convert('RGB')
+                response = model.generate_content([prompt, img])
             
         clean_json = response.text.replace("```json", "").replace("```", "").strip()
         start = clean_json.find("[")

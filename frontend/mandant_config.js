@@ -40,14 +40,20 @@ async function loadMandantConfig() {
 
         // Fill Fields
         document.getElementById('cfgFirma').value = config.firma || '';
+        document.getElementById('cfgMandantenNr').value = config.mandantennummer || '';
+
+        const formTypEl = document.getElementById('cfgFormTyp');
+        if (formTypEl) {
+            formTypEl.value = config.unternehmensform || 'Einzelunternehmen';
+        }
+
         document.getElementById('cfgGF').value = config.geschaeftsfuehrer || '';
+        document.getElementById('cfgUStId').value = config.ustid || '';
+        document.getElementById('cfgSteuernummer').value = config.steuernummer || '';
 
         const currentLogo = config.logo || 'Kein Logo';
         const logoEl = document.getElementById('cfgCurrentLogo');
         if (logoEl) logoEl.textContent = currentLogo;
-
-        // New Mandant Number
-        document.getElementById('cfgMandantNr').value = config.mandant_nummer || '000';
 
         // Reset File Input
         const fileInput = document.getElementById('cfgLogoFile');
@@ -64,6 +70,22 @@ async function loadMandantConfig() {
             document.getElementById('cfgBIC').value = config.bank.bic || '';
         }
 
+        // SMTP
+        if (config.smtp) {
+            document.getElementById('cfgSmtpServer').value = config.smtp.server || '';
+            document.getElementById('cfgSmtpPort').value = config.smtp.port || '';
+            document.getElementById('cfgSmtpUser').value = config.smtp.user || '';
+            document.getElementById('cfgSmtpPass').value = config.smtp.pass || '';
+            document.getElementById('cfgSmtpSender').value = config.smtp.sender || '';
+        } else {
+            // Reset if empty
+            document.getElementById('cfgSmtpServer').value = '';
+            document.getElementById('cfgSmtpPort').value = '';
+            document.getElementById('cfgSmtpUser').value = '';
+            document.getElementById('cfgSmtpPass').value = '';
+            document.getElementById('cfgSmtpSender').value = '';
+        }
+
     } catch (e) {
         console.error('Config Load Error:', e);
         alert('Fehler beim Laden der Daten.');
@@ -74,11 +96,13 @@ async function saveMandantConfig() {
     const id = getMandantIdForConfig();
     if (!id) return;
 
-    // 1. Save Text Config
     const data = {
         firma: document.getElementById('cfgFirma').value,
+        mandantennummer: document.getElementById('cfgMandantenNr').value,
+        unternehmensform: document.getElementById('cfgFormTyp') ? document.getElementById('cfgFormTyp').value : 'Einzelunternehmen',
         geschaeftsfuehrer: document.getElementById('cfgGF').value,
-        mandant_nummer: document.getElementById('cfgMandantNr').value,
+        ustid: document.getElementById('cfgUStId').value,
+        steuernummer: document.getElementById('cfgSteuernummer').value,
         // logo is handled via file upload
         adresse: {
             strasse: document.getElementById('cfgStrasse').value,
@@ -88,6 +112,13 @@ async function saveMandantConfig() {
             name: document.getElementById('cfgBankName').value,
             iban: document.getElementById('cfgIBAN').value,
             bic: document.getElementById('cfgBIC').value
+        },
+        smtp: {
+            server: document.getElementById('cfgSmtpServer').value,
+            port: document.getElementById('cfgSmtpPort').value,
+            user: document.getElementById('cfgSmtpUser').value,
+            pass: document.getElementById('cfgSmtpPass').value,
+            sender: document.getElementById('cfgSmtpSender').value
         }
     };
 
@@ -130,6 +161,30 @@ async function saveMandantConfig() {
     } catch (e) {
         console.error('Config Save Error:', e);
         alert('Fehler beim Speichern.');
+    }
+}
+
+async function deleteMandant() {
+    const id = getMandantIdForConfig();
+    if (!id) return;
+
+    if (confirm("Möchtest du diesen Mandanten wirklich löschen? Diese Aktion kann nicht rückgängig gemacht werden und alle Rechnungen, Angebote und Kundendaten werden unwiderruflich gelöscht!")) {
+        try {
+            const response = await fetch(`${getApiUrlForConfig()}/mandanten/${id}`, {
+                method: 'DELETE'
+            });
+
+            const result = await response.json();
+            if (result.success) {
+                alert('Mandant erfolgreich gelöscht.');
+                window.location.href = 'index.html'; // Redirect to dashboard
+            } else {
+                alert('Fehler beim Löschen: ' + (result.error || 'Unbekannt'));
+            }
+        } catch (e) {
+            console.error('Delete Mandant Error:', e);
+            alert('Fehler beim Löschen des Mandanten.');
+        }
     }
 }
 

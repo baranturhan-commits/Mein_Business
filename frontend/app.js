@@ -65,31 +65,68 @@ function renderMandanten(mandanten) {
 // Create Mandant Card HTML
 function createMandantCard(mandant) {
     const stats = mandant.stats || {};
-    const einnahmen = stats.einnahmen || {};
+    const einnahmen = stats.einnahmen || { total: 0, offen: 0 };
     const rechnungen = stats.rechnungen || {};
     const kunden = stats.kunden || 0;
 
+    const total = einnahmen.total || 0;
+    const offen = einnahmen.offen || 0;
+    const bezahlt = total - offen;
+    const percentPaid = total > 0 ? (bezahlt / total) * 100 : 100;
+
     const initial = mandant.name.charAt(0).toUpperCase();
 
+    // Status Logik
+    let statusClass = 'status-green'; // Alles gut
+    let statusIcon = '🟢';
+    let statusText = 'Alles erledigt';
+
+    if (offen > 0) {
+        // Hier könnte man noch prüfen wir alt die Rechnungen sind (wenn Backend das liefert)
+        // Für jetzt: Offen > 0 ist Gelb, Offen > 1000 ist Rot (als Beispiel)
+        if (offen > 1000) {
+            statusClass = 'status-red';
+            statusIcon = '🔴';
+            statusText = 'Handlungsbedarf';
+        } else {
+            statusClass = 'status-yellow';
+            statusIcon = '🟡';
+            statusText = 'Zahlungen offen';
+        }
+    }
+
     return `
-        <div class="mandant-card" onclick="openMandantDetails('${mandant.id}')">
+        <div class="mandant-card ${statusClass}" onclick="openMandantDetails('${mandant.id}')">
             <div class="mandant-header">
                 <div class="mandant-avatar">${initial}</div>
                 <div class="mandant-info">
-                    <h3>${mandant.name}</h3>
+                    <div style="display:flex; justify-content:space-between; align-items:center;">
+                        <h3>${mandant.name}</h3>
+                        <span title="${statusText}" style="cursor:help;">${statusIcon}</span>
+                    </div>
                     <p class="mandant-id">${mandant.id}</p>
                 </div>
             </div>
             
             <div class="mandant-stats">
+                <div class="stat-item full-width" style="margin-bottom: 8px;">
+                     <div style="display:flex; justify-content:space-between; font-size: 0.8em; margin-bottom: 2px; color: #aaa;">
+                        <span>Fortschritt (Bezahlt)</span>
+                        <span>${percentPaid.toFixed(0)}%</span>
+                     </div>
+                     <div style="width: 100%; height: 6px; background: #333; border-radius: 3px; overflow: hidden;">
+                        <div style="width: ${percentPaid}%; height: 100%; background: var(--success); transition: width 0.3s;"></div>
+                     </div>
+                </div>
+
                 <div class="stat-item">
-                    <p class="stat-item-label">💰 Einnahmen</p>
-                    <p class="stat-item-value">${formatCurrency(einnahmen.total || 0)}</p>
+                    <p class="stat-item-label">💰 Umsatz</p>
+                    <p class="stat-item-value">${formatCurrency(total)}</p>
                 </div>
                 
                 <div class="stat-item">
                     <p class="stat-item-label">⏳ Offen</p>
-                    <p class="stat-item-value warning">${formatCurrency(einnahmen.offen || 0)}</p>
+                    <p class="stat-item-value ${offen > 0 ? 'warning' : ''}">${formatCurrency(offen)}</p>
                 </div>
                 
                 <div class="stat-item">
@@ -130,26 +167,58 @@ async function refreshData() {
     updateLastUpdate();
 }
 
-// Create Backup
-async function createBackup() {
-    if (!confirm('Backup jetzt erstellen?')) {
-        return;
-    }
+// Feierabend & Backup
+async function finishWorkDay() {
+    if (!confirm("🏁 Feierabend machen?\n\nDas System erstellt noch kurz ein Backup für dich.\nDanach kannst du den PC ausschalten.")) return;
+
+    // Create custom overlay
+    const overlay = document.createElement('div');
+    overlay.style.position = 'fixed';
+    overlay.style.top = '0'; overlay.style.left = '0';
+    overlay.style.width = '100%'; overlay.style.height = '100%';
+    overlay.style.backgroundColor = 'rgba(0,0,0,0.85)';
+    overlay.style.zIndex = '9999';
+    overlay.style.display = 'flex';
+    overlay.style.flexDirection = 'column';
+    overlay.style.justifyContent = 'center';
+    overlay.style.alignItems = 'center';
+    overlay.style.color = 'white';
+    overlay.innerHTML = `
+        <div class="spinner" style="width: 60px; height: 60px; border-width: 6px;"></div>
+        <h2 style="margin-top: 20px;">Backup wird erstellt...</h2>
+        <p>Bitte warten...</p>
+    `;
+    document.body.appendChild(overlay);
 
     try {
-        const response = await fetch(`${API_BASE_URL}/backup`, {
-            method: 'POST'
-        });
+        const res = await fetch(`${API_BASE_URL}/backup/now`, { method: 'POST' });
+        const data = await res.json();
 
-        const result = await response.json();
-
-        if (result.success) {
-            alert(`✅ Backup erfolgreich erstellt!\n\n${result.backup_file}`);
+        if (data.success) {
+            overlay.innerHTML = `
+                <div style="font-size: 80px;">✅</div>
+                <h2>Fertig!</h2>
+                <p>Backup: ${data.filename}</p>
+                <p>Größe: ${data.size_mb} MB</p>
+                <br>
+                <h3>Schönen Feierabend! 👋</h3>
+                <button class="btn btn-primary" onclick="location.reload()" style="margin-top: 20px;">Schließen</button>
+            `;
         } else {
-            alert(`❌ Fehler: ${result.error}`);
+            overlay.innerHTML = `
+                <div style="font-size: 80px;">❌</div>
+                <h2>Fehler beim Backup</h2>
+                <p>${data.error}</p>
+                <button class="btn" onclick="location.reload()" style="margin-top: 20px;">Schließen</button>
+            `;
         }
-    } catch (error) {
-        alert(`❌ Fehler beim Backup: ${error.message}`);
+    } catch (e) {
+        overlay.innerHTML = `
+            <div style="font-size: 80px;">❌</div>
+            <h2>Netzwerkfehler</h2>
+            <p>${e}</p>
+            <button class="btn" onclick="location.reload()" style="margin-top: 20px;">Schließen</button>
+        `;
     }
 }
 
@@ -271,12 +340,16 @@ async function submitMandant(event) {
 
     const formData = {
         firma: document.getElementById('mandantFirma').value.trim(),
+        unternehmensform: document.getElementById('mandantFormTyp').value,
         strasse: document.getElementById('mandantStrasse').value.trim(),
         ort: document.getElementById('mandantOrt').value.trim(),
         geschaeftsfuehrer: document.getElementById('mandantGF').value.trim(),
+        ustid: document.getElementById('mandantUStId') ? document.getElementById('mandantUStId').value.trim() : '',
+        steuernummer: document.getElementById('mandantSteuernummer') ? document.getElementById('mandantSteuernummer').value.trim() : '',
         iban: document.getElementById('mandantIBAN').value.trim(),
         bic: document.getElementById('mandantBIC').value.trim(),
-        bank: document.getElementById('mandantBank').value.trim()
+        bank: document.getElementById('mandantBank').value.trim(),
+        start_invoice_number: parseInt(document.getElementById('mandantStartNr')?.value) || 0
     };
 
     const statusDiv = document.getElementById('mandantStatus');

@@ -29,6 +29,7 @@ venv.bak/
 Thumbs.db
 
 # Backend Specific
+backend/Mandanten/
 backend/_ARCHIV/
 backend/Output/
 backend/**/*.pdf

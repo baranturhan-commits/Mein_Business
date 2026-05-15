@@ -1,0 +1,144 @@
+2026-05-08 15:43:02,213 - __main__ - INFO - 🔥 Firebase Admin SDK initialized with ADC
+2026-05-08 15:43:02,239 - __main__ - INFO - ⏰ Scheduler gestartet (Backup täglich um 23:00)
+2026-05-08 15:43:02,252 - __main__ - INFO - 🚀 Starting API Server...
+2026-05-08 15:43:02,304 - werkzeug - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://192.168.178.199:5000
+2026-05-08 15:43:02,304 - werkzeug - INFO - [33mPress CTRL+C to quit[0m
+2026-05-08 15:43:02,307 - werkzeug - INFO -  * Restarting with stat
+2026-05-08 15:43:04,210 - __main__ - INFO - 🔥 Firebase Admin SDK initialized with ADC
+2026-05-08 15:43:04,237 - __main__ - INFO - ⏰ Scheduler gestartet (Backup täglich um 23:00)
+2026-05-08 15:43:04,244 - __main__ - INFO - 🚀 Starting API Server...
+2026-05-08 15:43:04,264 - werkzeug - WARNING -  * Debugger is active!
+2026-05-08 15:43:04,271 - werkzeug - INFO -  * Debugger PIN: 447-598-156
+2026-05-08 15:43:04,304 - werkzeug - INFO - 127.0.0.1 - - [08/May/2026 15:43:04] "GET / HTTP/1.1" 200 -
+2026-05-08 15:43:04,328 - werkzeug - INFO - 127.0.0.1 - - [08/May/2026 15:43:04] "[36mGET /styles.css HTTP/1.1[0m" 304 -
+2026-05-08 15:43:04,644 - werkzeug - INFO - 127.0.0.1 - - [08/May/2026 15:43:04] "[36mGET /firebase_config.js HTTP/1.1[0m" 304 -
+2026-05-08 15:43:04,653 - werkzeug - INFO - 127.0.0.1 - - [08/May/2026 15:43:04] "[36mGET /auth.js HTTP/1.1[0m" 304 -
+2026-05-08 15:43:04,653 - werkzeug - INFO - 127.0.0.1 - - [08/May/2026 15:43:04] "[36mGET /app.js HTTP/1.1[0m" 304 -
+2026-05-08 15:43:04,994 - __main__ - INFO - Mandanten geladen: 2
+2026-05-08 15:43:05,018 - werkzeug - INFO - 127.0.0.1 - - [08/May/2026 15:43:05] "[33mGET /favicon.ico HTTP/1.1[0m" 404 -
+2026-05-08 15:43:05,090 - werkzeug - INFO - 127.0.0.1 - - [08/May/2026 15:43:05] "GET /api/dashboard HTTP/1.1" 200 -
+2026-05-08 15:43:35,023 - __main__ - INFO - Mandanten geladen: 2
+2026-05-08 15:43:35,065 - werkzeug - INFO - 127.0.0.1 - - [08/May/2026 15:43:35] "GET /api/dashboard HTTP/1.1" 200 -
+2026-05-08 15:44:04,715 - __main__ - INFO - Mandanten geladen: 2
+2026-05-08 15:44:04,758 - werkzeug - INFO - 127.0.0.1 - - [08/May/2026 15:44:04] "GET /api/dashboard HTTP/1.1" 200 -
+2026-05-08 15:44:35,018 - __main__ - INFO - Mandanten geladen: 2
+2026-05-08 15:44:35,061 - werkzeug - INFO - 127.0.0.1 - - [08/May/2026 15:44:35] "GET /api/dashboard HTTP/1.1" 200 -
+2026-05-08 15:45:04,706 - __main__ - INFO - Mandanten geladen: 2
+2026-05-08 15:45:04,749 - werkzeug - INFO - 127.0.0.1 - - [08/May/2026 15:45:04] "GET /api/dashboard HTTP/1.1" 200 -
+2026-05-08 15:45:35,020 - __main__ - INFO - Mandanten geladen: 2
+2026-05-08 15:45:35,062 - werkzeug - INFO - 127.0.0.1 - - [08/May/2026 15:45:35] "GET /api/dashboard HTTP/1.1" 200 -
+2026-05-08 15:46:04,703 - __main__ - INFO - Mandanten geladen: 2
+2026-05-08 15:46:04,746 - werkzeug - INFO - 127.0.0.1 - - [08/May/2026 15:46:04] "GET /api/dashboard HTTP/1.1" 200 -
+2026-05-08 15:46:35,029 - __main__ - INFO - Mandanten geladen: 2
+2026-05-08 15:46:35,073 - werkzeug - INFO - 127.0.0.1 - - [08/May/2026 15:46:35] "GET /api/dashboard HTTP/1.1" 200 -
+2026-05-08 15:47:04,718 - __main__ - INFO - Mandanten geladen: 2
+2026-05-08 15:47:04,758 - werkzeug - INFO - 127.0.0.1 - - [08/May/2026 15:47:04] "GET /api/dashboard HTTP/1.1" 200 -
+2026-05-08 15:47:35,694 - __main__ - INFO - Mandanten geladen: 2
+2026-05-08 15:47:35,736 - werkzeug - INFO - 127.0.0.1 - - [08/May/2026 15:47:35] "GET /api/dashboard HTTP/1.1" 200 -
+2026-05-08 15:48:05,401 - __main__ - INFO - Mandanten geladen: 2
+2026-05-08 15:48:05,441 - werkzeug - INFO - 127.0.0.1 - - [08/May/2026 15:48:05] "GET /api/dashboard HTTP/1.1" 200 -
+2026-05-08 15:49:29,711 - __main__ - INFO - Mandanten geladen: 2
+2026-05-08 15:49:29,753 - werkzeug - INFO - 127.0.0.1 - - [08/May/2026 15:49:29] "GET /api/dashboard HTTP/1.1" 200 -
+2026-05-08 15:50:29,401 - __main__ - INFO - Mandanten geladen: 2
+2026-05-08 15:50:29,443 - werkzeug - INFO - 127.0.0.1 - - [08/May/2026 15:50:29] "GET /api/dashboard HTTP/1.1" 200 -
+2026-05-08 15:51:29,719 - __main__ - INFO - Mandanten geladen: 2
+2026-05-08 15:51:29,759 - werkzeug - INFO - 127.0.0.1 - - [08/May/2026 15:51:29] "GET /api/dashboard HTTP/1.1" 200 -
+2026-05-08 15:52:29,407 - __main__ - INFO - Mandanten geladen: 2
+2026-05-08 15:52:29,449 - werkzeug - INFO - 127.0.0.1 - - [08/May/2026 15:52:29] "GET /api/dashboard HTTP/1.1" 200 -
+2026-05-08 15:53:29,711 - __main__ - INFO - Mandanten geladen: 2
+2026-05-08 15:53:29,751 - werkzeug - INFO - 127.0.0.1 - - [08/May/2026 15:53:29] "GET /api/dashboard HTTP/1.1" 200 -
+2026-05-08 15:54:29,406 - __main__ - INFO - Mandanten geladen: 2
+2026-05-08 15:54:29,454 - werkzeug - INFO - 127.0.0.1 - - [08/May/2026 15:54:29] "GET /api/dashboard HTTP/1.1" 200 -
+2026-05-08 15:55:29,715 - __main__ - INFO - Mandanten geladen: 2
+2026-05-08 15:55:29,755 - werkzeug - INFO - 127.0.0.1 - - [08/May/2026 15:55:29] "GET /api/dashboard HTTP/1.1" 200 -
+2026-05-08 15:56:29,396 - __main__ - INFO - Mandanten geladen: 2
+2026-05-08 15:56:29,439 - werkzeug - INFO - 127.0.0.1 - - [08/May/2026 15:56:29] "GET /api/dashboard HTTP/1.1" 200 -
+2026-05-08 15:57:29,709 - __main__ - INFO - Mandanten geladen: 2
+2026-05-08 15:57:29,749 - werkzeug - INFO - 127.0.0.1 - - [08/May/2026 15:57:29] "GET /api/dashboard HTTP/1.1" 200 -
+2026-05-08 15:58:29,401 - __main__ - INFO - Mandanten geladen: 2
+2026-05-08 15:58:29,445 - werkzeug - INFO - 127.0.0.1 - - [08/May/2026 15:58:29] "GET /api/dashboard HTTP/1.1" 200 -
+2026-05-08 15:59:29,709 - __main__ - INFO - Mandanten geladen: 2
+2026-05-08 15:59:29,749 - werkzeug - INFO - 127.0.0.1 - - [08/May/2026 15:59:29] "GET /api/dashboard HTTP/1.1" 200 -
+2026-05-08 16:00:29,406 - __main__ - INFO - Mandanten geladen: 2
+2026-05-08 16:00:29,451 - werkzeug - INFO - 127.0.0.1 - - [08/May/2026 16:00:29] "GET /api/dashboard HTTP/1.1" 200 -
+2026-05-08 16:01:29,715 - __main__ - INFO - Mandanten geladen: 2
+2026-05-08 16:01:29,756 - werkzeug - INFO - 127.0.0.1 - - [08/May/2026 16:01:29] "GET /api/dashboard HTTP/1.1" 200 -
+2026-05-08 16:02:29,402 - __main__ - INFO - Mandanten geladen: 2
+2026-05-08 16:02:29,443 - werkzeug - INFO - 127.0.0.1 - - [08/May/2026 16:02:29] "GET /api/dashboard HTTP/1.1" 200 -
+2026-05-08 16:03:29,718 - __main__ - INFO - Mandanten geladen: 2
+2026-05-08 16:03:29,761 - werkzeug - INFO - 127.0.0.1 - - [08/May/2026 16:03:29] "GET /api/dashboard HTTP/1.1" 200 -
+2026-05-08 16:04:29,402 - __main__ - INFO - Mandanten geladen: 2
+2026-05-08 16:04:29,446 - werkzeug - INFO - 127.0.0.1 - - [08/May/2026 16:04:29] "GET /api/dashboard HTTP/1.1" 200 -
+2026-05-08 16:05:29,720 - __main__ - INFO - Mandanten geladen: 2
+2026-05-08 16:05:29,766 - werkzeug - INFO - 127.0.0.1 - - [08/May/2026 16:05:29] "GET /api/dashboard HTTP/1.1" 200 -
+2026-05-08 16:06:29,405 - __main__ - INFO - Mandanten geladen: 2
+2026-05-08 16:06:29,457 - werkzeug - INFO - 127.0.0.1 - - [08/May/2026 16:06:29] "GET /api/dashboard HTTP/1.1" 200 -
+2026-05-08 16:07:29,717 - __main__ - INFO - Mandanten geladen: 2
+2026-05-08 16:07:29,770 - werkzeug - INFO - 127.0.0.1 - - [08/May/2026 16:07:29] "GET /api/dashboard HTTP/1.1" 200 -
+2026-05-08 16:08:29,407 - __main__ - INFO - Mandanten geladen: 2
+2026-05-08 16:08:29,453 - werkzeug - INFO - 127.0.0.1 - - [08/May/2026 16:08:29] "GET /api/dashboard HTTP/1.1" 200 -
+2026-05-08 16:09:29,718 - __main__ - INFO - Mandanten geladen: 2
+2026-05-08 16:09:29,757 - werkzeug - INFO - 127.0.0.1 - - [08/May/2026 16:09:29] "GET /api/dashboard HTTP/1.1" 200 -
+2026-05-08 16:10:29,408 - __main__ - INFO - Mandanten geladen: 2
+2026-05-08 16:10:29,452 - werkzeug - INFO - 127.0.0.1 - - [08/May/2026 16:10:29] "GET /api/dashboard HTTP/1.1" 200 -
+2026-05-08 16:11:29,753 - __main__ - INFO - Mandanten geladen: 2
+2026-05-08 16:11:29,972 - werkzeug - INFO - 127.0.0.1 - - [08/May/2026 16:11:29] "GET /api/dashboard HTTP/1.1" 200 -
+2026-05-08 16:12:29,400 - __main__ - INFO - Mandanten geladen: 2
+2026-05-08 16:12:29,445 - werkzeug - INFO - 127.0.0.1 - - [08/May/2026 16:12:29] "GET /api/dashboard HTTP/1.1" 200 -
+2026-05-08 16:13:29,712 - __main__ - INFO - Mandanten geladen: 2
+2026-05-08 16:13:29,753 - werkzeug - INFO - 127.0.0.1 - - [08/May/2026 16:13:29] "GET /api/dashboard HTTP/1.1" 200 -
+2026-05-08 16:14:29,403 - __main__ - INFO - Mandanten geladen: 2
+2026-05-08 16:14:29,449 - werkzeug - INFO - 127.0.0.1 - - [08/May/2026 16:14:29] "GET /api/dashboard HTTP/1.1" 200 -
+2026-05-08 16:15:29,707 - __main__ - INFO - Mandanten geladen: 2
+2026-05-08 16:15:29,759 - werkzeug - INFO - 127.0.0.1 - - [08/May/2026 16:15:29] "GET /api/dashboard HTTP/1.1" 200 -
+2026-05-08 16:16:29,398 - __main__ - INFO - Mandanten geladen: 2
+2026-05-08 16:16:29,440 - werkzeug - INFO - 127.0.0.1 - - [08/May/2026 16:16:29] "GET /api/dashboard HTTP/1.1" 200 -
+2026-05-08 16:17:29,718 - __main__ - INFO - Mandanten geladen: 2
+2026-05-08 16:17:29,782 - werkzeug - INFO - 127.0.0.1 - - [08/May/2026 16:17:29] "GET /api/dashboard HTTP/1.1" 200 -
+2026-05-08 16:18:29,395 - __main__ - INFO - Mandanten geladen: 2
+2026-05-08 16:18:29,440 - werkzeug - INFO - 127.0.0.1 - - [08/May/2026 16:18:29] "GET /api/dashboard HTTP/1.1" 200 -
+2026-05-08 16:19:29,705 - __main__ - INFO - Mandanten geladen: 2
+2026-05-08 16:19:29,749 - werkzeug - INFO - 127.0.0.1 - - [08/May/2026 16:19:29] "GET /api/dashboard HTTP/1.1" 200 -
+2026-05-08 16:20:29,400 - __main__ - INFO - Mandanten geladen: 2
+2026-05-08 16:20:29,444 - werkzeug - INFO - 127.0.0.1 - - [08/May/2026 16:20:29] "GET /api/dashboard HTTP/1.1" 200 -
+2026-05-08 16:21:29,710 - __main__ - INFO - Mandanten geladen: 2
+2026-05-08 16:21:29,753 - werkzeug - INFO - 127.0.0.1 - - [08/May/2026 16:21:29] "GET /api/dashboard HTTP/1.1" 200 -
+2026-05-08 16:22:29,407 - __main__ - INFO - Mandanten geladen: 2
+2026-05-08 16:22:29,451 - werkzeug - INFO - 127.0.0.1 - - [08/May/2026 16:22:29] "GET /api/dashboard HTTP/1.1" 200 -
+2026-05-08 16:23:29,716 - __main__ - INFO - Mandanten geladen: 2
+2026-05-08 16:23:29,758 - werkzeug - INFO - 127.0.0.1 - - [08/May/2026 16:23:29] "GET /api/dashboard HTTP/1.1" 200 -
+2026-05-08 16:24:29,398 - __main__ - INFO - Mandanten geladen: 2
+2026-05-08 16:24:29,440 - werkzeug - INFO - 127.0.0.1 - - [08/May/2026 16:24:29] "GET /api/dashboard HTTP/1.1" 200 -
+2026-05-08 16:25:29,722 - __main__ - INFO - Mandanten geladen: 2
+2026-05-08 16:25:29,764 - werkzeug - INFO - 127.0.0.1 - - [08/May/2026 16:25:29] "GET /api/dashboard HTTP/1.1" 200 -
+2026-05-08 16:26:29,402 - __main__ - INFO - Mandanten geladen: 2
+2026-05-08 16:26:29,445 - werkzeug - INFO - 127.0.0.1 - - [08/May/2026 16:26:29] "GET /api/dashboard HTTP/1.1" 200 -
+2026-05-08 16:27:29,724 - __main__ - INFO - Mandanten geladen: 2
+2026-05-08 16:27:29,767 - werkzeug - INFO - 127.0.0.1 - - [08/May/2026 16:27:29] "GET /api/dashboard HTTP/1.1" 200 -
+2026-05-08 16:28:29,409 - __main__ - INFO - Mandanten geladen: 2
+2026-05-08 16:28:29,452 - werkzeug - INFO - 127.0.0.1 - - [08/May/2026 16:28:29] "GET /api/dashboard HTTP/1.1" 200 -
+2026-05-08 16:29:30,449 - __main__ - INFO - Mandanten geladen: 2
+2026-05-08 16:29:30,588 - werkzeug - INFO - 127.0.0.1 - - [08/May/2026 16:29:30] "GET /api/dashboard HTTP/1.1" 200 -
+2026-05-08 16:30:29,397 - __main__ - INFO - Mandanten geladen: 2
+2026-05-08 16:30:29,444 - werkzeug - INFO - 127.0.0.1 - - [08/May/2026 16:30:29] "GET /api/dashboard HTTP/1.1" 200 -
+2026-05-08 16:31:29,707 - __main__ - INFO - Mandanten geladen: 2
+2026-05-08 16:31:29,747 - werkzeug - INFO - 127.0.0.1 - - [08/May/2026 16:31:29] "GET /api/dashboard HTTP/1.1" 200 -
+2026-05-08 16:32:29,395 - __main__ - INFO - Mandanten geladen: 2
+2026-05-08 16:32:29,436 - werkzeug - INFO - 127.0.0.1 - - [08/May/2026 16:32:29] "GET /api/dashboard HTTP/1.1" 200 -
+2026-05-08 16:33:29,706 - __main__ - INFO - Mandanten geladen: 2
+2026-05-08 16:33:29,747 - werkzeug - INFO - 127.0.0.1 - - [08/May/2026 16:33:29] "GET /api/dashboard HTTP/1.1" 200 -
+2026-05-08 16:34:29,402 - __main__ - INFO - Mandanten geladen: 2
+2026-05-08 16:34:29,445 - werkzeug - INFO - 127.0.0.1 - - [08/May/2026 16:34:29] "GET /api/dashboard HTTP/1.1" 200 -
+2026-05-08 16:35:29,715 - __main__ - INFO - Mandanten geladen: 2
+2026-05-08 16:35:29,757 - werkzeug - INFO - 127.0.0.1 - - [08/May/2026 16:35:29] "GET /api/dashboard HTTP/1.1" 200 -
+2026-05-08 16:36:29,396 - __main__ - INFO - Mandanten geladen: 2
+2026-05-08 16:36:29,443 - werkzeug - INFO - 127.0.0.1 - - [08/May/2026 16:36:29] "GET /api/dashboard HTTP/1.1" 200 -
+2026-05-08 16:37:29,712 - __main__ - INFO - Mandanten geladen: 2
+2026-05-08 16:37:29,754 - werkzeug - INFO - 127.0.0.1 - - [08/May/2026 16:37:29] "GET /api/dashboard HTTP/1.1" 200 -
+2026-05-08 16:38:29,397 - __main__ - INFO - Mandanten geladen: 2
+2026-05-08 16:38:29,443 - werkzeug - INFO - 127.0.0.1 - - [08/May/2026 16:38:29] "GET /api/dashboard HTTP/1.1" 200 -
+2026-05-08 16:39:29,717 - __main__ - INFO - Mandanten geladen: 2
+2026-05-08 16:39:29,762 - werkzeug - INFO - 127.0.0.1 - - [08/May/2026 16:39:29] "GET /api/dashboard HTTP/1.1" 200 -

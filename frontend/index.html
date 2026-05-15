@@ -2,195 +2,231 @@
 <html lang="de">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mein Business - Admin Dashboard</title>
-    <link rel="stylesheet" href="styles.css">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mein Business - Admin Dashboard</title>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 </head>
 
 <body>
-    <div class="container">
-        <!-- Header -->
-        <header class="header">
-            <div class="header-content">
-                <div class="brand">
-                    <svg class="logo" width="40" height="40" viewBox="0 0 40 40" fill="none">
-                        <rect width="40" height="40" rx="8" fill="url(#gradient)" />
-                        <path d="M12 20L18 26L28 14" stroke="white" stroke-width="3" stroke-linecap="round"
-                            stroke-linejoin="round" />
-                        <defs>
-                            <linearGradient id="gradient" x1="0" y1="0" x2="40" y2="40">
-                                <stop offset="0%" stop-color="#667eea" />
-                                <stop offset="100%" stop-color="#764ba2" />
-                            </linearGradient>
-                        </defs>
-                    </svg>
-                    <div>
-                        <h1>Mein Business</h1>
-                        <p class="subtitle">Admin Cockpit</p>
-                    </div>
-                </div>
-                <div class="header-actions">
-                    <button class="btn btn-icon" onclick="refreshData()" title="Aktualisieren">
-                        <span class="icon">🔄</span>
-                    </button>
-                    <button class="btn btn-secondary" onclick="showMandantModal()">
-                        <span class="icon">🏢</span>
-                        Neuer Mandant
-                    </button>
-                    <button class="btn btn-primary" onclick="createBackup()">
-                        <span class="icon">💾</span>
-                        Backup erstellen
-                    </button>
-                </div>
-            </div>
-        </header>
-
-        <!-- Dashboard Summary -->
-        <section class="dashboard-summary" id="summarySection">
-            <div class="stat-card">
-                <div class="stat-icon blue">🏢</div>
-                <div class="stat-content">
-                    <p class="stat-label">Mandanten</p>
-                    <h2 class="stat-value" id="totalMandanten">-</h2>
-                </div>
-            </div>
-
-            <div class="stat-card">
-                <div class="stat-icon green">💰</div>
-                <div class="stat-content">
-                    <p class="stat-label">Gesamteinnahmen</p>
-                    <h2 class="stat-value" id="totalEinnahmen">-</h2>
-                </div>
-            </div>
-
-            <div class="stat-card">
-                <div class="stat-icon orange">⏳</div>
-                <div class="stat-content">
-                    <p class="stat-label">Offene Rechnungen</p>
-                    <h2 class="stat-value" id="totalOffen">-</h2>
-                </div>
-            </div>
-
-            <div class="stat-card">
-                <div class="stat-icon purple">📊</div>
-                <div class="stat-content">
-                    <p class="stat-label">Status</p>
-                    <h2 class="stat-value online">Online</h2>
-                </div>
-            </div>
-        </section>
-
-        <!-- Mandanten List -->
-        <section class="mandanten-section">
-            <div class="section-header">
-                <h2>📋 Mandanten Übersicht</h2>
-                <div class="search-bar">
-                    <span class="icon">🔍</span>
-                    <input type="text" id="searchInput" placeholder="Mandant suchen..." onkeyup="filterMandanten()">
-                </div>
-            </div>
-
-            <div class="mandanten-grid" id="mandantenGrid">
-                <!-- Wird dynamisch geladen -->
-                <div class="loading">
-                    <div class="spinner"></div>
-                    <p>Lade Mandanten...</p>
-                </div>
-            </div>
-        </section>
-
-        <!-- Quick Actions -->
-        <section class="quick-actions">
-            <h3>⚡ Schnellaktionen</h3>
-            <div class="actions-grid">
-                <button class="action-btn" onclick="openBackend('invoice')">
-                    <span class="action-icon">📄</span>
-                    Rechnung schreiben
-                </button>
-                <button class="action-btn" onclick="openBackend('scanner')">
-                    <span class="action-icon">📸</span>
-                    Belege scannen
-                </button>
-                <button class="action-btn" onclick="openBackend('payments')">
-                    <span class="action-icon">💶</span>
-                    Zahlungen prüfen
-                </button>
-                <button class="action-btn" onclick="openBackend('finance')">
-                    <span class="action-icon">💰</span>
-                    Finanzen checken
-                </button>
-            </div>
-        </section>
-
-        <!-- Footer -->
-        <footer class="footer">
-            <p>Mein Business v2.0 • Letzte Aktualisierung: <span id="lastUpdate">-</span></p>
-        </footer>
-    </div>
-
-    <!-- Mandant Modal -->
-    <div id="mandantModal" class="modal hidden">
-        <div class="modal-content modal-large">
-            <div class="modal-header">
-                <h2>🏢 Neuer Mandant</h2>
-                <button class="modal-close" onclick="closeMandantModal()">×</button>
-            </div>
-            <div class="modal-body">
-                <form id="mandantForm" onsubmit="submitMandant(event)">
-                    <h3>Stammdaten</h3>
-                    <div class="form-group">
-                        <label>Firma *</label>
-                        <input type="text" id="mandantFirma" required placeholder="z.B. Maler Müller GmbH">
-                    </div>
-
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label>Straße & Hausnr.</label>
-                            <input type="text" id="mandantStrasse" placeholder="Hauptstraße 1">
-                        </div>
-                        <div class="form-group">
-                            <label>PLZ & Ort</label>
-                            <input type="text" id="mandantOrt" placeholder="12345 Berlin">
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <label>Geschäftsführer</label>
-                        <input type="text" id="mandantGF" placeholder="Max Mustermann">
-                    </div>
-
-                    <h3>Bankverbindung</h3>
-                    <div class="form-group">
-                        <label>IBAN</label>
-                        <input type="text" id="mandantIBAN" placeholder="DE89 3704 0044 0532 0130 00">
-                    </div>
-
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label>BIC</label>
-                            <input type="text" id="mandantBIC" placeholder="COBADEFFXXX">
-                        </div>
-                        <div class="form-group">
-                            <label>Bankname</label>
-                            <input type="text" id="mandantBank" placeholder="Commerzbank">
-                        </div>
-                    </div>
-
-                    <div id="mandantStatus"></div>
-                    <div class="form-actions">
-                        <button type="button" class="btn" onclick="closeMandantModal()">Abbrechen</button>
-                        <button type="submit" class="btn btn-primary">Mandant anlegen</button>
-                    </div>
-                </form>
-            </div>
+  <div class="container">
+    <!-- Header -->
+    <header class="header">
+      <div class="header-content">
+        <div class="brand">
+          <svg class="logo" width="40" height="40" viewBox="0 0 40 40" fill="none">
+            <rect width="40" height="40" rx="8" fill="url(#gradient)" />
+            <path d="M12 20L18 26L28 14" stroke="white" stroke-width="3" stroke-linecap="round"
+              stroke-linejoin="round" />
+            <defs>
+              <linearGradient id="gradient" x1="0" y1="0" x2="40" y2="40">
+                <stop offset="0%" stop-color="#667eea" />
+                <stop offset="100%" stop-color="#764ba2" />
+              </linearGradient>
+            </defs>
+          </svg>
+          <div>
+            <h1>Mein Business</h1>
+            <p class="subtitle">Admin Cockpit</p>
+          </div>
         </div>
-    </div>
+        <div class="header-actions">
+          <button class="btn btn-icon" onclick="refreshData()" title="Aktualisieren">
+            <span class="icon">🔄</span>
+          </button>
+          <button class="btn btn-secondary" onclick="showMandantModal()">
+            <span class="icon">🏢</span>
+            Neuer Mandant
+          </button>
+          <button class="btn btn-warning" onclick="finishWorkDay()" title="Erstellt Backup und beendet den Tag">
+            <span class="icon">🏁</span>
+            Feierabend
+          </button>
+          <button class="btn" onclick="logout()" title="Abmelden" style="background: rgba(255, 60, 60, 0.2);">
+            <span class="icon">🚪</span>
+          </button>
+        </div>
+      </div>
+    </header>
 
-    <script src="app.js"></script>
+    <!-- Dashboard Summary -->
+    <section class="dashboard-summary" id="summarySection">
+      <div class="stat-card">
+        <div class="stat-icon blue">🏢</div>
+        <div class="stat-content">
+          <p class="stat-label">Mandanten</p>
+          <h2 class="stat-value" id="totalMandanten">-</h2>
+        </div>
+      </div>
+
+      <div class="stat-card">
+        <div class="stat-icon green">💰</div>
+        <div class="stat-content">
+          <p class="stat-label">Gesamteinnahmen</p>
+          <h2 class="stat-value" id="totalEinnahmen">-</h2>
+        </div>
+      </div>
+
+      <div class="stat-card">
+        <div class="stat-icon orange">⏳</div>
+        <div class="stat-content">
+          <p class="stat-label">Offene Rechnungen</p>
+          <h2 class="stat-value" id="totalOffen">-</h2>
+        </div>
+      </div>
+
+      <div class="stat-card">
+        <div class="stat-icon purple">📊</div>
+        <div class="stat-content">
+          <p class="stat-label">Status</p>
+          <h2 class="stat-value online">Online</h2>
+        </div>
+      </div>
+    </section>
+
+    <!-- Mandanten List -->
+    <section class="mandanten-section">
+      <div class="section-header">
+        <h2>📋 Mandanten Übersicht</h2>
+        <div class="search-bar">
+          <span class="icon">🔍</span>
+          <input type="text" id="searchInput" placeholder="Mandant suchen..." onkeyup="filterMandanten()">
+        </div>
+      </div>
+
+      <div class="mandanten-grid" id="mandantenGrid">
+        <!-- Wird dynamisch geladen -->
+        <div class="loading">
+          <div class="spinner"></div>
+          <p>Lade Mandanten...</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Quick Actions -->
+    <section class="quick-actions">
+      <h3>⚡ Schnellaktionen</h3>
+      <div class="actions-grid">
+        <button class="action-btn" onclick="openBackend('invoice')">
+          <span class="action-icon">📄</span>
+          Rechnung schreiben
+        </button>
+        <button class="action-btn" onclick="openBackend('scanner')">
+          <span class="action-icon">📸</span>
+          Belege scannen
+        </button>
+        <button class="action-btn" onclick="openBackend('payments')">
+          <span class="action-icon">💶</span>
+          Zahlungen prüfen
+        </button>
+        <button class="action-btn" onclick="openBackend('finance')">
+          <span class="action-icon">💰</span>
+          Finanzen checken
+        </button>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+      <p>Mein Business v2.0 • Letzte Aktualisierung: <span id="lastUpdate">-</span></p>
+    </footer>
+  </div>
+
+  <!-- Mandant Modal -->
+  <div id="mandantModal" class="modal hidden">
+    <div class="modal-content modal-large">
+      <div class="modal-header">
+        <h2>🏢 Neuer Mandant</h2>
+        <button class="modal-close" onclick="closeMandantModal()">×</button>
+      </div>
+      <div class="modal-body">
+        <form id="mandantForm" onsubmit="submitMandant(event)">
+          <h3>Stammdaten</h3>
+          <div class="form-group">
+            <label>Firma *</label>
+            <input type="text" id="mandantFirma" required placeholder="z.B. Maler Müller GmbH">
+          </div>
+
+          <div class="form-group">
+            <label>Unternehmensform *</label>
+            <select id="mandantFormTyp" required>
+              <option value="Einzelunternehmen">Einzelunternehmen</option>
+              <option value="Kleingewerbe">Kleingewerbe (§19 UStG)</option>
+              <option value="GmbH">GmbH</option>
+              <option value="UG">UG (haftungsbeschränkt)</option>
+              <option value="GbR">GbR</option>
+              <option value="Sonstiges">Sonstiges</option>
+            </select>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label>Straße & Hausnr.</label>
+              <input type="text" id="mandantStrasse" placeholder="Hauptstraße 1">
+            </div>
+            <div class="form-group">
+              <label>PLZ & Ort</label>
+              <input type="text" id="mandantOrt" placeholder="12345 Berlin">
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label>Geschäftsführer</label>
+            <input type="text" id="mandantGF" placeholder="Max Mustermann">
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label>USt-ID-Nr.</label>
+              <input type="text" id="mandantUStId" placeholder="z.B. DE123456789">
+            </div>
+            <div class="form-group">
+              <label>Steuernummer</label>
+              <input type="text" id="mandantSteuernummer" placeholder="z.B. 123/456/78901">
+            </div>
+          </div>
+
+          <h3>Bankverbindung</h3>
+          <div class="form-group">
+            <label>IBAN</label>
+            <input type="text" id="mandantIBAN" placeholder="DE89 3704 0044 0532 0130 00">
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label>BIC</label>
+              <input type="text" id="mandantBIC" placeholder="COBADEFFXXX">
+            </div>
+            <div class="form-group">
+              <label>Bankname</label>
+              <input type="text" id="mandantBank" placeholder="Commerzbank">
+            </div>
+          </div>
+
+          <h3>Rechnungsnummer</h3>
+          <div class="form-group">
+            <label>Start-Rechnungsnummer (Optional)</label>
+            <input type="number" id="mandantStartNr" min="1" placeholder="z.B. 55 → erste Rechnung wird Nr. 55">
+          </div>
+
+          <div id="mandantStatus"></div>
+          <div class="form-actions">
+            <button type="button" class="btn" onclick="closeMandantModal()">Abbrechen</button>
+            <button type="submit" class="btn btn-primary">Mandant anlegen</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- Firebase Auth -->
+  <script src="firebase_config.js"></script>
+  <script type="module" src="auth.js"></script>
+
+  <script src="app.js"></script>
 </body>
 
 </html>

@@ -31,15 +31,16 @@ document.addEventListener('DOMContentLoaded', () => {
     uploadZone.addEventListener('drop', (e) => {
         e.preventDefault();
         uploadZone.classList.remove('dragover');
-        const files = e.dataTransfer.files;
+        const files = Array.from(e.dataTransfer.files);
         if (files.length > 0) {
-            handleFileUpload(files);
+            handleBatchUpload(files);
         }
     });
 
     fileInput.addEventListener('change', (e) => {
-        if (e.target.files.length > 0) {
-            handleFileUpload(e.target.files);
+        const files = Array.from(e.target.files);
+        if (files.length > 0) {
+            handleBatchUpload(files);
         }
     });
 });
@@ -51,6 +52,7 @@ async function loadMandantDetails() {
         const stats = await response.json();
 
         currentMandant = stats;
+        window.isKleingewerbe = (stats.unternehmensform === 'Kleingewerbe');
 
         // Update Title
         document.getElementById('mandantName').textContent = mandantId.replace('_', ' ');
@@ -130,56 +132,100 @@ async function loadRechnungen() {
 }
 
 // File Upload
-async function handleFileUpload(files) {
-    // Determine if single file or FileList/Array
-    const fileList = (files instanceof FileList || Array.isArray(files)) ? files : [files];
-    const total = fileList.length;
-    let successCount = 0;
+// --- Batch Upload Logic ---
 
+async function handleBatchUpload(files) {
     const statusDiv = document.getElementById('uploadStatus');
-    statusDiv.innerHTML = `<p>📤 Uploading ${total} Datei(en)...</p>`;
+    const totalFiles = files.length;
 
-    for (let i = 0; i < total; i++) {
-        const file = fileList[i];
-        const formData = new FormData();
-        formData.append('file', file);
-        formData.append('mandant_id', mandantId);
-        formData.append('category', 'Sonstiges'); // Default category
+    // Initial UI
+    statusDiv.innerHTML = `
+        <div class="batch-progress">
+            <p><strong>📦 Upload ${totalFiles} Datei(en)...</strong></p>
+            <div class="progress-bar">
+                <div class="progress-fill" id="uploadProgressBar" style="width: 0%"></div>
+            </div>
+            <p id="uploadProgressText">0 von ${totalFiles} hochgeladen</p>
+        </div>
+        <div id="uploadResults" style="margin-top: 10px;"></div>
+    `;
+
+    const results = [];
+
+    // Process sequentially
+    for (let i = 0; i < totalFiles; i++) {
+        const file = files[i];
+        const progress = Math.round(((i + 1) / totalFiles) * 100);
+
+        // Update UI
+        document.getElementById('uploadProgressText').textContent = `Lade ${i + 1} von ${totalFiles}: ${file.name}`;
 
         try {
-            const response = await fetch(`${API_BASE_URL}/upload/beleg`, {
-                method: 'POST',
-                body: formData
+            const result = await uploadSingleFile(file);
+            results.push({
+                filename: file.name,
+                success: result.success,
+                message: result.message || result.error
             });
-            const result = await response.json();
-
-            if (result.success) {
-                successCount++;
-            } else {
-                console.error(`Upload error for ${file.name}: ${result.error}`);
-            }
         } catch (error) {
-            console.error(`Network error for ${file.name}: ${error}`);
+            results.push({
+                filename: file.name,
+                success: false,
+                message: "Netzwerkfehler"
+            });
         }
 
-        // Update progress
-        statusDiv.innerHTML = `<p>📤 Uploading... (${i + 1}/${total})</p>`;
+        document.getElementById('uploadProgressBar').style.width = `${progress}%`;
     }
 
-    if (successCount === total) {
-        statusDiv.innerHTML = `<p class="success">✅ Alle ${total} Dateien erfolgreich hochgeladen!</p>`;
-    } else {
-        statusDiv.innerHTML = `<p class="warning">⚠️ ${successCount} von ${total} Dateien hochgeladen.</p>`;
+    // Finalize
+    document.getElementById('uploadProgressBar').style.width = '100%';
+    document.getElementById('uploadProgressText').textContent = `✅ Fertig!`;
+
+    // Show Summary
+    displayUploadResults(results);
+
+    // Refresh lists if available
+    if (typeof loadAusgaben === 'function') loadAusgaben();
+}
+
+async function uploadSingleFile(file) {
+    const formData = new FormData();
+    formData.append('file', file);
+    formData.append('mandant_id', mandantId);
+    formData.append('category', 'Sonstiges'); // Default category
+
+    const response = await fetch(`${API_BASE_URL}/upload/beleg`, {
+        method: 'POST',
+        body: formData
+    });
+    return await response.json();
+}
+
+function displayUploadResults(results) {
+    const container = document.getElementById('uploadResults');
+    const successCount = results.filter(r => r.success).length;
+    const failCount = results.length - successCount;
+
+    let html = `
+        <div style="margin-top:10px; max-height:200px; overflow-y:auto; font-size:0.9rem;">
+            <p><strong>Ergebnis:</strong> ${successCount} OK, ${failCount} Fehler</p>
+            <ul style="list-style:none; padding:0;">
+    `;
+
+    results.forEach(r => {
+        const icon = r.success ? '✅' : '❌';
+        const color = r.success ? 'var(--success)' : 'var(--danger)';
+        html += `<li style="color:${color}; margin-bottom:4px; display:flex; gap:5px;"><span>${icon}</span> <span><b>${r.filename}</b>: ${r.message}</span></li>`;
+    });
+
+    html += `</ul></div>`;
+
+    if (results.length > 0) {
+        html += `<button class="btn btn-sm btn-secondary" onclick="closeUploadModal()" style="margin-top:10px; width:100%">Schließen</button>`;
     }
 
-    setTimeout(() => {
-        // Refresh Lists if necessary
-        if (window.AusgabenManager) AusgabenManager.init();
-
-        closeUploadModal();
-        statusDiv.innerHTML = '';
-        document.getElementById('fileInput').value = ''; // Reset input
-    }, 2000);
+    container.innerHTML = html;
 }
 
 // View PDF
@@ -217,6 +263,24 @@ function formatFileSize(bytes) {
     if (bytes < 1024) return bytes + ' B';
     if (bytes < 1048576) return (bytes / 1024).toFixed(1) + ' KB';
     return (bytes / 1048576).toFixed(1) + ' MB';
+}
+
+// Backup Trigger
+async function triggerManualBackup() {
+    if (!confirm("Jetzt vollständiges Backup erstellen?")) return;
+
+    try {
+        const res = await fetch(`${API_BASE_URL}/backup/now`, { method: 'POST' });
+        const data = await res.json();
+
+        if (data.success) {
+            alert(`✅ Backup erfolgreich!\nDatei: ${data.filename}\nGröße: ${data.size_mb} MB`);
+        } else {
+            alert("❌ Fehler: " + data.error);
+        }
+    } catch (e) {
+        alert("❌ Netzwerkfehler: " + e);
+    }
 }
 
 function formatDate(timestamp) {

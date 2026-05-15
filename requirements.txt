@@ -1,0 +1,11 @@
+google-generativeai
+fpdf
+python-dotenv
+flask
+flask-cors
+openpyxl
+gunicorn
+pandas
+firebase-admin
+reportlab
+werkzeug

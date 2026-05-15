@@ -1,0 +1,25 @@
+{
+    "firma": "Mamo Gartenpflege",
+    "unternehmensform": "Kleingewerbe",
+    "adresse": {
+        "strasse": "Am Sommerberg 2",
+        "ort": "51503, Rösrath"
+    },
+    "geschaeftsfuehrer": "Maher Mamo",
+    "bank": {
+        "name": "Kreissparkasse Köln",
+        "iban": "DE80 37050299 0327562153",
+        "bic": "COKSDE33XXX"
+    },
+    "logo": "logo.PNG",
+    "mandantennummer": "001",
+    "smtp": {
+        "server": "",
+        "port": "",
+        "user": "",
+        "pass": "",
+        "sender": "Maher Mamo"
+    },
+    "ustid": "",
+    "steuernummer": "204/5004/3354"
+}

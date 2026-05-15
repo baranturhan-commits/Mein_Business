@@ -98,10 +98,22 @@ def append_data(filepath, data_dict, sheet_name="Data", headers=None):
         for cell in ws[1]:
              style_cell(cell, is_header=True, bg_color=color)
 
-    # 2. Bestehende Header lesen (um Dict korrekt zu mappen)
+    # 2. Bestehende Header lesen
     existing_headers = [cell.value for cell in ws[1]]
     
-    # Falls neue Header dazu kamen (einfaches Schema: Append? Nein, wir nehmen strict existing)
+    # Neue Header anfügen, falls im Parameter 'headers' welche fehlen
+    if headers:
+        for h in headers:
+            if h not in existing_headers:
+                ws.cell(row=1, column=len(existing_headers)+1, value=h)
+                # Style New Header
+                new_cell = ws.cell(row=1, column=len(existing_headers)+1)
+                color = THEME_COLORS.get('Default')
+                if "Ausgaben" in sheet_name: color = THEME_COLORS['Ausgaben']
+                if "Einnahmen" in sheet_name: color = THEME_COLORS['Einnahmen']
+                style_cell(new_cell, is_header=True, bg_color=color)
+                
+                existing_headers.append(h)
     # Mapping
     row_values = []
     for h in existing_headers:
@@ -132,17 +144,37 @@ def append_data(filepath, data_dict, sheet_name="Data", headers=None):
     wb.close()
     return True
 
+_CACHE = {}
+
 def read_data(filepath, sheet_name=0):
-    """Liest Daten via Pandas als Liste von Dicts."""
+    """Liest Daten via Pandas als Liste von Dicts (mit Cache für bessere Performance)."""
     if not os.path.exists(filepath):
         return []
+        
+    # Check cache based on file modification time
+    try:
+        mtime = os.path.getmtime(filepath)
+        cache_key = f"{filepath}_{sheet_name}"
+        if cache_key in _CACHE and _CACHE[cache_key]['mtime'] == mtime:
+            return _CACHE[cache_key]['data']
+    except Exception:
+        pass
+        
     try:
         df = pd.read_excel(filepath, sheet_name=sheet_name)
         # Robust cleanup: Cast to object to allow None everywhere
         df = df.astype(object)
         # Replace all pandas/numpy NaNs with None
         df = df.where(pd.notnull(df), None)
-        return df.to_dict('records')
+        data = df.to_dict('records')
+        
+        # Save to cache
+        try:
+            _CACHE[cache_key] = {'mtime': mtime, 'data': data}
+        except Exception:
+            pass
+            
+        return data
     except Exception as e:
         print(f"⚠️  Fehler beim Lesen von Excel {filepath}: {e}")
         return []

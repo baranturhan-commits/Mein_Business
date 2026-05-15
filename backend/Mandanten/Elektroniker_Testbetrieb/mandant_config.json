@@ -10,6 +10,13 @@
         "iban": "DE55 9802 1289 1203 0003 00",
         "bic": "KIJ90KWDA"
     },
-    "logo": null,
-    "mandant_nummer": "001"
+    "logo": "Logo.PNG",
+    "mandantennummer": "001",
+    "smtp": {
+        "server": "",
+        "port": "",
+        "user": "",
+        "pass": "",
+        "sender": ""
+    }
 }

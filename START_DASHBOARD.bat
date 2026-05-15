@@ -7,13 +7,13 @@ echo ========================================
 echo.
 
 echo Oeffne Browser in 2 Sekunden...
-start "" "%~dp0frontend\index.html"
+start "" "http://localhost:5000"
 echo.
 
 :loop
 echo Starte API Server... (Druecke Strg+C zum Beenden)
 cd backend
-python api_server.py
+py api_server.py
 cd ..
 
 echo.

@@ -26,9 +26,16 @@ def analyze_receipt(image_path):
         return None
 
     try:
-        model = genai.GenerativeModel('gemini-2.0-flash-exp')
+        model = genai.GenerativeModel('gemini-2.0-flash-lite')
         
-        myfile = genai.upload_file(image_path)
+        # Determine mime_type
+        mime_type = 'application/pdf'
+        if image_path.lower().endswith(('.jpg', '.jpeg')):
+            mime_type = 'image/jpeg'
+        elif image_path.lower().endswith('.png'):
+            mime_type = 'image/png'
+
+        myfile = genai.upload_file(image_path, mime_type=mime_type)
         
         prompt = """
         Extrahiere Daten aus diesem Beleg für die Buchhaltung.

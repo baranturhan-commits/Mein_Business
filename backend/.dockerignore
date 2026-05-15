@@ -1,0 +1,51 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+.venv/
+ENV/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Project specific
+Backups/
+logs/
+*.log
+
+# Secrets (NEVER include in Docker image)
+.env
+serviceAccountKey.json
+Config/secrets.json
+
+# Git
+.git/
+.gitignore
+
+# Documentation
+README.md
+*.md
+
+# Test files
+test_*.py
+*_test.py
+create_dummy_*.py
+regenerate_*.py
+download_debug.py
+
+# Batch scripts (Windows only)
+*.bat
+
+# Backup HTML files
+*_backup.html

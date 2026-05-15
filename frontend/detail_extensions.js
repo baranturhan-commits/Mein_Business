@@ -59,11 +59,16 @@ function renderOPCheck(invoices) {
                     <th>Datum</th>
                     <th>Kunde</th>
                     <th>Betrag</th>
+                    <th>Aktion</th>
                 </tr>
             </thead>
             <tbody>
-                ${invoices.map(inv => `
-                    <tr class="${inv.Status === 'Offen' ? 'status-open' : 'status-paid'}">
+                ${invoices.map(inv => {
+        const overdue = isOverdue(inv.Datum, inv.Status);
+        const rowClass = inv.Status === 'Bezahlt' ? 'status-paid' : (overdue ? 'status-overdue' : 'status-open');
+
+        return `
+                    <tr class="${rowClass}">
                         <td>
                             <label class="checkbox-label">
                                 <input type="checkbox" 
@@ -72,19 +77,112 @@ function renderOPCheck(invoices) {
                                        onchange="togglePaymentStatus('${inv.Rechnungsnummer}', this.checked)">
                                 <span>${inv.Status}</span>
                             </label>
+                            ${overdue ? '<br><span class="badge-overdue">Überfällig</span>' : ''}
                         </td>
                         <td>${inv.Rechnungsnummer}</td>
                         <td>${inv.Datum}</td>
                         <td>${inv.Kunde}</td>
                         <td>${inv.Betrag_Brutto}€</td>
+                        <td>
+                            ${inv.Status === 'Offen' ?
+                `<button class="btn btn-sm btn-warning" onclick="createMahnung('${inv.Rechnungsnummer}')">⚠️ Mahnung</button>
+                 <button class="btn btn-sm btn-info" onclick="sendMahnungEmail('${inv.Rechnungsnummer}')" style="margin-left:5px;">📧 Senden</button>`
+                : '-'}
+                        </td>
                     </tr>
-                `).join('')}
+                    `
+    }).join('')}
             </tbody>
         </table>
     `;
 
     list.innerHTML = html;
 }
+
+function isOverdue(dateStr, status) {
+    if (status === 'Bezahlt' || !dateStr) return false;
+
+    try {
+        // Parse DD.MM.YYYY
+        const parts = dateStr.split('.');
+        if (parts.length !== 3) return false;
+
+        const invDate = new Date(parts[2], parts[1] - 1, parts[0]);
+        const now = new Date();
+
+        // 14 Tage Zahlungsziel
+        const diffTime = Math.abs(now - invDate);
+        const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+
+        return (now > invDate && diffDays > 14);
+    } catch (e) { return false; }
+}
+
+async function createMahnung(invoiceNum) {
+    if (!confirm(`Mahnung für Rechnung ${invoiceNum} erstellen?`)) return;
+
+    const mandantId = getMandantIdFromUrl();
+
+    try {
+        const res = await fetch(`${API_BASE_URL}/mandanten/${mandantId}/invoices/generate-reminder`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                invoice_num: invoiceNum,
+                level: 1 // Default to 1st reminder
+            })
+        });
+
+        const data = await res.json();
+
+        if (data.success && data.pdf_path) {
+            // Open PDF
+            if (window.viewPdf) {
+                // Determine filename from path
+                const parts = data.pdf_path.split('/');
+                const filename = parts[parts.length - 1];
+                window.viewPdf(data.pdf_path, filename);
+            } else {
+                window.open(`${API_BASE_URL.replace('/api', '')}${data.pdf_path}`, '_blank');
+            }
+            alert('Mahnung erfolgreich erstellt!');
+        } else {
+            alert('Fehler: ' + (data.error || 'Unbekannter Fehler'));
+        }
+    } catch (e) {
+        console.error('Fehler:', e);
+        alert('Netzwerkfehler beim Erstellen der Mahnung.');
+    }
+}
+
+async function sendMahnungEmail(invoiceNum) {
+    if (!confirm(`Mahnung für Rechnung ${invoiceNum} per E-Mail an den Kunden senden?`)) return;
+
+    const mandantId = getMandantIdFromUrl();
+
+    try {
+        const res = await fetch(`${API_BASE_URL}/mandanten/${mandantId}/invoices/send-reminder`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                invoice_num: invoiceNum,
+                level: 1
+            })
+        });
+
+        const data = await res.json();
+
+        if (data.success) {
+            alert(data.message || 'Mahnung erfolgreich versendet!');
+        } else {
+            alert('Fehler beim Senden: ' + (data.error || 'Unbekannter Fehler'));
+        }
+    } catch (e) {
+        console.error('Fehler beim Senden:', e);
+        alert('Netzwerkfehler beim Senden der Email.');
+    }
+}
+
 
 function togglePaymentStatus(rechnungNr, isPaid) {
     const newStatus = isPaid ? 'Bezahlt' : 'Offen';
@@ -117,12 +215,76 @@ async function savePaymentStatus() {
 
         // Reload
         loadOPCheck();
-        loadMandantDetails(); // Refresh stats
+        // Refresh detail stats if available
+        if (typeof loadMandantDetails === 'function') loadMandantDetails();
 
     } catch (error) {
         alert('❌ Fehler beim Speichern: ' + error.message);
     }
 }
+
+// --- Bank Upload Logic ---
+function triggerBankUpload() {
+    document.getElementById('bankUploadInput').click();
+}
+
+async function handleBankUpload(input) {
+    if (!input.files || input.files.length === 0) return;
+
+    const file = input.files[0];
+    const formData = new FormData();
+    formData.append('file', file);
+
+    // UI Feedback
+    const btn = document.querySelector('[onclick="triggerBankUpload()"]');
+    const originalText = btn.innerHTML;
+    btn.innerHTML = '<div class="spinner" style="width:16px;height:16px;"></div> Scanning...';
+    btn.disabled = true;
+
+    try {
+        const mandantId = getMandantIdFromUrl();
+        const res = await fetch(`${API_BASE_URL}/mandanten/${mandantId}/op-check/scan`, {
+            method: 'POST',
+            body: formData
+        });
+
+        const data = await res.json();
+
+        if (data.success) {
+            let matchCount = 0;
+            let matchDetails = [];
+
+            data.matches.forEach(match => {
+                const invId = match.invoice_id;
+                const checkbox = document.getElementById(`inv-${invId}`);
+
+                // Only check if not already checked
+                if (checkbox && !checkbox.checked) {
+                    checkbox.checked = true;
+                    togglePaymentStatus(invId, true); // Trigger change tracking
+                    matchCount++;
+                    matchDetails.push(invId);
+                }
+            });
+
+            if (matchCount > 0) {
+                alert(`✅ ${matchCount} Rechnungen gefunden und markiert:\n\n${matchDetails.join('\n')}\n\nBitte "Änderungen speichern" klicken!`);
+            } else {
+                alert(`ℹ️ Keine offenen Rechnungen gefunden.\n(${data.transactions_found} Transaktionen gescannt)`);
+            }
+        } else {
+            alert('❌ Fehler: ' + (data.error || 'Server Error'));
+        }
+    } catch (e) {
+        console.error(e);
+        alert('❌ Netzwerkfehler beim Upload');
+    } finally {
+        btn.innerHTML = originalText;
+        btn.disabled = false;
+        input.value = ''; // Reset
+    }
+}
+
 
 // Kunden Functions
 async function loadKunden() {
@@ -178,6 +340,9 @@ async function submitKunde(event) {
     const firma = document.getElementById('kundeFirma').value.trim();
     const email = document.getElementById('kundeEmail').value.trim();
     const anrede = document.getElementById('kundeAnrede').value;
+    const strasse = document.getElementById('kundeStrasse').value.trim();
+    const plz = document.getElementById('kundePlz').value.trim();
+    const ort = document.getElementById('kundeOrt').value.trim();
 
     const statusDiv = document.getElementById('kundeStatus');
     statusDiv.innerHTML = '<p>📤 Erstelle Kunde...</p>';
@@ -186,7 +351,7 @@ async function submitKunde(event) {
         const response = await fetch(`${API_BASE_URL}/mandanten/${mandantId}/kunden`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ firma, email, anrede })
+            body: JSON.stringify({ firma, email, anrede, strasse, plz, ort })
         });
 
         const result = await response.json();
@@ -209,6 +374,8 @@ async function submitKunde(event) {
 window.switchTab = switchTab;
 window.loadOPCheck = loadOPCheck;
 window.savePaymentStatus = savePaymentStatus;
+window.triggerBankUpload = triggerBankUpload;
+window.handleBankUpload = handleBankUpload;
 window.loadKunden = loadKunden;
 window.showKundeModal = showKundeModal;
 window.closeKundeModal = closeKundeModal;
@@ -230,6 +397,96 @@ function closeExportModal() {
     if (m) m.classList.add('hidden');
     const status = document.getElementById('exportStatus');
     if (status) status.innerHTML = '';
+}
+
+async function finishWorkDay() {
+    if (!confirm("🏁 Feierabend machen?\n\nDas System erstellt noch kurz ein Backup für dich.\nDanach kannst du den PC ausschalten.")) return;
+
+    // Create custom overlay
+    const overlay = document.createElement('div');
+    overlay.style.position = 'fixed';
+    overlay.style.top = '0'; overlay.style.left = '0';
+    overlay.style.width = '100%'; overlay.style.height = '100%';
+    overlay.style.backgroundColor = 'rgba(0,0,0,0.85)';
+    overlay.style.zIndex = '9999';
+    overlay.style.display = 'flex';
+    overlay.style.flexDirection = 'column';
+    overlay.style.justifyContent = 'center';
+    overlay.style.alignItems = 'center';
+    overlay.style.color = 'white';
+    overlay.innerHTML = `
+        <div class="spinner" style="width: 60px; height: 60px; border-width: 6px;"></div>
+        <h2 style="margin-top: 20px;">Backup wird erstellt...</h2>
+        <p>Bitte warten...</p>
+    `;
+    document.body.appendChild(overlay);
+
+    try {
+        const res = await fetch(`${API_BASE_URL}/backup/now`, { method: 'POST' });
+        const data = await res.json();
+
+        if (data.success) {
+            overlay.innerHTML = `
+                <div style="font-size: 80px;">✅</div>
+                <h2>Fertig!</h2>
+                <p>Backup: ${data.filename}</p>
+                <p>Größe: ${data.size_mb} MB</p>
+                <br>
+                <h3>Schönen Feierabend! 👋</h3>
+                <button class="btn btn-primary" onclick="location.reload()" style="margin-top: 20px;">Schließen</button>
+            `;
+        } else {
+            overlay.innerHTML = `
+                <div style="font-size: 80px;">❌</div>
+                <h2>Fehler beim Backup</h2>
+                <p>${data.error}</p>
+                <button class="btn" onclick="location.reload()" style="margin-top: 20px;">Schließen</button>
+            `;
+        }
+    } catch (e) {
+        overlay.innerHTML = `
+            <div style="font-size: 80px;">❌</div>
+            <h2>Netzwerkfehler</h2>
+            <p>${e}</p>
+            <button class="btn" onclick="location.reload()" style="margin-top: 20px;">Schließen</button>
+        `;
+    }
+}
+
+async function startReport() {
+    const month = document.getElementById('exportMonth').value;
+    const year = document.getElementById('exportYear').value;
+    const status = document.getElementById('exportStatus');
+    const mandantId = getMandantIdFromUrl();
+
+    if (!status) return;
+    status.innerHTML = '<div class="spinner"></div> PDF Report wird generiert...';
+
+    try {
+        const response = await fetch(`${API_BASE_URL}/mandanten/${mandantId}/report/generate`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ month, year })
+        });
+
+        const data = await response.json();
+
+        if (data.success) {
+            status.innerHTML = '<p class="success">✅ Report erstellt!</p>';
+            closeExportModal();
+            // Assuming viewPdf is global from detail.js
+            if (window.viewPdf) {
+                window.viewPdf(data.path, data.filename);
+            } else {
+                // Fallback: Open in new tab
+                window.open(`${API_BASE_URL}/pdf/${data.path}`, '_blank');
+            }
+        } else {
+            status.innerHTML = `<p class="error">❌ Fehler: ${data.error}</p>`;
+        }
+    } catch (error) {
+        status.innerHTML = `<p class="error">❌ Netzwerkfehler: ${error}</p>`;
+    }
 }
 
 async function startExport() {

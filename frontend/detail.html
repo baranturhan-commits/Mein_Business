@@ -61,7 +61,11 @@
                     </div>
                     <button class="btn btn-warning" onclick="finishWorkDay()"
                         title="Erstellt Backup und beendet den Tag" style="margin-right: 10px;">
-                        <span class="icon">🛑</span> Feierabend
+                        <span class="icon">🏁</span> Feierabend
+                    </button>
+                    <button class="btn" onclick="logout()" title="Abmelden"
+                        style="background: rgba(255, 60, 60, 0.2); margin-right: 10px;">
+                        <span class="icon">🚪</span>
                     </button>
                     <button class="btn btn-outline"
                         style="margin-right: 10px; color: white; border-color: rgba(255,255,255,0.5);"
@@ -176,68 +180,77 @@
                     <button class="btn btn-secondary big-btn" onclick="showExportModal()">
                         <span class="icon">🏦</span> Steuerberater Export
                     </button>
+
                 </div>
             </section>
         </div>
 
         <!-- Tab Content: Documents -->
         <div id="tab-documents" class="tab-content">
+            <div class="doc-grid-layout">
 
-            <!-- Sub Tabs or Sections -->
-            <div class="doc-sections">
-
-                <!-- 1. Angebote -->
-                <section class="mandanten-section">
-                    <div class="section-header">
+                <!-- Spalte 1: Angebote -->
+                <div class="doc-column col-offers">
+                    <div class="column-header">
                         <h2>📝 Angebote</h2>
-                        <button class="btn btn-sm btn-outline" onclick="showAngebotModal()">Neu +</button>
+                        <button class="btn btn-sm btn-primary-outline" onclick="showAngebotModal()">
+                            <span class="icon">➕</span> Neu
+                        </button>
                     </div>
-                    <div id="doc-angebote-list" class="doc-list">
-                        <div class="loading">
-                            <div class="spinner"></div>
+                    <div class="column-content">
+                        <div id="doc-angebote-list" class="doc-list-compact">
+                            <div class="loading">
+                                <div class="spinner"></div>
+                            </div>
                         </div>
                     </div>
-                </section>
+                </div>
 
-                <!-- 2. Protokolle / Lieferscheine -->
-                <section class="mandanten-section">
-                    <div class="section-header">
-                        <h2>📋 Abnahmeprotokolle</h2>
-                        <div class="btn-group">
-                            <button class="btn btn-sm btn-outline"
-                                onclick="if(window.LieferscheinModal) { LieferscheinModal.open() }">
-                                Leer Drucken
-                            </button>
-                            <button class="btn btn-sm btn-success" onclick="showProtocolUploadModal()">
-                                Scan -> Rechnung
-                            </button>
-                        </div>
-                    </div>
-                    <div class="split-list">
-                        <div class="sub-list">
-                            <h3>Ausgefüllt</h3>
-                            <div id="doc-lieferscheine-filled-list" class="doc-list"></div>
-                        </div>
-                        <div class="sub-list">
-                            <h3>Blanko (Leer)</h3>
-                            <div id="doc-lieferscheine-blank-list" class="doc-list"></div>
-                        </div>
-                    </div>
-                </section>
-
-                <!-- 3. Rechnungen -->
-                <section class="mandanten-section">
-                    <div class="section-header">
+                <!-- Spalte 2: Rechnungen -->
+                <div class="doc-column col-invoices">
+                    <div class="column-header">
                         <h2>🧾 Rechnungen</h2>
-                        <!-- Manual Invoice Button (Placeholder for Sprint 4) -->
-                        <button class="btn btn-sm btn-outline" disabled title="Kommt bald">Manuell +</button>
+                        <button class="btn btn-sm btn-primary-outline" onclick="InvoiceModal.open()">
+                            <span class="icon">➕</span> Manuell
+                        </button>
                     </div>
-                    <div id="doc-rechnungen-list" class="doc-list">
-                        <div class="loading">
-                            <div class="spinner"></div>
+                    <div class="column-content">
+                        <div id="doc-rechnungen-list" class="doc-list-compact">
+                            <div class="loading">
+                                <div class="spinner"></div>
+                            </div>
                         </div>
                     </div>
-                </section>
+                </div>
+
+                <!-- Spalte 3: Protokolle & Lieferscheine -->
+                <div class="doc-column col-protocols">
+                    <div class="column-header">
+                        <h2>📋 Protokolle</h2>
+                        <div class="header-actions">
+                            <button class="btn btn-sm btn-secondary-outline"
+                                onclick="if(window.LieferscheinModal) { LieferscheinModal.open() }"
+                                title="Blanko drucken">
+                                🖨️ Leer
+                            </button>
+                            <button class="btn btn-sm btn-success-outline" onclick="showProtocolUploadModal()"
+                                title="Scan hochladen & Invoice">
+                                📲 Scan
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="column-content">
+                        <div class="sub-section">
+                            <h4>✅ Ausgefüllt (Scans)</h4>
+                            <div id="doc-lieferscheine-filled-list" class="doc-list-mini"></div>
+                        </div>
+                        <div class="sub-section">
+                            <h4>📄 Blanko (Vorlagen)</h4>
+                            <div id="doc-lieferscheine-blank-list" class="doc-list-mini"></div>
+                        </div>
+                    </div>
+                </div>
 
             </div>
         </div>
@@ -247,10 +260,17 @@
             <section class="mandanten-section">
                 <div class="section-header">
                     <h2>💶 Offene Posten</h2>
-                    <button class="btn btn-primary" onclick="savePaymentStatus()">
-                        <span class="icon">💾</span>
-                        Änderungen speichern
-                    </button>
+                    <div class="button-group">
+                        <button class="btn btn-secondary" onclick="triggerBankUpload()">
+                            <span class="icon">📸</span> Scan Bankauszug
+                        </button>
+                        <input type="file" id="bankUploadInput" hidden accept=".csv,.pdf,.jpg,.png"
+                            onchange="handleBankUpload(this)">
+                        <button class="btn btn-primary" onclick="savePaymentStatus()">
+                            <span class="icon">💾</span>
+                            Änderungen speichern
+                        </button>
+                    </div>
                 </div>
                 <div id="opCheckList" class="op-list">
                     <div class="loading">
@@ -316,8 +336,9 @@
             <div class="modal-body">
                 <div class="upload-zone" id="uploadZone">
                     <p class="upload-icon">📁</p>
-                    <p>Datei hier ablegen oder klicken</p>
-                    <input type="file" id="fileInput" accept=".pdf,.jpg,.jpeg,.png" multiple hidden>
+                    <p>Datei(en) hier ablegen oder klicken</p>
+                    <small style="color:#aaa">Mehrere Scans gleichzeitig möglich!</small>
+                    <input type="file" id="fileInput" accept=".pdf,.jpg,.jpeg,.png,.txt" hidden multiple>
                 </div>
                 <div id="uploadStatus"></div>
             </div>
@@ -340,6 +361,20 @@
                     <div class="form-group">
                         <label>Email</label>
                         <input type="email" id="kundeEmail" placeholder="kunde@beispiel.de">
+                    </div>
+                    <div class="form-group">
+                        <label>Straße & Hausnummer</label>
+                        <input type="text" id="kundeStrasse" placeholder="z.B. Musterstraße 12">
+                    </div>
+                    <div class="form-group" style="display: flex; gap: 10px;">
+                        <div style="flex: 1;">
+                            <label>PLZ</label>
+                            <input type="text" id="kundePlz" placeholder="12345">
+                        </div>
+                        <div style="flex: 2;">
+                            <label>Ort</label>
+                            <input type="text" id="kundeOrt" placeholder="Musterstadt">
+                        </div>
                     </div>
                     <div class="form-group">
                         <label>Anrede</label>
@@ -380,6 +415,18 @@
                 <!-- Step 2: Positionen -->
                 <div id="angebot-step-2" class="angebot-step hidden">
                     <h3>Schritt 2: Positionen hinzufügen</h3>
+
+                    <div class="form-row" style="margin-bottom: 20px;">
+                        <div class="form-group">
+                            <label>Leistungszeitraum Von</label>
+                            <input type="date" id="ang-leistungs-von" style="width: 100%; padding: 8px;">
+                        </div>
+                        <div class="form-group">
+                            <label>Bis (Optional)</label>
+                            <input type="date" id="ang-leistungs-bis" style="width: 100%; padding: 8px;">
+                        </div>
+                    </div>
+
                     <div class="form-group">
                         <label>Aus Preisliste:</label>
                         <div class="form-row">
@@ -430,8 +477,10 @@
                     <div class="upload-zone" id="importZone"
                         onclick="document.getElementById('importFileInput').click()">
                         <p class="upload-icon">📁</p>
-                        <p>Datei hier ablegen oder klicken</p>
-                        <input type="file" id="importFileInput" hidden>
+                        <p>Datei(en) hier ablegen oder klicken</p>
+                        <small style="color: #999;">💡 Mehrere Dateien gleichzeitig möglich!</small>
+                        <input type="file" id="importFileInput" hidden multiple
+                            accept=".xlsx,.xls,.csv,.pdf,.jpg,.jpeg,.png">
                     </div>
                     <div id="importStatus"></div>
                 </div>
@@ -597,11 +646,38 @@
             </div>
             <div class="modal-body">
 
+                <!-- Next Invoice Number Preview -->
+                <div
+                    style="background: rgba(102, 126, 234, 0.15); padding: 10px 15px; border-radius: 8px; margin-bottom: 15px; border: 1px solid rgba(102, 126, 234, 0.3);">
+                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                        <span style="color: #aaa;">Nächste Rechnungsnummer:</span>
+                        <strong id="inv-next-number" style="color: #667eea; font-size: 1.1rem;">Lade...</strong>
+                    </div>
+                    <div style="display: flex; align-items: center; gap: 8px; margin-top: 8px;">
+                        <label style="color: #aaa; font-size: 0.85rem; white-space: nowrap;">Zähler ändern:</label>
+                        <input type="number" id="inv-counter-input" min="1"
+                            style="width: 80px; padding: 4px 8px; font-size: 0.9rem;" placeholder="z.B. 55">
+                        <button type="button" class="btn btn-secondary small" onclick="InvoiceModal.saveCounter()"
+                            style="padding: 4px 10px; font-size: 0.8rem;">Setzen</button>
+                    </div>
+                </div>
+
                 <!-- 1. Customer & Base -->
                 <div class="form-row">
                     <div class="form-group flex-grow">
                         <label>Kunde *</label>
                         <select id="inv-kunde-select" class="full-width" style="width: 100%; padding: 8px;"></select>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Leistungszeitraum Von</label>
+                        <input type="date" id="inv-leistungs-von" style="width: 100%; padding: 8px;">
+                    </div>
+                    <div class="form-group">
+                        <label>Bis (Optional)</label>
+                        <input type="date" id="inv-leistungs-bis" style="width: 100%; padding: 8px;">
                     </div>
                 </div>
 
@@ -668,15 +744,33 @@
                     <label>Firmenname</label>
                     <input type="text" id="cfgFirma" class="form-control">
                 </div>
-                <!-- NEW: Mandant Number -->
                 <div class="form-group">
-                    <label>Mandanten-Nummer (Prefix für Rechnungen)</label>
-                    <input type="text" id="cfgMandantNr" class="form-control" placeholder="z.B. 101">
-                    <small style="color:#aaa;">Bestimmt das Format: RE-[NR]-[JAHR]-[ZÄHLER]</small>
+                    <label>Mandantennummer</label>
+                    <input type="text" id="cfgMandantenNr" class="form-control" placeholder="z.B. 12345">
+                    <small style="color:#888;">Wird auf Rechnungen angezeigt</small>
+                </div>
+                <div class="form-group">
+                    <label>Unternehmensform</label>
+                    <select id="cfgFormTyp" class="form-control">
+                        <option value="Einzelunternehmen">Einzelunternehmen</option>
+                        <option value="Kleingewerbe">Kleingewerbe (§19 UStG)</option>
+                        <option value="GmbH">GmbH</option>
+                        <option value="UG">UG (haftungsbeschränkt)</option>
+                        <option value="GbR">GbR</option>
+                        <option value="Sonstiges">Sonstiges</option>
+                    </select>
                 </div>
                 <div class="form-group">
                     <label>Geschäftsführer</label>
                     <input type="text" id="cfgGF" class="form-control">
+                </div>
+                <div class="form-group">
+                    <label>USt-ID-Nr.</label>
+                    <input type="text" id="cfgUStId" class="form-control" placeholder="z.B. DE123456789">
+                </div>
+                <div class="form-group">
+                    <label>Steuernummer</label>
+                    <input type="text" id="cfgSteuernummer" class="form-control" placeholder="z.B. 123/456/78901">
                 </div>
                 <h4 style="margin-top:15px; margin-bottom:10px; color:#aaa;">Adresse</h4>
                 <div class="form-group">
@@ -700,6 +794,31 @@
                     <label>BIC</label>
                     <input type="text" id="cfgBIC" class="form-control">
                 </div>
+
+                <h4 style="margin-top:15px; margin-bottom:10px; color:#aaa;">Email-Einstellungen (SMTP)</h4>
+                <div class="row" style="display: flex; gap: 10px;">
+                    <div class="form-group" style="flex: 1;">
+                        <label>SMTP Server</label>
+                        <input type="text" id="cfgSmtpServer" class="form-control" placeholder="smtp.beispiel.de">
+                    </div>
+                    <div class="form-group" style="width: 80px;">
+                        <label>Port</label>
+                        <input type="number" id="cfgSmtpPort" class="form-control" placeholder="587">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>SMTP Benutzer / Email</label>
+                    <input type="text" id="cfgSmtpUser" class="form-control">
+                </div>
+                <div class="form-group">
+                    <label>SMTP Passwort</label>
+                    <input type="password" id="cfgSmtpPass" class="form-control">
+                </div>
+                <div class="form-group">
+                    <label>Absender-Name</label>
+                    <input type="text" id="cfgSmtpSender" class="form-control" placeholder="Buchhaltung">
+                </div>
+
                 <h4 style="margin-top:15px; margin-bottom:10px; color:#aaa;">Design</h4>
                 <div class="form-group">
                     <label>Logo</label>
@@ -710,12 +829,20 @@
                     <small style="color:#888;">Neu auswählen zum Überschreiben</small>
                 </div>
             </div>
-            <div class="modal-footer">
-                <button class="btn btn-outline" onclick="closeConfigModal()">Abbrechen</button>
-                <button class="btn btn-primary" onclick="saveMandantConfig()">Speichern</button>
+            <div class="modal-footer" style="display: flex; justify-content: space-between; width: 100%;">
+                <button class="btn btn-outline" style="color:red; border-color:red;" onclick="deleteMandant()">Mandant
+                    löschen</button>
+                <div style="display: flex; gap: 10px;">
+                    <button class="btn btn-outline" onclick="closeConfigModal()">Abbrechen</button>
+                    <button class="btn btn-primary" onclick="saveMandantConfig()">Speichern</button>
+                </div>
             </div>
         </div>
     </div>
+
+    <!-- Firebase Auth -->
+    <script src="firebase_config.js"></script>
+    <script type="module" src="auth.js"></script>
 
     <script src="detail.js"></script>
     <script src="detail_extensions.js"></script>
@@ -732,6 +859,7 @@
     <!-- Employee Edit Modal & Logic -->
 
     <script src="mitarbeiter.js"></script>
+    <script src="recurring.js"></script>
 
     <div id="editMitarbeiterModal" class="modal" style="display: none;">
         <div class="modal-content" style="max-width: 700px;">
@@ -804,55 +932,6 @@
             </div>
         </div>
     </div>
-
-    <!-- Recurring Invoice Modal -->
-    <div id="recurringModal" class="modal" style="display: none;">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h3>🔄 Neues Abo anlegen</h3>
-                <button class="close-modal" onclick="RecurringManager.closeModal()">×</button>
-            </div>
-            <div class="modal-body">
-                <form id="recForm" onsubmit="event.preventDefault(); RecurringManager.saveRecurring();">
-                    <div class="form-group">
-                        <label>Kunde *</label>
-                        <select id="recKunde" class="form-control" required></select>
-                    </div>
-                    <div class="form-group">
-                        <label>Beschreibung (Leistung) *</label>
-                        <input type="text" id="recDesc" class="form-control" placeholder="z.B. Wartungspauschale"
-                            required>
-                    </div>
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label>Betrag (Netto €) *</label>
-                            <input type="number" step="0.01" id="recAmount" class="form-control" required>
-                        </div>
-                        <div class="form-group">
-                            <label>Intervall *</label>
-                            <select id="recInterval" class="form-control">
-                                <option value="monatlich">Monatlich</option>
-                                <option value="quartalsweise">Quartalsweise</option>
-                                <option value="jaehrlich">Jährlich</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label>Startdatum / Erste Fälligkeit *</label>
-                        <input type="date" id="recStart" class="form-control" required>
-                    </div>
-
-                    <div class="modal-footer" style="margin-top:20px;">
-                        <button type="button" class="btn btn-outline"
-                            onclick="RecurringManager.closeModal()">Abbrechen</button>
-                        <button type="submit" class="btn btn-primary">Abo anlegen</button>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
-
-    <script src="recurring.js"></script>
 
     <!-- Payslip Generation Modal -->
     <div id="payslipModal" class="modal" style="display: none;">
@@ -930,4 +1009,78 @@
         </div>
     </div>
 
-    <!-- Duplicate Config Modal Removed -->
+    <script src="mitarbeiter.js"></script>
+    <!-- Recurring Invoice Modal -->
+    <div id="recurringModal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>🔄 Neues Abo anlegen</h3>
+                <button class="close-modal" onclick="RecurringManager.closeModal()">×</button>
+            </div>
+            <div class="modal-body">
+                <form id="recForm" onsubmit="event.preventDefault(); RecurringManager.saveRecurring();">
+                    <div class="form-group">
+                        <label>Kunde *</label>
+                        <select id="recKunde" class="form-control" required></select>
+                    </div>
+                    <div class="form-group">
+                        <label>Beschreibung (Leistung) *</label>
+                        <input type="text" id="recDesc" class="form-control" placeholder="z.B. Wartungspauschale"
+                            required>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Betrag (Netto €) *</label>
+                            <input type="number" step="0.01" id="recAmount" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Intervall *</label>
+                            <select id="recInterval" class="form-control">
+                                <option value="monatlich">Monatlich</option>
+                                <option value="quartalsweise">Quartalsweise</option>
+                                <option value="jaehrlich">Jährlich</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Startdatum / Erste Fälligkeit *</label>
+                        <input type="date" id="recStart" class="form-control" required>
+                    </div>
+
+                    <div class="modal-footer" style="margin-top:20px;">
+                        <button type="button" class="btn btn-outline"
+                            onclick="RecurringManager.closeModal()">Abbrechen</button>
+                        <button type="submit" class="btn btn-primary">Abo anlegen</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <!-- Beleg Preview Modal -->
+    <div id="belegPreviewModal" class="modal" style="display: none;">
+        <div class="modal-content" style="max-width: 90vw;"> <!-- Wide modal -->
+            <div class="modal-header">
+                <h3>🔍 Beleg Vorschau</h3>
+                <button class="close-modal" onclick="closeBelegModal()">×</button>
+            </div>
+            <div class="modal-body">
+                <div class="beleg-preview-container">
+                    <!-- Linke Seite: Bild/PDF -->
+                    <div id="belegView" class="beleg-view">
+                        <p class="beleg-missing">Kein Bild geladen</p>
+                    </div>
+
+                    <!-- Rechte Seite: Details -->
+                    <div class="beleg-details">
+                        <h4>Belegdaten</h4>
+                        <div id="belegDataView">
+                            <!-- Wird per JS gefüllt -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

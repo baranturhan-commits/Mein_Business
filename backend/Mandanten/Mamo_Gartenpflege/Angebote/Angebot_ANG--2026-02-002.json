@@ -1,0 +1,13 @@
+{
+    "nummer": "ANG--2026-02-002",
+    "kunde": "Gottfried Ninigel",
+    "positionen": [
+        {
+            "bezeichnung": "Arbeitsstunde",
+            "menge": 30,
+            "einheit": "Std",
+            "einzelpreis": 40
+        }
+    ],
+    "datum": "2026-02-20T19:11:51.572455"
+}

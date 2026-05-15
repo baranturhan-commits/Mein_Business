@@ -1,0 +1,380 @@
+2026-02-19 09:24:49,111 - __main__ - INFO - 🔥 Firebase Admin SDK initialized with ADC
+2026-02-19 09:24:49,151 - __main__ - INFO - ⏰ Scheduler gestartet (Backup täglich um 23:00)
+2026-02-19 09:24:49,172 - __main__ - INFO - 🚀 Starting API Server...
+2026-02-19 09:24:49,357 - werkzeug - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://192.168.178.199:5000
+2026-02-19 09:24:49,357 - werkzeug - INFO - [33mPress CTRL+C to quit[0m
+2026-02-19 09:24:49,364 - werkzeug - INFO -  * Restarting with stat
+2026-02-19 09:24:52,715 - __main__ - INFO - 🔥 Firebase Admin SDK initialized with ADC
+2026-02-19 09:24:52,764 - __main__ - INFO - ⏰ Scheduler gestartet (Backup täglich um 23:00)
+2026-02-19 09:24:52,781 - __main__ - INFO - 🚀 Starting API Server...
+2026-02-19 09:24:52,815 - werkzeug - WARNING -  * Debugger is active!
+2026-02-19 09:24:52,824 - werkzeug - INFO -  * Debugger PIN: 447-598-156
+2026-02-19 09:24:52,851 - werkzeug - INFO - 127.0.0.1 - - [19/Feb/2026 09:24:52] "GET / HTTP/1.1" 200 -
+2026-02-19 09:24:52,870 - werkzeug - INFO - 127.0.0.1 - - [19/Feb/2026 09:24:52] "[36mGET /styles.css HTTP/1.1[0m" 304 -
+2026-02-19 09:24:53,214 - werkzeug - INFO - 127.0.0.1 - - [19/Feb/2026 09:24:53] "[36mGET /auth.js HTTP/1.1[0m" 304 -
+2026-02-19 09:24:53,242 - werkzeug - INFO - 127.0.0.1 - - [19/Feb/2026 09:24:53] "[36mGET /firebase_config.js HTTP/1.1[0m" 304 -
+2026-02-19 09:24:53,261 - werkzeug - INFO - 127.0.0.1 - - [19/Feb/2026 09:24:53] "[36mGET /app.js HTTP/1.1[0m" 304 -
+2026-02-19 09:24:53,595 - __main__ - INFO - Mandanten geladen: 2
+2026-02-19 09:24:53,658 - werkzeug - INFO - 127.0.0.1 - - [19/Feb/2026 09:24:53] "[33mGET /favicon.ico HTTP/1.1[0m" 404 -
+2026-02-19 09:24:53,734 - werkzeug - INFO - 127.0.0.1 - - [19/Feb/2026 09:24:53] "GET /api/dashboard HTTP/1.1" 200 -
+2026-02-19 09:25:24,127 - __main__ - INFO - Mandanten geladen: 2
+2026-02-19 09:25:24,158 - werkzeug - INFO - 127.0.0.1 - - [19/Feb/2026 09:25:24] "GET /api/dashboard HTTP/1.1" 200 -
+2026-02-19 09:25:54,442 - __main__ - INFO - Mandanten geladen: 2
+2026-02-19 09:25:54,471 - werkzeug - INFO - 127.0.0.1 - - [19/Feb/2026 09:25:54] "GET /api/dashboard HTTP/1.1" 200 -
+2026-02-19 09:26:24,124 - __main__ - INFO - Mandanten geladen: 2
+2026-02-19 09:26:24,153 - werkzeug - INFO - 127.0.0.1 - - [19/Feb/2026 09:26:24] "GET /api/dashboard HTTP/1.1" 200 -
+2026-02-19 09:26:54,437 - __main__ - INFO - Mandanten geladen: 2
+2026-02-19 09:26:54,465 - werkzeug - INFO - 127.0.0.1 - - [19/Feb/2026 09:26:54] "GET /api/dashboard HTTP/1.1" 200 -
+2026-02-19 09:27:24,136 - __main__ - INFO - Mandanten geladen: 2
+2026-02-19 09:27:24,163 - werkzeug - INFO - 127.0.0.1 - - [19/Feb/2026 09:27:24] "GET /api/dashboard HTTP/1.1" 200 -
+2026-02-19 09:27:54,448 - __main__ - INFO - Mandanten geladen: 2
+2026-02-19 09:27:54,476 - werkzeug - INFO - 127.0.0.1 - - [19/Feb/2026 09:27:54] "GET /api/dashboard HTTP/1.1" 200 -
+2026-02-19 09:28:34,132 - __main__ - INFO - Mandanten geladen: 2
+2026-02-19 09:28:34,157 - werkzeug - INFO - 127.0.0.1 - - [19/Feb/2026 09:28:34] "GET /api/dashboard HTTP/1.1" 200 -
+2026-02-19 09:29:34,439 - __main__ - INFO - Mandanten geladen: 2
+2026-02-19 09:29:34,464 - werkzeug - INFO - 127.0.0.1 - - [19/Feb/2026 09:29:34] "GET /api/dashboard HTTP/1.1" 200 -
+2026-02-19 09:30:34,128 - __main__ - INFO - Mandanten geladen: 2
+2026-02-19 09:30:34,170 - werkzeug - INFO - 127.0.0.1 - - [19/Feb/2026 09:30:34] "GET /api/dashboard HTTP/1.1" 200 -
+2026-02-19 09:31:34,439 - __main__ - INFO - Mandanten geladen: 2
+2026-02-19 09:31:34,466 - werkzeug - INFO - 127.0.0.1 - - [19/Feb/2026 09:31:34] "GET /api/dashboard HTTP/1.1" 200 -
+2026-02-19 09:32:34,129 - __main__ - INFO - Mandanten geladen: 2
+2026-02-19 09:32:34,156 - werkzeug - INFO - 127.0.0.1 - - [19/Feb/2026 09:32:34] "GET /api/dashboard HTTP/1.1" 200 -
+2026-02-19 09:33:34,442 - __main__ - INFO - Mandanten geladen: 2
+2026-02-19 09:33:34,467 - werkzeug - INFO - 127.0.0.1 - - [19/Feb/2026 09:33:34] "GET /api/dashboard HTTP/1.1" 200 -
+2026-02-19 09:34:07,561 - __main__ - INFO - Mandanten geladen: 2
+2026-02-19 09:34:07,601 - werkzeug - INFO - 127.0.0.1 - - [19/Feb/2026 09:34:07] "GET /api/dashboard HTTP/1.1" 200 -
+2026-02-19 09:34:09,373 - werkzeug - INFO - 127.0.0.1 - - [19/Feb/2026 09:34:09] "[36mGET /detail.html?id=Elektroniker_Testbetrieb HTTP/1.1[0m" 304 -
+2026-02-19 09:34:09,637 - werkzeug - INFO - 127.0.0.1 - - [19/Feb/2026 09:34:09] "[36mGET /styles.css HTTP/1.1[0m" 304 -
+2026-02-19 09:34:09,702 - werkzeug - INFO - 127.0.0.1 - - [19/Feb/2026 09:34:09] "[36mGET /detail.js HTTP/1.1[0m" 304 -
+2026-02-19 09:34:09,703 - werkzeug - INFO - 127.0.0.1 - - [19/Feb/2026 09:34:09] "[36mGET /detail_extensions.js HTTP/1.1[0m" 304 -
+2026-02-19 09:34:09,702 - werkzeug - INFO - 127.0.0.1 - - [19/Feb/2026 09:34:09] "[36mGET /auth.js HTTP/1.1[0m" 304 -
+2026-02-19 09:34:09,702 - werkzeug - INFO - 127.0.0.1 - - [19/Feb/2026 09:34:09] "[36mGET /firebase_config.js HTTP/1.1[0m" 304 -
+2026-02-19 09:34:09,727 - werkzeug - INFO - 127.0.0.1 - - [19/Feb/2026 09:34:09] "[36mGET /preisliste.js HTTP/1.1[0m" 304 -
+2026-02-19 09:34:09,969 - werkzeug - INFO - 127.0.0.1 - - [19/Feb/2026 09:34:09] "[36mGET /import.js HTTP/1.1[0m" 304 -
+2026-02-19 09:34:10,035 - werkzeug - INFO - 127.0.0.1 - - [19/Feb/2026 09:34:10] "[36mGET /lieferschein_merged.js HTTP/1.1[0m" 304 -
+2026-02-19 09:34:10,035 - werkzeug - INFO - 127.0.0.1 - - [19/Feb/2026 09:34:10] "[36mGET /invoice.js HTTP/1.1[0m" 304 -
+2026-02-19 09:34:10,035 - werkzeug - INFO - 127.0.0.1 - - [19/Feb/2026 09:34:10] "[36mGET /protocol_scanner.js HTTP/1.1[0m" 304 -
+2026-02-19 09:34:10,036 - werkzeug - INFO - 127.0.0.1 - - [19/Feb/2026 09:34:10] "[36mGET /angebot.js HTTP/1.1[0m" 304 -
+2026-02-19 09:34:10,061 - werkzeug - INFO - 127.0.0.1 - - [19/Feb/2026 09:34:10] "[36mGET /ausgaben.js HTTP/1.1[0m" 304 -
+2026-02-19 09:34:10,275 - werkzeug - INFO - 127.0.0.1 - - [19/Feb/2026 09:34:10] "[36mGET /mandant_config.js HTTP/1.1[0m" 304 -
+2026-02-19 09:34:10,339 - werkzeug - INFO - 127.0.0.1 - - [19/Feb/2026 09:34:10] "[36mGET /documents.js HTTP/1.1[0m" 304 -
+2026-02-19 09:34:10,363 - werkzeug - INFO - 127.0.0.1 - - [19/Feb/2026 09:34:10] "[36mGET /mitarbeiter.js HTTP/1.1[0m" 304 -
+2026-02-19 09:34:10,364 - werkzeug - INFO - 127.0.0.1 - - [19/Feb/2026 09:34:10] "[36mGET /recurring.js HTTP/1.1[0m" 304 -
+2026-02-19 09:34:10,685 - werkzeug - INFO - 127.0.0.1 - - [19/Feb/2026 09:34:10] "GET /api/mandanten/Elektroniker_Testbetrieb/rechnungen HTTP/1.1" 200 -
+2026-02-19 09:34:10,701 - werkzeug - INFO - 127.0.0.1 - - [19/Feb/2026 09:34:10] "GET /api/mandanten/Elektroniker_Testbetrieb/stats HTTP/1.1" 200 -
+2026-02-19 09:34:10,932 - werkzeug - INFO - 127.0.0.1 - - [19/Feb/2026 09:34:10] "GET /api/mandanten/Elektroniker_Testbetrieb/recurring HTTP/1.1" 200 -
+2026-02-19 09:34:18,257 - werkzeug - INFO - 127.0.0.1 - - [19/Feb/2026 09:34:18] "GET /api/mandanten/Elektroniker_Testbetrieb/ausgaben HTTP/1.1" 200 -
+2026-02-19 09:34:20,359 - werkzeug - INFO - 127.0.0.1 - - [19/Feb/2026 09:34:20] "GET /api/mandanten/Elektroniker_Testbetrieb/rechnungen HTTP/1.1" 200 -
+2026-02-19 09:34:20,369 - __main__ - INFO - Found 8 Lieferscheine for Elektroniker_Testbetrieb
+2026-02-19 09:34:20,369 - werkzeug - INFO - 127.0.0.1 - - [19/Feb/2026 09:34:20] "GET /api/mandanten/Elektroniker_Testbetrieb/lieferscheine HTTP/1.1" 200 -
+2026-02-19 09:34:20,380 - __main__ - INFO - Found 4 Angebote for Elektroniker_Testbetrieb
+2026-02-19 09:34:20,381 - werkzeug - INFO - 127.0.0.1 - - [19/Feb/2026 09:34:20] "GET /api/mandanten/Elektroniker_Testbetrieb/angebote HTTP/1.1" 200 -
+2026-02-19 14:34:11,500 - __main__ - INFO - 🔥 Firebase Admin SDK initialized with ADC
+2026-02-19 14:34:11,525 - __main__ - INFO - ⏰ Scheduler gestartet (Backup täglich um 23:00)
+2026-02-19 14:34:11,535 - __main__ - INFO - 🚀 Starting API Server...
+2026-02-19 14:34:11,615 - werkzeug - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://192.168.178.199:5000
+2026-02-19 14:34:11,615 - werkzeug - INFO - [33mPress CTRL+C to quit[0m
+2026-02-19 14:34:11,618 - werkzeug - INFO -  * Restarting with stat
+2026-02-19 14:34:13,542 - __main__ - INFO - 🔥 Firebase Admin SDK initialized with ADC
+2026-02-19 14:34:13,567 - __main__ - INFO - ⏰ Scheduler gestartet (Backup täglich um 23:00)
+2026-02-19 14:34:13,575 - __main__ - INFO - 🚀 Starting API Server...
+2026-02-19 14:34:13,595 - werkzeug - WARNING -  * Debugger is active!
+2026-02-19 14:34:13,601 - werkzeug - INFO -  * Debugger PIN: 447-598-156
+2026-02-19 14:34:15,539 - werkzeug - INFO - 127.0.0.1 - - [19/Feb/2026 14:34:15] "[36mGET / HTTP/1.1[0m" 304 -
+2026-02-19 14:34:15,797 - werkzeug - INFO - 127.0.0.1 - - [19/Feb/2026 14:34:15] "[36mGET /styles.css HTTP/1.1[0m" 304 -
+2026-02-19 14:34:15,889 - werkzeug - INFO - 127.0.0.1 - - [19/Feb/2026 14:34:15] "[36mGET /firebase_config.js HTTP/1.1[0m" 304 -
+2026-02-19 14:34:15,900 - werkzeug - INFO - 127.0.0.1 - - [19/Feb/2026 14:34:15] "[36mGET /auth.js HTTP/1.1[0m" 304 -
+2026-02-19 14:34:15,901 - werkzeug - INFO - 127.0.0.1 - - [19/Feb/2026 14:34:15] "[36mGET /app.js HTTP/1.1[0m" 304 -
+2026-02-19 14:34:15,934 - __main__ - INFO - Mandanten geladen: 2
+2026-02-19 14:34:16,017 - werkzeug - INFO - 127.0.0.1 - - [19/Feb/2026 14:34:16] "GET /api/dashboard HTTP/1.1" 200 -
+2026-02-19 14:34:16,248 - werkzeug - INFO - 127.0.0.1 - - [19/Feb/2026 14:34:16] "[33mGET /favicon.ico HTTP/1.1[0m" 404 -
+2026-02-19 14:34:21,859 - werkzeug - INFO - 127.0.0.1 - - [19/Feb/2026 14:34:21] "[36mGET /detail.html?id=Elektroniker_Testbetrieb HTTP/1.1[0m" 304 -
+2026-02-19 14:34:22,090 - werkzeug - INFO - 127.0.0.1 - - [19/Feb/2026 14:34:22] "[36mGET /styles.css HTTP/1.1[0m" 304 -
+2026-02-19 14:34:22,187 - werkzeug - INFO - 127.0.0.1 - - [19/Feb/2026 14:34:22] "[36mGET /firebase_config.js HTTP/1.1[0m" 304 -
+2026-02-19 14:34:22,188 - werkzeug - INFO - 127.0.0.1 - - [19/Feb/2026 14:34:22] "[36mGET /auth.js HTTP/1.1[0m" 304 -
+2026-02-19 14:34:22,209 - werkzeug - INFO - 127.0.0.1 - - [19/Feb/2026 14:34:22] "[36mGET /preisliste.js HTTP/1.1[0m" 304 -
+2026-02-19 14:34:22,211 - werkzeug - INFO - 127.0.0.1 - - [19/Feb/2026 14:34:22] "[36mGET /detail.js HTTP/1.1[0m" 304 -
+2026-02-19 14:34:22,212 - werkzeug - INFO - 127.0.0.1 - - [19/Feb/2026 14:34:22] "[36mGET /detail_extensions.js HTTP/1.1[0m" 304 -
+2026-02-19 14:34:22,424 - werkzeug - INFO - 127.0.0.1 - - [19/Feb/2026 14:34:22] "[36mGET /import.js HTTP/1.1[0m" 304 -
+2026-02-19 14:34:22,520 - werkzeug - INFO - 127.0.0.1 - - [19/Feb/2026 14:34:22] "[36mGET /lieferschein_merged.js HTTP/1.1[0m" 304 -
+2026-02-19 14:34:22,524 - werkzeug - INFO - 127.0.0.1 - - [19/Feb/2026 14:34:22] "[36mGET /angebot.js HTTP/1.1[0m" 304 -
+2026-02-19 14:34:22,550 - werkzeug - INFO - 127.0.0.1 - - [19/Feb/2026 14:34:22] "[36mGET /invoice.js HTTP/1.1[0m" 304 -
+2026-02-19 14:34:22,550 - werkzeug - INFO - 127.0.0.1 - - [19/Feb/2026 14:34:22] "[36mGET /documents.js HTTP/1.1[0m" 304 -
+2026-02-19 14:34:22,550 - werkzeug - INFO - 127.0.0.1 - - [19/Feb/2026 14:34:22] "[36mGET /protocol_scanner.js HTTP/1.1[0m" 304 -
+2026-02-19 14:34:22,759 - werkzeug - INFO - 127.0.0.1 - - [19/Feb/2026 14:34:22] "[36mGET /ausgaben.js HTTP/1.1[0m" 304 -
+2026-02-19 14:34:22,863 - werkzeug - INFO - 127.0.0.1 - - [19/Feb/2026 14:34:22] "[36mGET /mitarbeiter.js HTTP/1.1[0m" 304 -
+2026-02-19 14:34:22,863 - werkzeug - INFO - 127.0.0.1 - - [19/Feb/2026 14:34:22] "[36mGET /mandant_config.js HTTP/1.1[0m" 304 -
+2026-02-19 14:34:22,880 - werkzeug - INFO - 127.0.0.1 - - [19/Feb/2026 14:34:22] "[36mGET /recurring.js HTTP/1.1[0m" 304 -
+2026-02-19 14:34:23,201 - werkzeug - INFO - 127.0.0.1 - - [19/Feb/2026 14:34:23] "GET /api/mandanten/Elektroniker_Testbetrieb/rechnungen HTTP/1.1" 200 -
+2026-02-19 14:34:23,217 - werkzeug - INFO - 127.0.0.1 - - [19/Feb/2026 14:34:23] "GET /api/mandanten/Elektroniker_Testbetrieb/stats HTTP/1.1" 200 -
+2026-02-19 14:34:23,472 - werkzeug - INFO - 127.0.0.1 - - [19/Feb/2026 14:34:23] "GET /api/mandanten/Elektroniker_Testbetrieb/recurring HTTP/1.1" 200 -
+2026-02-19 14:34:27,350 - __main__ - INFO - Found 4 Angebote for Elektroniker_Testbetrieb
+2026-02-19 14:34:27,350 - werkzeug - INFO - 127.0.0.1 - - [19/Feb/2026 14:34:27] "GET /api/mandanten/Elektroniker_Testbetrieb/angebote HTTP/1.1" 200 -
+2026-02-19 14:34:27,636 - werkzeug - INFO - 127.0.0.1 - - [19/Feb/2026 14:34:27] "GET /api/mandanten/Elektroniker_Testbetrieb/rechnungen HTTP/1.1" 200 -
+2026-02-19 14:34:27,659 - __main__ - INFO - Found 8 Lieferscheine for Elektroniker_Testbetrieb
+2026-02-19 14:34:27,659 - werkzeug - INFO - 127.0.0.1 - - [19/Feb/2026 14:34:27] "GET /api/mandanten/Elektroniker_Testbetrieb/lieferscheine HTTP/1.1" 200 -
+2026-02-19 14:34:32,980 - __main__ - INFO - PDF Request: Mandanten/Elektroniker_Testbetrieb/Rechnungen/Test_Kunde_GmbH/RE-001-2026-01-001.pdf -> C:\Users\Admin\Desktop\Mein_Business\backend\Mandanten\Elektroniker_Testbetrieb\Rechnungen\Test_Kunde_GmbH\RE-001-2026-01-001.pdf
+2026-02-19 14:34:32,981 - werkzeug - INFO - 127.0.0.1 - - [19/Feb/2026 14:34:32] "GET /api/pdf/Mandanten/Elektroniker_Testbetrieb/Rechnungen/Test_Kunde_GmbH/RE-001-2026-01-001.pdf HTTP/1.1" 200 -
+2026-02-19 14:34:54,676 - werkzeug - INFO - 127.0.0.1 - - [19/Feb/2026 14:34:54] "GET /api/mandanten/Elektroniker_Testbetrieb/kunden HTTP/1.1" 200 -
+2026-02-19 14:34:54,991 - __main__ - INFO - Found 4 Angebote for Elektroniker_Testbetrieb
+2026-02-19 14:34:54,992 - werkzeug - INFO - 127.0.0.1 - - [19/Feb/2026 14:34:54] "GET /api/mandanten/Elektroniker_Testbetrieb/angebote HTTP/1.1" 200 -
+2026-02-19 14:35:05,734 - werkzeug - INFO - 127.0.0.1 - - [19/Feb/2026 14:35:05] "GET /api/mandanten/Elektroniker_Testbetrieb/kunden HTTP/1.1" 200 -
+2026-02-19 14:35:05,999 - werkzeug - INFO - 127.0.0.1 - - [19/Feb/2026 14:35:05] "GET /api/mandanten/Elektroniker_Testbetrieb/preisliste HTTP/1.1" 200 -
+2026-02-19 14:35:09,889 - werkzeug - INFO - 127.0.0.1 - - [19/Feb/2026 14:35:09] "GET /api/mandanten/Elektroniker_Testbetrieb/kunden HTTP/1.1" 200 -
+2026-02-19 14:35:41,904 - __main__ - INFO - Kunde erstellt: Elektroniker_Testbetrieb/Baran Turhan
+2026-02-19 14:35:41,905 - werkzeug - INFO - 127.0.0.1 - - [19/Feb/2026 14:35:41] "POST /api/mandanten/Elektroniker_Testbetrieb/kunden HTTP/1.1" 200 -
+2026-02-19 14:35:43,429 - werkzeug - INFO - 127.0.0.1 - - [19/Feb/2026 14:35:43] "GET /api/mandanten/Elektroniker_Testbetrieb/kunden HTTP/1.1" 200 -
+2026-02-19 14:35:45,446 - werkzeug - INFO - 127.0.0.1 - - [19/Feb/2026 14:35:45] "GET /api/mandanten/Elektroniker_Testbetrieb/rechnungen HTTP/1.1" 200 -
+2026-02-19 14:35:45,455 - __main__ - INFO - Found 4 Angebote for Elektroniker_Testbetrieb
+2026-02-19 14:35:45,456 - werkzeug - INFO - 127.0.0.1 - - [19/Feb/2026 14:35:45] "GET /api/mandanten/Elektroniker_Testbetrieb/angebote HTTP/1.1" 200 -
+2026-02-19 14:35:45,465 - __main__ - INFO - Found 8 Lieferscheine for Elektroniker_Testbetrieb
+2026-02-19 14:35:45,465 - werkzeug - INFO - 127.0.0.1 - - [19/Feb/2026 14:35:45] "GET /api/mandanten/Elektroniker_Testbetrieb/lieferscheine HTTP/1.1" 200 -
+2026-02-19 14:35:45,894 - werkzeug - INFO - 127.0.0.1 - - [19/Feb/2026 14:35:45] "GET /api/mandanten/Elektroniker_Testbetrieb/kunden HTTP/1.1" 200 -
+2026-02-19 14:35:46,216 - werkzeug - INFO - 127.0.0.1 - - [19/Feb/2026 14:35:46] "GET /api/mandanten/Elektroniker_Testbetrieb/preisliste HTTP/1.1" 200 -
+2026-02-19 14:36:37,424 - __main__ - INFO - Angebot erstellt: Elektroniker_Testbetrieb/ANG-001-2026-02-001
+2026-02-19 14:36:37,424 - werkzeug - INFO - 127.0.0.1 - - [19/Feb/2026 14:36:37] "POST /api/mandanten/Elektroniker_Testbetrieb/angebot HTTP/1.1" 200 -
+2026-02-19 14:36:37,757 - __main__ - INFO - PDF Request: Mandanten/Elektroniker_Testbetrieb/Angebote/ANG-001-2026-02-001.pdf -> C:\Users\Admin\Desktop\Mein_Business\backend\Mandanten\Elektroniker_Testbetrieb\Angebote\ANG-001-2026-02-001.pdf
+2026-02-19 14:36:37,769 - werkzeug - INFO - 127.0.0.1 - - [19/Feb/2026 14:36:37] "GET /api/pdf/Mandanten/Elektroniker_Testbetrieb/Angebote/ANG-001-2026-02-001.pdf HTTP/1.1" 200 -
+2026-02-19 14:36:49,019 - werkzeug - INFO - 127.0.0.1 - - [19/Feb/2026 14:36:49] "GET /api/mandanten/Elektroniker_Testbetrieb/kunden HTTP/1.1" 200 -
+2026-02-19 14:36:49,349 - __main__ - INFO - Found 5 Angebote for Elektroniker_Testbetrieb
+2026-02-19 14:36:49,349 - werkzeug - INFO - 127.0.0.1 - - [19/Feb/2026 14:36:49] "GET /api/mandanten/Elektroniker_Testbetrieb/angebote HTTP/1.1" 200 -
+2026-02-19 14:37:33,797 - werkzeug - INFO - 127.0.0.1 - - [19/Feb/2026 14:37:33] "GET /api/mandanten/Elektroniker_Testbetrieb/kunden HTTP/1.1" 200 -
+2026-02-19 14:37:33,807 - __main__ - INFO - Found 5 Angebote for Elektroniker_Testbetrieb
+2026-02-19 14:37:33,808 - werkzeug - INFO - 127.0.0.1 - - [19/Feb/2026 14:37:33] "GET /api/mandanten/Elektroniker_Testbetrieb/angebote HTTP/1.1" 200 -
+2026-02-19 14:37:37,345 - werkzeug - INFO - 127.0.0.1 - - [19/Feb/2026 14:37:37] "GET /api/mandanten/Elektroniker_Testbetrieb/angebot/ANG-001-2026-02-001 HTTP/1.1" 200 -
+2026-02-19 14:37:39,887 - werkzeug - INFO - 127.0.0.1 - - [19/Feb/2026 14:37:39] "POST /api/mandanten/Elektroniker_Testbetrieb/lieferschein HTTP/1.1" 200 -
+2026-02-19 14:37:40,098 - __main__ - INFO - PDF Request: Mandanten/Elektroniker_Testbetrieb/Lieferscheine/Lieferschein_LS-001-2026-02-003_1771508259.pdf -> C:\Users\Admin\Desktop\Mein_Business\backend\Mandanten\Elektroniker_Testbetrieb\Lieferscheine\Lieferschein_LS-001-2026-02-003_1771508259.pdf
+2026-02-19 14:37:40,111 - werkzeug - INFO - 127.0.0.1 - - [19/Feb/2026 14:37:40] "GET /api/pdf/Mandanten/Elektroniker_Testbetrieb/Lieferscheine/Lieferschein_LS-001-2026-02-003_1771508259.pdf HTTP/1.1" 200 -
+2026-02-19 14:37:52,202 - werkzeug - INFO - 127.0.0.1 - - [19/Feb/2026 14:37:52] "GET /api/mandanten/Elektroniker_Testbetrieb/kunden HTTP/1.1" 200 -
+2026-02-19 14:37:52,514 - __main__ - INFO - Found 5 Angebote for Elektroniker_Testbetrieb
+2026-02-19 14:37:52,514 - werkzeug - INFO - 127.0.0.1 - - [19/Feb/2026 14:37:52] "GET /api/mandanten/Elektroniker_Testbetrieb/angebote HTTP/1.1" 200 -
+2026-02-19 14:38:33,281 - __main__ - ERROR - Protocol Scan Error: 404 models/gemini-2.0-flash-exp is not found for API version v1beta, or is not supported for generateContent. Call ListModels to see the list of available models and their supported methods.
+2026-02-19 14:38:33,282 - werkzeug - INFO - 127.0.0.1 - - [19/Feb/2026 14:38:33] "[35m[1mPOST /api/mandanten/Elektroniker_Testbetrieb/protocol/scan HTTP/1.1[0m" 500 -
+2026-02-19 14:49:23,792 - werkzeug - INFO -  * Detected change in 'C:\\Users\\Admin\\Desktop\\Mein_Business\\backend\\receipt_scanner.py', reloading
+2026-02-19 14:49:26,108 - werkzeug - INFO -  * Restarting with stat
+2026-02-19 14:49:28,114 - __main__ - INFO - 🔥 Firebase Admin SDK initialized with ADC
+2026-02-19 14:49:28,139 - __main__ - INFO - ⏰ Scheduler gestartet (Backup täglich um 23:00)
+2026-02-19 14:49:28,146 - __main__ - INFO - 🚀 Starting API Server...
+2026-02-19 14:49:28,164 - werkzeug - WARNING -  * Debugger is active!
+2026-02-19 14:49:28,169 - werkzeug - INFO -  * Debugger PIN: 447-598-156
+2026-02-19 14:51:30,248 - werkzeug - INFO -  * Detected change in 'C:\\Users\\Admin\\Desktop\\Mein_Business\\backend\\receipt_utils.py', reloading
+2026-02-19 14:51:30,543 - werkzeug - INFO -  * Restarting with stat
+2026-02-19 14:51:32,576 - __main__ - INFO - 🔥 Firebase Admin SDK initialized with ADC
+2026-02-19 14:51:32,600 - __main__ - INFO - ⏰ Scheduler gestartet (Backup täglich um 23:00)
+2026-02-19 14:51:32,607 - __main__ - INFO - 🚀 Starting API Server...
+2026-02-19 14:51:32,624 - werkzeug - WARNING -  * Debugger is active!
+2026-02-19 14:51:32,630 - werkzeug - INFO -  * Debugger PIN: 447-598-156
+2026-02-19 14:51:40,717 - werkzeug - INFO -  * Detected change in 'C:\\Users\\Admin\\Desktop\\Mein_Business\\backend\\protocol_utils.py', reloading
+2026-02-19 14:51:41,009 - werkzeug - INFO -  * Restarting with stat
+2026-02-19 14:51:43,083 - __main__ - INFO - 🔥 Firebase Admin SDK initialized with ADC
+2026-02-19 14:51:43,108 - __main__ - INFO - ⏰ Scheduler gestartet (Backup täglich um 23:00)
+2026-02-19 14:51:43,115 - __main__ - INFO - 🚀 Starting API Server...
+2026-02-19 14:51:43,131 - werkzeug - WARNING -  * Debugger is active!
+2026-02-19 14:51:43,137 - werkzeug - INFO -  * Debugger PIN: 447-598-156
+2026-02-19 14:52:29,314 - werkzeug - INFO - 127.0.0.1 - - [19/Feb/2026 14:52:29] "[36mGET /detail.html?id=Elektroniker_Testbetrieb HTTP/1.1[0m" 304 -
+2026-02-19 14:52:29,576 - werkzeug - INFO - 127.0.0.1 - - [19/Feb/2026 14:52:29] "[36mGET /styles.css HTTP/1.1[0m" 304 -
+2026-02-19 14:52:29,640 - werkzeug - INFO - 127.0.0.1 - - [19/Feb/2026 14:52:29] "[36mGET /firebase_config.js HTTP/1.1[0m" 304 -
+2026-02-19 14:52:29,641 - werkzeug - INFO - 127.0.0.1 - - [19/Feb/2026 14:52:29] "[36mGET /auth.js HTTP/1.1[0m" 304 -
+2026-02-19 14:52:29,641 - werkzeug - INFO - 127.0.0.1 - - [19/Feb/2026 14:52:29] "[36mGET /detail.js HTTP/1.1[0m" 304 -
+2026-02-19 14:52:29,642 - werkzeug - INFO - 127.0.0.1 - - [19/Feb/2026 14:52:29] "[36mGET /detail_extensions.js HTTP/1.1[0m" 304 -
+2026-02-19 14:52:29,642 - werkzeug - INFO - 127.0.0.1 - - [19/Feb/2026 14:52:29] "[36mGET /preisliste.js HTTP/1.1[0m" 304 -
+2026-02-19 14:52:29,886 - werkzeug - INFO - 127.0.0.1 - - [19/Feb/2026 14:52:29] "[36mGET /import.js HTTP/1.1[0m" 304 -
+2026-02-19 14:52:29,951 - werkzeug - INFO - 127.0.0.1 - - [19/Feb/2026 14:52:29] "[36mGET /lieferschein_merged.js HTTP/1.1[0m" 304 -
+2026-02-19 14:52:29,952 - werkzeug - INFO - 127.0.0.1 - - [19/Feb/2026 14:52:29] "[36mGET /angebot.js HTTP/1.1[0m" 304 -
+2026-02-19 14:52:29,953 - werkzeug - INFO - 127.0.0.1 - - [19/Feb/2026 14:52:29] "[36mGET /protocol_scanner.js HTTP/1.1[0m" 304 -
+2026-02-19 14:52:29,953 - werkzeug - INFO - 127.0.0.1 - - [19/Feb/2026 14:52:29] "[36mGET /invoice.js HTTP/1.1[0m" 304 -
+2026-02-19 14:52:29,953 - werkzeug - INFO - 127.0.0.1 - - [19/Feb/2026 14:52:29] "[36mGET /documents.js HTTP/1.1[0m" 304 -
+2026-02-19 14:52:30,197 - werkzeug - INFO - 127.0.0.1 - - [19/Feb/2026 14:52:30] "[36mGET /ausgaben.js HTTP/1.1[0m" 304 -
+2026-02-19 14:52:30,261 - werkzeug - INFO - 127.0.0.1 - - [19/Feb/2026 14:52:30] "[36mGET /mandant_config.js HTTP/1.1[0m" 304 -
+2026-02-19 14:52:30,261 - werkzeug - INFO - 127.0.0.1 - - [19/Feb/2026 14:52:30] "[36mGET /mitarbeiter.js HTTP/1.1[0m" 304 -
+2026-02-19 14:52:30,262 - werkzeug - INFO - 127.0.0.1 - - [19/Feb/2026 14:52:30] "[36mGET /recurring.js HTTP/1.1[0m" 304 -
+2026-02-19 14:52:30,584 - werkzeug - INFO - 127.0.0.1 - - [19/Feb/2026 14:52:30] "GET /api/mandanten/Elektroniker_Testbetrieb/rechnungen HTTP/1.1" 200 -
+2026-02-19 14:52:30,611 - werkzeug - INFO - 127.0.0.1 - - [19/Feb/2026 14:52:30] "GET /api/mandanten/Elektroniker_Testbetrieb/stats HTTP/1.1" 200 -
+2026-02-19 14:52:30,835 - werkzeug - INFO - 127.0.0.1 - - [19/Feb/2026 14:52:30] "GET /api/mandanten/Elektroniker_Testbetrieb/recurring HTTP/1.1" 200 -
+2026-02-19 14:52:31,665 - __main__ - INFO - Found 5 Angebote for Elektroniker_Testbetrieb
+2026-02-19 14:52:31,665 - werkzeug - INFO - 127.0.0.1 - - [19/Feb/2026 14:52:31] "GET /api/mandanten/Elektroniker_Testbetrieb/angebote HTTP/1.1" 200 -
+2026-02-19 14:52:31,971 - werkzeug - INFO - 127.0.0.1 - - [19/Feb/2026 14:52:31] "GET /api/mandanten/Elektroniker_Testbetrieb/rechnungen HTTP/1.1" 200 -
+2026-02-19 14:52:31,981 - __main__ - INFO - Found 9 Lieferscheine for Elektroniker_Testbetrieb
+2026-02-19 14:52:31,981 - werkzeug - INFO - 127.0.0.1 - - [19/Feb/2026 14:52:31] "GET /api/mandanten/Elektroniker_Testbetrieb/lieferscheine HTTP/1.1" 200 -
+2026-02-19 14:52:35,697 - werkzeug - INFO - 127.0.0.1 - - [19/Feb/2026 14:52:35] "GET /api/mandanten/Elektroniker_Testbetrieb/kunden HTTP/1.1" 200 -
+2026-02-19 14:52:35,710 - __main__ - INFO - Found 5 Angebote for Elektroniker_Testbetrieb
+2026-02-19 14:52:35,711 - werkzeug - INFO - 127.0.0.1 - - [19/Feb/2026 14:52:35] "GET /api/mandanten/Elektroniker_Testbetrieb/angebote HTTP/1.1" 200 -
+2026-02-19 14:53:07,961 - werkzeug - INFO - 127.0.0.1 - - [19/Feb/2026 14:53:07] "POST /api/mandanten/Elektroniker_Testbetrieb/protocol/scan HTTP/1.1" 200 -
+2026-02-19 14:53:48,099 - werkzeug - INFO - 127.0.0.1 - - [19/Feb/2026 14:53:48] "POST /api/mandanten/Elektroniker_Testbetrieb/check-duplicate HTTP/1.1" 200 -
+2026-02-19 14:53:48,424 - werkzeug - INFO - 127.0.0.1 - - [19/Feb/2026 14:53:48] "POST /api/mandanten/Elektroniker_Testbetrieb/rechnung HTTP/1.1" 200 -
+2026-02-19 14:53:49,885 - werkzeug - INFO - 127.0.0.1 - - [19/Feb/2026 14:53:49] "[36mGET /detail.html?id=Elektroniker_Testbetrieb HTTP/1.1[0m" 304 -
+2026-02-19 14:53:50,201 - werkzeug - INFO - 127.0.0.1 - - [19/Feb/2026 14:53:50] "[36mGET /styles.css HTTP/1.1[0m" 304 -
+2026-02-19 14:53:50,207 - werkzeug - INFO - 127.0.0.1 - - [19/Feb/2026 14:53:50] "[36mGET /auth.js HTTP/1.1[0m" 304 -
+2026-02-19 14:53:50,207 - werkzeug - INFO - 127.0.0.1 - - [19/Feb/2026 14:53:50] "[36mGET /detail_extensions.js HTTP/1.1[0m" 304 -
+2026-02-19 14:53:50,207 - werkzeug - INFO - 127.0.0.1 - - [19/Feb/2026 14:53:50] "[36mGET /detail.js HTTP/1.1[0m" 304 -
+2026-02-19 14:53:50,207 - werkzeug - INFO - 127.0.0.1 - - [19/Feb/2026 14:53:50] "[36mGET /firebase_config.js HTTP/1.1[0m" 304 -
+2026-02-19 14:53:50,208 - werkzeug - INFO - 127.0.0.1 - - [19/Feb/2026 14:53:50] "[36mGET /preisliste.js HTTP/1.1[0m" 304 -
+2026-02-19 14:53:50,509 - werkzeug - INFO - 127.0.0.1 - - [19/Feb/2026 14:53:50] "[36mGET /import.js HTTP/1.1[0m" 304 -
+2026-02-19 14:53:50,516 - werkzeug - INFO - 127.0.0.1 - - [19/Feb/2026 14:53:50] "[36mGET /protocol_scanner.js HTTP/1.1[0m" 304 -
+2026-02-19 14:53:50,516 - werkzeug - INFO - 127.0.0.1 - - [19/Feb/2026 14:53:50] "[36mGET /lieferschein_merged.js HTTP/1.1[0m" 304 -
+2026-02-19 14:53:50,516 - werkzeug - INFO - 127.0.0.1 - - [19/Feb/2026 14:53:50] "[36mGET /angebot.js HTTP/1.1[0m" 304 -
+2026-02-19 14:53:50,516 - werkzeug - INFO - 127.0.0.1 - - [19/Feb/2026 14:53:50] "[36mGET /invoice.js HTTP/1.1[0m" 304 -
+2026-02-19 14:53:50,516 - werkzeug - INFO - 127.0.0.1 - - [19/Feb/2026 14:53:50] "[36mGET /documents.js HTTP/1.1[0m" 304 -
+2026-02-19 14:53:50,821 - werkzeug - INFO - 127.0.0.1 - - [19/Feb/2026 14:53:50] "[36mGET /ausgaben.js HTTP/1.1[0m" 304 -
+2026-02-19 14:53:50,822 - werkzeug - INFO - 127.0.0.1 - - [19/Feb/2026 14:53:50] "[36mGET /mitarbeiter.js HTTP/1.1[0m" 304 -
+2026-02-19 14:53:50,822 - werkzeug - INFO - 127.0.0.1 - - [19/Feb/2026 14:53:50] "[36mGET /mandant_config.js HTTP/1.1[0m" 304 -
+2026-02-19 14:53:50,822 - werkzeug - INFO - 127.0.0.1 - - [19/Feb/2026 14:53:50] "[36mGET /recurring.js HTTP/1.1[0m" 304 -
+2026-02-19 14:53:51,021 - werkzeug - INFO - 127.0.0.1 - - [19/Feb/2026 14:53:51] "GET /api/mandanten/Elektroniker_Testbetrieb/stats HTTP/1.1" 200 -
+2026-02-19 14:53:51,146 - werkzeug - INFO - 127.0.0.1 - - [19/Feb/2026 14:53:51] "GET /api/mandanten/Elektroniker_Testbetrieb/rechnungen HTTP/1.1" 200 -
+2026-02-19 14:53:51,331 - werkzeug - INFO - 127.0.0.1 - - [19/Feb/2026 14:53:51] "GET /api/mandanten/Elektroniker_Testbetrieb/recurring HTTP/1.1" 200 -
+2026-02-19 14:53:52,401 - __main__ - INFO - Found 5 Angebote for Elektroniker_Testbetrieb
+2026-02-19 14:53:52,402 - werkzeug - INFO - 127.0.0.1 - - [19/Feb/2026 14:53:52] "GET /api/mandanten/Elektroniker_Testbetrieb/rechnungen HTTP/1.1" 200 -
+2026-02-19 14:53:52,402 - werkzeug - INFO - 127.0.0.1 - - [19/Feb/2026 14:53:52] "GET /api/mandanten/Elektroniker_Testbetrieb/angebote HTTP/1.1" 200 -
+2026-02-19 14:53:52,412 - __main__ - INFO - Found 9 Lieferscheine for Elektroniker_Testbetrieb
+2026-02-19 14:53:52,412 - werkzeug - INFO - 127.0.0.1 - - [19/Feb/2026 14:53:52] "GET /api/mandanten/Elektroniker_Testbetrieb/lieferscheine HTTP/1.1" 200 -
+2026-02-19 14:53:56,246 - __main__ - INFO - PDF Request: Mandanten/Elektroniker_Testbetrieb/Rechnungen/Baran_Turhan/RE-001-2026-02-001.pdf -> C:\Users\Admin\Desktop\Mein_Business\backend\Mandanten\Elektroniker_Testbetrieb\Rechnungen\Baran_Turhan\RE-001-2026-02-001.pdf
+2026-02-19 14:53:56,260 - werkzeug - INFO - 127.0.0.1 - - [19/Feb/2026 14:53:56] "GET /api/pdf/Mandanten/Elektroniker_Testbetrieb/Rechnungen/Baran_Turhan/RE-001-2026-02-001.pdf HTTP/1.1" 200 -
+2026-02-19 15:03:14,073 - werkzeug - INFO -  * Detected change in 'C:\\Users\\Admin\\Desktop\\Mein_Business\\backend\\invoice_generator.py', reloading
+2026-02-19 15:03:16,437 - werkzeug - INFO -  * Restarting with stat
+2026-02-19 15:03:18,681 - __main__ - INFO - 🔥 Firebase Admin SDK initialized with ADC
+2026-02-19 15:03:18,706 - __main__ - INFO - ⏰ Scheduler gestartet (Backup täglich um 23:00)
+2026-02-19 15:03:18,714 - __main__ - INFO - 🚀 Starting API Server...
+2026-02-19 15:03:18,731 - werkzeug - WARNING -  * Debugger is active!
+2026-02-19 15:03:18,737 - werkzeug - INFO -  * Debugger PIN: 447-598-156
+2026-02-19 15:03:52,030 - werkzeug - INFO -  * Detected change in 'C:\\Users\\Admin\\Desktop\\Mein_Business\\backend\\api_server.py', reloading
+2026-02-19 15:03:52,333 - werkzeug - INFO -  * Restarting with stat
+2026-02-19 15:03:54,342 - __main__ - INFO - 🔥 Firebase Admin SDK initialized with ADC
+2026-02-19 15:03:54,367 - __main__ - INFO - ⏰ Scheduler gestartet (Backup täglich um 23:00)
+2026-02-19 15:03:54,374 - __main__ - INFO - 🚀 Starting API Server...
+2026-02-19 15:03:54,391 - werkzeug - WARNING -  * Debugger is active!
+2026-02-19 15:03:54,397 - werkzeug - INFO -  * Debugger PIN: 447-598-156
+2026-02-19 15:06:34,804 - werkzeug - INFO - 127.0.0.1 - - [19/Feb/2026 15:06:34] "GET /api/mandanten/Elektroniker_Testbetrieb/kunden HTTP/1.1" 200 -
+2026-02-19 15:06:34,805 - __main__ - INFO - Found 5 Angebote for Elektroniker_Testbetrieb
+2026-02-19 15:06:34,806 - werkzeug - INFO - 127.0.0.1 - - [19/Feb/2026 15:06:34] "GET /api/mandanten/Elektroniker_Testbetrieb/angebote HTTP/1.1" 200 -
+2026-02-19 15:06:51,691 - werkzeug - INFO - 127.0.0.1 - - [19/Feb/2026 15:06:51] "POST /api/mandanten/Elektroniker_Testbetrieb/protocol/scan HTTP/1.1" 200 -
+2026-02-19 15:06:55,035 - werkzeug - INFO - 127.0.0.1 - - [19/Feb/2026 15:06:55] "POST /api/mandanten/Elektroniker_Testbetrieb/check-duplicate HTTP/1.1" 200 -
+2026-02-19 15:06:55,373 - werkzeug - INFO - 127.0.0.1 - - [19/Feb/2026 15:06:55] "POST /api/mandanten/Elektroniker_Testbetrieb/rechnung HTTP/1.1" 200 -
+2026-02-19 15:06:57,797 - werkzeug - INFO - 127.0.0.1 - - [19/Feb/2026 15:06:57] "GET /detail.html?id=Elektroniker_Testbetrieb HTTP/1.1" 200 -
+2026-02-19 15:06:58,117 - werkzeug - INFO - 127.0.0.1 - - [19/Feb/2026 15:06:58] "[36mGET /styles.css HTTP/1.1[0m" 304 -
+2026-02-19 15:06:58,118 - werkzeug - INFO - 127.0.0.1 - - [19/Feb/2026 15:06:58] "[36mGET /auth.js HTTP/1.1[0m" 304 -
+2026-02-19 15:06:58,119 - werkzeug - INFO - 127.0.0.1 - - [19/Feb/2026 15:06:58] "[36mGET /firebase_config.js HTTP/1.1[0m" 304 -
+2026-02-19 15:06:58,118 - werkzeug - INFO - 127.0.0.1 - - [19/Feb/2026 15:06:58] "[36mGET /detail_extensions.js HTTP/1.1[0m" 304 -
+2026-02-19 15:06:58,118 - werkzeug - INFO - 127.0.0.1 - - [19/Feb/2026 15:06:58] "[36mGET /detail.js HTTP/1.1[0m" 304 -
+2026-02-19 15:06:58,119 - werkzeug - INFO - 127.0.0.1 - - [19/Feb/2026 15:06:58] "[36mGET /preisliste.js HTTP/1.1[0m" 304 -
+2026-02-19 15:06:58,427 - werkzeug - INFO - 127.0.0.1 - - [19/Feb/2026 15:06:58] "[36mGET /import.js HTTP/1.1[0m" 304 -
+2026-02-19 15:06:58,428 - werkzeug - INFO - 127.0.0.1 - - [19/Feb/2026 15:06:58] "GET /invoice.js HTTP/1.1" 200 -
+2026-02-19 15:06:58,427 - werkzeug - INFO - 127.0.0.1 - - [19/Feb/2026 15:06:58] "[36mGET /angebot.js HTTP/1.1[0m" 304 -
+2026-02-19 15:06:58,428 - werkzeug - INFO - 127.0.0.1 - - [19/Feb/2026 15:06:58] "[36mGET /protocol_scanner.js HTTP/1.1[0m" 304 -
+2026-02-19 15:06:58,427 - werkzeug - INFO - 127.0.0.1 - - [19/Feb/2026 15:06:58] "[36mGET /lieferschein_merged.js HTTP/1.1[0m" 304 -
+2026-02-19 15:06:58,434 - werkzeug - INFO - 127.0.0.1 - - [19/Feb/2026 15:06:58] "[36mGET /documents.js HTTP/1.1[0m" 304 -
+2026-02-19 15:06:58,736 - werkzeug - INFO - 127.0.0.1 - - [19/Feb/2026 15:06:58] "[36mGET /ausgaben.js HTTP/1.1[0m" 304 -
+2026-02-19 15:06:58,736 - werkzeug - INFO - 127.0.0.1 - - [19/Feb/2026 15:06:58] "[36mGET /mandant_config.js HTTP/1.1[0m" 304 -
+2026-02-19 15:06:58,737 - werkzeug - INFO - 127.0.0.1 - - [19/Feb/2026 15:06:58] "[36mGET /mitarbeiter.js HTTP/1.1[0m" 304 -
+2026-02-19 15:06:58,739 - werkzeug - INFO - 127.0.0.1 - - [19/Feb/2026 15:06:58] "[36mGET /recurring.js HTTP/1.1[0m" 304 -
+2026-02-19 15:06:59,060 - werkzeug - INFO - 127.0.0.1 - - [19/Feb/2026 15:06:59] "GET /api/mandanten/Elektroniker_Testbetrieb/rechnungen HTTP/1.1" 200 -
+2026-02-19 15:06:59,090 - werkzeug - INFO - 127.0.0.1 - - [19/Feb/2026 15:06:59] "GET /api/mandanten/Elektroniker_Testbetrieb/stats HTTP/1.1" 200 -
+2026-02-19 15:06:59,308 - werkzeug - INFO - 127.0.0.1 - - [19/Feb/2026 15:06:59] "GET /api/mandanten/Elektroniker_Testbetrieb/recurring HTTP/1.1" 200 -
+2026-02-19 15:07:03,977 - __main__ - INFO - Found 5 Angebote for Elektroniker_Testbetrieb
+2026-02-19 15:07:03,978 - werkzeug - INFO - 127.0.0.1 - - [19/Feb/2026 15:07:03] "GET /api/mandanten/Elektroniker_Testbetrieb/angebote HTTP/1.1" 200 -
+2026-02-19 15:07:04,275 - werkzeug - INFO - 127.0.0.1 - - [19/Feb/2026 15:07:04] "GET /api/mandanten/Elektroniker_Testbetrieb/rechnungen HTTP/1.1" 200 -
+2026-02-19 15:07:04,284 - __main__ - INFO - Found 9 Lieferscheine for Elektroniker_Testbetrieb
+2026-02-19 15:07:04,285 - werkzeug - INFO - 127.0.0.1 - - [19/Feb/2026 15:07:04] "GET /api/mandanten/Elektroniker_Testbetrieb/lieferscheine HTTP/1.1" 200 -
+2026-02-19 15:07:09,710 - __main__ - INFO - PDF Request: Mandanten/Elektroniker_Testbetrieb/Rechnungen/Baran_Turhan/RE-001-2026-02-002.pdf -> C:\Users\Admin\Desktop\Mein_Business\backend\Mandanten\Elektroniker_Testbetrieb\Rechnungen\Baran_Turhan\RE-001-2026-02-002.pdf
+2026-02-19 15:07:09,722 - werkzeug - INFO - 127.0.0.1 - - [19/Feb/2026 15:07:09] "GET /api/pdf/Mandanten/Elektroniker_Testbetrieb/Rechnungen/Baran_Turhan/RE-001-2026-02-002.pdf HTTP/1.1" 200 -
+2026-02-19 15:11:38,260 - werkzeug - INFO - 127.0.0.1 - - [19/Feb/2026 15:11:38] "GET /api/mandanten/Elektroniker_Testbetrieb/kunden HTTP/1.1" 200 -
+2026-02-19 15:11:58,630 - werkzeug - INFO - 127.0.0.1 - - [19/Feb/2026 15:11:58] "[36mGET /index.html HTTP/1.1[0m" 304 -
+2026-02-19 15:11:58,960 - werkzeug - INFO - 127.0.0.1 - - [19/Feb/2026 15:11:58] "[36mGET /styles.css HTTP/1.1[0m" 304 -
+2026-02-19 15:11:58,961 - werkzeug - INFO - 127.0.0.1 - - [19/Feb/2026 15:11:58] "[36mGET /firebase_config.js HTTP/1.1[0m" 304 -
+2026-02-19 15:11:58,961 - werkzeug - INFO - 127.0.0.1 - - [19/Feb/2026 15:11:58] "[36mGET /auth.js HTTP/1.1[0m" 304 -
+2026-02-19 15:11:58,961 - werkzeug - INFO - 127.0.0.1 - - [19/Feb/2026 15:11:58] "[36mGET /app.js HTTP/1.1[0m" 304 -
+2026-02-19 15:11:59,207 - __main__ - INFO - Mandanten geladen: 2
+2026-02-19 15:11:59,237 - werkzeug - INFO - 127.0.0.1 - - [19/Feb/2026 15:11:59] "GET /api/dashboard HTTP/1.1" 200 -
+2026-02-19 15:12:03,065 - werkzeug - INFO - 127.0.0.1 - - [19/Feb/2026 15:12:03] "[36mGET /detail.html?id=Elektroniker_Testbetrieb HTTP/1.1[0m" 304 -
+2026-02-19 15:12:03,394 - werkzeug - INFO - 127.0.0.1 - - [19/Feb/2026 15:12:03] "[36mGET /auth.js HTTP/1.1[0m" 304 -
+2026-02-19 15:12:03,394 - werkzeug - INFO - 127.0.0.1 - - [19/Feb/2026 15:12:03] "[36mGET /styles.css HTTP/1.1[0m" 304 -
+2026-02-19 15:12:03,394 - werkzeug - INFO - 127.0.0.1 - - [19/Feb/2026 15:12:03] "[36mGET /detail.js HTTP/1.1[0m" 304 -
+2026-02-19 15:12:03,395 - werkzeug - INFO - 127.0.0.1 - - [19/Feb/2026 15:12:03] "[36mGET /firebase_config.js HTTP/1.1[0m" 304 -
+2026-02-19 15:12:03,396 - werkzeug - INFO - 127.0.0.1 - - [19/Feb/2026 15:12:03] "[36mGET /detail_extensions.js HTTP/1.1[0m" 304 -
+2026-02-19 15:12:03,397 - werkzeug - INFO - 127.0.0.1 - - [19/Feb/2026 15:12:03] "[36mGET /preisliste.js HTTP/1.1[0m" 304 -
+2026-02-19 15:12:03,707 - werkzeug - INFO - 127.0.0.1 - - [19/Feb/2026 15:12:03] "[36mGET /import.js HTTP/1.1[0m" 304 -
+2026-02-19 15:12:03,708 - werkzeug - INFO - 127.0.0.1 - - [19/Feb/2026 15:12:03] "[36mGET /invoice.js HTTP/1.1[0m" 304 -
+2026-02-19 15:12:03,707 - werkzeug - INFO - 127.0.0.1 - - [19/Feb/2026 15:12:03] "[36mGET /angebot.js HTTP/1.1[0m" 304 -
+2026-02-19 15:12:03,708 - werkzeug - INFO - 127.0.0.1 - - [19/Feb/2026 15:12:03] "[36mGET /documents.js HTTP/1.1[0m" 304 -
+2026-02-19 15:12:03,707 - werkzeug - INFO - 127.0.0.1 - - [19/Feb/2026 15:12:03] "[36mGET /protocol_scanner.js HTTP/1.1[0m" 304 -
+2026-02-19 15:12:03,708 - werkzeug - INFO - 127.0.0.1 - - [19/Feb/2026 15:12:03] "[36mGET /lieferschein_merged.js HTTP/1.1[0m" 304 -
+2026-02-19 15:12:04,016 - werkzeug - INFO - 127.0.0.1 - - [19/Feb/2026 15:12:04] "[36mGET /ausgaben.js HTTP/1.1[0m" 304 -
+2026-02-19 15:12:04,017 - werkzeug - INFO - 127.0.0.1 - - [19/Feb/2026 15:12:04] "[36mGET /mitarbeiter.js HTTP/1.1[0m" 304 -
+2026-02-19 15:12:04,017 - werkzeug - INFO - 127.0.0.1 - - [19/Feb/2026 15:12:04] "[36mGET /mandant_config.js HTTP/1.1[0m" 304 -
+2026-02-19 15:12:04,017 - werkzeug - INFO - 127.0.0.1 - - [19/Feb/2026 15:12:04] "[36mGET /recurring.js HTTP/1.1[0m" 304 -
+2026-02-19 15:12:04,348 - werkzeug - INFO - 127.0.0.1 - - [19/Feb/2026 15:12:04] "GET /api/mandanten/Elektroniker_Testbetrieb/rechnungen HTTP/1.1" 200 -
+2026-02-19 15:12:04,358 - werkzeug - INFO - 127.0.0.1 - - [19/Feb/2026 15:12:04] "GET /api/mandanten/Elektroniker_Testbetrieb/stats HTTP/1.1" 200 -
+2026-02-19 15:12:04,586 - werkzeug - INFO - 127.0.0.1 - - [19/Feb/2026 15:12:04] "GET /api/mandanten/Elektroniker_Testbetrieb/recurring HTTP/1.1" 200 -
+2026-02-19 15:12:05,044 - __main__ - INFO - Einnahmen geladen: 6 Rechnungen
+2026-02-19 15:12:05,045 - werkzeug - INFO - 127.0.0.1 - - [19/Feb/2026 15:12:05] "GET /api/mandanten/Elektroniker_Testbetrieb/einnahmen HTTP/1.1" 200 -
+2026-02-19 15:12:25,233 - werkzeug - INFO - 127.0.0.1 - - [19/Feb/2026 15:12:25] "[36mGET /index.html HTTP/1.1[0m" 304 -
+2026-02-19 15:12:25,495 - werkzeug - INFO - 127.0.0.1 - - [19/Feb/2026 15:12:25] "[36mGET /styles.css HTTP/1.1[0m" 304 -
+2026-02-19 15:12:25,558 - werkzeug - INFO - 127.0.0.1 - - [19/Feb/2026 15:12:25] "[36mGET /firebase_config.js HTTP/1.1[0m" 304 -
+2026-02-19 15:12:25,558 - werkzeug - INFO - 127.0.0.1 - - [19/Feb/2026 15:12:25] "[36mGET /auth.js HTTP/1.1[0m" 304 -
+2026-02-19 15:12:25,559 - werkzeug - INFO - 127.0.0.1 - - [19/Feb/2026 15:12:25] "[36mGET /app.js HTTP/1.1[0m" 304 -
+2026-02-19 15:12:25,568 - __main__ - INFO - Mandanten geladen: 2
+2026-02-19 15:12:25,601 - werkzeug - INFO - 127.0.0.1 - - [19/Feb/2026 15:12:25] "GET /api/dashboard HTTP/1.1" 200 -
+2026-02-19 15:12:56,204 - __main__ - INFO - Mandanten geladen: 2
+2026-02-19 15:12:56,230 - werkzeug - INFO - 127.0.0.1 - - [19/Feb/2026 15:12:56] "GET /api/dashboard HTTP/1.1" 200 -
+2026-02-19 15:13:25,896 - __main__ - INFO - Mandanten geladen: 2
+2026-02-19 15:13:25,922 - werkzeug - INFO - 127.0.0.1 - - [19/Feb/2026 15:13:25] "GET /api/dashboard HTTP/1.1" 200 -
+2026-02-19 15:13:56,196 - __main__ - INFO - Mandanten geladen: 2
+2026-02-19 15:13:56,223 - werkzeug - INFO - 127.0.0.1 - - [19/Feb/2026 15:13:56] "GET /api/dashboard HTTP/1.1" 200 -
+2026-02-19 15:14:25,904 - __main__ - INFO - Mandanten geladen: 2
+2026-02-19 15:14:25,936 - werkzeug - INFO - 127.0.0.1 - - [19/Feb/2026 15:14:25] "GET /api/dashboard HTTP/1.1" 200 -
+2026-02-19 15:14:46,723 - werkzeug - INFO - 127.0.0.1 - - [19/Feb/2026 15:14:46] "[36mGET /detail.html?id=Elektroniker_Testbetrieb HTTP/1.1[0m" 304 -
+2026-02-19 15:14:46,986 - werkzeug - INFO - 127.0.0.1 - - [19/Feb/2026 15:14:46] "[36mGET /styles.css HTTP/1.1[0m" 304 -
+2026-02-19 15:14:47,049 - werkzeug - INFO - 127.0.0.1 - - [19/Feb/2026 15:14:47] "[36mGET /firebase_config.js HTTP/1.1[0m" 304 -
+2026-02-19 15:14:47,050 - werkzeug - INFO - 127.0.0.1 - - [19/Feb/2026 15:14:47] "[36mGET /detail.js HTTP/1.1[0m" 304 -
+2026-02-19 15:14:47,050 - werkzeug - INFO - 127.0.0.1 - - [19/Feb/2026 15:14:47] "[36mGET /auth.js HTTP/1.1[0m" 304 -
+2026-02-19 15:14:47,050 - werkzeug - INFO - 127.0.0.1 - - [19/Feb/2026 15:14:47] "[36mGET /detail_extensions.js HTTP/1.1[0m" 304 -
+2026-02-19 15:14:47,051 - werkzeug - INFO - 127.0.0.1 - - [19/Feb/2026 15:14:47] "[36mGET /preisliste.js HTTP/1.1[0m" 304 -
+2026-02-19 15:14:47,295 - werkzeug - INFO - 127.0.0.1 - - [19/Feb/2026 15:14:47] "[36mGET /import.js HTTP/1.1[0m" 304 -
+2026-02-19 15:14:47,359 - werkzeug - INFO - 127.0.0.1 - - [19/Feb/2026 15:14:47] "[36mGET /invoice.js HTTP/1.1[0m" 304 -
+2026-02-19 15:14:47,360 - werkzeug - INFO - 127.0.0.1 - - [19/Feb/2026 15:14:47] "[36mGET /lieferschein_merged.js HTTP/1.1[0m" 304 -
+2026-02-19 15:14:47,359 - werkzeug - INFO - 127.0.0.1 - - [19/Feb/2026 15:14:47] "[36mGET /angebot.js HTTP/1.1[0m" 304 -
+2026-02-19 15:14:47,360 - werkzeug - INFO - 127.0.0.1 - - [19/Feb/2026 15:14:47] "[36mGET /protocol_scanner.js HTTP/1.1[0m" 304 -
+2026-02-19 15:14:47,361 - werkzeug - INFO - 127.0.0.1 - - [19/Feb/2026 15:14:47] "[36mGET /documents.js HTTP/1.1[0m" 304 -
+2026-02-19 15:14:47,605 - werkzeug - INFO - 127.0.0.1 - - [19/Feb/2026 15:14:47] "[36mGET /ausgaben.js HTTP/1.1[0m" 304 -
+2026-02-19 15:14:47,669 - werkzeug - INFO - 127.0.0.1 - - [19/Feb/2026 15:14:47] "[36mGET /mitarbeiter.js HTTP/1.1[0m" 304 -
+2026-02-19 15:14:47,669 - werkzeug - INFO - 127.0.0.1 - - [19/Feb/2026 15:14:47] "[36mGET /mandant_config.js HTTP/1.1[0m" 304 -
+2026-02-19 15:14:47,670 - werkzeug - INFO - 127.0.0.1 - - [19/Feb/2026 15:14:47] "[36mGET /recurring.js HTTP/1.1[0m" 304 -
+2026-02-19 15:14:48,004 - werkzeug - INFO - 127.0.0.1 - - [19/Feb/2026 15:14:48] "GET /api/mandanten/Elektroniker_Testbetrieb/rechnungen HTTP/1.1" 200 -
+2026-02-19 15:14:48,014 - werkzeug - INFO - 127.0.0.1 - - [19/Feb/2026 15:14:48] "GET /api/mandanten/Elektroniker_Testbetrieb/stats HTTP/1.1" 200 -
+2026-02-19 15:14:48,243 - werkzeug - INFO - 127.0.0.1 - - [19/Feb/2026 15:14:48] "GET /api/mandanten/Elektroniker_Testbetrieb/recurring HTTP/1.1" 200 -
+2026-02-19 15:14:48,662 - werkzeug - INFO - 127.0.0.1 - - [19/Feb/2026 15:14:48] "GET /api/mandanten/Elektroniker_Testbetrieb/config HTTP/1.1" 200 -
+2026-02-19 15:18:11,771 - werkzeug - INFO -  * Detected change in 'C:\\Users\\Admin\\Desktop\\Mein_Business\\backend\\api_server.py', reloading
+2026-02-19 15:18:14,086 - werkzeug - INFO -  * Restarting with stat
+2026-02-19 15:18:16,138 - __main__ - INFO - 🔥 Firebase Admin SDK initialized with ADC
+2026-02-19 15:18:16,163 - __main__ - INFO - ⏰ Scheduler gestartet (Backup täglich um 23:00)
+2026-02-19 15:18:16,170 - __main__ - INFO - 🚀 Starting API Server...
+2026-02-19 15:18:16,189 - werkzeug - WARNING -  * Debugger is active!
+2026-02-19 15:18:16,195 - werkzeug - INFO -  * Debugger PIN: 447-598-156
+2026-02-19 15:19:05,990 - api_server - INFO - 🔥 Firebase Admin SDK initialized with ADC
+2026-02-19 15:19:06,016 - api_server - INFO - ⏰ Scheduler gestartet (Backup täglich um 23:00)
+2026-02-19 15:19:37,630 - werkzeug - INFO - 127.0.0.1 - - [19/Feb/2026 15:19:37] "GET /detail.html?id=Elektroniker_Testbetrieb HTTP/1.1" 200 -
+2026-02-19 15:19:37,893 - werkzeug - INFO - 127.0.0.1 - - [19/Feb/2026 15:19:37] "[36mGET /styles.css HTTP/1.1[0m" 304 -
+2026-02-19 15:19:37,958 - werkzeug - INFO - 127.0.0.1 - - [19/Feb/2026 15:19:37] "[36mGET /firebase_config.js HTTP/1.1[0m" 304 -
+2026-02-19 15:19:37,958 - werkzeug - INFO - 127.0.0.1 - - [19/Feb/2026 15:19:37] "[36mGET /detail.js HTTP/1.1[0m" 304 -
+2026-02-19 15:19:37,960 - werkzeug - INFO - 127.0.0.1 - - [19/Feb/2026 15:19:37] "[36mGET /detail_extensions.js HTTP/1.1[0m" 304 -
+2026-02-19 15:19:37,959 - werkzeug - INFO - 127.0.0.1 - - [19/Feb/2026 15:19:37] "[36mGET /auth.js HTTP/1.1[0m" 304 -
+2026-02-19 15:19:37,960 - werkzeug - INFO - 127.0.0.1 - - [19/Feb/2026 15:19:37] "[36mGET /preisliste.js HTTP/1.1[0m" 304 -
+2026-02-19 15:19:38,207 - werkzeug - INFO - 127.0.0.1 - - [19/Feb/2026 15:19:38] "[36mGET /import.js HTTP/1.1[0m" 304 -
+2026-02-19 15:19:38,271 - werkzeug - INFO - 127.0.0.1 - - [19/Feb/2026 15:19:38] "[36mGET /invoice.js HTTP/1.1[0m" 304 -
+2026-02-19 15:19:38,272 - werkzeug - INFO - 127.0.0.1 - - [19/Feb/2026 15:19:38] "[36mGET /lieferschein_merged.js HTTP/1.1[0m" 304 -
+2026-02-19 15:19:38,272 - werkzeug - INFO - 127.0.0.1 - - [19/Feb/2026 15:19:38] "[36mGET /documents.js HTTP/1.1[0m" 304 -
+2026-02-19 15:19:38,272 - werkzeug - INFO - 127.0.0.1 - - [19/Feb/2026 15:19:38] "[36mGET /angebot.js HTTP/1.1[0m" 304 -
+2026-02-19 15:19:38,273 - werkzeug - INFO - 127.0.0.1 - - [19/Feb/2026 15:19:38] "[36mGET /protocol_scanner.js HTTP/1.1[0m" 304 -
+2026-02-19 15:19:38,517 - werkzeug - INFO - 127.0.0.1 - - [19/Feb/2026 15:19:38] "[36mGET /ausgaben.js HTTP/1.1[0m" 304 -
+2026-02-19 15:19:38,581 - werkzeug - INFO - 127.0.0.1 - - [19/Feb/2026 15:19:38] "GET /mandant_config.js HTTP/1.1" 200 -
+2026-02-19 15:19:38,582 - werkzeug - INFO - 127.0.0.1 - - [19/Feb/2026 15:19:38] "[36mGET /mitarbeiter.js HTTP/1.1[0m" 304 -
+2026-02-19 15:19:38,582 - werkzeug - INFO - 127.0.0.1 - - [19/Feb/2026 15:19:38] "[36mGET /recurring.js HTTP/1.1[0m" 304 -
+2026-02-19 15:19:38,911 - werkzeug - INFO - 127.0.0.1 - - [19/Feb/2026 15:19:38] "GET /api/mandanten/Elektroniker_Testbetrieb/rechnungen HTTP/1.1" 200 -
+2026-02-19 15:19:38,933 - werkzeug - INFO - 127.0.0.1 - - [19/Feb/2026 15:19:38] "GET /api/mandanten/Elektroniker_Testbetrieb/stats HTTP/1.1" 200 -
+2026-02-19 15:19:39,154 - werkzeug - INFO - 127.0.0.1 - - [19/Feb/2026 15:19:39] "GET /api/mandanten/Elektroniker_Testbetrieb/recurring HTTP/1.1" 200 -
+2026-02-19 15:19:39,403 - werkzeug - INFO - 127.0.0.1 - - [19/Feb/2026 15:19:39] "GET /api/mandanten/Elektroniker_Testbetrieb/config HTTP/1.1" 200 -

@@ -23,8 +23,6 @@ import excel_utils
 import preisliste_import  # For price list import functionality
 import offer_generator    # For offer PDF generation
 import payroll_generator  # For payslip generation
-import recurring_invoices
-import report_generator
 
 # Import logger
 from logger import get_logger
@@ -34,17 +32,75 @@ app = Flask(__name__)
 CORS(app)  # Enable CORS for frontend access
 
 # Paths
-BACKEND_DIR = Path(__file__).parent
+BACKEND_DIR = Path(__file__).resolve().parent
 MANDANTEN_DIR = BACKEND_DIR / 'Mandanten'
 
-@app.route('/')
-def index():
+FRONTEND_DIR = BACKEND_DIR.parent / 'frontend'
+
+# Firebase Admin SDK
+import firebase_admin
+from firebase_admin import credentials, auth as firebase_auth
+
+# Initialize Firebase Admin
+try:
+    # Try Application Default Credentials first (for Cloud Run)
+    firebase_admin.initialize_app()
+    logger.info("🔥 Firebase Admin SDK initialized with ADC")
+except:
+    # Fallback to service account key file (for local development)
+    service_account_path = BACKEND_DIR / 'service-account-key.json'
+    if service_account_path.exists():
+        cred = credentials.Certificate(str(service_account_path))
+        firebase_admin.initialize_app(cred)
+        logger.info("🔥 Firebase Admin SDK initialized with Service Account Key")
+    else:
+        logger.warning("⚠️ Firebase Admin SDK not initialized - no credentials found")
+
+# Authentication decorator
+from functools import wraps
+
+def require_auth(f):
+    """Decorator to require Firebase authentication"""
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        # Get Authorization header
+        auth_header = request.headers.get('Authorization')
+        
+        if not auth_header or not auth_header.startswith('Bearer '):
+            logger.warning(f"Unauthorized access attempt to {request.path}")
+            return jsonify({'error': 'Unauthorized - No token provided'}), 401
+        
+        # Extract token
+        id_token = auth_header.split('Bearer ')[1]
+        
+        try:
+            # Verify the token
+            decoded_token = firebase_auth.verify_id_token(id_token)
+            request.user = decoded_token  # Attach user info to request
+            logger.info(f"Authenticated user: {decoded_token.get('email')}")
+            return f(*args, **kwargs)
+        except Exception as e:
+            logger.error(f"Token verification failed: {e}")
+            return jsonify({'error': 'Unauthorized - Invalid token'}), 401
+    
+    return decorated_function
+
+@app.route('/api/health')
+def health_check():
     """Health check"""
     return jsonify({
         'status': 'online',
         'service': 'Mein Business API',
         'version': '1.0'
     })
+
+@app.route('/')
+def serve_index():
+    return send_from_directory(FRONTEND_DIR, 'index.html')
+
+@app.route('/<path:path>')
+def serve_static(path):
+    return send_from_directory(FRONTEND_DIR, path)
 
 @app.route('/api/mandanten', methods=['GET'])
 def get_mandanten():
@@ -91,8 +147,19 @@ def get_mandant_stats(mandant_id):
         if not mandant_dir.exists():
             return jsonify({'error': 'Mandant nicht gefunden'}), 404
         
+        unternehmensform = "Standard"
+        mandant_config_path = mandant_dir / 'mandant_config.json'
+        if mandant_config_path.exists():
+            try:
+                import json
+                with open(mandant_config_path, 'r', encoding='utf-8') as f:
+                    config = json.load(f)
+                    unternehmensform = config.get('unternehmensform', 'Standard')
+            except: pass
+            
         stats = {
             'mandant_id': mandant_id,
+            'unternehmensform': unternehmensform,
             'einnahmen': get_einnahmen_stats(mandant_dir),
             'ausgaben': get_ausgaben_stats(mandant_dir),
             'rechnungen': get_rechnungen_stats(mandant_dir),
@@ -135,7 +202,22 @@ def get_einnahmen_stats(mandant_dir):
                  data = list(csv.DictReader(f))
         
         if data:
+            # Load existing PDFs to filter deleted ones
+            rechnungen_dir = mandant_dir / 'Rechnungen'
+            existing_pdfs = set()
+            if rechnungen_dir.exists():
+                for pdf in rechnungen_dir.rglob('*.pdf'):
+                    existing_pdfs.add(pdf.stem)
+                    existing_pdfs.add(pdf.name)
+
             for row in data:
+                # Check if PDF exists
+                nr = str(row.get('Rechnungsnummer', ''))
+                nr_safe = nr.replace('-', '_').replace(' ', '_')
+                found = any(nr in p or nr_safe in p for p in existing_pdfs)
+                if not found and nr:
+                    continue # Skip if PDF was deleted
+                
                 count += 1
                 try:
                     # Clean number string (1.234,56 -> 1234.56 or 1234.56 -> 1234.56)
@@ -258,22 +340,7 @@ def get_dashboard():
         logger.error(f"Fehler beim Laden des Dashboards: {str(e)}")
         return jsonify({'error': str(e)}), 500
 
-@app.route('/api/backup', methods=['POST'])
-def trigger_backup():
-    """Backup manuell auslösen"""
-    try:
-        import backup
-        backup_file = backup.create_backup()
-        
-        return jsonify({
-            'success': True,
-            'backup_file': str(backup_file),
-            'timestamp': datetime.now().isoformat()
-        })
-    
-    except Exception as e:
-        logger.error(f"Fehler beim Backup: {str(e)}")
-        return jsonify({'error': str(e)}), 500
+
 
 @app.route('/api/mandanten/<mandant_id>/rechnungen', methods=['GET'])
 def get_mandant_rechnungen(mandant_id):
@@ -337,7 +404,7 @@ def handle_mandant_config(mandant_id):
             
             # Update fields
             # Allow specific fields to be updated
-            allowed_fields = ['firma', 'geschaeftsfuehrer', 'logo', 'adresse', 'bank', 'mandant_nummer']
+            allowed_fields = ['firma', 'mandantennummer', 'unternehmensform', 'geschaeftsfuehrer', 'logo', 'adresse', 'bank', 'smtp', 'ustid', 'steuernummer']
             
             for key in allowed_fields:
                 if key in new_data:
@@ -559,23 +626,143 @@ def serve_pdf(filepath):
     """Liefert PDF-Dateien aus"""
     try:
         # Normalize path for Windows
-        filepath_clean = filepath.replace('/', os.sep)
+        filepath_clean = filepath.lstrip('/').lstrip('\\').replace('/', os.sep)
         full_path = BACKEND_DIR / filepath_clean
+        
+        print(f"DEBUG PDF REQUEST: '{filepath}'")
+        print(f"DEBUG FULL PATH:   '{full_path}'")
+        print(f"DEBUG EXISTS?:     {full_path.exists()}")
         
         logger.info(f"PDF Request: {filepath} -> {full_path}")
         
         if not full_path.exists():
             logger.error(f"PDF nicht gefunden: {full_path}")
-            return jsonify({'error': 'Datei nicht gefunden'}), 404
+            return jsonify({'error': f'Datei nicht gefunden: {full_path}'}), 404
         
         from flask import send_file
-        return send_file(full_path, mimetype='application/pdf')
+        # Determine mimetype based on extension
+        mimetype = None
+        if full_path.suffix.lower() == '.pdf':
+            mimetype = 'application/pdf'
+        elif full_path.suffix.lower() in ['.png', '.jpg', '.jpeg']:
+            mimetype = 'image/jpeg' if full_path.suffix.lower() in ['.jpg', '.jpeg'] else 'image/png'
+            
+        return send_file(full_path, mimetype=mimetype)
     
     except Exception as e:
         logger.error(f"Fehler beim PDF-Abruf: {str(e)}")
         return jsonify({'error': str(e)}), 500
 
 
+
+@app.route('/api/mandanten/<mandant_id>/check-duplicate', methods=['POST'])
+def check_duplicate_invoice(mandant_id):
+    """Prüft auf ähnliche Rechnungen (Duplikat-Warnung)"""
+    try:
+        data = request.get_json()
+        kunde_name = data.get('kunde', '').strip()
+        new_total = float(data.get('total', 0))
+        
+        # Einstellungen
+        DAYS_THRESHOLD = 30
+        AMOUNT_TOLERANCE = 0.50 # 50 cent toleranz
+        
+        mandant_dir = MANDANTEN_DIR / mandant_id
+        xlsx_file = mandant_dir / 'Einnahmen' / 'einnahmen.xlsx'
+        csv_file = mandant_dir / 'Einnahmen' / 'einnahmen.csv'
+        
+        invoices = []
+        if xlsx_file.exists():
+            import excel_utils
+            invoices = excel_utils.read_data(str(xlsx_file), 'Einnahmen')
+        elif csv_file.exists():
+            with open(csv_file, 'r', encoding='utf-8') as f:
+                invoices = list(csv.DictReader(f))
+                
+        matches = []
+        now = datetime.now()
+        
+        for inv in invoices:
+            # 1. Check Kunde (fuzzy or exact)
+            inv_kunde = inv.get('Kunde', '')
+            if kunde_name.lower() not in inv_kunde.lower() and inv_kunde.lower() not in kunde_name.lower():
+                continue
+                
+            # 2. Check Amount
+            try:
+                # Parse amount (handle Deutsche Formate 1.000,00)
+                raw_amt = str(inv.get('Betrag_Netto', '0')).replace('.', '').replace(',', '.')
+                old_total = float(raw_amt)
+                
+                if abs(old_total - new_total) > AMOUNT_TOLERANCE:
+                    continue
+            except:
+                continue
+                
+            # 3. Check Date
+            try:
+                inv_date_str = inv.get('Datum', '')
+                inv_date = datetime.strptime(inv_date_str, '%d.%m.%Y')
+                days_diff = (now - inv_date).days
+                
+                if days_diff <= DAYS_THRESHOLD:
+                    matches.append({
+                        'nummer': inv.get('Rechnungsnummer'),
+                        'datum': inv_date_str,
+                        'kunde': inv_kunde,
+                        'betrag': old_total,
+                        'days_ago': days_diff
+                    })
+            except:
+                continue
+
+        return jsonify({
+            'duplicate': len(matches) > 0,
+            'matches': matches
+        })
+
+    except Exception as e:
+        logger.error(f"Fehler Check-Duplicate: {e}")
+        return jsonify({'error': str(e)}), 500
+
+@app.route('/api/mandanten/<mandant_id>/rechnungen', methods=['GET'])
+def get_mandant_rechnungen_files(mandant_id):
+    """Listet alle Rechnungs-PDFs aus dem Rechnungen-Ordner auf"""
+    try:
+        mandant_dir = MANDANTEN_DIR / mandant_id
+        rechnungen_dir = mandant_dir / 'Rechnungen'
+        
+        if not rechnungen_dir.exists():
+            return jsonify({'rechnungen': []})
+            
+        files = []
+        # Scan all PDF files in Rechnungen directory and subdirectories
+        for f in rechnungen_dir.rglob('*.pdf'):
+            try:
+                stat = f.stat()
+                # Create path relative to backend dir for the PDF serving endpoint
+                # Format: "Mandanten/ID/Rechnungen/File.pdf" or "Mandanten/ID/Rechnungen/Subdir/File.pdf"
+                rel_path = str(f.relative_to(BACKEND_DIR)).replace('\\', '/')
+                
+                files.append({
+                    'name': f.name,
+                    'path': rel_path,
+                    'size': stat.st_size,
+                    'modified': stat.st_mtime
+                })
+            except Exception as e:
+                logger.error(f"Error reading file {f}: {e}")
+                continue
+                
+        # Sort by modification time descending (newest first)
+        files.sort(key=lambda x: x['modified'], reverse=True)
+        
+        logger.info(f"Found {len(files)} invoice PDFs for {mandant_id}")
+        return jsonify({'rechnungen': files})
+
+    except Exception as e:
+        logger.error(f"Fehler beim Laden der Rechnungs-Dateien: {str(e)}")
+        return jsonify({'error': str(e)}), 500
 
 @app.route('/api/mandanten/<mandant_id>/einnahmen', methods=['GET'])
 def get_mandant_einnahmen(mandant_id):
@@ -586,39 +773,37 @@ def get_mandant_einnahmen(mandant_id):
         csv_file = mandant_dir / 'Einnahmen' / 'einnahmen.csv'
         
         invoices = []
-        seen_ids = set()
-
-        # Helper to add invoice if not duplicate
-        def add_invoice(inv):
-            nr = inv.get('Rechnungsnummer')
-            if nr and nr not in seen_ids:
-                invoices.append(inv)
-                seen_ids.add(nr)
         
-        # 1. Read XLSX
         if xlsx_file.exists():
             import excel_utils
-            try:
-                data = excel_utils.read_data(str(xlsx_file), 'Einnahmen')
-                for row in data:
-                    add_invoice(row)
-            except Exception as e:
-                logger.error(f"Error reading Einnahmen XLSX: {e}")
-
-        # 2. Read CSV (and merge)
-        if csv_file.exists():
-            try:
-                with open(csv_file, 'r', encoding='utf-8') as f:
-                    reader = csv.DictReader(f)
-                    for row in reader:
-                        # Clean up keys/values if needed? usually DictReader is fine
-                        add_invoice(row)
-            except Exception as e:
-                logger.error(f"Error reading Einnahmen CSV: {e}")
+            data = excel_utils.read_data(str(xlsx_file), 'Einnahmen')
+            invoices = data
+        elif csv_file.exists():
+            with open(csv_file, 'r', encoding='utf-8') as f:
+                reader = csv.DictReader(f)
+                invoices = list(reader)
         
-        # Sort by Date? (Optional but nice)
-        # invoices.sort(key=lambda x: datetime.strptime(x.get('Datum',''), '%d.%m.%Y'), reverse=True)
-
+        # Filter out invoices whose PDF was deleted from the Rechnungen folder
+        rechnungen_dir = mandant_dir / 'Rechnungen'
+        if rechnungen_dir.exists():
+            existing_pdfs = set()
+            for pdf in rechnungen_dir.rglob('*.pdf'):
+                existing_pdfs.add(pdf.stem)
+                existing_pdfs.add(pdf.name)
+            
+            filtered = []
+            for inv in invoices:
+                nr = str(inv.get('Rechnungsnummer', ''))
+                # Normalize: RE-001-2026-02-001 -> RE_001_2026_02_001
+                nr_safe = nr.replace('-', '_').replace(' ', '_')
+                # Check if any PDF contains this invoice number
+                found = any(nr in p or nr_safe in p for p in existing_pdfs)
+                if found or not nr:
+                    filtered.append(inv)
+            
+            logger.info(f"Einnahmen: {len(invoices)} total, {len(filtered)} mit vorhandener PDF")
+            invoices = filtered
+        
         logger.info(f"Einnahmen geladen: {len(invoices)} Rechnungen")
         return jsonify({'invoices': invoices})
     
@@ -681,9 +866,12 @@ def create_mandant():
             return jsonify({'error': 'Firmenname ist erforderlich'}), 400
         
         # Optional fields
+        unternehmensform = data.get('unternehmensform', 'Einzelunternehmen').strip()
         strasse = data.get('strasse', '').strip()
         ort = data.get('ort', '').strip()
         geschaeftsfuehrer = data.get('geschaeftsfuehrer', '').strip()
+        ustid = data.get('ustid', '').strip()
+        steuernummer = data.get('steuernummer', '').strip()
         iban = data.get('iban', '').strip()
         bic = data.get('bic', '').strip()
         bank = data.get('bank', '').strip()
@@ -713,8 +901,11 @@ def create_mandant():
         # Create config
         config = {
             'firma': firma,
+            'unternehmensform': unternehmensform,
             'adresse': {'strasse': strasse, 'ort': ort},
             'geschaeftsfuehrer': geschaeftsfuehrer,
+            'ustid': ustid,
+            'steuernummer': steuernummer,
             'bank': {'iban': iban, 'bic': bic, 'name': bank},
             'logo': None
         }
@@ -750,11 +941,41 @@ def create_mandant():
             'Preisliste'
         )
         
+        # Initialize invoice counter if start number provided
+        start_nr = int(data.get('start_invoice_number', 0))
+        if start_nr > 0:
+            from datetime import date as _date
+            counter_data = {
+                "year": str(_date.today().year),
+                "month": f"{_date.today().month:02d}",
+                "count": start_nr - 1
+            }
+            with open(mandant_path / 'counter.json', 'w', encoding='utf-8') as f:
+                json.dump(counter_data, f, indent=4)
+            logger.info(f"Counter initialisiert: Start bei {start_nr}")
+        
         logger.info(f"Mandant erstellt: {safe_name}")
         return jsonify({'success': True, 'mandant_id': safe_name, 'config': config})
     
     except Exception as e:
         logger.error(f"Fehler beim Anlegen des Mandanten: {str(e)}")
+        return jsonify({'error': str(e)}), 500
+
+@app.route('/api/mandanten/<mandant_id>', methods=['DELETE'])
+def delete_mandant(mandant_id):
+    """Löscht einen Mandanten komplett"""
+    try:
+        mandant_path = MANDANTEN_DIR / mandant_id
+        if not mandant_path.exists():
+            return jsonify({'error': 'Mandant nicht gefunden'}), 404
+        
+        import shutil
+        shutil.rmtree(mandant_path)
+        
+        logger.info(f"Mandant gelöscht: {mandant_id}")
+        return jsonify({'success': True})
+    except Exception as e:
+        logger.error(f"Fehler beim Löschen des Mandanten {mandant_id}: {str(e)}")
         return jsonify({'error': str(e)}), 500
 
 @app.route('/api/mandanten/<mandant_id>/kunden', methods=['GET'])
@@ -790,6 +1011,9 @@ def create_kunde(mandant_id):
         firma = data.get('firma', '').strip()
         email = data.get('email', '').strip()
         anrede = data.get('anrede', 'Sehr geehrte Damen und Herren')
+        strasse = data.get('strasse', '').strip()
+        plz = data.get('plz', '').strip()
+        ort = data.get('ort', '').strip()
         
         if not firma:
             return jsonify({'error': 'Firma ist erforderlich'}), 400
@@ -801,7 +1025,10 @@ def create_kunde(mandant_id):
         kunde_data = {
             'Firma': firma,
             'Email': email,
-            'Anrede': anrede
+            'Anrede': anrede,
+            'Strasse': strasse,
+            'PLZ': plz,
+            'Ort': ort
         }
         
         # Save to Excel
@@ -810,7 +1037,7 @@ def create_kunde(mandant_id):
             str(kunden_xlsx),
             kunde_data,
             'Kunden',
-            ['Firma', 'Email', 'Anrede']
+            ['Firma', 'Email', 'Anrede', 'Strasse', 'PLZ', 'Ort']
         )
         
         logger.info(f"Kunde erstellt: {mandant_id}/{firma}")
@@ -818,6 +1045,68 @@ def create_kunde(mandant_id):
     
     except Exception as e:
         logger.error(f"Fehler beim Anlegen des Kunden: {str(e)}")
+        return jsonify({'error': str(e)}), 500
+
+@app.route('/api/mandanten/<mandant_id>/recurring', methods=['GET'])
+def get_recurring(mandant_id):
+    """Liste aller Abos"""
+    try:
+        import recurring_invoices
+        mandant_dir = MANDANTEN_DIR / mandant_id
+        data = recurring_invoices.load_recurring(mandant_dir)
+        return jsonify(data)
+    except Exception as e:
+        logger.error(f"Error loading recurring: {e}")
+        return jsonify({'error': str(e)}), 500
+
+@app.route('/api/mandanten/<mandant_id>/recurring', methods=['POST'])
+def add_recurring(mandant_id):
+    """Neues Abo anlegen"""
+    try:
+        data = request.get_json()
+        import recurring_invoices
+        mandant_dir = MANDANTEN_DIR / mandant_id
+        
+        entry = recurring_invoices.add_recurring(mandant_dir, data)
+        return jsonify({'success': True, 'entry': entry})
+        
+    except Exception as e:
+        logger.error(f"Error adding recurring: {e}")
+        return jsonify({'error': str(e)}), 500
+
+@app.route('/api/mandanten/<mandant_id>/recurring/<entry_id>', methods=['DELETE'])
+def delete_recurring(mandant_id, entry_id):
+    """Abo löschen"""
+    try:
+        import recurring_invoices
+        mandant_dir = MANDANTEN_DIR / mandant_id
+        recurring_invoices.delete_recurring(mandant_dir, entry_id)
+        return jsonify({'success': True})
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
+@app.route('/api/mandanten/<mandant_id>/recurring/process', methods=['POST'])
+def process_recurring(mandant_id):
+    """Manuell Abos prüfen und ausführen"""
+    try:
+        import recurring_invoices
+        mandant_dir = MANDANTEN_DIR / mandant_id
+        
+        # Load Config
+        config_file = mandant_dir / 'mandant_config.json'
+        with open(config_file, 'r', encoding='utf-8') as f:
+            config = json.load(f)
+            
+        created = recurring_invoices.process_due_invoices(mandant_dir, config)
+        
+        return jsonify({
+            'success': True, 
+            'count': len(created),
+            'invoices': [str(p) for p in created]
+        })
+        
+    except Exception as e:
+        logger.error(f"Error processing recurring: {e}")
         return jsonify({'error': str(e)}), 500
 
 # ===== PREISLISTE ENDPOINTS =====
@@ -1041,37 +1330,73 @@ def confirm_import_preisliste(mandant_id):
 
 @app.route('/api/mandanten/<mandant_id>/angebote', methods=['GET'])
 def get_angebote(mandant_id):
-    """Liste aller Angebote"""
+    """Liste aller Angebote - scannt PDFs direkt aus Ordner"""
     try:
         mandant_dir = MANDANTEN_DIR / mandant_id
-        angebote_file = mandant_dir / 'Angebote' / 'angebote.xlsx'
+        angebote_dir = mandant_dir / 'Angebote'
         
-        if not angebote_file.exists():
+        if not angebote_dir.exists():
             return jsonify({'angebote': []})
         
-        import excel_utils
-        data = excel_utils.read_data(str(angebote_file), 'Angebote')
-        
-        # Normalize keys (Nummer -> nummer, PDF_Path -> pdf_path)
-        normalized = []
-        for row in data:
-            item = {}
-            for k, v in row.items():
-                key = k.lower()
-                if key == 'pdf_path': key = 'pdf_path' # Ensure specific underscore style if needed
-                item[key] = v
+        # Scan ALL PDFs in directory
+        all_pdfs = {}
+        for pdf_file in angebote_dir.rglob('*.pdf'):
+            try:
+                stat = pdf_file.stat()
+                rel_path = pdf_file.relative_to(angebote_dir)
                 
-            # Add path prefix if missing
-            if 'pdf_path' in item:
-                 # It's usually just filename in Excel based on current save logic
-                 # Frontend needs /api/pdf/Mandanten/<id>/Angebote/<filename>
-                 fname = item['pdf_path']
-                 if not fname.startswith('/api'):
-                     item['pdf_path'] = f"/api/pdf/Mandanten/{mandant_id}/Angebote/{fname}"
-            
-            normalized.append(item)
+                # Extract info from filename
+                name = pdf_file.stem
+                nummer = name
+                # Try to extract structured number (e.g., ANG-001-2026-001)
+                if '-' in name:
+                    nummer = name  # Use full name as nummer
+                
+                all_pdfs[str(rel_path)] = {
+                    'nummer': nummer,
+                    'filename': pdf_file.name,
+                    'pdf_path': f"/api/pdf/Mandanten/{mandant_id}/Angebote/{rel_path}".replace('\\', '/'),
+                    'datum': datetime.fromtimestamp(stat.st_mtime).strftime('%Y-%m-%d'),
+                    'kunde': '',  # Will be filled from Excel if available
+                    'status': 'Offen',
+                    'size': stat.st_size,
+                    'modified': stat.st_mtime
+                }
+            except Exception as e:
+                logger.error(f"Error reading PDF {pdf_file}: {e}")
+                continue
         
-        return jsonify({'angebote': sorted(normalized, key=lambda x: str(x.get('nummer', '0')), reverse=True)})
+        # Try to enrich with Excel data
+        angebote_file = mandant_dir / 'Angebote' / 'angebote.xlsx'
+        if angebote_file.exists():
+            try:
+                import excel_utils
+                data = excel_utils.read_data(str(angebote_file), 'Angebote')
+                
+                for row in data:
+                    item = {k.lower(): v for k, v in row.items()}
+                    nummer = item.get('nummer') or ''
+                    kunde = item.get('kunde') or ''
+                    status = item.get('status') or 'Offen'
+                    datum = item.get('datum') or ''
+                    
+                    # Try to match with PDF by nummer
+                    for key, pdf_info in all_pdfs.items():
+                        if nummer and nummer in pdf_info['nummer']:
+                            pdf_info['kunde'] = kunde
+                            pdf_info['status'] = status
+                            if datum:
+                                pdf_info['datum'] = str(datum)
+                            break
+            except Exception as e:
+                logger.warning(f"Could not read Excel: {e}")
+        
+        # Convert to list and sort by date
+        result = list(all_pdfs.values())
+        result.sort(key=lambda x: x.get('modified', 0), reverse=True)
+        
+        logger.info(f"Found {len(result)} Angebote for {mandant_id}")
+        return jsonify({'angebote': result})
     
     except Exception as e:
         logger.error(f"Fehler beim Laden der Angebote: {str(e)}")
@@ -1122,20 +1447,50 @@ def create_angebot(mandant_id):
         
         # Generate number
         import offer_generator
-        nummer = offer_generator.get_and_increment_offer_counter(str(mandant_dir))
+        nummer = offer_generator.get_and_increment_offer_counter(str(mandant_dir), mandant_config)
         
         # Create PDF with timestamp
         timestamp = int(datetime.now().timestamp())
-        pdf_filename = f"Angebot_{nummer}_{timestamp}.pdf"
+        pdf_filename = f"{nummer}.pdf"
         pdf_path = angebote_dir / pdf_filename
         
+        leistungs_von = data.get('leistungs_von', '')
+        leistungs_bis = data.get('leistungs_bis', '')
+        
+        # Retrieve address from kunden.xlsx if exists
+        kunde_adresse = ""
+        import excel_utils
+        kunden_path = mandant_dir / 'Kunden' / 'kunden.xlsx'
+        if kunden_path.exists():
+            kunden_list = excel_utils.read_data(str(kunden_path), 'Kunden')
+            for k in kunden_list:
+                if k.get('Firma') == kunde_name:
+                    adr_parts = []
+                    if k.get('Strasse'): adr_parts.append(str(k.get('Strasse')))
+                    
+                    plz = k.get('PLZ', '')
+                    if isinstance(plz, float) and plz.is_integer():
+                        plz = str(int(plz))
+                    elif isinstance(plz, str) and plz.endswith('.0'):
+                        plz = plz[:-2]
+                    else:
+                        plz = str(plz)
+                        
+                    plz_ort = f"{plz} {k.get('Ort', '')}".strip()
+                    if plz_ort: adr_parts.append(plz_ort)
+                    kunde_adresse = '<br/>'.join(adr_parts)
+                    break
+                    
         brutto, netto = offer_generator.create_offer_pdf(
             str(mandant_dir),
             mandant_config,
             kunde_name,
             positionen,
             str(pdf_path),
-            nummer
+            nummer,
+            leistungs_von=leistungs_von,
+            leistungs_bis=leistungs_bis,
+            kunde_adresse=kunde_adresse
         )
         
         # Save to Excel
@@ -1182,89 +1537,166 @@ def create_angebot(mandant_id):
 
 @app.route('/api/mandanten/<mandant_id>/lieferscheine', methods=['GET'])
 def get_lieferscheine(mandant_id):
+    """Liste aller Lieferscheine/Protokolle - scannt auch PDFs direkt"""
     try:
         mandant_path = MANDANTEN_DIR / mandant_id
         if not mandant_path.exists():
             return jsonify({'error': 'Mandant nicht gefunden'}), 404
             
-        file_path = mandant_path / 'Lieferscheine' / 'lieferscheine.xlsx'
-        if not file_path.exists():
-             return jsonify({'lieferscheine': []})
-             
-        import excel_utils
-        data = excel_utils.read_data(str(file_path), 'Lieferscheine')
+        lieferscheine_dir = mandant_path / 'Lieferscheine'
+        if not lieferscheine_dir.exists():
+            return jsonify({'lieferscheine': []})
         
-        # Normalize
-        normalized = []
-        for row in data:
-            item = {}
-            for k, v in row.items():
-                item[k.lower()] = v
+        # Scan ALL PDFs in directory (including subdirectories)
+        all_pdfs = {}
+        for pdf_file in lieferscheine_dir.rglob('*.pdf'):
+            try:
+                stat = pdf_file.stat()
+                rel_path = pdf_file.relative_to(lieferscheine_dir)
                 
-            # Parse Items if present (from Excel string to JSON)
-            if 'items' in item:
-                try:
-                    if isinstance(item['items'], str) and item['items'].strip():
-                         item['items'] = json.loads(item['items'])
-                except:
-                     item['items'] = []
+                # Extract info from filename
+                name = pdf_file.stem
+                # Try to extract number from filename like "Lieferschein_PROT-2026-001_..."
+                nummer = name
+                if '_' in name:
+                    parts = name.split('_')
+                    if len(parts) >= 2:
+                        nummer = parts[1]  # e.g., "PROT-2026-001"
                 
-            # Fix path
-            # Fix path
-            # Search for relevant key
-            path_val = item.get('pdf_path') or item.get('pdf path') or item.get('path') or item.get('dateipfad')
-            
-            # Fallback: Construct from Number if path needs validation or is missing
-            if not path_val:
-                nummer = item.get('lieferscheinnummer') or item.get('nummer')
-                if nummer:
-                    path_val = f"{nummer}.pdf"
-            
-            if path_val:
-                 fname = str(path_val).strip()
-                 # Ensure we only have the filename, as entries might contain 'Mandanten/...'
-                 if '/' in fname or '\\' in fname:
-                     fname = os.path.basename(fname)
-                 
-                 # Verify existence
-                 lieferscheine_dir = mandant_path / 'Lieferscheine'
-                 full_path = lieferscheine_dir / fname
-                 
-                 if not full_path.exists():
-                     # Try with .pdf extension
-                     if not fname.lower().endswith('.pdf'):
-                         test_path = lieferscheine_dir / f"{fname}.pdf"
-                         if test_path.exists():
-                             fname = f"{fname}.pdf"
-                             full_path = test_path
-                         else:
-                             # File really not found
-                             continue
-                     else:
-                         continue
-
-                 if not fname.startswith('/api') and not fname.startswith('http'):
-                     final_path = f"/api/pdf/Mandanten/{mandant_id}/Lieferscheine/{fname}"
-                 else:
-                     final_path = fname
-                     
-                 item['pdf_path'] = final_path
-                 
-                 # Ensure Date and Customer are set (mapping from screenshot headers)
-                 if 'datum' not in item and 'date' in item: item['datum'] = item['date']
-                 # Map 'lieferscheinnummer' to 'nummer' for frontend consistency
-                 if 'nummer' not in item and 'lieferscheinnummer' in item: 
-                     item['nummer'] = item['lieferscheinnummer']
-                     
-                 normalized.append(item)
-            else:
-                 # No path and no number -> invalid row
-                 continue
-            
-        return jsonify({'lieferscheine': sorted(normalized, key=lambda x: str(x.get('nummer', '0')), reverse=True)})
+                all_pdfs[str(rel_path)] = {
+                    'nummer': nummer,
+                    'filename': pdf_file.name,
+                    'pdf_path': f"/api/pdf/Mandanten/{mandant_id}/Lieferscheine/{rel_path}".replace('\\', '/'),
+                    'datum': datetime.fromtimestamp(stat.st_mtime).strftime('%Y-%m-%d'),
+                    'kunde': '',  # Will be filled from Excel if available
+                    'size': stat.st_size,
+                    'modified': stat.st_mtime
+                }
+            except Exception as e:
+                logger.error(f"Error reading PDF {pdf_file}: {e}")
+                continue
+        
+        # Try to enrich with Excel data
+        file_path = mandant_path / 'Lieferscheine' / 'lieferscheine.xlsx'
+        if file_path.exists():
+            try:
+                import excel_utils
+                data = excel_utils.read_data(str(file_path), 'Lieferscheine')
+                
+                for row in data:
+                    # Normalize keys
+                    item = {k.lower(): v for k, v in row.items()}
+                    nummer = item.get('lieferscheinnummer') or item.get('nummer') or ''
+                    kunde = item.get('kunde') or ''
+                    datum = item.get('datum') or ''
+                    
+                    # Try to match with PDF
+                    for key, pdf_info in all_pdfs.items():
+                        if nummer and nummer in pdf_info['nummer']:
+                            pdf_info['kunde'] = kunde
+                            if datum:
+                                pdf_info['datum'] = str(datum)
+                            break
+            except Exception as e:
+                logger.warning(f"Could not read Excel: {e}")
+        
+        # Convert to list and sort by date
+        result = list(all_pdfs.values())
+        result.sort(key=lambda x: x.get('modified', 0), reverse=True)
+        
+        logger.info(f"Found {len(result)} Lieferscheine for {mandant_id}")
+        return jsonify({'lieferscheine': result})
         
     except Exception as e:
         logger.error(f"LS Fehler: {e}")
+        return jsonify({'error': str(e)}), 500
+
+@app.route('/api/mandanten/<mandant_id>/lieferscheine/sync', methods=['POST'])
+def sync_lieferscheine(mandant_id):
+    """Synchronisiert alle PDFs im Lieferscheine-Ordner mit der Excel-Tabelle"""
+    try:
+        mandant_path = MANDANTEN_DIR / mandant_id
+        if not mandant_path.exists():
+            return jsonify({'error': 'Mandant nicht gefunden'}), 404
+            
+        lieferscheine_dir = mandant_path / 'Lieferscheine'
+        file_path = lieferscheine_dir / 'lieferscheine.xlsx'
+        
+        if not lieferscheine_dir.exists():
+            return jsonify({'error': 'Lieferscheine-Ordner nicht gefunden'}), 404
+        
+        # Read existing Excel entries
+        import excel_utils
+        existing_entries = set()
+        if file_path.exists():
+            try:
+                data = excel_utils.read_data(str(file_path), 'Lieferscheine')
+                for row in data:
+                    # Get the PDF path/filename
+                    pdf_path = row.get('PDF_Path') or row.get('pdf_path') or ''
+                    if pdf_path:
+                        existing_entries.add(str(pdf_path))
+                    # Also track by number
+                    nummer = row.get('Lieferscheinnummer') or row.get('Nummer') or row.get('nummer') or ''
+                    if nummer:
+                        existing_entries.add(str(nummer))
+            except Exception as e:
+                logger.warning(f"Could not read existing Excel: {e}")
+        
+        # Scan all PDFs
+        added = 0
+        for pdf_file in lieferscheine_dir.rglob('*.pdf'):
+            filename = pdf_file.name
+            
+            # Check if already in Excel
+            if filename in existing_entries:
+                continue
+            
+            # Extract info from filename
+            name = pdf_file.stem
+            nummer = name
+            if '_' in name:
+                parts = name.split('_')
+                if len(parts) >= 2:
+                    nummer = parts[1]
+            
+            if nummer in existing_entries:
+                continue
+            
+            # Extract customer name from subdirectory if exists
+            rel_path = pdf_file.relative_to(lieferscheine_dir)
+            kunde = ''
+            if len(rel_path.parts) > 1:
+                kunde = rel_path.parts[0]  # Parent folder name as customer
+            
+            # Add to Excel
+            stat = pdf_file.stat()
+            new_row = {
+                'Lieferscheinnummer': nummer,
+                'Datum': datetime.fromtimestamp(stat.st_mtime).strftime('%d.%m.%Y'),
+                'Kunde': kunde,
+                'AngebotRef': '',
+                'Status': 'Offen',
+                'Items': ''
+            }
+            
+            try:
+                excel_utils.append_data(str(file_path), new_row, sheet_name="Lieferscheine")
+                added += 1
+                existing_entries.add(filename)
+                existing_entries.add(nummer)
+            except Exception as e:
+                logger.error(f"Could not add {filename} to Excel: {e}")
+        
+        logger.info(f"Synced Lieferscheine for {mandant_id}: {added} new entries added")
+        return jsonify({
+            'success': True,
+            'added': added,
+            'message': f'{added} neue Einträge hinzugefügt'
+        })
+        
+    except Exception as e:
+        logger.error(f"Sync Fehler: {e}")
         return jsonify({'error': str(e)}), 500
 
 @app.route('/api/mandanten/<mandant_id>/lieferschein', methods=['POST'])
@@ -1291,7 +1723,7 @@ def create_lieferschein(mandant_id):
 
         # Generate Number
         import delivery_generator
-        nummer = delivery_generator.get_and_increment_delivery_counter(str(mandant_path))
+        nummer = delivery_generator.get_and_increment_delivery_counter(str(mandant_path), mandant_config)
         
         # Create PDF
         lieferscheine_dir = mandant_path / 'Lieferscheine'
@@ -1320,43 +1752,27 @@ def create_lieferschein(mandant_id):
         # Verify columns in add_client or just write blindly? 
         # Safer: use excel_utils.append_row
         
-        # Prepare row data
-        items_json = json.dumps(positionen)
-        row_data = {
-            'Lieferscheinnummer': nummer,
-            'Datum': datetime.now().strftime("%d.%m.%Y"),
+        new_row = {
+            'Nummer': nummer,
+            'Datum': datetime.now().strftime('%Y-%m-%d'),
             'Kunde': kunde_name,
-            'Angebot': angebot_nr or '',
-            'Items': items_json,
-            # Path relative for frontend? or full? Frontend typically wants relative to /api/pdf
-            'PDF_Path': f"Mandanten/{mandant_id}/Lieferscheine/{pdf_filename}",
-            'Status': 'Offen'
+            'Angebot': angebot_nr if angebot_nr else '',
+            'PDF_Path': pdf_filename
         }
         
-        # Save
-        if file_path.exists():
-            import excel_utils
-            # Assuming 'Lieferscheine' sheet name
-            headers = ['Lieferscheinnummer', 'Datum', 'Kunde', 'Angebot', 'Items', 'PDF_Path', 'Status']
-            excel_utils.append_data(str(file_path), [row_data], sheet_name='Lieferscheine', headers=headers)
-        else:
-            # Create new
-            import pandas as pd
-            df = pd.DataFrame([row_data])
-            df.to_excel(file_path, sheet_name='Lieferscheine', index=False)
-            
-        return jsonify({'success': True, 'nummer': nummer, 'pdf': f"/api/pdf/Mandanten/{mandant_id}/Lieferscheine/{pdf_filename}"})
+        # Note: excel_utils might require matching columns.
+        # If headers match keys, we are good.
+        excel_utils.append_data(file_path, new_row, sheet_name="Lieferscheine")
+
+        return jsonify({
+            'success': True,
+            'nummer': nummer,
+            'pdf_path': f"/api/pdf/Mandanten/{mandant_id}/Lieferscheine/{pdf_filename}"
+        })
 
     except Exception as e:
-        logger.error(f"Lieferschein Create Error: {e}")
+        logger.error(f"Fehler Lieferschein: {e}")
         return jsonify({'error': str(e)}), 500
-
-
-
-        
-
-
-
 
 
 
@@ -1590,6 +2006,73 @@ def scan_protocol(mandant_id):
         logger.error(f"Protocol Scan Error: {e}")
         return jsonify({'error': str(e)}), 500
 
+@app.route('/api/mandanten/<mandant_id>/rechnung/next-number', methods=['GET'])
+def get_next_invoice_number(mandant_id):
+    """Zeigt die nächste Rechnungsnummer an (ohne zu inkrementieren)"""
+    try:
+        mandant_path = MANDANTEN_DIR / mandant_id
+        if not mandant_path.exists():
+            return jsonify({'error': 'Mandant nicht gefunden'}), 404
+        
+        import invoice_generator
+        mandant_config = invoice_generator.load_mandant_config(str(mandant_path), mandant_id)
+        
+        # Peek at counter without incrementing
+        counter_file = mandant_path / 'counter.json'
+        today = datetime.now()
+        current_year = str(today.year)
+        current_month = f"{today.month:02d}"
+        
+        mandanten_nr = mandant_config.get('mandantennummer', '000')
+        
+        count = 0
+        if counter_file.exists():
+            try:
+                with open(counter_file, 'r', encoding='utf-8') as f:
+                    data = json.load(f)
+                if str(data.get('year')) == current_year and str(data.get('month')) == current_month:
+                    count = data.get('count', 0)
+            except: pass
+        
+        next_count = count + 1
+        next_number = f"RE-{mandanten_nr}-{current_year}-{current_month}-{next_count:03d}"
+        
+        return jsonify({'next_number': next_number, 'count': next_count})
+    except Exception as e:
+        logger.error(f"Next number error: {e}")
+        return jsonify({'error': str(e)}), 500
+
+@app.route('/api/mandanten/<mandant_id>/rechnung/set-counter', methods=['PUT'])
+def set_invoice_counter(mandant_id):
+    """Setzt den Rechnungszähler auf einen bestimmten Wert"""
+    try:
+        data = request.get_json()
+        new_count = int(data.get('count', 0))
+        if new_count < 1:
+            return jsonify({'error': 'Zähler muss mindestens 1 sein'}), 400
+        
+        mandant_path = MANDANTEN_DIR / mandant_id
+        if not mandant_path.exists():
+            return jsonify({'error': 'Mandant nicht gefunden'}), 404
+        
+        counter_file = mandant_path / 'counter.json'
+        today = datetime.now()
+        
+        counter_data = {
+            "year": str(today.year),
+            "month": f"{today.month:02d}",
+            "count": new_count - 1  # -1 weil get_and_increment +1 macht
+        }
+        
+        with open(counter_file, 'w', encoding='utf-8') as f:
+            json.dump(counter_data, f, indent=4)
+        
+        logger.info(f"Counter für {mandant_id} auf {new_count} gesetzt")
+        return jsonify({'success': True, 'next_count': new_count})
+    except Exception as e:
+        logger.error(f"Set counter error: {e}")
+        return jsonify({'error': str(e)}), 500
+
 @app.route('/api/mandanten/<mandant_id>/rechnung', methods=['POST'])
 def create_invoice_endpoint(mandant_id):
     try:
@@ -1618,34 +2101,54 @@ def create_invoice_endpoint(mandant_id):
             # Find match
             for k in kunden_list:
                 if k.get('Firma') == kunde_name:
+                    adr_parts = []
+                    if k.get('Strasse'): adr_parts.append(str(k.get('Strasse')))
+                    
+                    plz = k.get('PLZ', '')
+                    if isinstance(plz, float) and plz.is_integer():
+                        plz = str(int(plz))
+                    elif isinstance(plz, str) and plz.endswith('.0'):
+                        plz = plz[:-2]
+                    else:
+                        plz = str(plz)
+                        
+                    plz_ort = f"{plz} {k.get('Ort', '')}".strip()
+                    if plz_ort: adr_parts.append(plz_ort)
+                    
                     kunde_data = {
                         'firma': k.get('Firma'),
                         'anrede': k.get('Anrede', ''),
-                        'email': k.get('Email', '')
+                        'email': k.get('Email', ''),
+                        'adresse': '<br/>'.join(adr_parts) if adr_parts else ''
                     }
                     break
         
         # 3. Generate Number
         # Helper in invoice_generator expects mandant path string
-        nummer = invoice_generator.get_and_increment_counter(str(mandant_path))
+        nummer = invoice_generator.get_and_increment_counter(str(mandant_path), mandant_config)
         
         # 4. Prepare Items
-        # Convert {menge, einheit, bezeichnung, einzelpreis} -> {beschreibung, betrag}
+        # Convert {menge, einheit, bezeichnung, einzelpreis} -> {menge, einheit, beschreibung, einzelpreis}
         pdf_items = []
         for it in raw_items:
             try:
                 m = float(it.get('menge', 0))
                 p = float(it.get('einzelpreis', 0))
-                total = m * p
+                # total = m * p # Calculated in generator
                 
-                # Format: "1.0 Stk x Bezeichnung (50.00€)"
-                desc = f"{m} {it.get('einheit', 'Stk')} x {it.get('bezeichnung')} (EP: {p:.2f}€)"
-                pdf_items.append({'beschreibung': desc, 'betrag': total})
+                pdf_items.append({
+                    'menge': m,
+                    'einheit': it.get('einheit', 'Stk'),
+                    'beschreibung': it.get('bezeichnung', ''),
+                    'einzelpreis': p
+                })
             except: continue
             
         invoice_data = {
             'nummer': nummer,
             'datum': datetime.now().strftime('%d.%m.%Y'),
+            'leistungs_von': data.get('leistungs_von', ''),
+            'leistungs_bis': data.get('leistungs_bis', ''),
             'items': pdf_items
         }
         
@@ -1801,135 +2304,453 @@ def get_angebote_list(mandant_id):
         logger.error(f"Error loading angebote: {e}")
         return jsonify({'error': str(e)}), 500
 
-
-# --- RECURRING INVOICES ROUTES ---
-
-@app.route('/api/mandanten/<mandant_id>/recurring', methods=['GET'])
-def get_recurring(mandant_id):
-    mandant_dir = MANDANTEN_DIR / mandant_id
-    if not mandant_dir.exists():
-         return jsonify({'error': 'Mandant nicht gefunden'}), 404
-         
-    data = recurring_invoices.load_recurring(mandant_dir)
-    return jsonify(data)
-
-@app.route('/api/mandanten/<mandant_id>/recurring', methods=['POST'])
-def add_recurring(mandant_id):
-    mandant_dir = MANDANTEN_DIR / mandant_id
-    if not mandant_dir.exists():
-         return jsonify({'error': 'Mandant nicht gefunden'}), 404
-         
-    data = request.json
-    try:
-        new_entry = recurring_invoices.add_recurring(mandant_dir, data)
-        return jsonify({'success': True, 'entry': new_entry})
-    except Exception as e:
-        return jsonify({'success': False, 'error': str(e)})
-
-@app.route('/api/mandanten/<mandant_id>/recurring/<rec_id>', methods=['DELETE'])
-def delete_recurring(mandant_id, rec_id):
-    mandant_dir = MANDANTEN_DIR / mandant_id
-    if not mandant_dir.exists():
-         return jsonify({'error': 'Mandant nicht gefunden'}), 404
-         
-    try:
-        recurring_invoices.delete_recurring(mandant_dir, rec_id)
-        return jsonify({'success': True})
-    except Exception as e:
-        return jsonify({'success': False, 'error': str(e)})
-
-@app.route('/api/mandanten/<mandant_id>/recurring/process', methods=['POST'])
-def process_recurring(mandant_id):
-    """Prüft und erstellt fällige Rechnungen"""
-    mandant_dir = MANDANTEN_DIR / mandant_id
-    if not mandant_dir.exists():
-         return jsonify({'error': 'Mandant nicht gefunden'}), 404
-
-    # Config laden für PDF Generation
-    config_path = mandant_dir / 'mandant_config.json'
-    mandant_config = {}
-    if config_path.exists():
-        try:
-            with open(config_path, 'r', encoding='utf-8') as f:
-                mandant_config = json.load(f)
-        except: pass
-         
-    try:
-        created = recurring_invoices.process_due_invoices(mandant_dir, mandant_config)
-        return jsonify({'success': True, 'count': len(created), 'created': created})
-    except Exception as e:
-        logger.error(f"Fehler bei Recurring Process: {e}")
-        return jsonify({'success': False, 'error': str(e)})
-
-
-# --- REPORT ROUTES ---
-
 @app.route('/api/mandanten/<mandant_id>/report/generate', methods=['POST'])
-def generate_report_route(mandant_id):
-    mandant_dir = MANDANTEN_DIR / mandant_id
-    if not mandant_dir.exists():
-         return jsonify({'error': 'Mandant nicht gefunden'}), 404
-         
-    data = request.json
-    month = int(data.get('month', datetime.datetime.now().month))
-    year = int(data.get('year', datetime.datetime.now().year))
-    
+def generate_report_endpoint(mandant_id):
+    """Generates monthly report PDF"""
     try:
-        # Load necessary data
-        # 1. Einnahmen (aus invoices)
-        einnahmen = []
-        inv_file = mandant_dir / 'Rechnungen' / 'einnahmen.csv'
-        if inv_file.exists():
-            with open(inv_file, 'r', encoding='utf-8') as f:
-                reader = csv.DictReader(f)
-                for row in reader:
-                    # Filter by date
-                    try:
-                        d = datetime.datetime.strptime(row['Datum'], '%d.%m.%Y')
-                        if d.month == month and d.year == year:
-                            einnahmen.append(row)
-                    except: pass
-                    
-        # 2. Ausgaben (aus scanner csv)
-        ausgaben = []
-        ausg_file = mandant_dir / 'Ausgaben' / 'ausgaben.csv'
-        if ausg_file.exists():
-             with open(ausg_file, 'r', encoding='utf-8') as f:
-                reader = csv.DictReader(f, delimiter=';') # Semicolon!
-                for row in reader:
-                     try:
-                        d = datetime.datetime.strptime(row['Datum'], '%d.%m.%Y')
-                        if d.month == month and d.year == year:
-                            # Mapping fields to unify
-                            # Scan CSV: Datum;Kategorie;Beschreibung;Betrag_Brutto;Betrag_Netto;Steuer;Pfad
-                            ausgaben.append(row)
-                     except: pass
+        data = request.json
+        year_str = str(data.get('year'))
+        month_str = str(data.get('month'))
         
-        # 3. Config
+        try:
+            year = int(year_str)
+            month = int(month_str)
+        except:
+             return jsonify({'error': 'Invalid Date'}), 400
+             
+        mandant_path = MANDANTEN_DIR / mandant_id
+        if not mandant_path.exists():
+            return jsonify({'error': 'Mandant nicht gefunden'}), 404
+            
+        # 1. Gather Data
+        import excel_utils
+        
+        # Einnahmen
+        einnahmen = []
+        path_in = mandant_path / 'Einnahmen' / 'einnahmen.xlsx'
+        if path_in.exists():
+            all_in = excel_utils.read_data(str(path_in), 'Einnahmen')
+            einnahmen = filter_by_month(all_in, year, month)
+            
+        # Ausgaben
+        ausgaben = []
+        path_out = mandant_path / 'Ausgaben' / 'ausgaben.xlsx'
+        if path_out.exists():
+            all_out = excel_utils.read_data(str(path_out), 'Ausgaben')
+            ausgaben = filter_by_month(all_out, year, month)
+            
+        # 2. Config
+        import json
+        config_path = mandant_path / 'mandant_config.json'
+        config = {}
+        if config_path.exists():
+            with open(config_path,'r',encoding='utf-8') as f:
+                config = json.load(f)
+                
+        # 3. Generate PDF
+        import report_generator
+        
+        output_dir = mandant_path / 'Controlling' / 'Reports'
+        output_dir.mkdir(parents=True, exist_ok=True)
+        
+        filename = f"Report_{year}_{month:02d}.pdf"
+        output_path = output_dir / filename
+        
+        report_generator.generate_report(
+            str(mandant_path),
+            month,
+            year,
+            einnahmen,
+            ausgaben,
+            str(output_path),
+            config
+        )
+        
+        # Verify creation
+        if not output_path.exists():
+             raise Exception("PDF File was not created by generator")
+
+        # 4. Return
+        # Frontend expects path relative to /api/pdf/ or raw path?
+        # serve_pdf route is /api/pdf/<path:filepath>
+        # If we return "Mandanten/...", frontend might use it directly.
+        # But frontend logic (viewPdf) appends it to API_BASE_URL + '/pdf/'?
+        # Let's check frontend. But based on error, it requested /api/pdf/Mandanten...
+        # Wait, serve_pdf receives "api/pdf/Mandanten..." as filepath!
+        # This means the URL was /api/pdf/api/pdf/Mandanten...
+        # So frontend likely converts path to URL incorrectly OR we returned absolute path?
+        
+        # Current return: /api/pdf/Mandanten/...
+        # Browser requests: /api/pdf/api/pdf/Mandanten...
+        # This implies frontend does: base + path.
+        # IF path already has /api/pdf, and base has /api/pdf?
+        
+        # Change to return "Mandanten/..." (clean relative path)
+        rel_path = f"Mandanten/{mandant_id}/Controlling/Reports/{filename}"
+        return jsonify({
+            'success': True,
+            'path': rel_path,
+            'filename': filename
+        })
+
+    except Exception as e:
+        logger.error(f"Report Gen Error: {e}")
+        return jsonify({'error': str(e)}), 500
+
+def filter_by_month(data, year, month):
+    filtered = []
+    for row in data:
+        d_str = row.get('Datum')
+        if not d_str: continue
+        
+        try:
+            # Try formats
+            dt = None
+            for fmt in ['%Y-%m-%d', '%d.%m.%Y']:
+                try: 
+                    dt = datetime.strptime(str(d_str), fmt)
+                    break 
+                except: pass
+            
+            if dt and dt.year == year and dt.month == month:
+                filtered.append(row)
+        except: pass
+    return filtered
+
+# --- BACKUP SYSTEM ---
+import threading
+import time
+from datetime import datetime
+
+# Lazy import to avoid circular issues if any, or just standard import
+# import backup  <-- assumed available in same dir
+
+def run_scheduler():
+    """Background thread checks time for daily backup"""
+    logger.info("⏰ Scheduler gestartet (Backup täglich um 23:00)")
+    last_run = None
+    
+    while True:
+        now = datetime.now()
+        # Run at 23:00
+        if now.hour == 23 and now.minute == 0:
+            today = now.strftime('%Y-%m-%d')
+            if last_run != today:
+                try:
+                    logger.info("⏰ Starte automatisches Backup...")
+                    import backup
+                    backup.create_backup()
+                    last_run = today
+                except Exception as e:
+                    logger.error(f"Auto-Backup failed: {e}")
+                    
+        time.sleep(30) # Check every 30s
+
+# Start Scheduler
+scheduler_thread = threading.Thread(target=run_scheduler, daemon=True)
+scheduler_thread.start()
+
+@app.route('/api/backup/now', methods=['POST'])
+def trigger_backup():
+    """Manuelles Backup auslösen"""
+    try:
+        import backup
+        backup_file = backup.create_backup()
+        return jsonify({
+            'success': True,
+            'message': 'Backup erfolgreich erstellt!',
+            'filename': str(backup_file.name),
+            'size_mb': round(backup_file.stat().st_size / (1024*1024), 2)
+        })
+    except Exception as e:
+        logger.error(f"Backup Fehler: {e}")
+        return jsonify({'success': False, 'error': str(e)}), 500
+
+import dunning_generator
+
+@app.route('/api/mandanten/<mandant_id>/invoices/generate-reminder', methods=['POST'])
+def generate_invoice_reminder(mandant_id):
+    """Generiert Mahnung PDF"""
+    try:
+        data = request.get_json()
+        invoice_num = data.get('invoice_num')
+        level = int(data.get('level', 1))
+        
+        if not invoice_num:
+            return jsonify({'error': 'Rechnungsnummer erforderlich'}), 400
+
+        mandant_dir = MANDANTEN_DIR / mandant_id
+        if not mandant_dir.exists():
+            return jsonify({'error': 'Mandant nicht gefunden'}), 404
+            
+        # 1. Load Invoice Data
+        # Try to find in einnahmen.xlsx
+        einnahmen_file = mandant_dir / 'Einnahmen' / 'einnahmen.xlsx'
+        invoice_data = {}
+        
+        if einnahmen_file.exists():
+            import excel_utils
+            invoices = excel_utils.read_data(str(einnahmen_file), 'Einnahmen')
+            for inv in invoices:
+                curr_num = str(inv.get('Rechnungsnummer', inv.get('nummer', '')))
+                if curr_num == invoice_num:
+                    invoice_data = {
+                        'nummer': curr_num,
+                        'datum': inv.get('Datum', inv.get('datum', '')),
+                        'kunde': inv.get('Kunde', inv.get('kunde', '')),
+                        'betrag': inv.get('Betrag_Brutto', inv.get('betrag_brutto', inv.get('Gesamtbetrag', 0)))
+                    }
+                    break
+        
+        if not invoice_data:
+             invoice_data = {
+                'nummer': invoice_num,
+                'datum': datetime.now().strftime("%d.%m.%Y"),
+                'kunde': 'Kunde',
+                'betrag': 0.00
+             }
+
+        # 2. Load Mandant Config
         config_path = mandant_dir / 'mandant_config.json'
         mandant_config = {}
         if config_path.exists():
             with open(config_path, 'r', encoding='utf-8') as f:
                 mandant_config = json.load(f)
+
+        # 3. Generate PDF
+        mahnungen_dir = mandant_dir / 'Mahnungen'
+        mahnungen_dir.mkdir(parents=True, exist_ok=True)
         
-        # Generate PDF
-        filename = f"Report_{year}_{month:02d}.pdf"
-        output_path = mandant_dir / filename
+        timestamp = int(datetime.now().timestamp())
+        # Sanitize filename
+        safe_num = str(invoice_num).replace('/', '_').replace('\\', '_').strip()
+        filename = f"Mahnung_{level}_{safe_num}_{timestamp}.pdf"
+        output_path = mahnungen_dir / filename
         
-        success = report_generator.generate_report(mandant_dir, month, year, einnahmen, ausgaben, str(output_path), mandant_config)
+        success = dunning_generator.create_dunning_pdf(
+            str(mandant_dir), 
+            mandant_config, 
+            invoice_data, 
+            str(output_path), 
+            dunning_level=level
+        )
         
         if success:
-             return jsonify({
-                 'success': True, 
-                 'path': f"{mandant_id}/{filename}", 
-                 'filename': filename
-             })
+             web_path = f"Mandanten/{mandant_id}/Mahnungen/{filename}"
+             return jsonify({'success': True, 'pdf_path': web_path})
         else:
-             return jsonify({'success': False, 'error': 'PDF konnte nicht erstellt werden'})
-             
+             return jsonify({'error': 'Fehler bei PDF Erstellung'}), 500
+
     except Exception as e:
-        logger.error(f"Report Fehler: {e}")
-        return jsonify({'success': False, 'error': str(e)})
+        logger.error(f"Dunning Error: {e}")
+        return jsonify({'error': str(e)}), 500
+
+# --- EMAIL & DUNNING ---
+import smtplib
+from email.mime.text import MIMEText
+from email.mime.multipart import MIMEMultipart
+from email.mime.application import MIMEApplication
+
+def send_email_with_attachments(to_email, subject, body, attachment_paths, mandant_config):
+    """Sende Email mit mehreren Anhängen via SMTP (Mandanten-Config)"""
+    smtp_config = mandant_config.get('smtp', {})
+    
+    smtp_server = smtp_config.get('server')
+    smtp_port = int(smtp_config.get('port', 587))
+    smtp_user = smtp_config.get('user')
+    smtp_pass = smtp_config.get('pass')
+    smtp_sender = smtp_config.get('sender') or mandant_config.get('firma', 'Buchhaltung')
+    
+    if not smtp_server or not smtp_user or not smtp_pass:
+        raise Exception("SMTP Config Missing: Bitte in 'Mandant bearbeiten' die Email-Zugangsdaten (SMTP) hinterlegen.")
+
+    sender_email = smtp_user
+    msg = MIMEMultipart()
+    # Use calibrated sender name if provided
+    msg['From'] = f"{smtp_sender} <{sender_email}>"
+    msg['To'] = to_email
+    msg['Subject'] = subject
+
+    msg.attach(MIMEText(body, 'plain'))
+
+    for path in attachment_paths:
+        p = Path(path)
+        if p.exists():
+            with open(p, "rb") as f:
+                attach = MIMEApplication(f.read(), _subtype="pdf")
+                attach.add_header('Content-Disposition', 'attachment', filename=p.name)
+                msg.attach(attach)
+        else:
+            logger.warning(f"Attachment not found: {path}")
+
+    with smtplib.SMTP(smtp_server, smtp_port) as server:
+        server.starttls()
+        server.login(smtp_user, smtp_pass)
+        server.send_message(msg)
+
+@app.route('/api/mandanten/<mandant_id>/invoices/send-reminder', methods=['POST'])
+def send_invoice_reminder(mandant_id):
+    """Sende Mahnung per E-Mail (Mahnung + Originalrechnung)"""
+    try:
+        data = request.get_json()
+        invoice_num = data.get('invoice_num')
+        level = int(data.get('level', 1))
+        
+        if not invoice_num:
+            return jsonify({'error': 'Rechnungsnummer erforderlich'}), 400
+
+        mandant_dir = MANDANTEN_DIR / mandant_id
+        if not mandant_dir.exists():
+            return jsonify({'error': 'Mandant nicht gefunden'}), 404
+            
+        # 1. Load Data & Config
+        config_path = mandant_dir / 'mandant_config.json'
+        mandant_config = {}
+        if config_path.exists():
+            with open(config_path, 'r', encoding='utf-8') as f:
+                mandant_config = json.load(f)
+
+        # Load Invoice Data
+        einnahmen_file = mandant_dir / 'Einnahmen' / 'einnahmen.xlsx'
+        invoice_data = {}
+        if einnahmen_file.exists():
+            import excel_utils
+            invoices = excel_utils.read_data(str(einnahmen_file), 'Einnahmen')
+            for inv in invoices:
+                curr_num = str(inv.get('Rechnungsnummer', inv.get('nummer', '')))
+                if curr_num == invoice_num:
+                    invoice_data = {
+                        'nummer': curr_num,
+                        'datum': inv.get('Datum', inv.get('datum', '')),
+                        'kunde': inv.get('Kunde', inv.get('kunde', '')),
+                        'betrag': inv.get('Betrag_Brutto', inv.get('betrag_brutto', inv.get('Gesamtbetrag', 0)))
+                    }
+                    break
+        
+        if not invoice_data:
+             return jsonify({'error': f'Rechnung {invoice_num} nicht gefunden'}), 404
+
+        kunde_name = invoice_data.get('kunde')
+        kunde_email = None
+        
+        # Lookup Email form Customers
+        kunden_file = mandant_dir / 'Kunden' / 'kunden.xlsx'
+        if kunden_file.exists():
+            kunden = excel_utils.read_data(str(kunden_file), 'Kunden')
+            for k in kunden:
+                if k.get('Firma') == kunde_name:
+                    kunde_email = k.get('Email')
+                    break
+        
+        if not kunde_email:
+            kunde_email = data.get('email')
+        
+        if not kunde_email:
+             return jsonify({'error': f'Keine E-Mail-Adresse für Kunde "{kunde_name}" gefunden'}), 400
+
+        # 2. Files to Attach
+        attachments = []
+        
+        # A) Mahnung PDF (Re-Generate)
+        import dunning_generator
+        mahnungen_dir = mandant_dir / 'Mahnungen'
+        mahnungen_dir.mkdir(parents=True, exist_ok=True)
+        timestamp = int(datetime.now().timestamp())
+        safe_num = str(invoice_num).replace('/', '_').replace('\\', '_').strip()
+        mahnung_filename = f"Mahnung_{level}_{safe_num}_{timestamp}.pdf"
+        mahnung_path = mahnungen_dir / mahnung_filename
+        
+        success = dunning_generator.create_dunning_pdf(
+            str(mandant_dir), 
+            mandant_config, 
+            invoice_data, 
+            str(mahnung_path), 
+            dunning_level=level
+        )
+        if success:
+            attachments.append(str(mahnung_path))
+            
+        # B) Original Invoice PDF
+        rechnungen_dir = mandant_dir / 'Rechnungen'
+        for f in rechnungen_dir.rglob('*.pdf'):
+            if invoice_num in f.name:
+                attachments.append(str(f))
+                break
+
+        # 3. Send Email
+        subject = f"Zahlungserinnerung: Rechnung {invoice_num}"
+        betrag_fmt = f"{invoice_data.get('betrag', 0):.2f}".replace('.', ',')
+        
+        body = f"""Sehr geehrte Damen und Herren,
+
+anbei erhalten Sie unsere Zahlungserinnerung zur Rechnung {invoice_num} über {betrag_fmt} €.
+Eine Kopie der ursprünglichen Rechnung liegt ebenfalls bei.
+
+Wir bitten um zeitnahe Überweisung.
+
+Mit freundlichen Grüßen,
+{mandant_config.get('firma', 'Buchhaltung')}
+"""
+        send_email_with_attachments(kunde_email, subject, body, attachments, mandant_config)
+        
+        return jsonify({'success': True, 'message': f'Mahnung per E-Mail an {kunde_email} versendet!'})
+
+    except Exception as e:
+        logger.error(f"Send Reminder Error: {e}")
+        return jsonify({'error': str(e)}), 500
+
+import bank_parser
+
+@app.route('/api/mandanten/<mandant_id>/op-check/scan', methods=['POST'])
+def scan_bank_statement(mandant_id):
+    """Scans uploaded bank statement and finds matching invoices"""
+    try:
+        if 'file' not in request.files:
+            return jsonify({'error': 'No file uploaded'}), 400
+            
+        file = request.files['file']
+        if file.filename == '':
+            return jsonify({'error': 'No selected file'}), 400
+
+        mandant_dir = MANDANTEN_DIR / mandant_id
+        if not mandant_dir.exists():
+            return jsonify({'error': 'Mandant nicht gefunden'}), 404
+            
+        # 1. Save File temporarily
+        temp_dir = mandant_dir / 'Temp'
+        temp_dir.mkdir(parents=True, exist_ok=True)
+        filename = f"bank_scan_{int(datetime.now().timestamp())}_{file.filename}"
+        filepath = temp_dir / filename
+        file.save(filepath)
+        
+        # 2. Parse File
+        transactions = bank_parser.parse_bank_statement(str(filepath))
+        
+        # 3. Load Open Invoices
+        import excel_utils
+        einnahmen_path = mandant_dir / 'Einnahmen' / 'einnahmen.xlsx'
+        open_invoices = []
+        if einnahmen_path.exists():
+            invoices = excel_utils.read_data(str(einnahmen_path), 'Einnahmen')
+            # Filter Open
+            open_invoices = [inv for inv in invoices if str(inv.get('Status','')).lower() != 'bezahlt']
+            
+        # 4. Find Matches
+        matches = bank_parser.find_matches(transactions, open_invoices)
+        
+        # Cleanup? Keep for debug?
+        # filepath.unlink() 
+        
+        return jsonify({
+            'success': True, 
+            'matches': matches,
+            'count': len(matches),
+            'transactions_found': len(transactions)
+        })
+
+    except Exception as e:
+        logger.error(f"Scan Error: {e}")
+        return jsonify({'error': str(e)}), 500
 
 if __name__ == '__main__':
     # Restart Trigger
