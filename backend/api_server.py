@@ -112,7 +112,7 @@ def get_mandanten():
             return jsonify({'mandanten': []})
         
         for mandant_dir in MANDANTEN_DIR.iterdir():
-            if not mandant_dir.is_dir():
+            if not mandant_dir.is_dir() or mandant_dir.name.startswith('.') or mandant_dir.name == 'lost+found':
                 continue
             
             # Lade Mandanten-Config
