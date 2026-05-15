@@ -1,1 +1,1 @@
-web: gunicorn --bind 0.0.0.0:$PORT --chdir backend api_server:app
+web: gunicorn --chdir backend api_server:app --bind 0.0.0.0:$PORT --workers 2
