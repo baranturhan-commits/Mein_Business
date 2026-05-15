@@ -98,10 +98,22 @@ def append_data(filepath, data_dict, sheet_name="Data", headers=None):
         for cell in ws[1]:
              style_cell(cell, is_header=True, bg_color=color)
 
-    # 2. Bestehende Header lesen (um Dict korrekt zu mappen)
+    # 2. Bestehende Header lesen
     existing_headers = [cell.value for cell in ws[1]]
     
-    # Falls neue Header dazu kamen (einfaches Schema: Append? Nein, wir nehmen strict existing)
+    # Neue Header anfügen, falls im Parameter 'headers' welche fehlen
+    if headers:
+        for h in headers:
+            if h not in existing_headers:
+                ws.cell(row=1, column=len(existing_headers)+1, value=h)
+                # Style New Header
+                new_cell = ws.cell(row=1, column=len(existing_headers)+1)
+                color = THEME_COLORS.get('Default')
+                if "Ausgaben" in sheet_name: color = THEME_COLORS['Ausgaben']
+                if "Einnahmen" in sheet_name: color = THEME_COLORS['Einnahmen']
+                style_cell(new_cell, is_header=True, bg_color=color)
+                
+                existing_headers.append(h)
     # Mapping
     row_values = []
     for h in existing_headers:

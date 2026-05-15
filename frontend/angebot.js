@@ -12,6 +12,8 @@ async function showAngebotModal() {
     angebotStep = 1;
     selectedKunde = null;
     angebotPositionen = [];
+    document.getElementById('ang-leistungs-von').value = '';
+    document.getElementById('ang-leistungs-bis').value = '';
 
     // Load Kunden & Preisliste
     await loadDataForAngebot();
@@ -161,8 +163,12 @@ function renderAngebotPreview() {
         </tr>`;
     }).join('');
 
-    const mwst = netto * 0.19;
+    const mwst = window.isKleingewerbe ? 0 : (netto * 0.19);
     const brutto = netto + mwst;
+
+    const mwstRow = window.isKleingewerbe
+        ? `<tr><td colspan="3">MwSt 0%:</td><td>${mwst.toFixed(2)}€</td></tr>`
+        : `<tr><td colspan="3">MwSt 19%:</td><td>${mwst.toFixed(2)}€</td></tr>`;
 
     const html = `
         <h4>Kunde: ${selectedKunde}</h4>
@@ -173,7 +179,7 @@ function renderAngebotPreview() {
             <tbody>
                 ${posHtml}
                 <tr><td colspan="3"><b>Netto:</b></td><td><b>${netto.toFixed(2)}€</b></td></tr>
-                <tr><td colspan="3">MwSt 19%:</td><td>${mwst.toFixed(2)}€</td></tr>
+                ${mwstRow}
                 <tr><td colspan="3"><b>Brutto:</b></td><td><b>${brutto.toFixed(2)}€</b></td></tr>
             </tbody>
         </table>
@@ -192,6 +198,8 @@ async function submitAngebot() {
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
                 kunde: selectedKunde,
+                leistungs_von: document.getElementById('ang-leistungs-von').value,
+                leistungs_bis: document.getElementById('ang-leistungs-bis').value,
                 positionen: angebotPositionen
             })
         });

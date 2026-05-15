@@ -223,6 +223,69 @@ async function savePaymentStatus() {
     }
 }
 
+// --- Bank Upload Logic ---
+function triggerBankUpload() {
+    document.getElementById('bankUploadInput').click();
+}
+
+async function handleBankUpload(input) {
+    if (!input.files || input.files.length === 0) return;
+
+    const file = input.files[0];
+    const formData = new FormData();
+    formData.append('file', file);
+
+    // UI Feedback
+    const btn = document.querySelector('[onclick="triggerBankUpload()"]');
+    const originalText = btn.innerHTML;
+    btn.innerHTML = '<div class="spinner" style="width:16px;height:16px;"></div> Scanning...';
+    btn.disabled = true;
+
+    try {
+        const mandantId = getMandantIdFromUrl();
+        const res = await fetch(`${API_BASE_URL}/mandanten/${mandantId}/op-check/scan`, {
+            method: 'POST',
+            body: formData
+        });
+
+        const data = await res.json();
+
+        if (data.success) {
+            let matchCount = 0;
+            let matchDetails = [];
+
+            data.matches.forEach(match => {
+                const invId = match.invoice_id;
+                const checkbox = document.getElementById(`inv-${invId}`);
+
+                // Only check if not already checked
+                if (checkbox && !checkbox.checked) {
+                    checkbox.checked = true;
+                    togglePaymentStatus(invId, true); // Trigger change tracking
+                    matchCount++;
+                    matchDetails.push(invId);
+                }
+            });
+
+            if (matchCount > 0) {
+                alert(`✅ ${matchCount} Rechnungen gefunden und markiert:\n\n${matchDetails.join('\n')}\n\nBitte "Änderungen speichern" klicken!`);
+            } else {
+                alert(`ℹ️ Keine offenen Rechnungen gefunden.\n(${data.transactions_found} Transaktionen gescannt)`);
+            }
+        } else {
+            alert('❌ Fehler: ' + (data.error || 'Server Error'));
+        }
+    } catch (e) {
+        console.error(e);
+        alert('❌ Netzwerkfehler beim Upload');
+    } finally {
+        btn.innerHTML = originalText;
+        btn.disabled = false;
+        input.value = ''; // Reset
+    }
+}
+
+
 // Kunden Functions
 async function loadKunden() {
     try {
@@ -277,6 +340,9 @@ async function submitKunde(event) {
     const firma = document.getElementById('kundeFirma').value.trim();
     const email = document.getElementById('kundeEmail').value.trim();
     const anrede = document.getElementById('kundeAnrede').value;
+    const strasse = document.getElementById('kundeStrasse').value.trim();
+    const plz = document.getElementById('kundePlz').value.trim();
+    const ort = document.getElementById('kundeOrt').value.trim();
 
     const statusDiv = document.getElementById('kundeStatus');
     statusDiv.innerHTML = '<p>📤 Erstelle Kunde...</p>';
@@ -285,7 +351,7 @@ async function submitKunde(event) {
         const response = await fetch(`${API_BASE_URL}/mandanten/${mandantId}/kunden`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ firma, email, anrede })
+            body: JSON.stringify({ firma, email, anrede, strasse, plz, ort })
         });
 
         const result = await response.json();
@@ -308,6 +374,8 @@ async function submitKunde(event) {
 window.switchTab = switchTab;
 window.loadOPCheck = loadOPCheck;
 window.savePaymentStatus = savePaymentStatus;
+window.triggerBankUpload = triggerBankUpload;
+window.handleBankUpload = handleBankUpload;
 window.loadKunden = loadKunden;
 window.showKundeModal = showKundeModal;
 window.closeKundeModal = closeKundeModal;

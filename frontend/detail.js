@@ -52,6 +52,7 @@ async function loadMandantDetails() {
         const stats = await response.json();
 
         currentMandant = stats;
+        window.isKleingewerbe = (stats.unternehmensform === 'Kleingewerbe');
 
         // Update Title
         document.getElementById('mandantName').textContent = mandantId.replace('_', ' ');

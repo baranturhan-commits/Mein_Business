@@ -18,6 +18,7 @@ const InvoiceModal = {
         document.getElementById(this.modalId).classList.remove('hidden');
         this.loadCustomers();
         this.loadOffers();
+        this.loadNextNumber();
         this.renderItems();
     },
 
@@ -28,6 +29,48 @@ const InvoiceModal = {
         document.getElementById('inv-total-netto').textContent = '0.00 €';
         document.getElementById('inv-protocol-input').value = '';
         document.getElementById('inv-import-status').innerHTML = '';
+        // Reset Dates
+        document.getElementById('inv-leistungs-von').value = '';
+        document.getElementById('inv-leistungs-bis').value = '';
+    },
+
+    // --- Load Next Invoice Number ---
+    loadNextNumber: async function () {
+        const el = document.getElementById('inv-next-number');
+        if (!el) return;
+        try {
+            const id = this.getId();
+            const res = await fetch(`${this.getApiUrl()}/mandanten/${id}/rechnung/next-number`);
+            const data = await res.json();
+            el.textContent = data.next_number || '?';
+        } catch (e) {
+            el.textContent = '–';
+        }
+    },
+
+    // --- Save Counter ---
+    saveCounter: async function () {
+        const input = document.getElementById('inv-counter-input');
+        const val = parseInt(input.value);
+        if (!val || val < 1) return alert('Bitte eine gültige Zahl ab 1 eingeben.');
+
+        try {
+            const id = this.getId();
+            const res = await fetch(`${this.getApiUrl()}/mandanten/${id}/rechnung/set-counter`, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ count: val })
+            });
+            const data = await res.json();
+            if (data.success) {
+                input.value = '';
+                this.loadNextNumber(); // Refresh preview
+            } else {
+                alert('Fehler: ' + data.error);
+            }
+        } catch (e) {
+            alert('Fehler: ' + e.message);
+        }
     },
 
     // --- Data Loading ---
@@ -209,6 +252,15 @@ const InvoiceModal = {
 
     submit: async function () {
         const kunde = document.getElementById('inv-kunde-select').value;
+        const lVon = document.getElementById('inv-leistungs-von').value; // YYYY-MM-DD
+        const lBis = document.getElementById('inv-leistungs-bis').value;
+
+        // Convert Dates to German Format DD.MM.YYYY
+        const formatDate = (d) => {
+            if (!d) return '';
+            const [y, m, d_] = d.split('-');
+            return `${d_}.${m}.${y}`;
+        };
         if (!kunde) return alert("Bitte Kunden wählen!");
         if (this.items.length === 0) return alert("Bitte Positionen hinzufügen!");
 
@@ -254,6 +306,8 @@ const InvoiceModal = {
         // 2. Submit Real Invoice
         const payload = {
             kunde: kunde,
+            leistungs_von: formatDate(lVon),
+            leistungs_bis: formatDate(lBis),
             items: this.items
         };
 

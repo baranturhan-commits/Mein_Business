@@ -1,0 +1,348 @@
+2026-02-21 20:46:09,957 - __main__ - INFO - 🔥 Firebase Admin SDK initialized with ADC
+2026-02-21 20:46:10,003 - __main__ - INFO - ⏰ Scheduler gestartet (Backup täglich um 23:00)
+2026-02-21 20:46:10,029 - __main__ - INFO - 🚀 Starting API Server...
+2026-02-21 20:46:10,195 - werkzeug - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://192.168.178.199:5000
+2026-02-21 20:46:10,195 - werkzeug - INFO - [33mPress CTRL+C to quit[0m
+2026-02-21 20:46:10,200 - werkzeug - INFO -  * Restarting with stat
+2026-02-21 20:46:14,099 - __main__ - INFO - 🔥 Firebase Admin SDK initialized with ADC
+2026-02-21 20:46:14,148 - __main__ - INFO - ⏰ Scheduler gestartet (Backup täglich um 23:00)
+2026-02-21 20:46:14,164 - __main__ - INFO - 🚀 Starting API Server...
+2026-02-21 20:46:14,197 - werkzeug - WARNING -  * Debugger is active!
+2026-02-21 20:46:14,206 - werkzeug - INFO -  * Debugger PIN: 447-598-156
+2026-02-21 20:46:14,274 - werkzeug - INFO - 127.0.0.1 - - [21/Feb/2026 20:46:14] "GET / HTTP/1.1" 200 -
+2026-02-21 20:46:14,309 - werkzeug - INFO - 127.0.0.1 - - [21/Feb/2026 20:46:14] "[36mGET /styles.css HTTP/1.1[0m" 304 -
+2026-02-21 20:46:14,639 - werkzeug - INFO - 127.0.0.1 - - [21/Feb/2026 20:46:14] "[36mGET /firebase_config.js HTTP/1.1[0m" 304 -
+2026-02-21 20:46:14,648 - werkzeug - INFO - 127.0.0.1 - - [21/Feb/2026 20:46:14] "[36mGET /auth.js HTTP/1.1[0m" 304 -
+2026-02-21 20:46:14,651 - werkzeug - INFO - 127.0.0.1 - - [21/Feb/2026 20:46:14] "[36mGET /app.js HTTP/1.1[0m" 304 -
+2026-02-21 20:46:15,034 - __main__ - INFO - Mandanten geladen: 2
+2026-02-21 20:46:15,051 - werkzeug - INFO - 127.0.0.1 - - [21/Feb/2026 20:46:15] "[33mGET /favicon.ico HTTP/1.1[0m" 404 -
+2026-02-21 20:46:15,210 - werkzeug - INFO - 127.0.0.1 - - [21/Feb/2026 20:46:15] "GET /api/dashboard HTTP/1.1" 200 -
+2026-02-21 20:46:17,135 - werkzeug - INFO - 127.0.0.1 - - [21/Feb/2026 20:46:17] "[36mGET /detail.html?id=Mamo_Gartenpflege HTTP/1.1[0m" 304 -
+2026-02-21 20:46:17,467 - werkzeug - INFO - 127.0.0.1 - - [21/Feb/2026 20:46:17] "[36mGET /styles.css HTTP/1.1[0m" 304 -
+2026-02-21 20:46:17,467 - werkzeug - INFO - 127.0.0.1 - - [21/Feb/2026 20:46:17] "[36mGET /auth.js HTTP/1.1[0m" 304 -
+2026-02-21 20:46:17,472 - werkzeug - INFO - 127.0.0.1 - - [21/Feb/2026 20:46:17] "[36mGET /detail_extensions.js HTTP/1.1[0m" 304 -
+2026-02-21 20:46:17,494 - werkzeug - INFO - 127.0.0.1 - - [21/Feb/2026 20:46:17] "[36mGET /firebase_config.js HTTP/1.1[0m" 304 -
+2026-02-21 20:46:17,514 - werkzeug - INFO - 127.0.0.1 - - [21/Feb/2026 20:46:17] "[36mGET /preisliste.js HTTP/1.1[0m" 304 -
+2026-02-21 20:46:17,515 - werkzeug - INFO - 127.0.0.1 - - [21/Feb/2026 20:46:17] "[36mGET /detail.js HTTP/1.1[0m" 304 -
+2026-02-21 20:46:17,805 - werkzeug - INFO - 127.0.0.1 - - [21/Feb/2026 20:46:17] "[36mGET /invoice.js HTTP/1.1[0m" 304 -
+2026-02-21 20:46:17,821 - werkzeug - INFO - 127.0.0.1 - - [21/Feb/2026 20:46:17] "[36mGET /import.js HTTP/1.1[0m" 304 -
+2026-02-21 20:46:17,828 - werkzeug - INFO - 127.0.0.1 - - [21/Feb/2026 20:46:17] "[36mGET /lieferschein_merged.js HTTP/1.1[0m" 304 -
+2026-02-21 20:46:17,829 - werkzeug - INFO - 127.0.0.1 - - [21/Feb/2026 20:46:17] "[36mGET /angebot.js HTTP/1.1[0m" 304 -
+2026-02-21 20:46:17,867 - werkzeug - INFO - 127.0.0.1 - - [21/Feb/2026 20:46:17] "[36mGET /protocol_scanner.js HTTP/1.1[0m" 304 -
+2026-02-21 20:46:17,868 - werkzeug - INFO - 127.0.0.1 - - [21/Feb/2026 20:46:17] "[36mGET /ausgaben.js HTTP/1.1[0m" 304 -
+2026-02-21 20:46:18,128 - werkzeug - INFO - 127.0.0.1 - - [21/Feb/2026 20:46:18] "[36mGET /mandant_config.js HTTP/1.1[0m" 304 -
+2026-02-21 20:46:18,141 - werkzeug - INFO - 127.0.0.1 - - [21/Feb/2026 20:46:18] "[36mGET /documents.js HTTP/1.1[0m" 304 -
+2026-02-21 20:46:18,190 - werkzeug - INFO - 127.0.0.1 - - [21/Feb/2026 20:46:18] "[36mGET /recurring.js HTTP/1.1[0m" 304 -
+2026-02-21 20:46:18,201 - werkzeug - INFO - 127.0.0.1 - - [21/Feb/2026 20:46:18] "[36mGET /mitarbeiter.js HTTP/1.1[0m" 304 -
+2026-02-21 20:46:18,537 - werkzeug - INFO - 127.0.0.1 - - [21/Feb/2026 20:46:18] "GET /api/mandanten/Mamo_Gartenpflege/rechnungen HTTP/1.1" 200 -
+2026-02-21 20:46:18,592 - werkzeug - INFO - 127.0.0.1 - - [21/Feb/2026 20:46:18] "GET /api/mandanten/Mamo_Gartenpflege/stats HTTP/1.1" 200 -
+2026-02-21 20:46:18,795 - werkzeug - INFO - 127.0.0.1 - - [21/Feb/2026 20:46:18] "GET /api/mandanten/Mamo_Gartenpflege/recurring HTTP/1.1" 200 -
+2026-02-21 20:46:20,048 - __main__ - INFO - Einnahmen geladen: 1 Rechnungen
+2026-02-21 20:46:20,050 - werkzeug - INFO - 127.0.0.1 - - [21/Feb/2026 20:46:20] "GET /api/mandanten/Mamo_Gartenpflege/einnahmen HTTP/1.1" 200 -
+2026-02-21 20:47:56,837 - werkzeug - INFO - 127.0.0.1 - - [21/Feb/2026 20:47:56] "[36mGET /detail.html?id=Mamo_Gartenpflege HTTP/1.1[0m" 304 -
+2026-02-21 20:47:57,103 - werkzeug - INFO - 127.0.0.1 - - [21/Feb/2026 20:47:57] "[36mGET /styles.css HTTP/1.1[0m" 304 -
+2026-02-21 20:47:57,167 - werkzeug - INFO - 127.0.0.1 - - [21/Feb/2026 20:47:57] "[36mGET /auth.js HTTP/1.1[0m" 304 -
+2026-02-21 20:47:57,167 - werkzeug - INFO - 127.0.0.1 - - [21/Feb/2026 20:47:57] "[36mGET /firebase_config.js HTTP/1.1[0m" 304 -
+2026-02-21 20:47:57,168 - werkzeug - INFO - 127.0.0.1 - - [21/Feb/2026 20:47:57] "[36mGET /detail_extensions.js HTTP/1.1[0m" 304 -
+2026-02-21 20:47:57,168 - werkzeug - INFO - 127.0.0.1 - - [21/Feb/2026 20:47:57] "[36mGET /detail.js HTTP/1.1[0m" 304 -
+2026-02-21 20:47:57,170 - werkzeug - INFO - 127.0.0.1 - - [21/Feb/2026 20:47:57] "[36mGET /preisliste.js HTTP/1.1[0m" 304 -
+2026-02-21 20:47:57,417 - werkzeug - INFO - 127.0.0.1 - - [21/Feb/2026 20:47:57] "[36mGET /import.js HTTP/1.1[0m" 304 -
+2026-02-21 20:47:57,483 - werkzeug - INFO - 127.0.0.1 - - [21/Feb/2026 20:47:57] "[36mGET /angebot.js HTTP/1.1[0m" 304 -
+2026-02-21 20:47:57,483 - werkzeug - INFO - 127.0.0.1 - - [21/Feb/2026 20:47:57] "[36mGET /lieferschein_merged.js HTTP/1.1[0m" 304 -
+2026-02-21 20:47:57,483 - werkzeug - INFO - 127.0.0.1 - - [21/Feb/2026 20:47:57] "[36mGET /invoice.js HTTP/1.1[0m" 304 -
+2026-02-21 20:47:57,484 - werkzeug - INFO - 127.0.0.1 - - [21/Feb/2026 20:47:57] "[36mGET /protocol_scanner.js HTTP/1.1[0m" 304 -
+2026-02-21 20:47:57,485 - werkzeug - INFO - 127.0.0.1 - - [21/Feb/2026 20:47:57] "[36mGET /documents.js HTTP/1.1[0m" 304 -
+2026-02-21 20:47:57,730 - werkzeug - INFO - 127.0.0.1 - - [21/Feb/2026 20:47:57] "[36mGET /ausgaben.js HTTP/1.1[0m" 304 -
+2026-02-21 20:47:57,793 - werkzeug - INFO - 127.0.0.1 - - [21/Feb/2026 20:47:57] "[36mGET /mitarbeiter.js HTTP/1.1[0m" 304 -
+2026-02-21 20:47:57,794 - werkzeug - INFO - 127.0.0.1 - - [21/Feb/2026 20:47:57] "[36mGET /mandant_config.js HTTP/1.1[0m" 304 -
+2026-02-21 20:47:57,794 - werkzeug - INFO - 127.0.0.1 - - [21/Feb/2026 20:47:57] "[36mGET /recurring.js HTTP/1.1[0m" 304 -
+2026-02-21 20:47:58,104 - werkzeug - INFO - 127.0.0.1 - - [21/Feb/2026 20:47:58] "GET /api/mandanten/Mamo_Gartenpflege/rechnungen HTTP/1.1" 200 -
+2026-02-21 20:47:58,122 - werkzeug - INFO - 127.0.0.1 - - [21/Feb/2026 20:47:58] "GET /api/mandanten/Mamo_Gartenpflege/stats HTTP/1.1" 200 -
+2026-02-21 20:47:58,368 - werkzeug - INFO - 127.0.0.1 - - [21/Feb/2026 20:47:58] "GET /api/mandanten/Mamo_Gartenpflege/recurring HTTP/1.1" 200 -
+2026-02-21 20:47:59,237 - __main__ - INFO - Found 1 Angebote for Mamo_Gartenpflege
+2026-02-21 20:47:59,238 - werkzeug - INFO - 127.0.0.1 - - [21/Feb/2026 20:47:59] "GET /api/mandanten/Mamo_Gartenpflege/angebote HTTP/1.1" 200 -
+2026-02-21 20:47:59,520 - werkzeug - INFO - 127.0.0.1 - - [21/Feb/2026 20:47:59] "GET /api/mandanten/Mamo_Gartenpflege/rechnungen HTTP/1.1" 200 -
+2026-02-21 20:47:59,540 - __main__ - INFO - Found 1 Lieferscheine for Mamo_Gartenpflege
+2026-02-21 20:47:59,540 - werkzeug - INFO - 127.0.0.1 - - [21/Feb/2026 20:47:59] "GET /api/mandanten/Mamo_Gartenpflege/lieferscheine HTTP/1.1" 200 -
+2026-02-21 20:48:04,541 - __main__ - INFO - Einnahmen geladen: 1 Rechnungen
+2026-02-21 20:48:04,542 - werkzeug - INFO - 127.0.0.1 - - [21/Feb/2026 20:48:04] "GET /api/mandanten/Mamo_Gartenpflege/einnahmen HTTP/1.1" 200 -
+2026-02-21 20:56:09,534 - werkzeug - INFO -  * Detected change in 'C:\\Users\\Admin\\Desktop\\Mein_Business\\backend\\api_server.py', reloading
+2026-02-21 20:56:09,867 - werkzeug - INFO -  * Restarting with stat
+2026-02-21 20:56:15,604 - __main__ - INFO - 🔥 Firebase Admin SDK initialized with ADC
+2026-02-21 20:56:15,630 - __main__ - INFO - ⏰ Scheduler gestartet (Backup täglich um 23:00)
+2026-02-21 20:56:15,638 - __main__ - INFO - 🚀 Starting API Server...
+2026-02-21 20:56:15,688 - werkzeug - WARNING -  * Debugger is active!
+2026-02-21 20:56:15,695 - werkzeug - INFO -  * Debugger PIN: 447-598-156
+2026-02-21 20:56:33,899 - werkzeug - INFO -  * Detected change in 'C:\\Users\\Admin\\Desktop\\Mein_Business\\backend\\api_server.py', reloading
+2026-02-21 20:56:34,196 - werkzeug - INFO -  * Restarting with stat
+2026-02-21 20:56:36,257 - __main__ - INFO - 🔥 Firebase Admin SDK initialized with ADC
+2026-02-21 20:56:36,282 - __main__ - INFO - ⏰ Scheduler gestartet (Backup täglich um 23:00)
+2026-02-21 20:56:36,290 - __main__ - INFO - 🚀 Starting API Server...
+2026-02-21 20:56:36,307 - werkzeug - WARNING -  * Debugger is active!
+2026-02-21 20:56:36,313 - werkzeug - INFO -  * Debugger PIN: 447-598-156
+2026-02-21 20:57:31,253 - werkzeug - INFO - 127.0.0.1 - - [21/Feb/2026 20:57:31] "[36mGET /detail.html?id=Mamo_Gartenpflege HTTP/1.1[0m" 304 -
+2026-02-21 20:57:31,520 - werkzeug - INFO - 127.0.0.1 - - [21/Feb/2026 20:57:31] "[36mGET /styles.css HTTP/1.1[0m" 304 -
+2026-02-21 20:57:31,585 - werkzeug - INFO - 127.0.0.1 - - [21/Feb/2026 20:57:31] "[36mGET /firebase_config.js HTTP/1.1[0m" 304 -
+2026-02-21 20:57:31,585 - werkzeug - INFO - 127.0.0.1 - - [21/Feb/2026 20:57:31] "[36mGET /detail.js HTTP/1.1[0m" 304 -
+2026-02-21 20:57:31,586 - werkzeug - INFO - 127.0.0.1 - - [21/Feb/2026 20:57:31] "[36mGET /auth.js HTTP/1.1[0m" 304 -
+2026-02-21 20:57:31,587 - werkzeug - INFO - 127.0.0.1 - - [21/Feb/2026 20:57:31] "[36mGET /detail_extensions.js HTTP/1.1[0m" 304 -
+2026-02-21 20:57:31,589 - werkzeug - INFO - 127.0.0.1 - - [21/Feb/2026 20:57:31] "[36mGET /preisliste.js HTTP/1.1[0m" 304 -
+2026-02-21 20:57:31,834 - werkzeug - INFO - 127.0.0.1 - - [21/Feb/2026 20:57:31] "[36mGET /import.js HTTP/1.1[0m" 304 -
+2026-02-21 20:57:31,899 - werkzeug - INFO - 127.0.0.1 - - [21/Feb/2026 20:57:31] "[36mGET /angebot.js HTTP/1.1[0m" 304 -
+2026-02-21 20:57:31,900 - werkzeug - INFO - 127.0.0.1 - - [21/Feb/2026 20:57:31] "[36mGET /protocol_scanner.js HTTP/1.1[0m" 304 -
+2026-02-21 20:57:31,900 - werkzeug - INFO - 127.0.0.1 - - [21/Feb/2026 20:57:31] "[36mGET /invoice.js HTTP/1.1[0m" 304 -
+2026-02-21 20:57:31,900 - werkzeug - INFO - 127.0.0.1 - - [21/Feb/2026 20:57:31] "[36mGET /lieferschein_merged.js HTTP/1.1[0m" 304 -
+2026-02-21 20:57:31,901 - werkzeug - INFO - 127.0.0.1 - - [21/Feb/2026 20:57:31] "[36mGET /documents.js HTTP/1.1[0m" 304 -
+2026-02-21 20:57:32,147 - werkzeug - INFO - 127.0.0.1 - - [21/Feb/2026 20:57:32] "[36mGET /ausgaben.js HTTP/1.1[0m" 304 -
+2026-02-21 20:57:32,213 - werkzeug - INFO - 127.0.0.1 - - [21/Feb/2026 20:57:32] "[36mGET /mitarbeiter.js HTTP/1.1[0m" 304 -
+2026-02-21 20:57:32,213 - werkzeug - INFO - 127.0.0.1 - - [21/Feb/2026 20:57:32] "[36mGET /mandant_config.js HTTP/1.1[0m" 304 -
+2026-02-21 20:57:32,214 - werkzeug - INFO - 127.0.0.1 - - [21/Feb/2026 20:57:32] "[36mGET /recurring.js HTTP/1.1[0m" 304 -
+2026-02-21 20:57:32,526 - werkzeug - INFO - 127.0.0.1 - - [21/Feb/2026 20:57:32] "GET /api/mandanten/Mamo_Gartenpflege/rechnungen HTTP/1.1" 200 -
+2026-02-21 20:57:32,552 - werkzeug - INFO - 127.0.0.1 - - [21/Feb/2026 20:57:32] "GET /api/mandanten/Mamo_Gartenpflege/stats HTTP/1.1" 200 -
+2026-02-21 20:57:32,790 - werkzeug - INFO - 127.0.0.1 - - [21/Feb/2026 20:57:32] "GET /api/mandanten/Mamo_Gartenpflege/recurring HTTP/1.1" 200 -
+2026-02-21 20:57:34,620 - __main__ - INFO - Found 1 Angebote for Mamo_Gartenpflege
+2026-02-21 20:57:34,620 - werkzeug - INFO - 127.0.0.1 - - [21/Feb/2026 20:57:34] "GET /api/mandanten/Mamo_Gartenpflege/angebote HTTP/1.1" 200 -
+2026-02-21 20:57:34,924 - werkzeug - INFO - 127.0.0.1 - - [21/Feb/2026 20:57:34] "GET /api/mandanten/Mamo_Gartenpflege/rechnungen HTTP/1.1" 200 -
+2026-02-21 20:57:34,932 - __main__ - INFO - Found 1 Lieferscheine for Mamo_Gartenpflege
+2026-02-21 20:57:34,932 - werkzeug - INFO - 127.0.0.1 - - [21/Feb/2026 20:57:34] "GET /api/mandanten/Mamo_Gartenpflege/lieferscheine HTTP/1.1" 200 -
+2026-02-21 20:57:40,310 - werkzeug - INFO - 127.0.0.1 - - [21/Feb/2026 20:57:40] "GET /api/mandanten/Mamo_Gartenpflege/kunden HTTP/1.1" 200 -
+2026-02-21 20:57:40,321 - __main__ - INFO - Found 1 Angebote for Mamo_Gartenpflege
+2026-02-21 20:57:40,323 - werkzeug - INFO - 127.0.0.1 - - [21/Feb/2026 20:57:40] "GET /api/mandanten/Mamo_Gartenpflege/angebote HTTP/1.1" 200 -
+2026-02-21 20:57:58,801 - werkzeug - INFO - 127.0.0.1 - - [21/Feb/2026 20:57:58] "POST /api/mandanten/Mamo_Gartenpflege/protocol/scan HTTP/1.1" 200 -
+2026-02-21 21:01:39,400 - werkzeug - INFO - 127.0.0.1 - - [21/Feb/2026 21:01:39] "[36mGET /detail.html?id=Mamo_Gartenpflege HTTP/1.1[0m" 304 -
+2026-02-21 21:01:39,662 - werkzeug - INFO - 127.0.0.1 - - [21/Feb/2026 21:01:39] "[36mGET /styles.css HTTP/1.1[0m" 304 -
+2026-02-21 21:01:39,727 - werkzeug - INFO - 127.0.0.1 - - [21/Feb/2026 21:01:39] "[36mGET /firebase_config.js HTTP/1.1[0m" 304 -
+2026-02-21 21:01:39,727 - werkzeug - INFO - 127.0.0.1 - - [21/Feb/2026 21:01:39] "[36mGET /detail.js HTTP/1.1[0m" 304 -
+2026-02-21 21:01:39,727 - werkzeug - INFO - 127.0.0.1 - - [21/Feb/2026 21:01:39] "[36mGET /auth.js HTTP/1.1[0m" 304 -
+2026-02-21 21:01:39,728 - werkzeug - INFO - 127.0.0.1 - - [21/Feb/2026 21:01:39] "[36mGET /detail_extensions.js HTTP/1.1[0m" 304 -
+2026-02-21 21:01:39,728 - werkzeug - INFO - 127.0.0.1 - - [21/Feb/2026 21:01:39] "[36mGET /preisliste.js HTTP/1.1[0m" 304 -
+2026-02-21 21:01:39,972 - werkzeug - INFO - 127.0.0.1 - - [21/Feb/2026 21:01:39] "[36mGET /import.js HTTP/1.1[0m" 304 -
+2026-02-21 21:01:40,036 - werkzeug - INFO - 127.0.0.1 - - [21/Feb/2026 21:01:40] "[36mGET /lieferschein_merged.js HTTP/1.1[0m" 304 -
+2026-02-21 21:01:40,036 - werkzeug - INFO - 127.0.0.1 - - [21/Feb/2026 21:01:40] "[36mGET /invoice.js HTTP/1.1[0m" 304 -
+2026-02-21 21:01:40,037 - werkzeug - INFO - 127.0.0.1 - - [21/Feb/2026 21:01:40] "[36mGET /protocol_scanner.js HTTP/1.1[0m" 304 -
+2026-02-21 21:01:40,038 - werkzeug - INFO - 127.0.0.1 - - [21/Feb/2026 21:01:40] "[36mGET /angebot.js HTTP/1.1[0m" 304 -
+2026-02-21 21:01:40,038 - werkzeug - INFO - 127.0.0.1 - - [21/Feb/2026 21:01:40] "[36mGET /documents.js HTTP/1.1[0m" 304 -
+2026-02-21 21:01:40,279 - werkzeug - INFO - 127.0.0.1 - - [21/Feb/2026 21:01:40] "[36mGET /ausgaben.js HTTP/1.1[0m" 304 -
+2026-02-21 21:01:40,342 - werkzeug - INFO - 127.0.0.1 - - [21/Feb/2026 21:01:40] "[36mGET /mandant_config.js HTTP/1.1[0m" 304 -
+2026-02-21 21:01:40,342 - werkzeug - INFO - 127.0.0.1 - - [21/Feb/2026 21:01:40] "[36mGET /mitarbeiter.js HTTP/1.1[0m" 304 -
+2026-02-21 21:01:40,342 - werkzeug - INFO - 127.0.0.1 - - [21/Feb/2026 21:01:40] "[36mGET /recurring.js HTTP/1.1[0m" 304 -
+2026-02-21 21:01:40,653 - werkzeug - INFO - 127.0.0.1 - - [21/Feb/2026 21:01:40] "GET /api/mandanten/Mamo_Gartenpflege/rechnungen HTTP/1.1" 200 -
+2026-02-21 21:01:40,672 - werkzeug - INFO - 127.0.0.1 - - [21/Feb/2026 21:01:40] "GET /api/mandanten/Mamo_Gartenpflege/stats HTTP/1.1" 200 -
+2026-02-21 21:01:40,916 - werkzeug - INFO - 127.0.0.1 - - [21/Feb/2026 21:01:40] "GET /api/mandanten/Mamo_Gartenpflege/recurring HTTP/1.1" 200 -
+2026-02-21 21:01:41,561 - __main__ - INFO - Found 1 Angebote for Mamo_Gartenpflege
+2026-02-21 21:01:41,561 - werkzeug - INFO - 127.0.0.1 - - [21/Feb/2026 21:01:41] "GET /api/mandanten/Mamo_Gartenpflege/angebote HTTP/1.1" 200 -
+2026-02-21 21:01:41,867 - werkzeug - INFO - 127.0.0.1 - - [21/Feb/2026 21:01:41] "GET /api/mandanten/Mamo_Gartenpflege/rechnungen HTTP/1.1" 200 -
+2026-02-21 21:01:41,875 - __main__ - INFO - Found 1 Lieferscheine for Mamo_Gartenpflege
+2026-02-21 21:01:41,875 - werkzeug - INFO - 127.0.0.1 - - [21/Feb/2026 21:01:41] "GET /api/mandanten/Mamo_Gartenpflege/lieferscheine HTTP/1.1" 200 -
+2026-02-21 21:01:44,808 - werkzeug - INFO - 127.0.0.1 - - [21/Feb/2026 21:01:44] "GET /api/mandanten/Mamo_Gartenpflege/kunden HTTP/1.1" 200 -
+2026-02-21 21:01:44,816 - __main__ - INFO - Found 1 Angebote for Mamo_Gartenpflege
+2026-02-21 21:01:44,817 - werkzeug - INFO - 127.0.0.1 - - [21/Feb/2026 21:01:44] "GET /api/mandanten/Mamo_Gartenpflege/angebote HTTP/1.1" 200 -
+2026-02-21 21:02:08,359 - werkzeug - INFO - 127.0.0.1 - - [21/Feb/2026 21:02:08] "POST /api/mandanten/Mamo_Gartenpflege/protocol/scan HTTP/1.1" 200 -
+2026-02-21 21:03:19,296 - werkzeug - INFO - 127.0.0.1 - - [21/Feb/2026 21:03:19] "GET /api/mandanten/Mamo_Gartenpflege/config HTTP/1.1" 200 -
+2026-02-21 21:03:39,527 - werkzeug - INFO - 127.0.0.1 - - [21/Feb/2026 21:03:39] "PUT /api/mandanten/Mamo_Gartenpflege/config HTTP/1.1" 200 -
+2026-02-21 21:03:41,481 - werkzeug - INFO - 127.0.0.1 - - [21/Feb/2026 21:03:41] "[36mGET /detail.html?id=Mamo_Gartenpflege HTTP/1.1[0m" 304 -
+2026-02-21 21:03:41,720 - werkzeug - INFO - 127.0.0.1 - - [21/Feb/2026 21:03:41] "[36mGET /styles.css HTTP/1.1[0m" 304 -
+2026-02-21 21:03:41,809 - werkzeug - INFO - 127.0.0.1 - - [21/Feb/2026 21:03:41] "[36mGET /firebase_config.js HTTP/1.1[0m" 304 -
+2026-02-21 21:03:41,809 - werkzeug - INFO - 127.0.0.1 - - [21/Feb/2026 21:03:41] "[36mGET /auth.js HTTP/1.1[0m" 304 -
+2026-02-21 21:03:41,810 - werkzeug - INFO - 127.0.0.1 - - [21/Feb/2026 21:03:41] "[36mGET /detail.js HTTP/1.1[0m" 304 -
+2026-02-21 21:03:41,810 - werkzeug - INFO - 127.0.0.1 - - [21/Feb/2026 21:03:41] "[36mGET /detail_extensions.js HTTP/1.1[0m" 304 -
+2026-02-21 21:03:41,811 - werkzeug - INFO - 127.0.0.1 - - [21/Feb/2026 21:03:41] "[36mGET /preisliste.js HTTP/1.1[0m" 304 -
+2026-02-21 21:03:42,038 - werkzeug - INFO - 127.0.0.1 - - [21/Feb/2026 21:03:42] "[36mGET /import.js HTTP/1.1[0m" 304 -
+2026-02-21 21:03:42,119 - werkzeug - INFO - 127.0.0.1 - - [21/Feb/2026 21:03:42] "[36mGET /angebot.js HTTP/1.1[0m" 304 -
+2026-02-21 21:03:42,120 - werkzeug - INFO - 127.0.0.1 - - [21/Feb/2026 21:03:42] "[36mGET /protocol_scanner.js HTTP/1.1[0m" 304 -
+2026-02-21 21:03:42,120 - werkzeug - INFO - 127.0.0.1 - - [21/Feb/2026 21:03:42] "[36mGET /lieferschein_merged.js HTTP/1.1[0m" 304 -
+2026-02-21 21:03:42,120 - werkzeug - INFO - 127.0.0.1 - - [21/Feb/2026 21:03:42] "[36mGET /invoice.js HTTP/1.1[0m" 304 -
+2026-02-21 21:03:42,121 - werkzeug - INFO - 127.0.0.1 - - [21/Feb/2026 21:03:42] "[36mGET /documents.js HTTP/1.1[0m" 304 -
+2026-02-21 21:03:42,350 - werkzeug - INFO - 127.0.0.1 - - [21/Feb/2026 21:03:42] "[36mGET /ausgaben.js HTTP/1.1[0m" 304 -
+2026-02-21 21:03:42,431 - werkzeug - INFO - 127.0.0.1 - - [21/Feb/2026 21:03:42] "[36mGET /mitarbeiter.js HTTP/1.1[0m" 304 -
+2026-02-21 21:03:42,431 - werkzeug - INFO - 127.0.0.1 - - [21/Feb/2026 21:03:42] "[36mGET /mandant_config.js HTTP/1.1[0m" 304 -
+2026-02-21 21:03:42,432 - werkzeug - INFO - 127.0.0.1 - - [21/Feb/2026 21:03:42] "[36mGET /recurring.js HTTP/1.1[0m" 304 -
+2026-02-21 21:03:42,741 - werkzeug - INFO - 127.0.0.1 - - [21/Feb/2026 21:03:42] "GET /api/mandanten/Mamo_Gartenpflege/rechnungen HTTP/1.1" 200 -
+2026-02-21 21:03:42,767 - werkzeug - INFO - 127.0.0.1 - - [21/Feb/2026 21:03:42] "GET /api/mandanten/Mamo_Gartenpflege/stats HTTP/1.1" 200 -
+2026-02-21 21:03:43,006 - werkzeug - INFO - 127.0.0.1 - - [21/Feb/2026 21:03:43] "GET /api/mandanten/Mamo_Gartenpflege/recurring HTTP/1.1" 200 -
+2026-02-21 21:03:59,244 - werkzeug - INFO -  * Detected change in 'C:\\Users\\Admin\\Desktop\\Mein_Business\\backend\\api_server.py', reloading
+2026-02-21 21:04:01,598 - werkzeug - INFO -  * Restarting with stat
+2026-02-21 21:04:03,815 - __main__ - INFO - 🔥 Firebase Admin SDK initialized with ADC
+2026-02-21 21:04:03,849 - __main__ - INFO - ⏰ Scheduler gestartet (Backup täglich um 23:00)
+2026-02-21 21:04:03,858 - __main__ - INFO - 🚀 Starting API Server...
+2026-02-21 21:04:03,877 - werkzeug - WARNING -  * Debugger is active!
+2026-02-21 21:04:03,883 - werkzeug - INFO -  * Debugger PIN: 447-598-156
+2026-02-21 21:04:44,162 - werkzeug - INFO - 127.0.0.1 - - [21/Feb/2026 21:04:44] "GET /detail.html?id=Mamo_Gartenpflege HTTP/1.1" 200 -
+2026-02-21 21:04:44,426 - werkzeug - INFO - 127.0.0.1 - - [21/Feb/2026 21:04:44] "[36mGET /styles.css HTTP/1.1[0m" 304 -
+2026-02-21 21:04:44,492 - werkzeug - INFO - 127.0.0.1 - - [21/Feb/2026 21:04:44] "[36mGET /auth.js HTTP/1.1[0m" 304 -
+2026-02-21 21:04:44,492 - werkzeug - INFO - 127.0.0.1 - - [21/Feb/2026 21:04:44] "[36mGET /detail.js HTTP/1.1[0m" 304 -
+2026-02-21 21:04:44,493 - werkzeug - INFO - 127.0.0.1 - - [21/Feb/2026 21:04:44] "[36mGET /preisliste.js HTTP/1.1[0m" 304 -
+2026-02-21 21:04:44,493 - werkzeug - INFO - 127.0.0.1 - - [21/Feb/2026 21:04:44] "[36mGET /detail_extensions.js HTTP/1.1[0m" 304 -
+2026-02-21 21:04:44,493 - werkzeug - INFO - 127.0.0.1 - - [21/Feb/2026 21:04:44] "[36mGET /firebase_config.js HTTP/1.1[0m" 304 -
+2026-02-21 21:04:44,739 - werkzeug - INFO - 127.0.0.1 - - [21/Feb/2026 21:04:44] "[36mGET /import.js HTTP/1.1[0m" 304 -
+2026-02-21 21:04:44,804 - werkzeug - INFO - 127.0.0.1 - - [21/Feb/2026 21:04:44] "[36mGET /angebot.js HTTP/1.1[0m" 304 -
+2026-02-21 21:04:44,804 - werkzeug - INFO - 127.0.0.1 - - [21/Feb/2026 21:04:44] "[36mGET /lieferschein_merged.js HTTP/1.1[0m" 304 -
+2026-02-21 21:04:44,804 - werkzeug - INFO - 127.0.0.1 - - [21/Feb/2026 21:04:44] "GET /invoice.js HTTP/1.1" 200 -
+2026-02-21 21:04:44,805 - werkzeug - INFO - 127.0.0.1 - - [21/Feb/2026 21:04:44] "[36mGET /protocol_scanner.js HTTP/1.1[0m" 304 -
+2026-02-21 21:04:44,806 - werkzeug - INFO - 127.0.0.1 - - [21/Feb/2026 21:04:44] "[36mGET /documents.js HTTP/1.1[0m" 304 -
+2026-02-21 21:04:45,053 - werkzeug - INFO - 127.0.0.1 - - [21/Feb/2026 21:04:45] "[36mGET /ausgaben.js HTTP/1.1[0m" 304 -
+2026-02-21 21:04:45,117 - werkzeug - INFO - 127.0.0.1 - - [21/Feb/2026 21:04:45] "[36mGET /mitarbeiter.js HTTP/1.1[0m" 304 -
+2026-02-21 21:04:45,117 - werkzeug - INFO - 127.0.0.1 - - [21/Feb/2026 21:04:45] "[36mGET /mandant_config.js HTTP/1.1[0m" 304 -
+2026-02-21 21:04:45,118 - werkzeug - INFO - 127.0.0.1 - - [21/Feb/2026 21:04:45] "[36mGET /recurring.js HTTP/1.1[0m" 304 -
+2026-02-21 21:04:45,439 - werkzeug - INFO - 127.0.0.1 - - [21/Feb/2026 21:04:45] "GET /api/mandanten/Mamo_Gartenpflege/rechnungen HTTP/1.1" 200 -
+2026-02-21 21:04:45,464 - werkzeug - INFO - 127.0.0.1 - - [21/Feb/2026 21:04:45] "GET /api/mandanten/Mamo_Gartenpflege/stats HTTP/1.1" 200 -
+2026-02-21 21:04:45,703 - werkzeug - INFO - 127.0.0.1 - - [21/Feb/2026 21:04:45] "GET /api/mandanten/Mamo_Gartenpflege/recurring HTTP/1.1" 200 -
+2026-02-21 21:04:46,845 - __main__ - INFO - Found 1 Angebote for Mamo_Gartenpflege
+2026-02-21 21:04:46,845 - werkzeug - INFO - 127.0.0.1 - - [21/Feb/2026 21:04:46] "GET /api/mandanten/Mamo_Gartenpflege/angebote HTTP/1.1" 200 -
+2026-02-21 21:04:47,143 - werkzeug - INFO - 127.0.0.1 - - [21/Feb/2026 21:04:47] "GET /api/mandanten/Mamo_Gartenpflege/rechnungen HTTP/1.1" 200 -
+2026-02-21 21:04:47,152 - __main__ - INFO - Found 1 Lieferscheine for Mamo_Gartenpflege
+2026-02-21 21:04:47,152 - werkzeug - INFO - 127.0.0.1 - - [21/Feb/2026 21:04:47] "GET /api/mandanten/Mamo_Gartenpflege/lieferscheine HTTP/1.1" 200 -
+2026-02-21 21:04:48,657 - werkzeug - INFO - 127.0.0.1 - - [21/Feb/2026 21:04:48] "GET /api/mandanten/Mamo_Gartenpflege/kunden HTTP/1.1" 200 -
+2026-02-21 21:04:48,667 - __main__ - INFO - Found 1 Angebote for Mamo_Gartenpflege
+2026-02-21 21:04:48,667 - werkzeug - INFO - 127.0.0.1 - - [21/Feb/2026 21:04:48] "GET /api/mandanten/Mamo_Gartenpflege/angebote HTTP/1.1" 200 -
+2026-02-21 21:04:48,668 - werkzeug - INFO - 127.0.0.1 - - [21/Feb/2026 21:04:48] "GET /api/mandanten/Mamo_Gartenpflege/rechnung/next-number HTTP/1.1" 200 -
+2026-02-21 21:06:36,207 - werkzeug - INFO -  * Detected change in 'C:\\Users\\Admin\\Desktop\\Mein_Business\\backend\\api_server.py', reloading
+2026-02-21 21:06:36,525 - werkzeug - INFO -  * Restarting with stat
+2026-02-21 21:06:38,609 - __main__ - INFO - 🔥 Firebase Admin SDK initialized with ADC
+2026-02-21 21:06:38,636 - __main__ - INFO - ⏰ Scheduler gestartet (Backup täglich um 23:00)
+2026-02-21 21:06:38,644 - __main__ - INFO - 🚀 Starting API Server...
+2026-02-21 21:06:38,662 - werkzeug - WARNING -  * Debugger is active!
+2026-02-21 21:06:38,668 - werkzeug - INFO -  * Debugger PIN: 447-598-156
+2026-02-21 21:07:05,095 - werkzeug - INFO - 127.0.0.1 - - [21/Feb/2026 21:07:05] "GET /detail.html?id=Mamo_Gartenpflege HTTP/1.1" 200 -
+2026-02-21 21:07:05,340 - werkzeug - INFO - 127.0.0.1 - - [21/Feb/2026 21:07:05] "[36mGET /styles.css HTTP/1.1[0m" 304 -
+2026-02-21 21:07:05,420 - werkzeug - INFO - 127.0.0.1 - - [21/Feb/2026 21:07:05] "[36mGET /firebase_config.js HTTP/1.1[0m" 304 -
+2026-02-21 21:07:05,421 - werkzeug - INFO - 127.0.0.1 - - [21/Feb/2026 21:07:05] "[36mGET /auth.js HTTP/1.1[0m" 304 -
+2026-02-21 21:07:05,421 - werkzeug - INFO - 127.0.0.1 - - [21/Feb/2026 21:07:05] "[36mGET /detail.js HTTP/1.1[0m" 304 -
+2026-02-21 21:07:05,422 - werkzeug - INFO - 127.0.0.1 - - [21/Feb/2026 21:07:05] "[36mGET /detail_extensions.js HTTP/1.1[0m" 304 -
+2026-02-21 21:07:05,422 - werkzeug - INFO - 127.0.0.1 - - [21/Feb/2026 21:07:05] "[36mGET /preisliste.js HTTP/1.1[0m" 304 -
+2026-02-21 21:07:05,651 - werkzeug - INFO - 127.0.0.1 - - [21/Feb/2026 21:07:05] "[36mGET /import.js HTTP/1.1[0m" 304 -
+2026-02-21 21:07:05,732 - werkzeug - INFO - 127.0.0.1 - - [21/Feb/2026 21:07:05] "[36mGET /angebot.js HTTP/1.1[0m" 304 -
+2026-02-21 21:07:05,732 - werkzeug - INFO - 127.0.0.1 - - [21/Feb/2026 21:07:05] "[36mGET /lieferschein_merged.js HTTP/1.1[0m" 304 -
+2026-02-21 21:07:05,733 - werkzeug - INFO - 127.0.0.1 - - [21/Feb/2026 21:07:05] "[36mGET /protocol_scanner.js HTTP/1.1[0m" 304 -
+2026-02-21 21:07:05,733 - werkzeug - INFO - 127.0.0.1 - - [21/Feb/2026 21:07:05] "[36mGET /documents.js HTTP/1.1[0m" 304 -
+2026-02-21 21:07:05,733 - werkzeug - INFO - 127.0.0.1 - - [21/Feb/2026 21:07:05] "GET /invoice.js HTTP/1.1" 200 -
+2026-02-21 21:07:05,962 - werkzeug - INFO - 127.0.0.1 - - [21/Feb/2026 21:07:05] "[36mGET /ausgaben.js HTTP/1.1[0m" 304 -
+2026-02-21 21:07:06,042 - werkzeug - INFO - 127.0.0.1 - - [21/Feb/2026 21:07:06] "[36mGET /mandant_config.js HTTP/1.1[0m" 304 -
+2026-02-21 21:07:06,042 - werkzeug - INFO - 127.0.0.1 - - [21/Feb/2026 21:07:06] "[36mGET /mitarbeiter.js HTTP/1.1[0m" 304 -
+2026-02-21 21:07:06,042 - werkzeug - INFO - 127.0.0.1 - - [21/Feb/2026 21:07:06] "[36mGET /recurring.js HTTP/1.1[0m" 304 -
+2026-02-21 21:07:06,354 - werkzeug - INFO - 127.0.0.1 - - [21/Feb/2026 21:07:06] "GET /api/mandanten/Mamo_Gartenpflege/rechnungen HTTP/1.1" 200 -
+2026-02-21 21:07:06,378 - werkzeug - INFO - 127.0.0.1 - - [21/Feb/2026 21:07:06] "GET /api/mandanten/Mamo_Gartenpflege/stats HTTP/1.1" 200 -
+2026-02-21 21:07:06,619 - werkzeug - INFO - 127.0.0.1 - - [21/Feb/2026 21:07:06] "GET /api/mandanten/Mamo_Gartenpflege/recurring HTTP/1.1" 200 -
+2026-02-21 21:07:08,048 - __main__ - INFO - Found 1 Angebote for Mamo_Gartenpflege
+2026-02-21 21:07:08,049 - werkzeug - INFO - 127.0.0.1 - - [21/Feb/2026 21:07:08] "GET /api/mandanten/Mamo_Gartenpflege/angebote HTTP/1.1" 200 -
+2026-02-21 21:07:08,340 - werkzeug - INFO - 127.0.0.1 - - [21/Feb/2026 21:07:08] "GET /api/mandanten/Mamo_Gartenpflege/rechnungen HTTP/1.1" 200 -
+2026-02-21 21:07:08,349 - __main__ - INFO - Found 1 Lieferscheine for Mamo_Gartenpflege
+2026-02-21 21:07:08,349 - werkzeug - INFO - 127.0.0.1 - - [21/Feb/2026 21:07:08] "GET /api/mandanten/Mamo_Gartenpflege/lieferscheine HTTP/1.1" 200 -
+2026-02-21 21:07:09,612 - werkzeug - INFO - 127.0.0.1 - - [21/Feb/2026 21:07:09] "GET /api/mandanten/Mamo_Gartenpflege/kunden HTTP/1.1" 200 -
+2026-02-21 21:07:09,613 - werkzeug - INFO - 127.0.0.1 - - [21/Feb/2026 21:07:09] "GET /api/mandanten/Mamo_Gartenpflege/rechnung/next-number HTTP/1.1" 200 -
+2026-02-21 21:07:09,622 - __main__ - INFO - Found 1 Angebote for Mamo_Gartenpflege
+2026-02-21 21:07:09,623 - werkzeug - INFO - 127.0.0.1 - - [21/Feb/2026 21:07:09] "GET /api/mandanten/Mamo_Gartenpflege/angebote HTTP/1.1" 200 -
+2026-02-21 21:07:36,730 - werkzeug - INFO - 127.0.0.1 - - [21/Feb/2026 21:07:36] "POST /api/mandanten/Mamo_Gartenpflege/protocol/scan HTTP/1.1" 200 -
+2026-02-21 21:07:46,393 - werkzeug - INFO - 127.0.0.1 - - [21/Feb/2026 21:07:46] "POST /api/mandanten/Mamo_Gartenpflege/check-duplicate HTTP/1.1" 200 -
+2026-02-21 21:07:46,744 - werkzeug - INFO - 127.0.0.1 - - [21/Feb/2026 21:07:46] "POST /api/mandanten/Mamo_Gartenpflege/rechnung HTTP/1.1" 200 -
+2026-02-21 21:07:48,077 - werkzeug - INFO - 127.0.0.1 - - [21/Feb/2026 21:07:48] "[36mGET /detail.html?id=Mamo_Gartenpflege HTTP/1.1[0m" 304 -
+2026-02-21 21:07:48,403 - werkzeug - INFO - 127.0.0.1 - - [21/Feb/2026 21:07:48] "[36mGET /styles.css HTTP/1.1[0m" 304 -
+2026-02-21 21:07:48,405 - werkzeug - INFO - 127.0.0.1 - - [21/Feb/2026 21:07:48] "[36mGET /detail_extensions.js HTTP/1.1[0m" 304 -
+2026-02-21 21:07:48,404 - werkzeug - INFO - 127.0.0.1 - - [21/Feb/2026 21:07:48] "[36mGET /detail.js HTTP/1.1[0m" 304 -
+2026-02-21 21:07:48,404 - werkzeug - INFO - 127.0.0.1 - - [21/Feb/2026 21:07:48] "[36mGET /firebase_config.js HTTP/1.1[0m" 304 -
+2026-02-21 21:07:48,404 - werkzeug - INFO - 127.0.0.1 - - [21/Feb/2026 21:07:48] "[36mGET /auth.js HTTP/1.1[0m" 304 -
+2026-02-21 21:07:48,405 - werkzeug - INFO - 127.0.0.1 - - [21/Feb/2026 21:07:48] "[36mGET /preisliste.js HTTP/1.1[0m" 304 -
+2026-02-21 21:07:48,715 - werkzeug - INFO - 127.0.0.1 - - [21/Feb/2026 21:07:48] "[36mGET /lieferschein_merged.js HTTP/1.1[0m" 304 -
+2026-02-21 21:07:48,716 - werkzeug - INFO - 127.0.0.1 - - [21/Feb/2026 21:07:48] "[36mGET /import.js HTTP/1.1[0m" 304 -
+2026-02-21 21:07:48,717 - werkzeug - INFO - 127.0.0.1 - - [21/Feb/2026 21:07:48] "[36mGET /protocol_scanner.js HTTP/1.1[0m" 304 -
+2026-02-21 21:07:48,717 - werkzeug - INFO - 127.0.0.1 - - [21/Feb/2026 21:07:48] "[36mGET /angebot.js HTTP/1.1[0m" 304 -
+2026-02-21 21:07:48,716 - werkzeug - INFO - 127.0.0.1 - - [21/Feb/2026 21:07:48] "[36mGET /invoice.js HTTP/1.1[0m" 304 -
+2026-02-21 21:07:48,718 - werkzeug - INFO - 127.0.0.1 - - [21/Feb/2026 21:07:48] "[36mGET /documents.js HTTP/1.1[0m" 304 -
+2026-02-21 21:07:49,025 - werkzeug - INFO - 127.0.0.1 - - [21/Feb/2026 21:07:49] "[36mGET /ausgaben.js HTTP/1.1[0m" 304 -
+2026-02-21 21:07:49,026 - werkzeug - INFO - 127.0.0.1 - - [21/Feb/2026 21:07:49] "[36mGET /mitarbeiter.js HTTP/1.1[0m" 304 -
+2026-02-21 21:07:49,026 - werkzeug - INFO - 127.0.0.1 - - [21/Feb/2026 21:07:49] "[36mGET /recurring.js HTTP/1.1[0m" 304 -
+2026-02-21 21:07:49,026 - werkzeug - INFO - 127.0.0.1 - - [21/Feb/2026 21:07:49] "[36mGET /mandant_config.js HTTP/1.1[0m" 304 -
+2026-02-21 21:07:49,349 - werkzeug - INFO - 127.0.0.1 - - [21/Feb/2026 21:07:49] "GET /api/mandanten/Mamo_Gartenpflege/rechnungen HTTP/1.1" 200 -
+2026-02-21 21:07:49,380 - werkzeug - INFO - 127.0.0.1 - - [21/Feb/2026 21:07:49] "GET /api/mandanten/Mamo_Gartenpflege/stats HTTP/1.1" 200 -
+2026-02-21 21:07:49,615 - werkzeug - INFO - 127.0.0.1 - - [21/Feb/2026 21:07:49] "GET /api/mandanten/Mamo_Gartenpflege/recurring HTTP/1.1" 200 -
+2026-02-21 21:08:34,162 - werkzeug - INFO - 127.0.0.1 - - [21/Feb/2026 21:08:34] "[36mGET /detail.html?id=Mamo_Gartenpflege HTTP/1.1[0m" 304 -
+2026-02-21 21:08:34,486 - werkzeug - INFO - 127.0.0.1 - - [21/Feb/2026 21:08:34] "[36mGET /styles.css HTTP/1.1[0m" 304 -
+2026-02-21 21:08:34,487 - werkzeug - INFO - 127.0.0.1 - - [21/Feb/2026 21:08:34] "[36mGET /detail_extensions.js HTTP/1.1[0m" 304 -
+2026-02-21 21:08:34,486 - werkzeug - INFO - 127.0.0.1 - - [21/Feb/2026 21:08:34] "[36mGET /firebase_config.js HTTP/1.1[0m" 304 -
+2026-02-21 21:08:34,487 - werkzeug - INFO - 127.0.0.1 - - [21/Feb/2026 21:08:34] "[36mGET /preisliste.js HTTP/1.1[0m" 304 -
+2026-02-21 21:08:34,486 - werkzeug - INFO - 127.0.0.1 - - [21/Feb/2026 21:08:34] "[36mGET /detail.js HTTP/1.1[0m" 304 -
+2026-02-21 21:08:34,487 - werkzeug - INFO - 127.0.0.1 - - [21/Feb/2026 21:08:34] "[36mGET /auth.js HTTP/1.1[0m" 304 -
+2026-02-21 21:08:34,796 - werkzeug - INFO - 127.0.0.1 - - [21/Feb/2026 21:08:34] "[36mGET /protocol_scanner.js HTTP/1.1[0m" 304 -
+2026-02-21 21:08:34,797 - werkzeug - INFO - 127.0.0.1 - - [21/Feb/2026 21:08:34] "[36mGET /lieferschein_merged.js HTTP/1.1[0m" 304 -
+2026-02-21 21:08:34,797 - werkzeug - INFO - 127.0.0.1 - - [21/Feb/2026 21:08:34] "[36mGET /import.js HTTP/1.1[0m" 304 -
+2026-02-21 21:08:34,797 - werkzeug - INFO - 127.0.0.1 - - [21/Feb/2026 21:08:34] "[36mGET /invoice.js HTTP/1.1[0m" 304 -
+2026-02-21 21:08:34,797 - werkzeug - INFO - 127.0.0.1 - - [21/Feb/2026 21:08:34] "[36mGET /angebot.js HTTP/1.1[0m" 304 -
+2026-02-21 21:08:34,798 - werkzeug - INFO - 127.0.0.1 - - [21/Feb/2026 21:08:34] "[36mGET /documents.js HTTP/1.1[0m" 304 -
+2026-02-21 21:08:35,107 - werkzeug - INFO - 127.0.0.1 - - [21/Feb/2026 21:08:35] "[36mGET /ausgaben.js HTTP/1.1[0m" 304 -
+2026-02-21 21:08:35,107 - werkzeug - INFO - 127.0.0.1 - - [21/Feb/2026 21:08:35] "[36mGET /mandant_config.js HTTP/1.1[0m" 304 -
+2026-02-21 21:08:35,107 - werkzeug - INFO - 127.0.0.1 - - [21/Feb/2026 21:08:35] "[36mGET /mitarbeiter.js HTTP/1.1[0m" 304 -
+2026-02-21 21:08:35,108 - werkzeug - INFO - 127.0.0.1 - - [21/Feb/2026 21:08:35] "[36mGET /recurring.js HTTP/1.1[0m" 304 -
+2026-02-21 21:08:35,419 - werkzeug - INFO - 127.0.0.1 - - [21/Feb/2026 21:08:35] "GET /api/mandanten/Mamo_Gartenpflege/rechnungen HTTP/1.1" 200 -
+2026-02-21 21:08:35,437 - werkzeug - INFO - 127.0.0.1 - - [21/Feb/2026 21:08:35] "GET /api/mandanten/Mamo_Gartenpflege/stats HTTP/1.1" 200 -
+2026-02-21 21:08:35,684 - werkzeug - INFO - 127.0.0.1 - - [21/Feb/2026 21:08:35] "GET /api/mandanten/Mamo_Gartenpflege/recurring HTTP/1.1" 200 -
+2026-02-21 21:09:44,447 - werkzeug - INFO - 127.0.0.1 - - [21/Feb/2026 21:09:44] "GET /api/mandanten/Mamo_Gartenpflege/rechnungen HTTP/1.1" 200 -
+2026-02-21 21:09:44,458 - __main__ - INFO - Found 1 Angebote for Mamo_Gartenpflege
+2026-02-21 21:09:44,459 - werkzeug - INFO - 127.0.0.1 - - [21/Feb/2026 21:09:44] "GET /api/mandanten/Mamo_Gartenpflege/angebote HTTP/1.1" 200 -
+2026-02-21 21:09:44,465 - __main__ - INFO - Found 1 Lieferscheine for Mamo_Gartenpflege
+2026-02-21 21:09:44,466 - werkzeug - INFO - 127.0.0.1 - - [21/Feb/2026 21:09:44] "GET /api/mandanten/Mamo_Gartenpflege/lieferscheine HTTP/1.1" 200 -
+2026-02-21 21:09:45,417 - werkzeug - INFO - 127.0.0.1 - - [21/Feb/2026 21:09:45] "GET /api/mandanten/Mamo_Gartenpflege/kunden HTTP/1.1" 200 -
+2026-02-21 21:09:45,726 - __main__ - INFO - Found 1 Angebote for Mamo_Gartenpflege
+2026-02-21 21:09:45,726 - werkzeug - INFO - 127.0.0.1 - - [21/Feb/2026 21:09:45] "GET /api/mandanten/Mamo_Gartenpflege/angebote HTTP/1.1" 200 -
+2026-02-21 21:09:45,727 - werkzeug - INFO - 127.0.0.1 - - [21/Feb/2026 21:09:45] "GET /api/mandanten/Mamo_Gartenpflege/rechnung/next-number HTTP/1.1" 200 -
+2026-02-21 21:09:59,070 - werkzeug - INFO - 127.0.0.1 - - [21/Feb/2026 21:09:59] "POST /api/mandanten/Mamo_Gartenpflege/protocol/scan HTTP/1.1" 200 -
+2026-02-21 21:10:11,740 - __main__ - INFO - Counter für Mamo_Gartenpflege auf 5 gesetzt
+2026-02-21 21:10:11,741 - werkzeug - INFO - 127.0.0.1 - - [21/Feb/2026 21:10:11] "PUT /api/mandanten/Mamo_Gartenpflege/rechnung/set-counter HTTP/1.1" 200 -
+2026-02-21 21:10:12,047 - werkzeug - INFO - 127.0.0.1 - - [21/Feb/2026 21:10:12] "GET /api/mandanten/Mamo_Gartenpflege/rechnung/next-number HTTP/1.1" 200 -
+2026-02-21 21:10:16,403 - __main__ - INFO - Counter für Mamo_Gartenpflege auf 6 gesetzt
+2026-02-21 21:10:16,404 - werkzeug - INFO - 127.0.0.1 - - [21/Feb/2026 21:10:16] "PUT /api/mandanten/Mamo_Gartenpflege/rechnung/set-counter HTTP/1.1" 200 -
+2026-02-21 21:10:16,732 - werkzeug - INFO - 127.0.0.1 - - [21/Feb/2026 21:10:16] "GET /api/mandanten/Mamo_Gartenpflege/rechnung/next-number HTTP/1.1" 200 -
+2026-02-21 21:10:20,715 - __main__ - INFO - Counter für Mamo_Gartenpflege auf 5 gesetzt
+2026-02-21 21:10:20,716 - werkzeug - INFO - 127.0.0.1 - - [21/Feb/2026 21:10:20] "PUT /api/mandanten/Mamo_Gartenpflege/rechnung/set-counter HTTP/1.1" 200 -
+2026-02-21 21:10:21,023 - werkzeug - INFO - 127.0.0.1 - - [21/Feb/2026 21:10:21] "GET /api/mandanten/Mamo_Gartenpflege/rechnung/next-number HTTP/1.1" 200 -
+2026-02-21 21:10:40,424 - werkzeug - INFO - 127.0.0.1 - - [21/Feb/2026 21:10:40] "POST /api/mandanten/Mamo_Gartenpflege/check-duplicate HTTP/1.1" 200 -
+2026-02-21 21:10:40,797 - werkzeug - INFO - 127.0.0.1 - - [21/Feb/2026 21:10:40] "POST /api/mandanten/Mamo_Gartenpflege/rechnung HTTP/1.1" 200 -
+2026-02-21 21:10:42,336 - werkzeug - INFO - 127.0.0.1 - - [21/Feb/2026 21:10:42] "[36mGET /detail.html?id=Mamo_Gartenpflege HTTP/1.1[0m" 304 -
+2026-02-21 21:10:42,664 - werkzeug - INFO - 127.0.0.1 - - [21/Feb/2026 21:10:42] "[36mGET /detail_extensions.js HTTP/1.1[0m" 304 -
+2026-02-21 21:10:42,665 - werkzeug - INFO - 127.0.0.1 - - [21/Feb/2026 21:10:42] "[36mGET /detail.js HTTP/1.1[0m" 304 -
+2026-02-21 21:10:42,665 - werkzeug - INFO - 127.0.0.1 - - [21/Feb/2026 21:10:42] "[36mGET /auth.js HTTP/1.1[0m" 304 -
+2026-02-21 21:10:42,665 - werkzeug - INFO - 127.0.0.1 - - [21/Feb/2026 21:10:42] "[36mGET /firebase_config.js HTTP/1.1[0m" 304 -
+2026-02-21 21:10:42,665 - werkzeug - INFO - 127.0.0.1 - - [21/Feb/2026 21:10:42] "[36mGET /styles.css HTTP/1.1[0m" 304 -
+2026-02-21 21:10:42,666 - werkzeug - INFO - 127.0.0.1 - - [21/Feb/2026 21:10:42] "[36mGET /preisliste.js HTTP/1.1[0m" 304 -
+2026-02-21 21:10:42,974 - werkzeug - INFO - 127.0.0.1 - - [21/Feb/2026 21:10:42] "[36mGET /lieferschein_merged.js HTTP/1.1[0m" 304 -
+2026-02-21 21:10:42,976 - werkzeug - INFO - 127.0.0.1 - - [21/Feb/2026 21:10:42] "[36mGET /angebot.js HTTP/1.1[0m" 304 -
+2026-02-21 21:10:42,975 - werkzeug - INFO - 127.0.0.1 - - [21/Feb/2026 21:10:42] "[36mGET /invoice.js HTTP/1.1[0m" 304 -
+2026-02-21 21:10:42,975 - werkzeug - INFO - 127.0.0.1 - - [21/Feb/2026 21:10:42] "[36mGET /import.js HTTP/1.1[0m" 304 -
+2026-02-21 21:10:42,976 - werkzeug - INFO - 127.0.0.1 - - [21/Feb/2026 21:10:42] "[36mGET /protocol_scanner.js HTTP/1.1[0m" 304 -
+2026-02-21 21:10:42,977 - werkzeug - INFO - 127.0.0.1 - - [21/Feb/2026 21:10:42] "[36mGET /documents.js HTTP/1.1[0m" 304 -
+2026-02-21 21:10:43,283 - werkzeug - INFO - 127.0.0.1 - - [21/Feb/2026 21:10:43] "[36mGET /ausgaben.js HTTP/1.1[0m" 304 -
+2026-02-21 21:10:43,283 - werkzeug - INFO - 127.0.0.1 - - [21/Feb/2026 21:10:43] "[36mGET /mandant_config.js HTTP/1.1[0m" 304 -
+2026-02-21 21:10:43,284 - werkzeug - INFO - 127.0.0.1 - - [21/Feb/2026 21:10:43] "[36mGET /recurring.js HTTP/1.1[0m" 304 -
+2026-02-21 21:10:43,284 - werkzeug - INFO - 127.0.0.1 - - [21/Feb/2026 21:10:43] "[36mGET /mitarbeiter.js HTTP/1.1[0m" 304 -
+2026-02-21 21:10:43,603 - werkzeug - INFO - 127.0.0.1 - - [21/Feb/2026 21:10:43] "GET /api/mandanten/Mamo_Gartenpflege/rechnungen HTTP/1.1" 200 -
+2026-02-21 21:10:43,633 - werkzeug - INFO - 127.0.0.1 - - [21/Feb/2026 21:10:43] "GET /api/mandanten/Mamo_Gartenpflege/stats HTTP/1.1" 200 -
+2026-02-21 21:10:43,855 - werkzeug - INFO - 127.0.0.1 - - [21/Feb/2026 21:10:43] "GET /api/mandanten/Mamo_Gartenpflege/recurring HTTP/1.1" 200 -
+2026-02-21 21:13:51,508 - werkzeug - INFO -  * Detected change in 'C:\\Users\\Admin\\Desktop\\Mein_Business\\backend\\api_server.py', reloading
+2026-02-21 21:13:53,854 - werkzeug - INFO -  * Restarting with stat
+2026-02-21 21:13:55,996 - __main__ - INFO - 🔥 Firebase Admin SDK initialized with ADC
+2026-02-21 21:13:56,023 - __main__ - INFO - ⏰ Scheduler gestartet (Backup täglich um 23:00)
+2026-02-21 21:13:56,030 - __main__ - INFO - 🚀 Starting API Server...
+2026-02-21 21:13:56,048 - werkzeug - WARNING -  * Debugger is active!
+2026-02-21 21:13:56,054 - werkzeug - INFO -  * Debugger PIN: 447-598-156
+2026-02-21 21:14:17,844 - werkzeug - INFO - 127.0.0.1 - - [21/Feb/2026 21:14:17] "[36mGET /detail.html?id=Mamo_Gartenpflege HTTP/1.1[0m" 304 -
+2026-02-21 21:14:18,095 - werkzeug - INFO - 127.0.0.1 - - [21/Feb/2026 21:14:18] "[36mGET /styles.css HTTP/1.1[0m" 304 -
+2026-02-21 21:14:18,177 - werkzeug - INFO - 127.0.0.1 - - [21/Feb/2026 21:14:18] "[36mGET /auth.js HTTP/1.1[0m" 304 -
+2026-02-21 21:14:18,178 - werkzeug - INFO - 127.0.0.1 - - [21/Feb/2026 21:14:18] "[36mGET /firebase_config.js HTTP/1.1[0m" 304 -
+2026-02-21 21:14:18,178 - werkzeug - INFO - 127.0.0.1 - - [21/Feb/2026 21:14:18] "[36mGET /detail.js HTTP/1.1[0m" 304 -
+2026-02-21 21:14:18,179 - werkzeug - INFO - 127.0.0.1 - - [21/Feb/2026 21:14:18] "[36mGET /detail_extensions.js HTTP/1.1[0m" 304 -
+2026-02-21 21:14:18,179 - werkzeug - INFO - 127.0.0.1 - - [21/Feb/2026 21:14:18] "[36mGET /preisliste.js HTTP/1.1[0m" 304 -
+2026-02-21 21:14:18,408 - werkzeug - INFO - 127.0.0.1 - - [21/Feb/2026 21:14:18] "[36mGET /import.js HTTP/1.1[0m" 304 -
+2026-02-21 21:14:18,489 - werkzeug - INFO - 127.0.0.1 - - [21/Feb/2026 21:14:18] "[36mGET /angebot.js HTTP/1.1[0m" 304 -
+2026-02-21 21:14:18,490 - werkzeug - INFO - 127.0.0.1 - - [21/Feb/2026 21:14:18] "[36mGET /lieferschein_merged.js HTTP/1.1[0m" 304 -
+2026-02-21 21:14:18,490 - werkzeug - INFO - 127.0.0.1 - - [21/Feb/2026 21:14:18] "[36mGET /protocol_scanner.js HTTP/1.1[0m" 304 -
+2026-02-21 21:14:18,491 - werkzeug - INFO - 127.0.0.1 - - [21/Feb/2026 21:14:18] "[36mGET /invoice.js HTTP/1.1[0m" 304 -
+2026-02-21 21:14:18,492 - werkzeug - INFO - 127.0.0.1 - - [21/Feb/2026 21:14:18] "[36mGET /documents.js HTTP/1.1[0m" 304 -
+2026-02-21 21:14:18,721 - werkzeug - INFO - 127.0.0.1 - - [21/Feb/2026 21:14:18] "[36mGET /ausgaben.js HTTP/1.1[0m" 304 -
+2026-02-21 21:14:18,801 - werkzeug - INFO - 127.0.0.1 - - [21/Feb/2026 21:14:18] "[36mGET /mandant_config.js HTTP/1.1[0m" 304 -
+2026-02-21 21:14:18,801 - werkzeug - INFO - 127.0.0.1 - - [21/Feb/2026 21:14:18] "[36mGET /mitarbeiter.js HTTP/1.1[0m" 304 -
+2026-02-21 21:14:18,802 - werkzeug - INFO - 127.0.0.1 - - [21/Feb/2026 21:14:18] "[36mGET /recurring.js HTTP/1.1[0m" 304 -
+2026-02-21 21:14:19,116 - werkzeug - INFO - 127.0.0.1 - - [21/Feb/2026 21:14:19] "GET /api/mandanten/Mamo_Gartenpflege/rechnungen HTTP/1.1" 200 -
+2026-02-21 21:14:19,146 - werkzeug - INFO - 127.0.0.1 - - [21/Feb/2026 21:14:19] "GET /api/mandanten/Mamo_Gartenpflege/stats HTTP/1.1" 200 -
+2026-02-21 21:14:19,379 - werkzeug - INFO - 127.0.0.1 - - [21/Feb/2026 21:14:19] "GET /api/mandanten/Mamo_Gartenpflege/recurring HTTP/1.1" 200 -

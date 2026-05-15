@@ -1,0 +1,31 @@
+{
+    "nummer": "ANG-001-2026-02-001",
+    "kunde": "Baran Turhan",
+    "positionen": [
+        {
+            "bezeichnung": "Anfahrt pauschal",
+            "menge": 2,
+            "einheit": "Stk",
+            "einzelpreis": 35
+        },
+        {
+            "bezeichnung": "Gesellenstunde",
+            "menge": 4,
+            "einheit": "Std",
+            "einzelpreis": 80
+        },
+        {
+            "bezeichnung": "NYM-J Kabel 3x1,5",
+            "menge": 50,
+            "einheit": "Stk",
+            "einzelpreis": 1.5
+        },
+        {
+            "bezeichnung": "E-Herd Anschluss",
+            "menge": 2,
+            "einheit": "Stk",
+            "einzelpreis": 75
+        }
+    ],
+    "datum": "2026-02-19T14:36:37.423913"
+}

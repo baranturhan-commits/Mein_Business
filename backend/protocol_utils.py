@@ -20,31 +20,33 @@ def analyze_protocol(file_path, mandant_path=None, offer_items=None):
     if not api_key:
         raise Exception("Google API Key missing in .env")
 
-    model = genai.GenerativeModel('gemini-2.0-flash-exp')
+    model = genai.GenerativeModel('gemini-2.0-flash-lite')
 
     # Upload file
     sample_file = genai.upload_file(path=file_path, display_name="Protocol")
     
     prompt = """
-    Analyze this handwritten Acceptance Protocol (Abnahmeprotokoll).
-    Extract the table rows containing "Gewerk", "Beschreibung", "ok", "nok", "Bemerkung".
-    
-    CRITICAL INSTRUCTION:
-    - IGNORE rows that are empty or only contain a line number (like "1", "2", etc.).
-    - IGNORE the pre-printed template lines 1-15 unless they have actual handwritten or typed content in the "Beschreibung" column.
-    - If a row has no description, skip it.
-    
-    Return ONLY a valid JSON array like this:
+    Analyze this document (Abnahmeprotokoll, Lieferschein, or similar service record).
+    Extract line items / positions that describe performed work or services.
+
+    CRITICAL INSTRUCTIONS:
+    - Extract EACH distinct service/work item as its own entry.
+    - If the description contains a leading quantity like "30 Std Arbeitsstunde" or "5x Steckdose",
+      SPLIT IT: set "menge" to the number (30 or 5) and "bezeichnung" to the clean name (e.g. "Arbeitsstunde" or "Steckdose").
+    - "einheit" should be the unit: "Std" for hours, "Stk" for pieces, "m" for meters, etc.
+    - IGNORE empty rows or pure line-number rows.
+    - If no quantity is visible, default menge to 1.
+    - einzelpreis should always be 0.00 (prices come from the offer/price list).
+
+    Return ONLY a valid JSON array, no extra text:
     [
         {
-            "bezeichnung": "Gewerk X: Beschreibung text...",
-            "menge": 1, 
-            "einheit": "Stk",
+            "bezeichnung": "Arbeitsstunde",
+            "menge": 30,
+            "einheit": "Std",
             "einzelpreis": 0.00
         }
     ]
-    Include the status (ok/nok) in the description if relevant.
-    If a quantity is visible, use it. If not, default to 1.
     """
     
     response = model.generate_content([sample_file, prompt])

@@ -1,0 +1,47 @@
+2026-01-09 15:00:26,906 - __main__ - INFO - 🔥 Firebase Admin SDK initialized with ADC
+2026-01-09 15:00:26,932 - __main__ - INFO - ⏰ Scheduler gestartet (Backup täglich um 23:00)
+2026-01-09 15:00:26,941 - __main__ - INFO - 🚀 Starting API Server...
+2026-01-09 15:00:27,020 - werkzeug - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://192.168.178.199:5000
+2026-01-09 15:00:27,021 - werkzeug - INFO - [33mPress CTRL+C to quit[0m
+2026-01-09 15:00:27,025 - werkzeug - INFO -  * Restarting with stat
+2026-01-09 15:00:28,919 - __main__ - INFO - 🔥 Firebase Admin SDK initialized with ADC
+2026-01-09 15:00:28,944 - __main__ - INFO - ⏰ Scheduler gestartet (Backup täglich um 23:00)
+2026-01-09 15:00:28,950 - __main__ - INFO - 🚀 Starting API Server...
+2026-01-09 15:00:28,971 - werkzeug - WARNING -  * Debugger is active!
+2026-01-09 15:00:28,976 - werkzeug - INFO -  * Debugger PIN: 447-598-156
+2026-01-09 15:00:29,010 - werkzeug - INFO - 127.0.0.1 - - [09/Jan/2026 15:00:29] "[36mGET / HTTP/1.1[0m" 304 -
+2026-01-09 15:00:29,180 - werkzeug - INFO - 127.0.0.1 - - [09/Jan/2026 15:00:29] "[36mGET /styles.css HTTP/1.1[0m" 304 -
+2026-01-09 15:00:29,347 - werkzeug - INFO - 127.0.0.1 - - [09/Jan/2026 15:00:29] "[36mGET /firebase_config.js HTTP/1.1[0m" 304 -
+2026-01-09 15:00:29,365 - werkzeug - INFO - 127.0.0.1 - - [09/Jan/2026 15:00:29] "[36mGET /auth.js HTTP/1.1[0m" 304 -
+2026-01-09 15:00:29,366 - werkzeug - INFO - 127.0.0.1 - - [09/Jan/2026 15:00:29] "[36mGET /app.js HTTP/1.1[0m" 304 -
+2026-01-09 15:00:29,396 - __main__ - INFO - Mandanten geladen: 2
+2026-01-09 15:00:29,473 - werkzeug - INFO - 127.0.0.1 - - [09/Jan/2026 15:00:29] "GET /api/dashboard HTTP/1.1" 200 -
+2026-01-09 15:00:29,726 - werkzeug - INFO - 127.0.0.1 - - [09/Jan/2026 15:00:29] "[33mGET /favicon.ico HTTP/1.1[0m" 404 -
+2026-01-09 15:00:59,747 - __main__ - INFO - Mandanten geladen: 2
+2026-01-09 15:00:59,771 - werkzeug - INFO - 127.0.0.1 - - [09/Jan/2026 15:00:59] "GET /api/dashboard HTTP/1.1" 200 -
+2026-01-09 15:01:02,597 - werkzeug - INFO - 127.0.0.1 - - [09/Jan/2026 15:01:02] "[36mGET /detail.html?id=Elektroniker_Testbetrieb HTTP/1.1[0m" 304 -
+2026-01-09 15:01:02,931 - werkzeug - INFO - 127.0.0.1 - - [09/Jan/2026 15:01:02] "[36mGET /firebase_config.js HTTP/1.1[0m" 304 -
+2026-01-09 15:01:02,932 - werkzeug - INFO - 127.0.0.1 - - [09/Jan/2026 15:01:02] "[36mGET /auth.js HTTP/1.1[0m" 304 -
+2026-01-09 15:01:02,932 - werkzeug - INFO - 127.0.0.1 - - [09/Jan/2026 15:01:02] "[36mGET /styles.css HTTP/1.1[0m" 304 -
+2026-01-09 15:01:02,955 - werkzeug - INFO - 127.0.0.1 - - [09/Jan/2026 15:01:02] "[36mGET /preisliste.js HTTP/1.1[0m" 304 -
+2026-01-09 15:01:02,955 - werkzeug - INFO - 127.0.0.1 - - [09/Jan/2026 15:01:02] "[36mGET /detail.js HTTP/1.1[0m" 304 -
+2026-01-09 15:01:02,957 - werkzeug - INFO - 127.0.0.1 - - [09/Jan/2026 15:01:02] "[36mGET /detail_extensions.js HTTP/1.1[0m" 304 -
+2026-01-09 15:01:03,263 - werkzeug - INFO - 127.0.0.1 - - [09/Jan/2026 15:01:03] "[36mGET /import.js HTTP/1.1[0m" 304 -
+2026-01-09 15:01:03,264 - werkzeug - INFO - 127.0.0.1 - - [09/Jan/2026 15:01:03] "[36mGET /lieferschein_merged.js HTTP/1.1[0m" 304 -
+2026-01-09 15:01:03,268 - werkzeug - INFO - 127.0.0.1 - - [09/Jan/2026 15:01:03] "[36mGET /angebot.js HTTP/1.1[0m" 304 -
+2026-01-09 15:01:03,294 - werkzeug - INFO - 127.0.0.1 - - [09/Jan/2026 15:01:03] "[36mGET /invoice.js HTTP/1.1[0m" 304 -
+2026-01-09 15:01:03,294 - werkzeug - INFO - 127.0.0.1 - - [09/Jan/2026 15:01:03] "[36mGET /protocol_scanner.js HTTP/1.1[0m" 304 -
+2026-01-09 15:01:03,297 - werkzeug - INFO - 127.0.0.1 - - [09/Jan/2026 15:01:03] "[36mGET /documents.js HTTP/1.1[0m" 304 -
+2026-01-09 15:01:03,597 - werkzeug - INFO - 127.0.0.1 - - [09/Jan/2026 15:01:03] "[36mGET /ausgaben.js HTTP/1.1[0m" 304 -
+2026-01-09 15:01:03,598 - werkzeug - INFO - 127.0.0.1 - - [09/Jan/2026 15:01:03] "[36mGET /mitarbeiter.js HTTP/1.1[0m" 304 -
+2026-01-09 15:01:03,600 - werkzeug - INFO - 127.0.0.1 - - [09/Jan/2026 15:01:03] "[36mGET /mandant_config.js HTTP/1.1[0m" 304 -
+2026-01-09 15:01:03,624 - werkzeug - INFO - 127.0.0.1 - - [09/Jan/2026 15:01:03] "[36mGET /recurring.js HTTP/1.1[0m" 304 -
+2026-01-09 15:01:03,942 - werkzeug - INFO - 127.0.0.1 - - [09/Jan/2026 15:01:03] "GET /api/mandanten/Elektroniker_Testbetrieb/rechnungen HTTP/1.1" 200 -
+2026-01-09 15:01:03,955 - werkzeug - INFO - 127.0.0.1 - - [09/Jan/2026 15:01:03] "GET /api/mandanten/Elektroniker_Testbetrieb/stats HTTP/1.1" 200 -
+2026-01-09 15:01:04,209 - werkzeug - INFO - 127.0.0.1 - - [09/Jan/2026 15:01:04] "GET /api/mandanten/Elektroniker_Testbetrieb/recurring HTTP/1.1" 200 -
+2026-01-09 15:01:19,786 - werkzeug - INFO - 127.0.0.1 - - [09/Jan/2026 15:01:19] "POST /api/mandanten/Elektroniker_Testbetrieb/report/generate HTTP/1.1" 200 -
+2026-01-09 15:01:20,105 - __main__ - INFO - PDF Request: Mandanten/Elektroniker_Testbetrieb/Controlling/Reports/Report_2026_01.pdf -> C:\Users\Admin\Desktop\Mein_Business\backend\Mandanten\Elektroniker_Testbetrieb\Controlling\Reports\Report_2026_01.pdf
+2026-01-09 15:01:20,119 - werkzeug - INFO - 127.0.0.1 - - [09/Jan/2026 15:01:20] "GET /api/pdf/Mandanten/Elektroniker_Testbetrieb/Controlling/Reports/Report_2026_01.pdf HTTP/1.1" 200 -

@@ -1,0 +1,37 @@
+{
+    "nummer": "ANG-001-2026-02-005",
+    "kunde": "Oma_Erna",
+    "positionen": [
+        {
+            "bezeichnung": "E-Herd Anschluss",
+            "menge": 1,
+            "einheit": "Stk",
+            "einzelpreis": 60
+        },
+        {
+            "bezeichnung": "Gesellenstunde",
+            "menge": 1,
+            "einheit": "Std",
+            "einzelpreis": 80
+        },
+        {
+            "bezeichnung": "Meisterstunde",
+            "menge": 1,
+            "einheit": "Std",
+            "einzelpreis": 75
+        },
+        {
+            "bezeichnung": "Schalter",
+            "menge": 4,
+            "einheit": "Stk",
+            "einzelpreis": 14
+        },
+        {
+            "bezeichnung": "NYM-J Kabel 3x1,5",
+            "menge": 80,
+            "einheit": "m",
+            "einzelpreis": 1.5
+        }
+    ],
+    "datum": "2026-02-01T14:18:58.378659"
+}

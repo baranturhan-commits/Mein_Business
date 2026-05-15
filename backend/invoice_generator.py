@@ -78,10 +78,27 @@ def load_kunden(mandant_path):
     # Fallback to CSV if XL missing? No, we migrate.
     return kunden
 
-def get_and_increment_counter(mandant_path):
+def get_and_increment_counter(mandant_path, mandant_config=None):
     counter_file = os.path.join(mandant_path, "counter.json")
-    current_year = datetime.date.today().year
-    data = {"year": current_year, "count": 0}
+    today = datetime.date.today()
+    current_year = str(today.year)
+    current_month = f"{today.month:02d}"
+    
+    # Get Mandantennummer
+    mandanten_nr = "000"
+    if mandant_config:
+         mandanten_nr = mandant_config.get('mandantennummer', '000')
+    if mandanten_nr == "000":
+         # Try load if not provided
+         c_path = os.path.join(mandant_path, "mandant_config.json")
+         if os.path.exists(c_path):
+             try:
+                 with open(c_path, 'r', encoding='utf-8') as f:
+                     cfg = json.load(f)
+                     mandanten_nr = cfg.get('mandantennummer', '000')
+             except: pass
+    
+    data = {"year": current_year, "month": current_month, "count": 0}
     
     if os.path.exists(counter_file):
         try:
@@ -89,8 +106,10 @@ def get_and_increment_counter(mandant_path):
                 data = json.load(f)
         except: pass
             
-    if data.get("year") != current_year:
+    # Reset if changed
+    if (str(data.get("year")) != current_year) or (str(data.get("month")) != current_month):
         data["year"] = current_year
+        data["month"] = current_month
         data["count"] = 1
     else:
         data["count"] = data.get("count", 0) + 1
@@ -101,13 +120,14 @@ def get_and_increment_counter(mandant_path):
     except Exception as e:
         print(f"⚠️  Fehler beim Speichern des Counters: {e}")
         
-    return f"{current_year}-{data['count']:03d}"
+    return f"RE-{mandanten_nr}-{current_year}-{current_month}-{data['count']:03d}"
 
 def create_pdf(invoice_data, mandant_path, mandant_config, kunde_data):
-    """Erstellt PDF mit Logo und Stammdaten."""
+    """Erstellt PDF mit neuem Layout (Logo rechts, Info-Block, 6-Spalten Tabelle)."""
     
     # 1. Zielordner: Mandanten/[Mandant]/Rechnungen/[Kunde]/
-    kunde_safe = re.sub(r'[^\w\-_]', '_', kunde_data['firma'])
+    # Clean Filename
+    kunde_safe = re.sub(r'[^\w\-_]', '_', kunde_data.get('firma', 'Unbekannt'))
     save_dir = os.path.join(mandant_path, "Rechnungen", kunde_safe)
     
     if not os.path.exists(save_dir):
@@ -118,102 +138,330 @@ def create_pdf(invoice_data, mandant_path, mandant_config, kunde_data):
             return False
 
     # 2. Dateiname
-    datum_safe = invoice_data['datum'].replace('.', '-')
     nr_safe = re.sub(r'[^\w\-]', '_', invoice_data['nummer'])
-    filename = os.path.join(save_dir, f"{datum_safe}_Rechnung_{nr_safe}.pdf")
+    filename = os.path.join(save_dir, f"{nr_safe}.pdf")
 
     # 3. PDF Generierung
     try:
-        doc = SimpleDocTemplate(filename, pagesize=A4, rightMargin=2*cm, leftMargin=2*cm, topMargin=2*cm, bottomMargin=2*cm)
+        # Custom Page Template for Footer using Canvas
+        def add_footer(canvas, doc):
+            canvas.saveState()
+            
+            # Footer Configuration
+            footer_y = 2 * cm
+            
+            # Draw Line
+            canvas.setStrokeColor(colors.lightgrey)
+            canvas.setLineWidth(0.5)
+            canvas.line(2*cm, footer_y + 1.5*cm, A4[0]-2*cm, footer_y + 1.5*cm)
+            
+            # Content
+            styles = getSampleStyleSheet()
+            style_footer = ParagraphStyle('Footer', parent=styles['Normal'], fontSize=7, leading=9, textColor=colors.grey)
+            
+            # Column 1: Company & Address
+            m_adr = mandant_config.get('adresse', {})
+            col1 = [
+                f"<b>{mandant_config.get('firma', '')}</b>",
+                m_adr.get('strasse', ''),
+                m_adr.get('ort', ''),
+                f"Tel: {mandant_config.get('telefon', '-')}" if mandant_config.get('telefon') else "",
+                f"Email: {mandant_config.get('email', '-')}" if mandant_config.get('email') else "",
+            ]
+            
+            # Column 2: Bank
+            bank = mandant_config.get('bank', {})
+            col2 = [
+                "<b>Bankverbindung</b>",
+                f"Bank: {bank.get('name', '-')}",
+                f"IBAN: {bank.get('iban', '-')}",
+                f"BIC: {bank.get('bic', '-')}",
+            ]
+            
+            # Column 3: Legal / Tax
+            ustid = mandant_config.get('ustid', '').strip()
+            steuernummer = mandant_config.get('steuernummer', '').strip()
+
+            tax_string = ""
+            if ustid:
+                tax_string = f"USt-ID: {ustid}"
+            elif steuernummer:
+                tax_string = f"Steuer-Nr: {steuernummer}"
+                
+            col3 = [
+                f"<b>Geschäftsführer:</b>",
+                mandant_config.get('geschaeftsfuehrer', '-'),
+                tax_string,
+                "Gerichtsstand: " + (m_adr.get('ort', '').split(' ')[1] if ' ' in m_adr.get('ort', '') else m_adr.get('ort', ''))
+            ]
+            
+            # Render Columns
+            # Col 1
+            t1 = Paragraph("<br/>".join([c for c in col1 if c]), style_footer)
+            w1, h1 = t1.wrap(5*cm, 5*cm)
+            t1.drawOn(canvas, 2*cm, footer_y + 1.2*cm - h1)
+            
+            # Col 2
+            t2 = Paragraph("<br/>".join([c for c in col2 if c]), style_footer)
+            w2, h2 = t2.wrap(5*cm, 5*cm)
+            t2.drawOn(canvas, 8*cm, footer_y + 1.2*cm - h2)
+            
+            # Col 3
+            t3 = Paragraph("<br/>".join([c for c in col3 if c]), style_footer)
+            w3, h3 = t3.wrap(5*cm, 5*cm)
+            t3.drawOn(canvas, 14*cm, footer_y + 1.2*cm - h3)
+            
+            # Page Number
+            page_num = canvas.getPageNumber()
+            text = "Seite %d" % page_num
+            canvas.drawRightString(20*cm, footer_y, text) # 1cm from bottom
+            
+            canvas.restoreState()
+
+        doc = SimpleDocTemplate(filename, pagesize=A4, 
+                              rightMargin=2*cm, leftMargin=2*cm, 
+                              topMargin=1*cm, bottomMargin=4*cm) # More bottom margin for footer
         story = []
         styles = getSampleStyleSheet()
         
-        # --- HEADER BEREICH (Logo rechts, Absender links) ---
+        # Define Custom Styles
+        style_right = ParagraphStyle('RightAlign', parent=styles['Normal'], alignment=2)
+        style_header_small = ParagraphStyle('HeaderSmall', parent=styles['Normal'], fontSize=8, textColor=colors.grey)
+        style_table_header = ParagraphStyle('TableHeader', parent=styles['Normal'], fontSize=9, fontName='Helvetica-Bold')
+        style_table_cell = ParagraphStyle('TableCell', parent=styles['Normal'], fontSize=9)
         
-        # Logo Check
+        # --- HEADER (Logo Right) ---
         logo_path = None
         if mandant_config.get("logo"):
             p_logo = os.path.join(mandant_path, mandant_config["logo"])
             if os.path.exists(p_logo):
                 logo_path = p_logo
 
-        if logo_path:
-            # Logo Placement using Table to align right
-            im = ReportLabImage(logo_path, width=5*cm, height=2.5*cm, kind='proportional')
-            im.hAlign = 'RIGHT'
-            logo_table = Table([[im]], colWidths=[17*cm])
-            logo_table.setStyle(TableStyle([('ALIGN', (0,0), (-1,-1), 'RIGHT')]))
-            story.append(logo_table)
-            story.append(Spacer(1, 0.5*cm))
-        else:
-            story.append(Spacer(1, 1*cm))
+        # Top Spacer
+        story.append(Spacer(1, 1*cm))
 
-        # Absender (Klein über Empfänger oder oben links)
-        m_adr = mandant_config.get('adresse', {})
-        firmen_block = f"{mandant_config.get('firma', '')}<br/>{m_adr.get('strasse', '')}<br/>{m_adr.get('ort', '')}"
-        
-        story.append(Paragraph(firmen_block, styles['Normal']))
-        story.append(Spacer(1, 1.5*cm))
-        
-        # Empfänger
-        empf_text = f"An:\n{kunde_data['firma']}\n{kunde_data['anrede']}"
-        story.append(Paragraph(empf_text.replace('\n', '<br/>'), styles['Normal']))
-        story.append(Spacer(1, 1.5*cm))
-        
-        # Titel & Datum
-        story.append(Paragraph(f"Rechnung {invoice_data['nummer']}", styles['Heading1']))
-        story.append(Paragraph(f"Datum: {invoice_data['datum']}", styles['Normal']))
+        # Logo Row
+        if logo_path:
+            im = ReportLabImage(logo_path, width=6*cm, height=3*cm, kind='proportional')
+            im.hAlign = 'RIGHT'
+            # Table to force right alignment reliably
+            # Col 1: Empty, Col 2: Logo
+            logo_table = Table([['', im]], colWidths=[10*cm, 7*cm])
+            logo_table.setStyle(TableStyle([
+                ('ALIGN', (1,0), (1,0), 'RIGHT'),
+                ('VALIGN', (0,0), (-1,-1), 'TOP'),
+            ]))
+            story.append(logo_table)
+        else:
+            story.append(Spacer(1, 2*cm))
+            
         story.append(Spacer(1, 1*cm))
         
-        # --- POSITIONEN ---
-        table_data = [['Beschreibung', 'Betrag (Netto)']]
-        total = 0.0
+        # --- ADDRESS & INFO BLOCK ---
+        # Left: Sender (Small) + Recipient
+        # Right: Info Block (Rechnung Nr, Datum, etc.)
         
-        for item in invoice_data['items']:
-            desc = item['beschreibung']
-            price = item['betrag']
-            total += price
-            table_data.append([desc, f"{price:.2f} €"])
-            
-        mwst = total * 0.19
-        brutto = total + mwst
+        # Left Content
+        m_adr = mandant_config.get('adresse', {})
+        sender_line = f"{mandant_config.get('firma', '')} · {m_adr.get('strasse', '')} · {m_adr.get('ort', '')}"
         
-        table_data.append(['', ''])
-        table_data.append(['Netto:', f"{total:.2f} €"])
-        table_data.append(['MwSt 19%:', f"{mwst:.2f} €"])
-        table_data.append(['Gesamtbetrag:', f"{brutto:.2f} €"])
-        
-        t = Table(table_data, colWidths=[12*cm, 4*cm])
-        ts = [
-            ('BACKGROUND', (0,0), (-1,0), colors.lightgrey),
-            ('ALIGN', (0,0), (0,-1), 'LEFT'),
-            ('ALIGN', (1,0), (1,-1), 'RIGHT'),
-            ('GRID', (0,0), (-1,-1), 0.5, colors.grey),
-            ('FONTNAME', (0,0), (-1,0), 'Helvetica-Bold'),
-            ('FONTNAME', (0,-1), (-1,-1), 'Helvetica-Bold'),
+        recipient = [
+            Paragraph(f"<u>{sender_line}</u>", style_header_small),
+            Spacer(1, 0.5*cm),
+            Paragraph(kunde_data.get('anrede', ''), styles['Normal']),
+            Paragraph(f"<b>{kunde_data.get('firma', '')}</b>", styles['Normal']),
+            Paragraph(kunde_data.get('adresse', ''), styles['Normal']) if kunde_data.get('adresse') else Spacer(1,0),
         ]
-        t.setStyle(TableStyle(ts))
+        
+        # Right Content (Info Block)
+        # Format dates
+        datum = invoice_data.get('datum', datetime.date.today().strftime('%d.%m.%Y'))
+        l_von = invoice_data.get('leistungs_von', '')
+        l_bis = invoice_data.get('leistungs_bis', '')
+        
+        # "Leistungszeitraum" Logic
+        l_datum_text = datum # Default to invoice date if no period
+        if l_von and l_bis:
+            if l_von == l_bis:
+                 l_datum_text = l_von
+            else:
+                 l_datum_text = f"{l_von} bis {l_bis}"
+        elif l_von:
+            l_datum_text = f"ab {l_von}"
+        elif l_bis:
+            l_datum_text = f"bis {l_bis}"
+            
+        
+        info_data = [
+            ['Rechnung Nr.:', invoice_data['nummer']],
+            ['Kundennummer:', kunde_data.get('kundennummer', 'K-0000')], # Fallback if not in data
+            ['Rechnungsdatum:', datum],
+            ['Leistungsz.:', l_datum_text],
+            ['Sachbearbeiter:', mandant_config.get('geschaeftsfuehrer', '')] # Or specific user
+        ]
+        
+        # Create Info Table
+        info_table = Table(info_data, colWidths=[3.5*cm, 4*cm])
+        info_table.setStyle(TableStyle([
+            ('FONTNAME', (0,0), (0,-1), 'Helvetica-Bold'),
+            ('FONTSIZE', (0,0), (-1,-1), 9),
+            ('ALIGN', (0,0), (-1,-1), 'LEFT'),
+            ('VALIGN', (0,0), (-1,-1), 'TOP'),
+            ('LEADING', (0,0), (-1,-1), 12),
+        ]))
+        
+        # Layout Table for Address (Left) and Info (Right)
+        
+        layout_data = [[recipient, info_table]]
+        layout_table = Table(layout_data, colWidths=[10*cm, 7.5*cm])
+        layout_table.setStyle(TableStyle([
+            ('VALIGN', (0,0), (-1,-1), 'TOP'),
+        ]))
+        
+        story.append(layout_table)
+        story.append(Spacer(1, 1.5*cm))
+        
+        # --- TITLE ---
+        story.append(Paragraph(f"<b>Rechnung</b>", ParagraphStyle('TitleBold', parent=styles['Heading1'], fontSize=16)))
+        story.append(Spacer(1, 0.2*cm))
+        # Optional Subject/Project line
+        if invoice_data.get('betreff'):
+             story.append(Paragraph(f"<b>{invoice_data['betreff']}</b>", styles['Normal']))
+        else:
+             pass
+             
+        story.append(Spacer(1, 0.8*cm))
+        
+        # --- ITEM TABLE (6 Columns) ---
+        # Pos | Menge | Einh. | Bezeichnung | E-Preis | Gesamt
+        
+        table_header = ['Pos.', 'Menge', 'Einh.', 'Bezeichnung', 'E-Preis', 'Gesamt']
+        table_data = [table_header]
+        
+        total_netto = 0.0
+        
+        for i, item in enumerate(invoice_data.get('items', []), 1):
+            # Parse values. Expected: dict with structured data. 
+            
+            try:
+                menge = float(item.get('menge', 1))
+                einheit = item.get('einheit', 'Stk')
+                bezeichnung = item.get('beschreibung', '') # Or 'bezeichnung'
+                
+                if 'einzelpreis' in item:
+                    ep = float(item['einzelpreis'])
+                    gesamt = menge * ep
+                else:
+                    # Fallback old style
+                    gesamt = float(item.get('betrag', 0))
+                    ep = gesamt / menge if menge else 0
+                
+                total_netto += gesamt
+                
+                # Format
+                row = [
+                    str(i),
+                    f"{menge:.2f}".replace('.', ','),
+                    einheit,
+                    Paragraph(bezeichnung, style_table_cell), # Allow wrapping
+                    f"{ep:.2f}".replace('.', ','),
+                    f"{gesamt:.2f}".replace('.', ',')
+                ]
+                table_data.append(row)
+                
+            except Exception as e:
+                print(f"Error parsing item {item}: {e}")
+                continue
+                
+        # --- TOTALS BLOCK ---
+        mwst_satz = 0.19 # Configurable?
+        
+        # Check for Kleingewerbe
+        is_kleingewerbe = mandant_config.get('unternehmensform') == 'Kleingewerbe'
+        if is_kleingewerbe:
+            mwst_satz = 0.0
+
+        mwst = total_netto * mwst_satz
+        brutto = total_netto + mwst
+        
+        table_data.append(['', '', '', '', '', '']) # Spacer Line
+        
+        # Styles for Table
+        col_widths = [1.2*cm, 1.8*cm, 1.5*cm, 8.5*cm, 2.5*cm, 2.5*cm]
+        
+        t = Table(table_data, colWidths=col_widths, repeatRows=1)
+        
+        t_styles = [
+            ('FONTNAME', (0,0), (-1,0), 'Helvetica-Bold'), # Header Bold
+            ('FONTSIZE', (0,0), (-1,-1), 9),
+            ('ALIGN', (0,0), (2,-1), 'CENTER'), # Pos, Menge, Einh Center
+            ('ALIGN', (3,0), (3,-1), 'LEFT'),   # Desc Left
+            ('ALIGN', (4,0), (-1,-1), 'RIGHT'), # Prices Right
+            ('VALIGN', (0,0), (-1,-1), 'TOP'),
+            ('LINEBELOW', (0,0), (-1,0), 1, colors.black), # Line under Header
+            ('LINEBELOW', (0,-2), (-1,-2), 0.5, colors.grey), # Line above empty row (spacer)
+        ]
+        
+        t.setStyle(TableStyle(t_styles))
         story.append(t)
         
-        # --- FOOTER ---
-        story.append(Spacer(1, 2*cm))
+        # Summary Block
         
-        bank = mandant_config.get('bank', {})
-        footer_info = (
-            f"Bitte überweisen Sie den Betrag innerhalb von 14 Tagen.<br/><br/>"
-            f"<b>Geschäftsführer:</b> {mandant_config.get('geschaeftsfuehrer', '')} | "
-            f"<b>Bank:</b> {bank.get('name', '')} | "
-            f"<b>IBAN:</b> {bank.get('iban', '')} | "
-            f"<b>BIC:</b> {bank.get('bic', '')}"
-        )
+        summary_data = [
+            ['Summe netto', f"{total_netto:.2f}".replace('.', ',')]
+        ]
         
-        story.append(Paragraph(footer_info, styles['Normal']))
+        if is_kleingewerbe:
+            summary_data.append(['Umsatzsteuer 0%', f"{mwst:.2f}".replace('.', ',')])
+            summary_data.append(['Gesamtsumme €', f"{brutto:.2f}".replace('.', ',')])
+        else:
+            summary_data.append([f'Umsatzsteuer {int(mwst_satz*100)}%', f"{mwst:.2f}".replace('.', ',')])
+            summary_data.append(['Gesamtsumme €', f"{brutto:.2f}".replace('.', ',')])
         
-        doc.build(story)
+        st = Table(summary_data, colWidths=[3.5*cm, 2.5*cm])
+        st.setStyle(TableStyle([
+            ('ALIGN', (1,0), (1,-1), 'RIGHT'), # Numbers Right
+            ('FONTNAME', (0,-1), (-1,-1), 'Helvetica-Bold'), # Total Bold
+            ('LINEABOVE', (0,-1), (-1,-1), 1, colors.black), # Line above Total
+            ('LINEBELOW', (0,-1), (-1,-1), 1, colors.black), # Double line? Just one for now
+            ('LEADING', (0,0), (-1,-1), 12),
+        ]))
+        
+        # Container to push to right
+        ct = Table([['', st]], colWidths=[11*cm, 6*cm])
+        ct.setStyle(TableStyle([
+             ('ALIGN', (1,0), (1,0), 'RIGHT'),
+             ('VALIGN', (0,0), (-1,-1), 'TOP'),
+        ]))
+        
+        story.append(Spacer(1, 0.2*cm))
+        story.append(ct)
+        
+        # --- PAYMENT TERMS ---
+        story.append(Spacer(1, 1.5*cm))
+        # Date + 14 days
+        try:
+             d_obj = datetime.datetime.strptime(datum, '%d.%m.%Y')
+        except:
+             d_obj = datetime.date.today()
+             
+        due_date = d_obj + datetime.timedelta(days=14)
+        due_str = due_date.strftime('%d.%m.%Y')
+        
+        terms_text = f"Der Rechnungsbetrag ist zahlbar bis zum <b>{due_str}</b> ohne Abzug."
+        story.append(Paragraph(terms_text, styles['Normal']))
+        
+        if is_kleingewerbe:
+            story.append(Paragraph("Gemäß § 19 UStG wird keine Umsatzsteuer ausgewiesen.", styles['Normal']))
+        
+        # Optional: Legal Text
+        legal_text = "Bitte geben Sie bei der Überweisung immer die Rechnungsnummer an."
+        story.append(Paragraph(legal_text, styles['Normal']))
+
+        # Build Data
+        doc.build(story, onFirstPage=add_footer, onLaterPages=add_footer)
         print(f"\n✅ PDF erfolgreich erstellt!")
         print(f"📂 Pfad: {filename}")
-
-
 
         # --- UMSATZ VERBUCHEN (EXCEL) ---
         try:
@@ -223,15 +471,16 @@ def create_pdf(invoice_data, mandant_path, mandant_config, kunde_data):
             xlsx_path = os.path.join(einnahmen_dir, "einnahmen.xlsx")
 
             # Beschreibungen zusammenfügen
-            desc_list = [i['beschreibung'] for i in invoice_data['items']]
+            # New structure: items have 'beschreibung'
+            desc_list = [i.get('beschreibung', '') for i in invoice_data.get('items', [])]
             full_desc = ", ".join(desc_list)
             
             data_row = {
                 "Rechnungsnummer": invoice_data['nummer'],
                 "Datum": invoice_data['datum'],
-                "Kunde": kunde_data['firma'],
+                "Kunde": kunde_data.get('firma', 'Unbekannt'),
                 "Beschreibung": full_desc,
-                "Betrag_Netto": f"{total:.2f}",
+                "Betrag_Netto": f"{total_netto:.2f}",
                 "Betrag_Brutto": f"{brutto:.2f}",
                 "Status": "Offen"
             }

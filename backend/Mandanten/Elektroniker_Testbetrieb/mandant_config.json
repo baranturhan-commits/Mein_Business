@@ -1,0 +1,22 @@
+{
+    "firma": "Elektroniker Testbetrieb",
+    "adresse": {
+        "strasse": "Lucie-Kahlenborn-Str.36",
+        "ort": "51427, Bergisch Gladbach"
+    },
+    "geschaeftsfuehrer": "Kerim Engizek",
+    "bank": {
+        "name": "Sparkasse Köln Bonn",
+        "iban": "DE55 9802 1289 1203 0003 00",
+        "bic": "KIJ90KWDA"
+    },
+    "logo": "Logo.PNG",
+    "mandantennummer": "001",
+    "smtp": {
+        "server": "",
+        "port": "",
+        "user": "",
+        "pass": "",
+        "sender": ""
+    }
+}

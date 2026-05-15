@@ -41,7 +41,15 @@ async function loadMandantConfig() {
         // Fill Fields
         document.getElementById('cfgFirma').value = config.firma || '';
         document.getElementById('cfgMandantenNr').value = config.mandantennummer || '';
+
+        const formTypEl = document.getElementById('cfgFormTyp');
+        if (formTypEl) {
+            formTypEl.value = config.unternehmensform || 'Einzelunternehmen';
+        }
+
         document.getElementById('cfgGF').value = config.geschaeftsfuehrer || '';
+        document.getElementById('cfgUStId').value = config.ustid || '';
+        document.getElementById('cfgSteuernummer').value = config.steuernummer || '';
 
         const currentLogo = config.logo || 'Kein Logo';
         const logoEl = document.getElementById('cfgCurrentLogo');
@@ -88,11 +96,13 @@ async function saveMandantConfig() {
     const id = getMandantIdForConfig();
     if (!id) return;
 
-    // 1. Save Text Config
     const data = {
         firma: document.getElementById('cfgFirma').value,
         mandantennummer: document.getElementById('cfgMandantenNr').value,
+        unternehmensform: document.getElementById('cfgFormTyp') ? document.getElementById('cfgFormTyp').value : 'Einzelunternehmen',
         geschaeftsfuehrer: document.getElementById('cfgGF').value,
+        ustid: document.getElementById('cfgUStId').value,
+        steuernummer: document.getElementById('cfgSteuernummer').value,
         // logo is handled via file upload
         adresse: {
             strasse: document.getElementById('cfgStrasse').value,
@@ -151,6 +161,30 @@ async function saveMandantConfig() {
     } catch (e) {
         console.error('Config Save Error:', e);
         alert('Fehler beim Speichern.');
+    }
+}
+
+async function deleteMandant() {
+    const id = getMandantIdForConfig();
+    if (!id) return;
+
+    if (confirm("Möchtest du diesen Mandanten wirklich löschen? Diese Aktion kann nicht rückgängig gemacht werden und alle Rechnungen, Angebote und Kundendaten werden unwiderruflich gelöscht!")) {
+        try {
+            const response = await fetch(`${getApiUrlForConfig()}/mandanten/${id}`, {
+                method: 'DELETE'
+            });
+
+            const result = await response.json();
+            if (result.success) {
+                alert('Mandant erfolgreich gelöscht.');
+                window.location.href = 'index.html'; // Redirect to dashboard
+            } else {
+                alert('Fehler beim Löschen: ' + (result.error || 'Unbekannt'));
+            }
+        } catch (e) {
+            console.error('Delete Mandant Error:', e);
+            alert('Fehler beim Löschen des Mandanten.');
+        }
     }
 }
 

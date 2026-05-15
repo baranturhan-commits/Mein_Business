@@ -1,0 +1,100 @@
+2026-04-08 19:56:11,563 - __main__ - INFO - 🔥 Firebase Admin SDK initialized with ADC
+2026-04-08 19:56:11,589 - __main__ - INFO - ⏰ Scheduler gestartet (Backup täglich um 23:00)
+2026-04-08 19:56:11,601 - __main__ - INFO - 🚀 Starting API Server...
+2026-04-08 19:56:11,657 - werkzeug - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://192.168.178.199:5000
+2026-04-08 19:56:11,658 - werkzeug - INFO - [33mPress CTRL+C to quit[0m
+2026-04-08 19:56:11,661 - werkzeug - INFO -  * Restarting with stat
+2026-04-08 19:56:13,526 - __main__ - INFO - 🔥 Firebase Admin SDK initialized with ADC
+2026-04-08 19:56:13,553 - __main__ - INFO - ⏰ Scheduler gestartet (Backup täglich um 23:00)
+2026-04-08 19:56:13,560 - __main__ - INFO - 🚀 Starting API Server...
+2026-04-08 19:56:13,574 - werkzeug - WARNING -  * Debugger is active!
+2026-04-08 19:56:13,579 - werkzeug - INFO -  * Debugger PIN: 447-598-156
+2026-04-08 19:56:15,314 - werkzeug - INFO - 127.0.0.1 - - [08/Apr/2026 19:56:15] "GET / HTTP/1.1" 200 -
+2026-04-08 19:56:15,560 - werkzeug - INFO - 127.0.0.1 - - [08/Apr/2026 19:56:15] "[36mGET /styles.css HTTP/1.1[0m" 304 -
+2026-04-08 19:56:15,640 - werkzeug - INFO - 127.0.0.1 - - [08/Apr/2026 19:56:15] "[36mGET /firebase_config.js HTTP/1.1[0m" 304 -
+2026-04-08 19:56:15,641 - werkzeug - INFO - 127.0.0.1 - - [08/Apr/2026 19:56:15] "[36mGET /auth.js HTTP/1.1[0m" 304 -
+2026-04-08 19:56:15,642 - werkzeug - INFO - 127.0.0.1 - - [08/Apr/2026 19:56:15] "GET /app.js HTTP/1.1" 200 -
+2026-04-08 19:56:15,669 - __main__ - INFO - Mandanten geladen: 2
+2026-04-08 19:56:15,774 - werkzeug - INFO - 127.0.0.1 - - [08/Apr/2026 19:56:15] "GET /api/dashboard HTTP/1.1" 200 -
+2026-04-08 19:56:16,006 - werkzeug - INFO - 127.0.0.1 - - [08/Apr/2026 19:56:16] "[33mGET /favicon.ico HTTP/1.1[0m" 404 -
+2026-04-08 19:56:24,328 - werkzeug - INFO - 127.0.0.1 - - [08/Apr/2026 19:56:24] "[36mGET /detail.html?id=Mamo_Gartenpflege HTTP/1.1[0m" 304 -
+2026-04-08 19:56:24,592 - werkzeug - INFO - 127.0.0.1 - - [08/Apr/2026 19:56:24] "[36mGET /styles.css HTTP/1.1[0m" 304 -
+2026-04-08 19:56:24,656 - werkzeug - INFO - 127.0.0.1 - - [08/Apr/2026 19:56:24] "[36mGET /firebase_config.js HTTP/1.1[0m" 304 -
+2026-04-08 19:56:24,656 - werkzeug - INFO - 127.0.0.1 - - [08/Apr/2026 19:56:24] "[36mGET /auth.js HTTP/1.1[0m" 304 -
+2026-04-08 19:56:24,657 - werkzeug - INFO - 127.0.0.1 - - [08/Apr/2026 19:56:24] "[36mGET /detail_extensions.js HTTP/1.1[0m" 304 -
+2026-04-08 19:56:24,657 - werkzeug - INFO - 127.0.0.1 - - [08/Apr/2026 19:56:24] "[36mGET /detail.js HTTP/1.1[0m" 304 -
+2026-04-08 19:56:24,681 - werkzeug - INFO - 127.0.0.1 - - [08/Apr/2026 19:56:24] "[36mGET /preisliste.js HTTP/1.1[0m" 304 -
+2026-04-08 19:56:24,923 - werkzeug - INFO - 127.0.0.1 - - [08/Apr/2026 19:56:24] "[36mGET /import.js HTTP/1.1[0m" 304 -
+2026-04-08 19:56:24,966 - werkzeug - INFO - 127.0.0.1 - - [08/Apr/2026 19:56:24] "[36mGET /angebot.js HTTP/1.1[0m" 304 -
+2026-04-08 19:56:24,967 - werkzeug - INFO - 127.0.0.1 - - [08/Apr/2026 19:56:24] "[36mGET /invoice.js HTTP/1.1[0m" 304 -
+2026-04-08 19:56:24,991 - werkzeug - INFO - 127.0.0.1 - - [08/Apr/2026 19:56:24] "[36mGET /lieferschein_merged.js HTTP/1.1[0m" 304 -
+2026-04-08 19:56:24,991 - werkzeug - INFO - 127.0.0.1 - - [08/Apr/2026 19:56:24] "[36mGET /protocol_scanner.js HTTP/1.1[0m" 304 -
+2026-04-08 19:56:24,995 - werkzeug - INFO - 127.0.0.1 - - [08/Apr/2026 19:56:24] "[36mGET /documents.js HTTP/1.1[0m" 304 -
+2026-04-08 19:56:25,250 - werkzeug - INFO - 127.0.0.1 - - [08/Apr/2026 19:56:25] "[36mGET /ausgaben.js HTTP/1.1[0m" 304 -
+2026-04-08 19:56:25,275 - werkzeug - INFO - 127.0.0.1 - - [08/Apr/2026 19:56:25] "[36mGET /mandant_config.js HTTP/1.1[0m" 304 -
+2026-04-08 19:56:25,299 - werkzeug - INFO - 127.0.0.1 - - [08/Apr/2026 19:56:25] "[36mGET /mitarbeiter.js HTTP/1.1[0m" 304 -
+2026-04-08 19:56:25,326 - werkzeug - INFO - 127.0.0.1 - - [08/Apr/2026 19:56:25] "[36mGET /recurring.js HTTP/1.1[0m" 304 -
+2026-04-08 19:56:25,651 - werkzeug - INFO - 127.0.0.1 - - [08/Apr/2026 19:56:25] "GET /api/mandanten/Mamo_Gartenpflege/rechnungen HTTP/1.1" 200 -
+2026-04-08 19:56:25,670 - werkzeug - INFO - 127.0.0.1 - - [08/Apr/2026 19:56:25] "GET /api/mandanten/Mamo_Gartenpflege/stats HTTP/1.1" 200 -
+2026-04-08 19:56:25,904 - werkzeug - INFO - 127.0.0.1 - - [08/Apr/2026 19:56:25] "GET /api/mandanten/Mamo_Gartenpflege/recurring HTTP/1.1" 200 -
+2026-04-08 19:56:27,509 - __main__ - INFO - Found 1 Angebote for Mamo_Gartenpflege
+2026-04-08 19:56:27,509 - werkzeug - INFO - 127.0.0.1 - - [08/Apr/2026 19:56:27] "GET /api/mandanten/Mamo_Gartenpflege/angebote HTTP/1.1" 200 -
+2026-04-08 19:56:27,803 - werkzeug - INFO - 127.0.0.1 - - [08/Apr/2026 19:56:27] "GET /api/mandanten/Mamo_Gartenpflege/rechnungen HTTP/1.1" 200 -
+2026-04-08 19:56:27,822 - __main__ - INFO - Found 1 Lieferscheine for Mamo_Gartenpflege
+2026-04-08 19:56:27,822 - werkzeug - INFO - 127.0.0.1 - - [08/Apr/2026 19:56:27] "GET /api/mandanten/Mamo_Gartenpflege/lieferscheine HTTP/1.1" 200 -
+2026-04-08 19:56:28,898 - __main__ - INFO - Einnahmen: 3 total, 1 mit vorhandener PDF
+2026-04-08 19:56:28,898 - __main__ - INFO - Einnahmen geladen: 1 Rechnungen
+2026-04-08 19:56:28,899 - werkzeug - INFO - 127.0.0.1 - - [08/Apr/2026 19:56:28] "GET /api/mandanten/Mamo_Gartenpflege/einnahmen HTTP/1.1" 200 -
+2026-04-08 19:56:29,170 - werkzeug - INFO - 127.0.0.1 - - [08/Apr/2026 19:56:29] "GET /api/mandanten/Mamo_Gartenpflege/ausgaben HTTP/1.1" 200 -
+2026-04-08 19:56:30,910 - __main__ - INFO - Einnahmen: 3 total, 1 mit vorhandener PDF
+2026-04-08 19:56:30,911 - __main__ - INFO - Einnahmen geladen: 1 Rechnungen
+2026-04-08 19:56:30,911 - werkzeug - INFO - 127.0.0.1 - - [08/Apr/2026 19:56:30] "GET /api/mandanten/Mamo_Gartenpflege/einnahmen HTTP/1.1" 200 -
+2026-04-08 19:56:34,850 - werkzeug - INFO - 127.0.0.1 - - [08/Apr/2026 19:56:34] "GET /api/mandanten/Mamo_Gartenpflege/mitarbeiter HTTP/1.1" 200 -
+2026-04-08 19:56:36,143 - werkzeug - INFO - 127.0.0.1 - - [08/Apr/2026 19:56:36] "GET /index.html HTTP/1.1" 200 -
+2026-04-08 19:56:36,459 - werkzeug - INFO - 127.0.0.1 - - [08/Apr/2026 19:56:36] "[36mGET /styles.css HTTP/1.1[0m" 304 -
+2026-04-08 19:56:36,460 - werkzeug - INFO - 127.0.0.1 - - [08/Apr/2026 19:56:36] "[36mGET /firebase_config.js HTTP/1.1[0m" 304 -
+2026-04-08 19:56:36,461 - werkzeug - INFO - 127.0.0.1 - - [08/Apr/2026 19:56:36] "[36mGET /auth.js HTTP/1.1[0m" 304 -
+2026-04-08 19:56:36,462 - werkzeug - INFO - 127.0.0.1 - - [08/Apr/2026 19:56:36] "[36mGET /app.js HTTP/1.1[0m" 304 -
+2026-04-08 19:56:36,722 - __main__ - INFO - Mandanten geladen: 2
+2026-04-08 19:56:36,763 - werkzeug - INFO - 127.0.0.1 - - [08/Apr/2026 19:56:36] "GET /api/dashboard HTTP/1.1" 200 -
+2026-04-08 19:57:06,475 - __main__ - INFO - Mandanten geladen: 2
+2026-04-08 19:57:06,515 - werkzeug - INFO - 127.0.0.1 - - [08/Apr/2026 19:57:06] "GET /api/dashboard HTTP/1.1" 200 -
+2026-04-08 19:57:36,787 - __main__ - INFO - Mandanten geladen: 2
+2026-04-08 19:57:36,826 - werkzeug - INFO - 127.0.0.1 - - [08/Apr/2026 19:57:36] "GET /api/dashboard HTTP/1.1" 200 -
+2026-04-08 19:58:06,481 - __main__ - INFO - Mandanten geladen: 2
+2026-04-08 19:58:06,521 - werkzeug - INFO - 127.0.0.1 - - [08/Apr/2026 19:58:06] "GET /api/dashboard HTTP/1.1" 200 -
+2026-04-08 19:58:36,783 - __main__ - INFO - Mandanten geladen: 2
+2026-04-08 19:58:36,823 - werkzeug - INFO - 127.0.0.1 - - [08/Apr/2026 19:58:36] "GET /api/dashboard HTTP/1.1" 200 -
+2026-04-08 19:59:06,485 - __main__ - INFO - Mandanten geladen: 2
+2026-04-08 19:59:06,525 - werkzeug - INFO - 127.0.0.1 - - [08/Apr/2026 19:59:06] "GET /api/dashboard HTTP/1.1" 200 -
+2026-04-08 19:59:36,792 - __main__ - INFO - Mandanten geladen: 2
+2026-04-08 19:59:36,831 - werkzeug - INFO - 127.0.0.1 - - [08/Apr/2026 19:59:36] "GET /api/dashboard HTTP/1.1" 200 -
+2026-04-08 20:00:06,478 - __main__ - INFO - Mandanten geladen: 2
+2026-04-08 20:00:06,517 - werkzeug - INFO - 127.0.0.1 - - [08/Apr/2026 20:00:06] "GET /api/dashboard HTTP/1.1" 200 -
+2026-04-08 20:00:36,789 - __main__ - INFO - Mandanten geladen: 2
+2026-04-08 20:00:36,829 - werkzeug - INFO - 127.0.0.1 - - [08/Apr/2026 20:00:36] "GET /api/dashboard HTTP/1.1" 200 -
+2026-04-08 20:01:06,483 - __main__ - INFO - Mandanten geladen: 2
+2026-04-08 20:01:06,524 - werkzeug - INFO - 127.0.0.1 - - [08/Apr/2026 20:01:06] "GET /api/dashboard HTTP/1.1" 200 -
+2026-04-08 20:01:36,800 - __main__ - INFO - Mandanten geladen: 2
+2026-04-08 20:01:36,840 - werkzeug - INFO - 127.0.0.1 - - [08/Apr/2026 20:01:36] "GET /api/dashboard HTTP/1.1" 200 -
+2026-04-08 20:02:06,476 - __main__ - INFO - Mandanten geladen: 2
+2026-04-08 20:02:06,516 - werkzeug - INFO - 127.0.0.1 - - [08/Apr/2026 20:02:06] "GET /api/dashboard HTTP/1.1" 200 -
+2026-04-08 20:02:36,801 - __main__ - INFO - Mandanten geladen: 2
+2026-04-08 20:02:36,843 - werkzeug - INFO - 127.0.0.1 - - [08/Apr/2026 20:02:36] "GET /api/dashboard HTTP/1.1" 200 -
+2026-04-08 20:03:06,478 - __main__ - INFO - Mandanten geladen: 2
+2026-04-08 20:03:06,518 - werkzeug - INFO - 127.0.0.1 - - [08/Apr/2026 20:03:06] "GET /api/dashboard HTTP/1.1" 200 -
+2026-04-08 20:03:36,787 - __main__ - INFO - Mandanten geladen: 2
+2026-04-08 20:03:36,826 - werkzeug - INFO - 127.0.0.1 - - [08/Apr/2026 20:03:36] "GET /api/dashboard HTTP/1.1" 200 -
+2026-04-08 20:04:06,476 - __main__ - INFO - Mandanten geladen: 2
+2026-04-08 20:04:06,515 - werkzeug - INFO - 127.0.0.1 - - [08/Apr/2026 20:04:06] "GET /api/dashboard HTTP/1.1" 200 -
+2026-04-08 20:04:36,785 - __main__ - INFO - Mandanten geladen: 2
+2026-04-08 20:04:36,825 - werkzeug - INFO - 127.0.0.1 - - [08/Apr/2026 20:04:36] "GET /api/dashboard HTTP/1.1" 200 -
+2026-04-08 20:05:06,736 - __main__ - INFO - Mandanten geladen: 2
+2026-04-08 20:05:06,805 - werkzeug - INFO - 127.0.0.1 - - [08/Apr/2026 20:05:06] "GET /api/dashboard HTTP/1.1" 200 -
+2026-04-08 20:05:37,038 - __main__ - INFO - Mandanten geladen: 2
+2026-04-08 20:05:37,085 - werkzeug - INFO - 127.0.0.1 - - [08/Apr/2026 20:05:37] "GET /api/dashboard HTTP/1.1" 200 -
+2026-04-08 20:06:40,038 - __main__ - INFO - Mandanten geladen: 2
+2026-04-08 20:06:40,081 - werkzeug - INFO - 127.0.0.1 - - [08/Apr/2026 20:06:40] "GET /api/dashboard HTTP/1.1" 200 -

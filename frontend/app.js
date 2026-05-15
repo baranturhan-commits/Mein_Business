@@ -284,12 +284,16 @@ async function submitMandant(event) {
 
     const formData = {
         firma: document.getElementById('mandantFirma').value.trim(),
+        unternehmensform: document.getElementById('mandantFormTyp').value,
         strasse: document.getElementById('mandantStrasse').value.trim(),
         ort: document.getElementById('mandantOrt').value.trim(),
         geschaeftsfuehrer: document.getElementById('mandantGF').value.trim(),
+        ustid: document.getElementById('mandantUStId') ? document.getElementById('mandantUStId').value.trim() : '',
+        steuernummer: document.getElementById('mandantSteuernummer') ? document.getElementById('mandantSteuernummer').value.trim() : '',
         iban: document.getElementById('mandantIBAN').value.trim(),
         bic: document.getElementById('mandantBIC').value.trim(),
-        bank: document.getElementById('mandantBank').value.trim()
+        bank: document.getElementById('mandantBank').value.trim(),
+        start_invoice_number: parseInt(document.getElementById('mandantStartNr')?.value) || 0
     };
 
     const statusDiv = document.getElementById('mandantStatus');

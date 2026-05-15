@@ -16,7 +16,9 @@ from pathlib import Path
 def get_and_increment_offer_counter(mandant_path, mandant_config=None):
     """Generiert und inkrementiert Angebots-Nummer mit Mandantennummer"""
     counter_file = Path(mandant_path) / "offer_counter.json"
-    current_year = datetime.date.today().year
+    today = datetime.date.today()
+    current_year = str(today.year)
+    current_month = f"{today.month:02d}"
     
     # Get Mandantennummer from config
     mandanten_nr = "000"
@@ -39,20 +41,26 @@ def get_and_increment_offer_counter(mandant_path, mandant_config=None):
     else:
         data = {}
     
-    year_key = str(current_year)
-    if year_key not in data or data.get('year') != year_key:
-        data = {'year': year_key, 'counter': 0}
+    # Check if year OR month changed
+    if (data.get('year') != current_year) or (data.get('month') != current_month):
+        # Reset counter for new month
+        data = {'year': current_year, 'month': current_month, 'counter': 0}
     
     data['counter'] += 1
-    # Format: ANG-[MandantenNr]-[Jahr]-[Counter]
-    nummer = f"ANG-{mandanten_nr}-{current_year}-{data['counter']:03d}"
+    
+    # Update month if missing in old data to avoid errors (migration)
+    data['month'] = current_month
+    data['year'] = current_year
+
+    # Format: ANG-[MandantenNr]-[Jahr]-[Monat]-[Counter]
+    nummer = f"ANG-{mandanten_nr}-{current_year}-{current_month}-{data['counter']:03d}"
     
     with open(counter_file, 'w') as f:
         json.dump(data, f, indent=4)
     
     return nummer
 
-def create_offer_pdf(mandant_path, mandant_config, kunde_name, positionen, output_path, nummer):
+def create_offer_pdf(mandant_path, mandant_config, kunde_name, positionen, output_path, nummer, leistungs_von='', leistungs_bis='', kunde_adresse=''):
     """
     Erstellt Angebots-PDF
     
@@ -114,9 +122,24 @@ def create_offer_pdf(mandant_path, mandant_config, kunde_name, positionen, outpu
     story.append(Spacer(1, 0.5*cm))
     
     # Kunde & Datum
-    story.append(Paragraph(f"<b>An:</b> {kunde_name}", styles['Normal']))
+    kunde_block = f"<b>An:</b> {kunde_name}"
+    if kunde_adresse:
+        kunde_block += f"<br/>{kunde_adresse}"
+    story.append(Paragraph(kunde_block, styles['Normal']))
     datum = datetime.date.today().strftime("%d.%m.%Y")
     story.append(Paragraph(f"<b>Datum:</b> {datum}", styles['Normal']))
+    
+    if leistungs_von or leistungs_bis:
+        story.append(Spacer(1, 0.3*cm))
+        lz_text = "<b>Leistungszeitraum:</b> "
+        if leistungs_von and leistungs_bis:
+            lz_text += f"{leistungs_von} bis {leistungs_bis}"
+        elif leistungs_von:
+            lz_text += f"ab {leistungs_von}"
+        elif leistungs_bis:
+            lz_text += f"bis {leistungs_bis}"
+        story.append(Paragraph(lz_text, styles['Normal']))
+    
     story.append(Spacer(1, 1*cm))
     
     # Positionen-Tabelle
@@ -141,11 +164,18 @@ def create_offer_pdf(mandant_path, mandant_config, kunde_name, positionen, outpu
     style_right = ParagraphStyle('Right', parent=styles['Normal'], alignment=2) # 2 = TA_RIGHT
 
     # Summen
-    mwst = netto_gesamt * 0.19
+    is_kleingewerbe = mandant_config.get('unternehmensform') == 'Kleingewerbe'
+    mwst_satz = 0.0 if is_kleingewerbe else 0.19
+    
+    mwst = netto_gesamt * mwst_satz
     brutto = netto_gesamt + mwst
     
     table_data.append(['', '', '', 'Netto:', f"{netto_gesamt:.2f}€"])
-    table_data.append(['', '', '', 'MwSt 19%:', f"{mwst:.2f}€"])
+    
+    if is_kleingewerbe:
+        table_data.append(['', '', '', 'MwSt 0%:', f"{mwst:.2f}€"])
+    else:
+        table_data.append(['', '', '', 'MwSt 19%:', f"{mwst:.2f}€"])
     
     # Use Paragraph to interpret <b> tags
     table_data.append([
@@ -172,6 +202,23 @@ def create_offer_pdf(mandant_path, mandant_config, kunde_name, positionen, outpu
     story.append(Spacer(1, 1*cm))
     
     # Footer
+    if is_kleingewerbe:
+        story.append(Paragraph("<font size=10>Gemäß § 19 UStG wird keine Umsatzsteuer ausgewiesen.</font>", styles['Normal']))
+        story.append(Spacer(1, 0.5*cm))
+        
+    ustid = mandant_config.get('ustid', '').strip()
+    steuernummer = mandant_config.get('steuernummer', '').strip()
+
+    tax_string = ""
+    if ustid:
+        tax_string = f"USt-ID: {ustid}"
+    elif steuernummer:
+        tax_string = f"Steuer-Nr: {steuernummer}"
+        
+    if tax_string:
+        story.append(Paragraph(f"<font size=10>{tax_string}</font>", styles['Normal']))
+        story.append(Spacer(1, 0.5*cm))
+
     story.append(Paragraph("<i>Vielen Dank für Ihre Anfrage!</i>", styles['Normal']))
     story.append(Paragraph(f"<i>Angebot gültig bis: {(datetime.date.today() + datetime.timedelta(days=30)).strftime('%d.%m.%Y')}</i>", styles['Normal']))
     

@@ -260,10 +260,17 @@
             <section class="mandanten-section">
                 <div class="section-header">
                     <h2>💶 Offene Posten</h2>
-                    <button class="btn btn-primary" onclick="savePaymentStatus()">
-                        <span class="icon">💾</span>
-                        Änderungen speichern
-                    </button>
+                    <div class="button-group">
+                        <button class="btn btn-secondary" onclick="triggerBankUpload()">
+                            <span class="icon">📸</span> Scan Bankauszug
+                        </button>
+                        <input type="file" id="bankUploadInput" hidden accept=".csv,.pdf,.jpg,.png"
+                            onchange="handleBankUpload(this)">
+                        <button class="btn btn-primary" onclick="savePaymentStatus()">
+                            <span class="icon">💾</span>
+                            Änderungen speichern
+                        </button>
+                    </div>
                 </div>
                 <div id="opCheckList" class="op-list">
                     <div class="loading">
@@ -356,6 +363,20 @@
                         <input type="email" id="kundeEmail" placeholder="kunde@beispiel.de">
                     </div>
                     <div class="form-group">
+                        <label>Straße & Hausnummer</label>
+                        <input type="text" id="kundeStrasse" placeholder="z.B. Musterstraße 12">
+                    </div>
+                    <div class="form-group" style="display: flex; gap: 10px;">
+                        <div style="flex: 1;">
+                            <label>PLZ</label>
+                            <input type="text" id="kundePlz" placeholder="12345">
+                        </div>
+                        <div style="flex: 2;">
+                            <label>Ort</label>
+                            <input type="text" id="kundeOrt" placeholder="Musterstadt">
+                        </div>
+                    </div>
+                    <div class="form-group">
                         <label>Anrede</label>
                         <select id="kundeAnrede">
                             <option>Sehr geehrte Damen und Herren</option>
@@ -394,6 +415,18 @@
                 <!-- Step 2: Positionen -->
                 <div id="angebot-step-2" class="angebot-step hidden">
                     <h3>Schritt 2: Positionen hinzufügen</h3>
+
+                    <div class="form-row" style="margin-bottom: 20px;">
+                        <div class="form-group">
+                            <label>Leistungszeitraum Von</label>
+                            <input type="date" id="ang-leistungs-von" style="width: 100%; padding: 8px;">
+                        </div>
+                        <div class="form-group">
+                            <label>Bis (Optional)</label>
+                            <input type="date" id="ang-leistungs-bis" style="width: 100%; padding: 8px;">
+                        </div>
+                    </div>
+
                     <div class="form-group">
                         <label>Aus Preisliste:</label>
                         <div class="form-row">
@@ -613,11 +646,38 @@
             </div>
             <div class="modal-body">
 
+                <!-- Next Invoice Number Preview -->
+                <div
+                    style="background: rgba(102, 126, 234, 0.15); padding: 10px 15px; border-radius: 8px; margin-bottom: 15px; border: 1px solid rgba(102, 126, 234, 0.3);">
+                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                        <span style="color: #aaa;">Nächste Rechnungsnummer:</span>
+                        <strong id="inv-next-number" style="color: #667eea; font-size: 1.1rem;">Lade...</strong>
+                    </div>
+                    <div style="display: flex; align-items: center; gap: 8px; margin-top: 8px;">
+                        <label style="color: #aaa; font-size: 0.85rem; white-space: nowrap;">Zähler ändern:</label>
+                        <input type="number" id="inv-counter-input" min="1"
+                            style="width: 80px; padding: 4px 8px; font-size: 0.9rem;" placeholder="z.B. 55">
+                        <button type="button" class="btn btn-secondary small" onclick="InvoiceModal.saveCounter()"
+                            style="padding: 4px 10px; font-size: 0.8rem;">Setzen</button>
+                    </div>
+                </div>
+
                 <!-- 1. Customer & Base -->
                 <div class="form-row">
                     <div class="form-group flex-grow">
                         <label>Kunde *</label>
                         <select id="inv-kunde-select" class="full-width" style="width: 100%; padding: 8px;"></select>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Leistungszeitraum Von</label>
+                        <input type="date" id="inv-leistungs-von" style="width: 100%; padding: 8px;">
+                    </div>
+                    <div class="form-group">
+                        <label>Bis (Optional)</label>
+                        <input type="date" id="inv-leistungs-bis" style="width: 100%; padding: 8px;">
                     </div>
                 </div>
 
@@ -690,8 +750,27 @@
                     <small style="color:#888;">Wird auf Rechnungen angezeigt</small>
                 </div>
                 <div class="form-group">
+                    <label>Unternehmensform</label>
+                    <select id="cfgFormTyp" class="form-control">
+                        <option value="Einzelunternehmen">Einzelunternehmen</option>
+                        <option value="Kleingewerbe">Kleingewerbe (§19 UStG)</option>
+                        <option value="GmbH">GmbH</option>
+                        <option value="UG">UG (haftungsbeschränkt)</option>
+                        <option value="GbR">GbR</option>
+                        <option value="Sonstiges">Sonstiges</option>
+                    </select>
+                </div>
+                <div class="form-group">
                     <label>Geschäftsführer</label>
                     <input type="text" id="cfgGF" class="form-control">
+                </div>
+                <div class="form-group">
+                    <label>USt-ID-Nr.</label>
+                    <input type="text" id="cfgUStId" class="form-control" placeholder="z.B. DE123456789">
+                </div>
+                <div class="form-group">
+                    <label>Steuernummer</label>
+                    <input type="text" id="cfgSteuernummer" class="form-control" placeholder="z.B. 123/456/78901">
                 </div>
                 <h4 style="margin-top:15px; margin-bottom:10px; color:#aaa;">Adresse</h4>
                 <div class="form-group">
@@ -750,9 +829,13 @@
                     <small style="color:#888;">Neu auswählen zum Überschreiben</small>
                 </div>
             </div>
-            <div class="modal-footer">
-                <button class="btn btn-outline" onclick="closeConfigModal()">Abbrechen</button>
-                <button class="btn btn-primary" onclick="saveMandantConfig()">Speichern</button>
+            <div class="modal-footer" style="display: flex; justify-content: space-between; width: 100%;">
+                <button class="btn btn-outline" style="color:red; border-color:red;" onclick="deleteMandant()">Mandant
+                    löschen</button>
+                <div style="display: flex; gap: 10px;">
+                    <button class="btn btn-outline" onclick="closeConfigModal()">Abbrechen</button>
+                    <button class="btn btn-primary" onclick="saveMandantConfig()">Speichern</button>
+                </div>
             </div>
         </div>
     </div>

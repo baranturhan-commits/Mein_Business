@@ -150,6 +150,18 @@
             <input type="text" id="mandantFirma" required placeholder="z.B. Maler Müller GmbH">
           </div>
 
+          <div class="form-group">
+            <label>Unternehmensform *</label>
+            <select id="mandantFormTyp" required>
+              <option value="Einzelunternehmen">Einzelunternehmen</option>
+              <option value="Kleingewerbe">Kleingewerbe (§19 UStG)</option>
+              <option value="GmbH">GmbH</option>
+              <option value="UG">UG (haftungsbeschränkt)</option>
+              <option value="GbR">GbR</option>
+              <option value="Sonstiges">Sonstiges</option>
+            </select>
+          </div>
+
           <div class="form-row">
             <div class="form-group">
               <label>Straße & Hausnr.</label>
@@ -164,6 +176,17 @@
           <div class="form-group">
             <label>Geschäftsführer</label>
             <input type="text" id="mandantGF" placeholder="Max Mustermann">
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label>USt-ID-Nr.</label>
+              <input type="text" id="mandantUStId" placeholder="z.B. DE123456789">
+            </div>
+            <div class="form-group">
+              <label>Steuernummer</label>
+              <input type="text" id="mandantSteuernummer" placeholder="z.B. 123/456/78901">
+            </div>
           </div>
 
           <h3>Bankverbindung</h3>
@@ -181,6 +204,12 @@
               <label>Bankname</label>
               <input type="text" id="mandantBank" placeholder="Commerzbank">
             </div>
+          </div>
+
+          <h3>Rechnungsnummer</h3>
+          <div class="form-group">
+            <label>Start-Rechnungsnummer (Optional)</label>
+            <input type="number" id="mandantStartNr" min="1" placeholder="z.B. 55 → erste Rechnung wird Nr. 55">
           </div>
 
           <div id="mandantStatus"></div>
