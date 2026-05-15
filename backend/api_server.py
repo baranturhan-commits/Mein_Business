@@ -970,7 +970,30 @@ def delete_mandant(mandant_id):
             return jsonify({'error': 'Mandant nicht gefunden'}), 404
         
         import shutil
-        shutil.rmtree(mandant_path)
+        import stat
+        import time
+        
+        def remove_readonly(func, path, excinfo):
+            try:
+                os.chmod(path, stat.S_IWRITE)
+                func(path)
+            except Exception:
+                pass
+                
+        # Retry logic for Windows file locks
+        for _ in range(3):
+            try:
+                if mandant_path.exists():
+                    shutil.rmtree(mandant_path, onerror=remove_readonly)
+                break
+            except Exception:
+                time.sleep(0.5)
+        
+        if mandant_path.exists():
+            shutil.rmtree(mandant_path, ignore_errors=True)
+            
+        if mandant_path.exists():
+            raise Exception("Dateien sind blockiert/geöffnet. Bitte schließe alle PDFs oder Excel-Dateien des Mandanten.")
         
         logger.info(f"Mandant gelöscht: {mandant_id}")
         return jsonify({'success': True})
