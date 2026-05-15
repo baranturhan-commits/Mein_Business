@@ -1,5 +1,6 @@
 // Mein Business - Frontend Application Logic
-const API_BASE_URL = 'https://meinbusiness-production.up.railway.app/api';
+const API_BASE_URL = 'https://meinbusiness-production.up.railway.app';
+const API = `${API_BASE_URL}/api`;
 
 // State
 let allMandanten = [];
@@ -18,7 +19,7 @@ document.addEventListener('DOMContentLoaded', () => {
 // Load Dashboard Data
 async function loadDashboard() {
     try {
-        const response = await fetch(`${API_BASE_URL}/dashboard`);
+        const response = await fetch(`${API}/dashboard`);
 
         if (!response.ok) {
             throw new Error('API Server nicht erreichbar');
@@ -191,7 +192,7 @@ async function finishWorkDay() {
     document.body.appendChild(overlay);
 
     try {
-        const res = await fetch(`${API_BASE_URL}/backup/now`, { method: 'POST' });
+        const res = await fetch(`${API}/backup/now`, { method: 'POST' });
         const data = await res.json();
 
         if (data.success) {
@@ -247,7 +248,7 @@ async function finishWorkDay() {
     document.body.appendChild(overlay);
 
     try {
-        const res = await fetch(`${API_BASE_URL}/backup/now`, { method: 'POST' });
+        const res = await fetch(`${API}/backup/now`, { method: 'POST' });
         const data = await res.json();
 
         if (data.success) {
@@ -356,7 +357,7 @@ async function submitMandant(event) {
     statusDiv.innerHTML = '<p>🏢 Erstelle Mandanten...</p>';
 
     try {
-        const response = await fetch(`${API_BASE_URL}/mandanten`, {
+        const response = await fetch(`${API}/mandanten`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(formData)
