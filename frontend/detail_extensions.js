@@ -309,19 +309,25 @@ function renderKunden(kunden) {
         return;
     }
 
-    const html = kunden.map(kunde => `
+    const html = kunden.map((kunde, index) => `
         <div class="kunde-card">
             <div class="kunde-icon">👤</div>
             <div class="kunde-info">
                 <h4>${kunde.Firma}</h4>
                 <p>${kunde.Email || 'Keine Email'}</p>
                 <p class="kunde-anrede">${kunde.Anrede}</p>
+                <div class="kunde-actions" style="margin-top: 10px; display: flex; gap: 10px;">
+                    <button class="btn btn-sm" style="background:#4b6cb7; color:white;" onclick="editKunde(${index})">✏️ Bearbeiten</button>
+                    <button class="btn btn-sm btn-danger" onclick="deleteKunde('${kunde.Firma}')">🗑️ Löschen</button>
+                </div>
             </div>
         </div>
     `).join('');
 
     list.innerHTML = html;
 }
+
+let editKundeFirma = null;
 
 // Kunde Modal
 function showKundeModal() {
@@ -332,6 +338,9 @@ function closeKundeModal() {
     document.getElementById('kundeModal').classList.add('hidden');
     document.getElementById('kundeForm').reset();
     document.getElementById('kundeStatus').innerHTML = '';
+    const h2 = document.querySelector('#kundeModal .modal-content h2');
+    if(h2) h2.innerText = 'Neuer Kunde';
+    editKundeFirma = null;
 }
 
 async function submitKunde(event) {
@@ -345,11 +354,16 @@ async function submitKunde(event) {
     const ort = document.getElementById('kundeOrt').value.trim();
 
     const statusDiv = document.getElementById('kundeStatus');
-    statusDiv.innerHTML = '<p>📤 Erstelle Kunde...</p>';
+    statusDiv.innerHTML = `<p>📤 ${editKundeFirma ? 'Speichere' : 'Erstelle'} Kunde...</p>`;
+
+    const method = editKundeFirma ? 'PUT' : 'POST';
+    const url = editKundeFirma ? 
+        `${API_BASE_URL}/mandanten/${mandantId}/kunden/${encodeURIComponent(editKundeFirma)}` : 
+        `${API_BASE_URL}/mandanten/${mandantId}/kunden`;
 
     try {
-        const response = await fetch(`${API_BASE_URL}/mandanten/${mandantId}/kunden`, {
-            method: 'POST',
+        const response = await fetch(url, {
+            method: method,
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ firma, email, anrede, strasse, plz, ort })
         });
@@ -357,7 +371,7 @@ async function submitKunde(event) {
         const result = await response.json();
 
         if (result.success) {
-            statusDiv.innerHTML = '<p class="success">✅ Kunde erstellt!</p>';
+            statusDiv.innerHTML = `<p class="success">✅ Kunde ${editKundeFirma ? 'gespeichert' : 'erstellt'}!</p>`;
             setTimeout(() => {
                 closeKundeModal();
                 loadKunden(); // Refresh list
@@ -366,8 +380,44 @@ async function submitKunde(event) {
             statusDiv.innerHTML = `<p class="error">❌ ${result.error}</p>`;
         }
     } catch (error) {
-        statusDiv.innerHTML = '<p class="error">❌ Fehler beim Erstellen</p>';
+        statusDiv.innerHTML = '<p class="error">❌ Verbindungsfehler beim Speichern</p>';
     }
+}
+
+async function deleteKunde(firma) {
+    if (!confirm(`Möchtest du den Kunden "${firma}" wirklich löschen?`)) return;
+    
+    try {
+        const response = await fetch(`${API_BASE_URL}/mandanten/${mandantId}/kunden/${encodeURIComponent(firma)}`, {
+            method: 'DELETE'
+        });
+        const result = await response.json();
+        
+        if (result.success) {
+            loadKunden();
+        } else {
+            alert('Fehler beim Löschen: ' + result.error);
+        }
+    } catch (e) {
+        alert('Netzwerkfehler beim Löschen des Kunden.');
+    }
+}
+
+function editKunde(index) {
+    const kunde = allKunden[index];
+    editKundeFirma = kunde.Firma;
+    
+    document.getElementById('kundeFirma').value = kunde.Firma || '';
+    document.getElementById('kundeEmail').value = kunde.Email || '';
+    document.getElementById('kundeAnrede').value = kunde.Anrede || 'Sehr geehrte Damen und Herren';
+    document.getElementById('kundeStrasse').value = kunde.Strasse || '';
+    document.getElementById('kundePlz').value = kunde.PLZ || '';
+    document.getElementById('kundeOrt').value = kunde.Ort || '';
+    
+    const h2 = document.querySelector('#kundeModal .modal-content h2');
+    if(h2) h2.innerText = 'Kunde bearbeiten';
+    
+    showKundeModal();
 }
 
 // Add to window for global access
@@ -380,6 +430,8 @@ window.loadKunden = loadKunden;
 window.showKundeModal = showKundeModal;
 window.closeKundeModal = closeKundeModal;
 window.submitKunde = submitKunde;
+window.editKunde = editKunde;
+window.deleteKunde = deleteKunde;
 // Export Modal Logic
 function showExportModal() {
     const m = document.getElementById('exportModal');

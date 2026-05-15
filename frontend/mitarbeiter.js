@@ -2,10 +2,9 @@
 const MitarbeiterManager = {
     // Helper for API URL (handling file:// protocol)
     getApiUrl: function () {
-        if (window.location.protocol === 'file:') {
-            return 'https://meinbusiness-production.up.railway.app/api';
-        }
-        return `${window.location.protocol}//${window.location.hostname}:5000/api`;
+        // Nutzt die globale API_BASE_URL Konstante aus app.js (oder den direkten Link)
+        if (typeof API !== 'undefined') return API;
+        return 'https://meinbusiness-production.up.railway.app/api';
     },
 
     getMandantId: function () {

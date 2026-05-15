@@ -1071,6 +1071,66 @@ def create_kunde(mandant_id):
         logger.error(f"Fehler beim Anlegen des Kunden: {str(e)}")
         return jsonify({'error': str(e)}), 500
 
+@app.route('/api/mandanten/<mandant_id>/kunden/<path:firma>', methods=['DELETE'])
+def delete_kunde(mandant_id, firma):
+    """Löscht einen Kunden"""
+    try:
+        mandant_dir = MANDANTEN_DIR / mandant_id
+        kunden_xlsx = mandant_dir / 'Kunden' / 'kunden.xlsx'
+        
+        import excel_utils
+        success = excel_utils.delete_row(str(kunden_xlsx), 'Firma', firma, 'Kunden')
+        
+        if success:
+            logger.info(f"Kunde gelöscht: {mandant_id}/{firma}")
+            return jsonify({'success': True})
+        else:
+            return jsonify({'error': 'Kunde nicht gefunden'}), 404
+            
+    except Exception as e:
+        logger.error(f"Fehler beim Löschen des Kunden: {str(e)}")
+        return jsonify({'error': str(e)}), 500
+
+@app.route('/api/mandanten/<mandant_id>/kunden/<path:firma>', methods=['PUT'])
+def update_kunde(mandant_id, firma):
+    """Aktualisiert einen Kunden"""
+    try:
+        data = request.get_json()
+        new_firma = data.get('firma', '').strip()
+        email = data.get('email', '').strip()
+        
+        if not new_firma and not email:
+            return jsonify({'error': 'Bitte gib zumindest einen Namen/Firma oder eine Email an'}), 400
+            
+        if not new_firma:
+            new_firma = email
+            
+        mandant_dir = MANDANTEN_DIR / mandant_id
+        kunden_xlsx = mandant_dir / 'Kunden' / 'kunden.xlsx'
+        
+        kunde_data = {
+            'Firma': new_firma,
+            'Email': email,
+            'Anrede': data.get('anrede', 'Sehr geehrte Damen und Herren'),
+            'Strasse': data.get('strasse', '').strip(),
+            'PLZ': data.get('plz', '').strip(),
+            'Ort': data.get('ort', '').strip()
+        }
+        
+        import excel_utils
+        success = excel_utils.update_row(str(kunden_xlsx), 'Firma', firma, kunde_data, 'Kunden')
+        
+        if success:
+            logger.info(f"Kunde aktualisiert: {mandant_id}/{firma}")
+            return jsonify({'success': True, 'kunde': kunde_data})
+        else:
+            return jsonify({'error': 'Kunde nicht gefunden'}), 404
+            
+    except Exception as e:
+        logger.error(f"Fehler beim Aktualisieren des Kunden: {str(e)}")
+        return jsonify({'error': str(e)}), 500
+
+
 @app.route('/api/mandanten/<mandant_id>/recurring', methods=['GET'])
 def get_recurring(mandant_id):
     """Liste aller Abos"""

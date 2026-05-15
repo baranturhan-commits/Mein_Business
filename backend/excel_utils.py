@@ -220,3 +220,60 @@ def update_status(filepath, id_col, id_val, status_col, new_status):
     except Exception as e:
         print(f"❌ Excel Update Fehler: {e}")
         return False
+
+def delete_row(filepath, id_col, id_val, sheet_name=0):
+    if not os.path.exists(filepath): return False
+    try:
+        wb = load_workbook(filepath)
+        if isinstance(sheet_name, int):
+            ws = wb.worksheets[sheet_name]
+        else:
+            ws = wb[sheet_name]
+            
+        header_row = [c.value for c in ws[1]]
+        try:
+            col_idx_id = header_row.index(id_col) + 1
+        except ValueError:
+            return False
+            
+        for i, row in enumerate(ws.iter_rows(min_row=2), start=2):
+            cell_id = row[col_idx_id-1]
+            if str(cell_id.value) == str(id_val):
+                ws.delete_rows(i, 1)
+                wb.save(filepath)
+                wb.close()
+                return True
+        return False
+    except Exception as e:
+        print(f"❌ Excel Delete Fehler: {e}")
+        return False
+
+def update_row(filepath, id_col, id_val, new_data_dict, sheet_name=0):
+    if not os.path.exists(filepath): return False
+    try:
+        wb = load_workbook(filepath)
+        if isinstance(sheet_name, int):
+            ws = wb.worksheets[sheet_name]
+        else:
+            ws = wb[sheet_name]
+            
+        header_row = [c.value for c in ws[1]]
+        try:
+            col_idx_id = header_row.index(id_col) + 1
+        except ValueError:
+            return False
+            
+        for i, row in enumerate(ws.iter_rows(min_row=2), start=2):
+            cell_id = row[col_idx_id-1]
+            if str(cell_id.value) == str(id_val):
+                for key, val in new_data_dict.items():
+                    if key in header_row:
+                        c_idx = header_row.index(key) + 1
+                        ws.cell(row=i, column=c_idx).value = val
+                wb.save(filepath)
+                wb.close()
+                return True
+        return False
+    except Exception as e:
+        print(f"❌ Excel Update Row Fehler: {e}")
+        return False
