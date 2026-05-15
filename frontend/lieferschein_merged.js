@@ -37,7 +37,7 @@ window.LieferscheinModal = {
     getApiBaseUrl: function () {
         // Fallback or Global
         if (typeof API_BASE_URL !== 'undefined') return API_BASE_URL;
-        return 'http://localhost:5000/api';
+        return 'https://meinbusiness-production.up.railway.app/api';
     },
 
     loadKunden: function () {

@@ -1,5 +1,5 @@
-﻿// Mein Business - Frontend Application Logic
-const API_BASE_URL = 'http://localhost:5000/api';
+// Mein Business - Frontend Application Logic
+const API_BASE_URL = 'https://meinbusiness-production.up.railway.app/api';
 
 // State
 let allMandanten = [];

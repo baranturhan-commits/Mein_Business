@@ -22,7 +22,7 @@ const RecurringManager = {
 
             list.innerHTML = '<div class="loading"><div class="spinner"></div><p>Lade Abos...</p></div>';
 
-            const res = await fetch(`http://localhost:5000/api/mandanten/${this.currentMandantId}/recurring`);
+            const res = await fetch(`https://meinbusiness-production.up.railway.app/api/mandanten/${this.currentMandantId}/recurring`);
             const data = await res.json();
 
             this.renderList(data);
@@ -55,7 +55,7 @@ const RecurringManager = {
         };
 
         try {
-            const res = await fetch(`http://localhost:5000/api/mandanten/${this.currentMandantId}/recurring`, {
+            const res = await fetch(`https://meinbusiness-production.up.railway.app/api/mandanten/${this.currentMandantId}/recurring`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(payload)
@@ -78,7 +78,7 @@ const RecurringManager = {
         if (!confirm("Möchten Sie dieses Abo wirklich löschen?")) return;
 
         try {
-            const res = await fetch(`http://localhost:5000/api/mandanten/${this.currentMandantId}/recurring/${id}`, {
+            const res = await fetch(`https://meinbusiness-production.up.railway.app/api/mandanten/${this.currentMandantId}/recurring/${id}`, {
                 method: 'DELETE'
             });
             const result = await res.json();
@@ -150,7 +150,7 @@ const RecurringManager = {
         select.innerHTML = '<option value="">Lade Kunden...</option>';
 
         try {
-            const res = await fetch(`http://localhost:5000/api/mandanten/${this.currentMandantId}/kunden`);
+            const res = await fetch(`https://meinbusiness-production.up.railway.app/api/mandanten/${this.currentMandantId}/kunden`);
             const data = await res.json();
 
             // API returns { kunden: [...] }

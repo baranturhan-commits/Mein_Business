@@ -555,7 +555,7 @@ async function startReport() {
                 // If we have a viewPdf helper
                 // window.viewPdf(data.path, data.filename);
             }
-            window.open(`http://localhost:5000/api/pdf/${data.path}`, '_blank');
+            window.open(`https://meinbusiness-production.up.railway.app/api/pdf/${data.path}`, '_blank');
         } else {
             status.innerHTML = `<p class="error">❌ Fehler: ${data.error}</p>`;
         }

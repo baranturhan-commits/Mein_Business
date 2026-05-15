@@ -8,7 +8,7 @@ function getMandantIdForConfig() {
 
 function getApiUrlForConfig() {
     if (window.location.protocol === 'file:') {
-        return 'http://localhost:5000/api';
+        return 'https://meinbusiness-production.up.railway.app/api';
     }
     return `${window.location.protocol}//${window.location.hostname}:5000/api`;
 }

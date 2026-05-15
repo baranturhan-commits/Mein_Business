@@ -1,5 +1,5 @@
 // Detail Page Logic
-const API_BASE_URL = 'http://localhost:5000/api';
+const API_BASE_URL = 'https://meinbusiness-production.up.railway.app/api';
 const urlParams = new URLSearchParams(window.location.search);
 const mandantId = urlParams.get('id');
 
