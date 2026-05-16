@@ -3,6 +3,15 @@ import sys
 import json
 import datetime
 import locale
+import re
+
+def clean_text(text):
+    if not isinstance(text, str):
+        return str(text)
+    text = re.sub(r'[\x00-\x1F\x7F]', ' ', text)
+    text = text.replace('\u25A0', ' ')
+    return text
+
 from reportlab.lib import colors
 from reportlab.lib.pagesizes import A4
 from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer, Table, TableStyle, Image as ReportLabImage
@@ -64,6 +73,14 @@ def generate_report(mandant_path, month, year, einnahmen, ausgaben, output_path,
         fontSize=18,
         spaceAfter=10,
         alignment=1
+    )
+
+    style_table_cell = ParagraphStyle(
+        'TableCell', 
+        parent=styles['Normal'], 
+        fontSize=9, 
+        wordWrap='CJK', 
+        fontName='Helvetica'
     )
 
     # --- 1. HEADER (Logo + Company Info) ---
@@ -140,15 +157,15 @@ def generate_report(mandant_path, month, year, einnahmen, ausgaben, output_path,
     if einnahmen:
         t_data = [['Datum', 'Kunde / Re-Nr.', 'Beschreibung', 'Betrag']]
         for e in einnahmen:
-            desc = e.get('Beschreibung') or "Rechnung " + str(e.get('Rechnungsnummer',''))
+            desc = clean_text(e.get('Beschreibung') or "Rechnung " + str(e.get('Rechnungsnummer','')))
             t_data.append([
                 e.get('Datum',''),
                 str(e.get('Kunde','')) + "\n" + str(e.get('Rechnungsnummer','')),
-                Paragraph(desc, styles['Normal']),
+                Paragraph(desc, style_table_cell),
                 format_currency(e.get('Betrag_Netto',0))
             ])
             
-        t_in = Table(t_data, colWidths=[2.5*cm, 4*cm, 7.5*cm, 3*cm])
+        t_in = Table(t_data, colWidths=[3.1166*cm, 3.1166*cm, 7.65*cm, 3.1166*cm])
         t_in.setStyle(get_table_style(colors.HexColor('#e8f5e9'))) # Light Green
         story.append(t_in)
     else:
@@ -164,11 +181,11 @@ def generate_report(mandant_path, month, year, einnahmen, ausgaben, output_path,
             t_data.append([
                 a.get('Datum',''),
                 a.get('Kategorie',''),
-                Paragraph(str(a.get('Beschreibung','')), styles['Normal']),
+                Paragraph(clean_text(str(a.get('Beschreibung',''))), style_table_cell),
                 format_currency(a.get('Betrag_Netto',0))
             ])
             
-        t_out = Table(t_data, colWidths=[2.5*cm, 4*cm, 7.5*cm, 3*cm])
+        t_out = Table(t_data, colWidths=[3.1166*cm, 3.1166*cm, 7.65*cm, 3.1166*cm])
         t_out.setStyle(get_table_style(colors.HexColor('#fce4ec'))) # Light Pink
         story.append(t_out)
     else:

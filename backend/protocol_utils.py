@@ -4,6 +4,15 @@ import json
 import google.generativeai as genai
 from pathlib import Path
 from dotenv import load_dotenv
+import re
+
+def clean_text(text):
+    if not isinstance(text, str):
+        return str(text)
+    text = re.sub(r'[\x00-\x1F\x7F]', ' ', text)
+    text = text.replace('\u25A0', ' ')
+    return text
+
 
 load_dotenv()
 
@@ -61,6 +70,11 @@ def analyze_protocol(file_path, mandant_path=None, offer_items=None):
             text = text.split("```")[1].split("```")[0]
             
         data = json.loads(text)
+        for item in data:
+            if 'bezeichnung' in item:
+                item['bezeichnung'] = clean_text(item['bezeichnung'])
+            if 'einheit' in item:
+                item['einheit'] = clean_text(item['einheit'])
         
         # --- Price Matching Logic ---
         if mandant_path:

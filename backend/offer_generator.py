@@ -6,6 +6,15 @@ Erstellt PDF-Angebote mit Preislisten-Integration
 import os
 import datetime
 import json
+import re
+
+def clean_text(text):
+    if not isinstance(text, str):
+        return str(text)
+    text = re.sub(r'[\x00-\x1F\x7F]', ' ', text)
+    text = text.replace('\u25A0', ' ')
+    return text
+
 from reportlab.lib import colors
 from reportlab.lib.pagesizes import A4
 from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer, Table, TableStyle, Image as ReportLabImage
@@ -145,6 +154,8 @@ def create_offer_pdf(mandant_path, mandant_config, kunde_name, positionen, outpu
     # Positionen-Tabelle
     table_data = [['Pos', 'Beschreibung', 'Menge', 'Einzel', 'Gesamt']]
     
+    style_table_cell = ParagraphStyle('TableCell', parent=styles['Normal'], fontSize=10, wordWrap='CJK', fontName='Helvetica')
+    
     netto_gesamt = 0
     for idx, pos in enumerate(positionen, 1):
         menge = float(pos.get('menge', 0))
@@ -154,8 +165,8 @@ def create_offer_pdf(mandant_path, mandant_config, kunde_name, positionen, outpu
         
         table_data.append([
             str(idx),
-            pos.get('bezeichnung', ''),
-            f"{menge} {pos.get('einheit', 'Stk')}",
+            Paragraph(clean_text(pos.get('bezeichnung', '')), style_table_cell),
+            f"{menge} {clean_text(pos.get('einheit', 'Stk'))}",
             f"{preis:.2f}€",
             f"{gesamt:.2f}€"
         ])
@@ -184,7 +195,7 @@ def create_offer_pdf(mandant_path, mandant_config, kunde_name, positionen, outpu
         Paragraph(f"<b>{brutto:.2f}€</b>", style_right)
     ])
     
-    table = Table(table_data, colWidths=[1.5*cm, 8*cm, 3*cm, 2.5*cm, 2.5*cm])
+    table = Table(table_data, colWidths=[2.3375*cm, 7.65*cm, 2.3375*cm, 2.3375*cm, 2.3375*cm])
     table.setStyle(TableStyle([
         ('BACKGROUND', (0,0), (-1,0), colors.grey),
         ('TEXTCOLOR', (0,0), (-1,0), colors.whitesmoke),

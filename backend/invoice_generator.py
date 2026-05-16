@@ -5,6 +5,14 @@ import csv
 import datetime
 import re
 import json
+
+def clean_text(text):
+    if not isinstance(text, str):
+        return str(text)
+    text = re.sub(r'[\x00-\x1F\x7F]', ' ', text)
+    text = text.replace('\u25A0', ' ')
+    return text
+
 from reportlab.lib import colors
 from reportlab.lib.pagesizes import A4
 from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer, Table, TableStyle, Image as ReportLabImage
@@ -228,7 +236,7 @@ def create_pdf(invoice_data, mandant_path, mandant_config, kunde_data):
         style_right = ParagraphStyle('RightAlign', parent=styles['Normal'], alignment=2)
         style_header_small = ParagraphStyle('HeaderSmall', parent=styles['Normal'], fontSize=8, textColor=colors.grey)
         style_table_header = ParagraphStyle('TableHeader', parent=styles['Normal'], fontSize=9, fontName='Helvetica-Bold')
-        style_table_cell = ParagraphStyle('TableCell', parent=styles['Normal'], fontSize=9)
+        style_table_cell = ParagraphStyle('TableCell', parent=styles['Normal'], fontSize=9, wordWrap='CJK', fontName='Helvetica')
         
         # --- HEADER (Logo Right) ---
         logo_path = None
@@ -345,8 +353,8 @@ def create_pdf(invoice_data, mandant_path, mandant_config, kunde_data):
             
             try:
                 menge = float(item.get('menge', 1))
-                einheit = item.get('einheit', 'Stk')
-                bezeichnung = item.get('beschreibung', '') # Or 'bezeichnung'
+                einheit = clean_text(item.get('einheit', 'Stk'))
+                bezeichnung = clean_text(item.get('beschreibung', '')) # Or 'bezeichnung'
                 
                 if 'einzelpreis' in item:
                     ep = float(item['einzelpreis'])
@@ -387,7 +395,7 @@ def create_pdf(invoice_data, mandant_path, mandant_config, kunde_data):
         table_data.append(['', '', '', '', '', '']) # Spacer Line
         
         # Styles for Table
-        col_widths = [1.2*cm, 1.8*cm, 1.5*cm, 8.5*cm, 2.5*cm, 2.5*cm]
+        col_widths = [1.87*cm, 1.87*cm, 1.87*cm, 7.65*cm, 1.87*cm, 1.87*cm]
         
         t = Table(table_data, colWidths=col_widths, repeatRows=1)
         

@@ -7,6 +7,15 @@ from reportlab.pdfbase import pdfmetrics
 from reportlab.pdfbase.ttfonts import TTFont
 import os
 from datetime import datetime
+import re
+
+def clean_text(text):
+    if not isinstance(text, str):
+        return str(text)
+    text = re.sub(r'[\x00-\x1F\x7F]', ' ', text)
+    text = text.replace('\u25A0', ' ')
+    return text
+
 
 def create_payroll_pdf(mandant_config, employee_data, payroll_data, mandant_path):
     """
@@ -51,6 +60,7 @@ def create_payroll_pdf(mandant_config, employee_data, payroll_data, mandant_path
     styles.add(ParagraphStyle(name='Small', parent=styles['Normal'], fontSize=8, leading=10))
     styles.add(ParagraphStyle(name='Bold', parent=styles['Normal'], fontName='Helvetica-Bold'))
     styles.add(ParagraphStyle(name='DocTitle', parent=styles['Heading1'], alignment=1, spaceAfter=20))
+    style_table_cell = ParagraphStyle('TableCell', parent=styles['Normal'], fontSize=9, wordWrap='CJK', fontName='Helvetica')
     
     # --- HEADER (Logo rechts, Absender links) ---
     logo_path = None
@@ -123,15 +133,15 @@ def create_payroll_pdf(mandant_config, employee_data, payroll_data, mandant_path
 
     # Optional: Aufschlüsselung wenn Details da sind (z.B. Stunden * Satz)
     # Hier simpel:
-    data.append(['Festbezug / Gehalt', '', f"{brutto_lohn:.2f}"])
+    data.append([Paragraph(clean_text('Festbezug / Gehalt'), style_table_cell), '', f"{brutto_lohn:.2f}"])
     
     amount_bonus = payroll_data.get('bonus')
     if amount_bonus and float(amount_bonus) > 0:
         val = float(amount_bonus)
-        data.append(['Einmalzahlung / Bonus', '', f"{val:.2f}"])
+        data.append([Paragraph(clean_text('Einmalzahlung / Bonus'), style_table_cell), '', f"{val:.2f}"])
         brutto_lohn += val
         
-    data.append(['Gesamtbrutto', '', f"{brutto_lohn:.2f}"])
+    data.append([Paragraph(clean_text('Gesamtbrutto'), style_table_cell), '', f"{brutto_lohn:.2f}"])
     data.append(['', '', '']) # Leerzeile
     
     # 2. Abzüge
@@ -149,16 +159,16 @@ def create_payroll_pdf(mandant_config, employee_data, payroll_data, mandant_path
                 val = 0.0
                 
             if val > 0:
-                data.append([tax_name, '', f"- {val:.2f}"])
+                data.append([Paragraph(clean_text(tax_name), style_table_cell), '', f"- {val:.2f}"])
                 total_deductions += val
             
     netto -= total_deductions
     
     data.append(['', '', ''])
-    data.append(['Nettoredienst', '', f"{netto:.2f}"])
+    data.append([Paragraph(clean_text('Nettoredienst'), style_table_cell), '', f"{netto:.2f}"])
     
     # Style Table
-    t_main = Table(data, colWidths=[10*cm, 3*cm, 4*cm])
+    t_main = Table(data, colWidths=[7.65*cm, 4.675*cm, 4.675*cm])
     t_main.setStyle(TableStyle([
         ('LINEBELOW', (0,0), (-1,0), 1, colors.black), # Header Line
         ('FONTNAME', (0,0), (-1,0), 'Helvetica-Bold'),

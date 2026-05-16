@@ -6,6 +6,15 @@ Erstellt PDF-Abnahmeprotokolle für Baustellen
 import os
 import datetime
 import json
+import re
+
+def clean_text(text):
+    if not isinstance(text, str):
+        return str(text)
+    text = re.sub(r'[\x00-\x1F\x7F]', ' ', text)
+    text = text.replace('\u25A0', ' ')
+    return text
+
 from reportlab.lib import colors
 from reportlab.lib.pagesizes import A4
 from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer, Table, TableStyle, Image as ReportLabImage
@@ -213,6 +222,8 @@ def create_delivery_pdf(mandant_path, mandant_config, kunde_name, positionen, ou
     
     main_data = [header]
     
+    style_table_cell = ParagraphStyle('TableCell', parent=styles['Normal'], fontSize=10, wordWrap='CJK', fontName='Helvetica')
+
     if positionen and len(positionen) > 0:
         # Use positions from offer
         for i, pos in enumerate(positionen):
@@ -220,16 +231,16 @@ def create_delivery_pdf(mandant_path, mandant_config, kunde_name, positionen, ou
             menge = pos.get('menge', '')
             einheit = pos.get('einheit', '')
             bez = pos.get('bezeichnung', '')
-            desc = f"{menge} {einheit} {bez}".strip()
+            desc = clean_text(f"{menge} {einheit} {bez}".strip())
             
-            main_data.append([str(i+1), desc, "", "", ""])
+            main_data.append([str(i+1), Paragraph(desc, style_table_cell), "", "", ""])
             
     else:
         # Generate ~15 empty rows for manual entry
         for i in range(15):
              main_data.append([str(i+1), "", "", "", ""]) # Empty rows
     
-    main_table = Table(main_data, colWidths=[1.5*cm, 8*cm, 1.5*cm, 1.5*cm, 4.5*cm])
+    main_table = Table(main_data, colWidths=[2.3375*cm, 7.65*cm, 2.3375*cm, 2.3375*cm, 2.3375*cm])
     main_table.setStyle(TableStyle([
         # Header
         ('BACKGROUND', (0,0), (-1,0), colors.HexColor('#555555')), # Dark Gray

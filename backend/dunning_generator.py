@@ -5,6 +5,15 @@ Erstellt PDF-Mahnungen basierend auf Rechnungen
 
 import os
 import datetime
+import re
+
+def clean_text(text):
+    if not isinstance(text, str):
+        return str(text)
+    text = re.sub(r'[\x00-\x1F\x7F]', ' ', text)
+    text = text.replace('\u25A0', ' ')
+    return text
+
 from reportlab.lib import colors
 from reportlab.lib.pagesizes import A4
 from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer, Table, TableStyle, Image as ReportLabImage
@@ -140,6 +149,7 @@ Bitte überweisen Sie den offenen Betrag von <b>{betrag_str}</b>{fee_text} in de
 auf unsere Zahlungserinnerung haben Sie bisher leider nicht reagiert.<br/>
 Wir bitten Sie nachdrücklich, den fälligen Betrag von <b>{betrag_str}</b>{fee_text} umgehend zu begleichen."""
     
+    msg = clean_text(msg)
     story.append(Paragraph(msg, styles['Normal']))
     story.append(Spacer(1, 1*cm))
     
