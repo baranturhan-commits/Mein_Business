@@ -2856,6 +2856,82 @@ def scan_bank_statement(mandant_id):
         logger.error(f"Scan Error: {e}")
         return jsonify({'error': str(e)}), 500
 
+# ===== DELETE DOCUMENT ENDPOINTS =====
+
+def reset_counter_after_delete(mandant_dir, prefix, folder, counter_file_name):
+    try:
+        counter_file = mandant_dir / counter_file_name
+        today = datetime.now()
+        current_year = str(today.year)
+        current_month = f"{today.month:02d}"
+        
+        docs_dir = mandant_dir / folder
+        max_counter = 0
+        
+        if docs_dir.exists():
+            for f in docs_dir.glob(f"{prefix}-*-{current_year}-{current_month}-*.pdf"):
+                parts = f.stem.split('-')
+                if len(parts) >= 5:
+                    try:
+                        c = int(parts[-1])
+                        if c > max_counter:
+                            max_counter = c
+                    except:
+                        pass
+                        
+        data = {
+            'year': current_year,
+            'month': current_month,
+            'counter': max_counter
+        }
+        with open(counter_file, 'w', encoding='utf-8') as f:
+            json.dump(data, f, indent=4)
+            
+    except Exception as e:
+        logger.error(f"Error resetting counter for {folder}: {e}")
+
+@app.route('/api/mandanten/<mandant_id>/angebote/<path:filename>', methods=['DELETE'])
+def delete_angebot(mandant_id, filename):
+    try:
+        mandant_dir = MANDANTEN_DIR / mandant_id
+        angebote_dir = mandant_dir / 'Angebote'
+        
+        pdf_file = angebote_dir / filename
+        json_file = angebote_dir / filename.replace('.pdf', '.json')
+        
+        if pdf_file.exists():
+            pdf_file.unlink()
+        if json_file.exists():
+            json_file.unlink()
+            
+        reset_counter_after_delete(mandant_dir, 'ANG', 'Angebote', 'offer_counter.json')
+        
+        return jsonify({'success': True})
+    except Exception as e:
+        logger.error(f"Fehler beim Löschen des Angebots: {e}")
+        return jsonify({'error': str(e)}), 500
+
+@app.route('/api/mandanten/<mandant_id>/lieferscheine/<path:filename>', methods=['DELETE'])
+def delete_lieferschein(mandant_id, filename):
+    try:
+        mandant_dir = MANDANTEN_DIR / mandant_id
+        lieferscheine_dir = mandant_dir / 'Lieferscheine'
+        
+        pdf_file = lieferscheine_dir / filename
+        json_file = lieferscheine_dir / filename.replace('.pdf', '.json')
+        
+        if pdf_file.exists():
+            pdf_file.unlink()
+        if json_file.exists():
+            json_file.unlink()
+            
+        reset_counter_after_delete(mandant_dir, 'LS', 'Lieferscheine', 'delivery_counter.json')
+        
+        return jsonify({'success': True})
+    except Exception as e:
+        logger.error(f"Fehler beim Löschen des Lieferscheins: {e}")
+        return jsonify({'error': str(e)}), 500
+
 if __name__ == '__main__':
     # Restart Trigger
     logger.info("🚀 Starting API Server...")

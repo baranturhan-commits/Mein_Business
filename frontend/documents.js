@@ -94,12 +94,15 @@ function renderAngeboteList() {
 
     if (filtered.length > 0) {
         container.innerHTML = filtered.map(a => `
-            <div class="doc-item-compact" onclick="openPdf('${a.pdf_path}')">
-                <span class="doc-icon">📝</span>
-                <div class="doc-info">
-                    <div class="doc-title">${a.nummer || 'Angebot'}</div>
-                    <div class="doc-meta">${a.date || a.datum} | ${a.kunde}</div>
+            <div class="doc-item-compact" style="display: flex; justify-content: space-between; align-items: center;">
+                <div style="flex-grow: 1; display: flex; align-items: center; cursor: pointer;" onclick="openPdf('${a.pdf_path}')">
+                    <span class="doc-icon">📝</span>
+                    <div class="doc-info">
+                        <div class="doc-title">${a.nummer || 'Angebot'}</div>
+                        <div class="doc-meta">${a.date || a.datum} | ${a.kunde}</div>
+                    </div>
                 </div>
+                <button class="btn btn-icon btn-danger" onclick="deleteDocument('angebote', '${a.pdf_path}')" title="Löschen" style="margin-left: 10px; background: transparent; border: none; font-size: 1.2rem; cursor: pointer;">🗑️</button>
             </div>
         `).join('');
     } else {
@@ -191,14 +194,38 @@ function renderRechnungenListDoc() {
 
 function createDocItem(doc, icon) {
     return `
-        <div class="doc-item-compact" onclick="openPdf('${doc.pdf_path}')">
-            <span class="doc-icon">${icon}</span>
-            <div class="doc-info">
-                <div class="doc-title">${doc.nummer || 'Dokument'}</div>
-                <div class="doc-meta">${doc.datum || ''} | ${doc.kunde || ''}</div>
+        <div class="doc-item-compact" style="display: flex; justify-content: space-between; align-items: center;">
+            <div style="flex-grow: 1; display: flex; align-items: center; cursor: pointer;" onclick="openPdf('${doc.pdf_path}')">
+                <span class="doc-icon">${icon}</span>
+                <div class="doc-info">
+                    <div class="doc-title">${doc.nummer || 'Dokument'}</div>
+                    <div class="doc-meta">${doc.datum || ''} | ${doc.kunde || ''}</div>
+                </div>
             </div>
+            <button class="btn btn-icon btn-danger" onclick="deleteDocument('lieferscheine', '${doc.pdf_path}')" title="Löschen" style="margin-left: 10px; background: transparent; border: none; font-size: 1.2rem; cursor: pointer;">🗑️</button>
         </div>
     `;
+}
+
+async function deleteDocument(type, path) {
+    if (!confirm(`Möchtest du dieses Dokument wirklich löschen?\nDiese Aktion kann nicht rückgängig gemacht werden.`)) return;
+    
+    const filename = path.split('/').pop();
+    const id = getMandantId();
+    
+    try {
+        const res = await fetch(`${DOCS_API_URL}/mandanten/${id}/${type}/${encodeURIComponent(filename)}`, {
+            method: 'DELETE'
+        });
+        const data = await res.json();
+        if (data.success) {
+            loadDocuments();
+        } else {
+            alert('❌ Fehler: ' + data.error);
+        }
+    } catch (e) {
+        alert('Netzwerkfehler: ' + e);
+    }
 }
 
 function openPdf(path) {
