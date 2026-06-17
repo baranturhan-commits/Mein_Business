@@ -2932,6 +2932,210 @@ def delete_lieferschein(mandant_id, filename):
         logger.error(f"Fehler beim Löschen des Lieferscheins: {e}")
         return jsonify({'error': str(e)}), 500
 
+# ===== WARTUNGS-PROTOKOLL ENDPOINTS =====
+
+# Pydantic-Validierung für Wartungsprotokoll-Eingaben
+try:
+    from pydantic import BaseModel, Field
+    from typing import Optional
+
+    class WartungsProtokollInput(BaseModel):
+        """Validierungsmodell für ein neues Wartungsprotokoll."""
+        datum: str = Field(..., description="Datum der Wartung (YYYY-MM-DD)")
+        techniker: str = Field(..., min_length=1, description="Name des Technikers")
+        kunde: str = Field(..., min_length=1, description="Name des Kunden")
+        anlage: str = Field(..., description="Art der Anlage (z.B. Kessel, Brenner)")
+        druck_ok: bool = Field(False, description="Druck geprüft")
+        dichtheit_ok: bool = Field(False, description="Dichtheit geprüft")
+        filter_ok: bool = Field(False, description="Filter gereinigt")
+        sicherheitsventil_ok: bool = Field(False, description="Sicherheitsventil geprüft")
+        befund: Optional[str] = Field('', description="Freitext: Befund / Feststellungen")
+        naechste_wartung: Optional[str] = Field('', description="Datum der nächsten Wartung")
+
+    PYDANTIC_AVAILABLE = True
+except ImportError:
+    PYDANTIC_AVAILABLE = False
+    logger.warning("Pydantic nicht installiert – Validierung übersprungen")
+
+
+@app.route('/api/mandanten/<mandant_id>/wartung/protokoll', methods=['POST'])
+@require_auth
+def create_wartungsprotokoll(mandant_id):
+    """
+    Speichert ein neues Wartungsprotokoll in wartungen.xlsx.
+    Erwartet JSON-Body mit Wartungsdaten.
+    """
+    try:
+        rohdaten = request.get_json()
+        if not rohdaten:
+            return jsonify({'error': 'Keine Daten übermittelt'}), 400
+
+        # Pydantic-Validierung (wenn verfügbar)
+        if PYDANTIC_AVAILABLE:
+            try:
+                validated = WartungsProtokollInput(**rohdaten)
+                daten = validated.dict()
+            except Exception as val_err:
+                return jsonify({'error': f'Validierungsfehler: {val_err}'}), 422
+        else:
+            # Manuelle Pflichtfeld-Prüfung als Fallback
+            for pflichtfeld in ['datum', 'techniker', 'kunde', 'anlage']:
+                if not rohdaten.get(pflichtfeld):
+                    return jsonify({'error': f'Pflichtfeld fehlt: {pflichtfeld}'}), 400
+            daten = rohdaten
+
+        mandant_dir = MANDANTEN_DIR / mandant_id
+        if not mandant_dir.exists():
+            return jsonify({'error': 'Mandant nicht gefunden'}), 404
+
+        # Wartungs-Ordner anlegen (falls noch nicht vorhanden)
+        wartung_dir = mandant_dir / 'Wartung'
+        wartung_dir.mkdir(parents=True, exist_ok=True)
+
+        # Eindeutige ID und Erstellungszeitstempel
+        protokoll_id = str(uuid.uuid4())
+        erstellt_am = datetime.now().isoformat()
+
+        # Zeile für Excel vorbereiten
+        neue_zeile = {
+            'id': protokoll_id,
+            'datum': daten.get('datum', ''),
+            'techniker': daten.get('techniker', ''),
+            'kunde': daten.get('kunde', ''),
+            'anlage': daten.get('anlage', ''),
+            'druck_ok': str(daten.get('druck_ok', False)),
+            'dichtheit_ok': str(daten.get('dichtheit_ok', False)),
+            'filter_ok': str(daten.get('filter_ok', False)),
+            'sicherheitsventil_ok': str(daten.get('sicherheitsventil_ok', False)),
+            'befund': daten.get('befund', ''),
+            'naechste_wartung': daten.get('naechste_wartung', ''),
+            'erstellt_am': erstellt_am
+        }
+
+        spalten = [
+            'id', 'datum', 'techniker', 'kunde', 'anlage',
+            'druck_ok', 'dichtheit_ok', 'filter_ok', 'sicherheitsventil_ok',
+            'befund', 'naechste_wartung', 'erstellt_am'
+        ]
+
+        import excel_utils
+        wartungen_datei = wartung_dir / 'wartungen.xlsx'
+        excel_utils.append_data(str(wartungen_datei), neue_zeile, 'Wartungen', spalten)
+
+        logger.info(f"Wartungsprotokoll gespeichert: {mandant_id}/{protokoll_id}")
+        return jsonify({'success': True, 'id': protokoll_id, 'erstellt_am': erstellt_am})
+
+    except Exception as e:
+        logger.error(f"Fehler beim Speichern des Wartungsprotokolls: {e}")
+        return jsonify({'error': str(e)}), 500
+
+
+@app.route('/api/mandanten/<mandant_id>/wartung/protokolle', methods=['GET'])
+@require_auth
+def get_wartungsprotokolle(mandant_id):
+    """
+    Liest alle Wartungsprotokolle aus wartungen.xlsx und gibt sie zurück.
+    """
+    try:
+        mandant_dir = MANDANTEN_DIR / mandant_id
+        if not mandant_dir.exists():
+            return jsonify({'error': 'Mandant nicht gefunden'}), 404
+
+        wartungen_datei = mandant_dir / 'Wartung' / 'wartungen.xlsx'
+
+        # Noch keine Protokolle vorhanden
+        if not wartungen_datei.exists():
+            return jsonify({'protokolle': []})
+
+        import excel_utils
+        rohdaten = excel_utils.read_data(str(wartungen_datei), 'Wartungen')
+
+        # Boolean-Felder konvertieren (werden als String gespeichert)
+        bool_felder = ['druck_ok', 'dichtheit_ok', 'filter_ok', 'sicherheitsventil_ok']
+        protokolle = []
+        for zeile in rohdaten:
+            eintrag = dict(zeile)
+            for feld in bool_felder:
+                wert = str(eintrag.get(feld, 'False')).lower()
+                eintrag[feld] = wert in ('true', '1', 'ja', 'yes')
+            protokolle.append(eintrag)
+
+        # Neueste zuerst sortieren
+        protokolle.sort(key=lambda x: str(x.get('erstellt_am', '')), reverse=True)
+
+        logger.info(f"Wartungsprotokolle geladen: {mandant_id} – {len(protokolle)} Einträge")
+        return jsonify({'protokolle': protokolle})
+
+    except Exception as e:
+        logger.error(f"Fehler beim Laden der Wartungsprotokolle: {e}")
+        return jsonify({'error': str(e)}), 500
+
+
+@app.route('/api/mandanten/<mandant_id>/wartung/protokoll/<protokoll_id>/pdf', methods=['GET'])
+@require_auth
+def get_wartungsprotokoll_pdf(mandant_id, protokoll_id):
+    """
+    Generiert ein Wartungsprotokoll-PDF für das angegebene Protokoll und gibt es zurück.
+    """
+    try:
+        mandant_dir = MANDANTEN_DIR / mandant_id
+        if not mandant_dir.exists():
+            return jsonify({'error': 'Mandant nicht gefunden'}), 404
+
+        wartungen_datei = mandant_dir / 'Wartung' / 'wartungen.xlsx'
+        if not wartungen_datei.exists():
+            return jsonify({'error': 'Keine Protokolle vorhanden'}), 404
+
+        # Protokoll-Datensatz suchen
+        import excel_utils
+        alle = excel_utils.read_data(str(wartungen_datei), 'Wartungen')
+        gefunden = None
+        for zeile in alle:
+            if str(zeile.get('id', '')) == protokoll_id:
+                gefunden = zeile
+                break
+
+        if not gefunden:
+            return jsonify({'error': f'Protokoll {protokoll_id} nicht gefunden'}), 404
+
+        # Boolean-Felder konvertieren
+        bool_felder = ['druck_ok', 'dichtheit_ok', 'filter_ok', 'sicherheitsventil_ok']
+        protokoll_data = dict(gefunden)
+        for feld in bool_felder:
+            wert = str(protokoll_data.get(feld, 'False')).lower()
+            protokoll_data[feld] = wert in ('true', '1', 'ja', 'yes')
+
+        # PDF-Ausgabepfad (temporärer Unterordner)
+        pdf_dir = mandant_dir / 'Wartung' / 'PDFs'
+        pdf_dir.mkdir(parents=True, exist_ok=True)
+
+        sicherer_name = protokoll_id.replace('-', '_')
+        pdf_pfad = pdf_dir / f"Wartungsprotokoll_{sicherer_name}.pdf"
+
+        # PDF über Generator erstellen
+        import protocol_generator_wartung
+        erfolg = protocol_generator_wartung.erstelle_wartungsprotokoll_pdf(
+            str(pdf_pfad),
+            mandant_dir,
+            protokoll_data
+        )
+
+        if not erfolg or not pdf_pfad.exists():
+            return jsonify({'error': 'PDF konnte nicht erstellt werden'}), 500
+
+        from flask import send_file
+        return send_file(
+            str(pdf_pfad),
+            mimetype='application/pdf',
+            as_attachment=True,
+            download_name=f"Wartungsprotokoll_{protokoll_data.get('datum', 'unbekannt')}.pdf"
+        )
+
+    except Exception as e:
+        logger.error(f"Fehler beim Erstellen des Wartungsprotokoll-PDFs: {e}")
+        return jsonify({'error': str(e)}), 500
+
+
 if __name__ == '__main__':
     # Restart Trigger
     logger.info("🚀 Starting API Server...")

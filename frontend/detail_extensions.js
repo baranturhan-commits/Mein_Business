@@ -24,6 +24,8 @@ function switchTab(tabName) {
         if (typeof MitarbeiterManager !== 'undefined') MitarbeiterManager.loadList();
     } else if (tabName === 'ausgaben') {
         if (typeof AusgabenManager !== 'undefined') AusgabenManager.init();
+    } else if (tabName === 'wartung') {
+        if (typeof WartungManager !== 'undefined') WartungManager.init();
     }
 }
 
